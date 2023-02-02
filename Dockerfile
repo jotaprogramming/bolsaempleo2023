@@ -1,0 +1,17 @@
+FROM python:latest
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+RUN mkdir -p /code
+
+WORKDIR /code
+
+COPY requirements.txt /code/
+
+RUN python -m pip install --upgrade pip
+RUN python -m pip install -r requirements.txt
+
+COPY ./jobboard/ /code/
+
+EXPOSE 3000

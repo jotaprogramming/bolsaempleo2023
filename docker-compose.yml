@@ -5,12 +5,12 @@ services:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./jobboard:/code
+      - ./src:/code
       - web-django:/usr/src/app
       - web-static:/usr/src/app/static
     ports:
       - "3000:8000"
-    env_file: .env
+    env_file: ./src/.env
     # environment:
     #   DEBUG: 'false'
     depends_on:

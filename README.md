@@ -34,27 +34,34 @@ python src/manage.py migrate <app>
 >
 > `--fake` asegura que se ejecute la última versión y salte las migraciones faltantes
 
-### Docker Compose
+### Docker
 
-#### Crear y ejecutar imágenes Docker con Logs
+#### Ejecutar CLI
+
+```bash
+docker exec -it [container_name] bash
+docker exec -it [container_name] sh
+```
+
+#### Crear y ejecutar contenedores con Logs
 
 ```bash
 docker-compose up --build
 ```
 
-#### Crear y ejecutar imágenes Docker sin Logs
+#### Crear y ejecutar contenedores sin Logs
 
 ```bash
 docker-compose up --build -d
 ```
 
-#### Detener la red y los contenedores
+#### Detener los contenedores
 
 ```bash
 docker-compose stop
 ```
 
-#### Detener y eliminar la red y los contenedores
+#### Detener y eliminar los contenedores
 
 ```bash
 docker-compose down

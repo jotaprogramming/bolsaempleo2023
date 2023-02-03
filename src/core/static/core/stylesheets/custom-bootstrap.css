@@ -1,0 +1,19 @@
+.btn-primary {
+    color: var(--white) !important;
+    background-color: var(--orange) !important;
+    border-color: var(--orange) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--burnt-orange) !important;
+}
+
+.btn-outline-primary {
+    color: var(--orange) !important;
+    border-color: var(--orange) !important;
+}
+
+.btn-outline-primary:hover {
+    color: var(--white) !important;
+    background-color: var(--orange) !important;
+}

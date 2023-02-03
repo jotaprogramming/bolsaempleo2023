@@ -1,0 +1,17 @@
+{% load static %}
+
+<div class="d-flex align-items-center w-100">
+    {% comment %} <label class="btn btn-light-orange h-center border-0 h-100" for="search_btn">
+        <img class="w1-h-auto" src="{% static 'core/assets/icon/icon-search-small.svg' %}" alt="icon-search-small" />
+    </label>
+    <input class="d-none" type="checkbox" name="search_btn" id="search_btn"> {% endcomment %}
+    <button class="btn btn-light-orange h-center border-0 h-100" id="search" type="submit">
+        <img class="w1-h-auto" src="{% static 'core/assets/icon/icon-search-small.svg' %}" alt="icon-search-small" />
+    </button>
+    <input class="form-control border-0 bg-transparent" type="search"
+        placeholder="{% if search_placeholder %}{{search_placeholder}}{% else %}Buscar{% endif %}"
+        aria-label="Search" />
+    {% comment %}
+    <button class="btn btn-outline-success d-none" type="submit">Search</button>
+    {% endcomment %}
+</div>

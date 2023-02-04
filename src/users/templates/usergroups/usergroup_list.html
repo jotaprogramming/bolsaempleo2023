@@ -1,0 +1,99 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>{{title_app}} | Lista </title>
+{% endblock title %}
+
+{% block content %}
+{% comment %} <a href="{% url 'users_app:usergroup_add' %}" class="btn btn-primary" id="save_btn">Crear</a> {% endcomment %}
+<button 
+    type="button"
+    class="btn btn-primary"
+    name="editButtons"
+    id="{% url 'users_app:usergroup_add' %}"
+>
+    Crear
+</button>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th>Nombre del grupo</th>
+            <th>Descripción</th>
+            <th>Estado</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in object_list %}
+        <tr>
+            <td scope="row">{{row.id}}</td>
+            <td>{{row.group_name}}</td>
+            <td>{{row.description}}</td>
+            <td>
+                {% if row.deleted_at %}
+                Eliminado el {{row.deleted_at}}
+                {% elif row.updated_at %}
+                Actualizado el {{row.updated_at}}
+                {% else %}
+                Creado el {{row.created_at}}
+                {% endif %}
+            </td>
+            <td>
+                <!-- data-bs-toggle="modal"
+                    data-bs-target="#userGroupModal" -->
+                {% if not row.deleted_at %}
+                <button 
+                    type="button"
+                    class="btn btn-outline-primary"
+                    name="editButtons"
+                    id="{% url 'users_app:usergroup_edit' row.id %}"
+                    >
+                    Editar
+                </button>
+                {% endif %}
+            </td>
+            <td>
+                {% if not row.deleted_at %}
+                <button 
+                    type="button"
+                    class="btn btn-outline-danger"
+                    name="deleteButtons"
+                    id="{% url 'users_app:usergroup_delete' row.id %}"
+                    >
+                    Eliminar
+                </button>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% comment %} <div class="modal fade" id="userGroupModal"  aria-labelledby="userGroupModalLabel" aria-hidden="true"></div> {% endcomment %}
+{% comment %} <div class="modal fade" id="userGroupModal" tabindex="-1" role="dialog" aria-hidden="true"></div> {% endcomment %}
+
+{% endblock content %}
+
+{% block extrajs %}
+<script type="text/javascript">
+    const editButtons = document.getElementsByName("editButtons");
+    const deleteButtons = document.getElementsByName("deleteButtons");
+
+    editButtons.forEach((element, index) => {
+        element.addEventListener("click", () => {
+            const URL = element.getAttribute('id')
+            open_modal(url=URL)
+        });
+    })
+    
+    deleteButtons.forEach((element, index) => {
+        element.addEventListener("click", () => {
+            const URL = element.getAttribute('id')
+            open_modal(url=URL)
+        });
+    })
+</script>
+{% endblock extrajs %}

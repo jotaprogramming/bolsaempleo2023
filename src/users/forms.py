@@ -108,3 +108,28 @@ class RestrictionForm(forms.ModelForm):
 
     def clean(self):
         datos = self.cleaned_data
+
+
+class AppForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(AppForm, self).__init__(*args, **kwargs)
+        self.fields["description"].label = "Descripción"
+
+    class Meta:
+        model = Apps
+
+        fields = [
+            "description",
+        ]
+
+        widgets = {
+            "description": forms.Textarea(
+                attrs={
+                    "placeholder": "Descripción de la aplicación",
+                    "class": "form-control",
+                }
+            ),
+        }
+
+    def clean(self):
+        datos = self.cleaned_data

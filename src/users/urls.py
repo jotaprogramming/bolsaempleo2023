@@ -28,4 +28,11 @@ urlpatterns = [
         RestrictionDeleteModal.as_view(),
         name="restriction_delete",
     ),
+    # APPS
+    path("app/list", AppList.as_view(), name="app_list"),
+    path(
+        "app/edit/<int:pk>",
+        AppEditModal.as_view(),
+        name="app_edit",
+    ),
 ]

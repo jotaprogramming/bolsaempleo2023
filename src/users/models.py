@@ -22,7 +22,7 @@ class Restrictions(models.Model):
 
 class Apps(models.Model):
     name = models.CharField(max_length=25, unique=True, null=False)
-    path_name = models.CharField(max_length=25, unique=True, null=False)
+    route = models.CharField(max_length=100, unique=True, null=False)
     description = models.TextField(null=False)
     created_at = models.DateTimeField(auto_now_add=True, null=False)
     updated_at = models.DateTimeField(auto_now_add=False, editable=True, null=True)

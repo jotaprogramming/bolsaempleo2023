@@ -20,20 +20,20 @@
         <thead>
           <tr>
             <th scope="col">#</th>
-            <th>Código</th>
             <th>Nombre</th>
+            <th>Ruta</th>
             <th>Descripción</th>
             <th>Estado</th>
             <th>Editar</th>
-            <th>Eliminar</th>
+            {% comment %} <th>Eliminar</th> {% endcomment %}
           </tr>
         </thead>
         <tbody>
           {% for row in object_list %}
           <tr>
             <td scope="row">{{row.id}}</td>
-            <td>{{row.code}}</td>
             <td>{{row.name}}</td>
+            <td>{{row.route}}</td>
             <td>{{row.description}}</td>
             <td>
               {% if row.deleted_at %} 
@@ -50,15 +50,15 @@
               {% if not row.deleted_at %}
               <button
                 type="button"
-                class="btn btn-outline-primary btn-center"
+                class="btn btn-outline-primary  btn-center"
                 name="editButtons"
-                id="{% url 'users_app:restriction_edit' row.id %}"
+                id="{% url 'users_app:app_edit' row.id %}"
               >
               <i class="lni lni-pencil"></i>
               </button>
               {% endif %}
             </td>
-            <td>
+            {% comment %} <td>
               {% if not row.deleted_at %}
               <button
                 type="button"
@@ -69,7 +69,7 @@
               <i class="lni lni-trash-can"></i>
               </button>
               {% endif %}
-            </td>
+            </td> {% endcomment %}
           </tr>
           {% endfor %}
         </tbody>

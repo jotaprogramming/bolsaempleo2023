@@ -11,8 +11,10 @@
             {% if current_email %}{{current_email}}{% else %}Configuraciones{% endif %}
         </a>
         <ul class="dropdown-menu dropdown-menu-lg-end">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
+            <li><a class="dropdown-item" href="{% url 'users_app:usergroup_list' %}">Grupos de Usuarios</a></li>
+            <li><a class="dropdown-item" href="{% url 'users_app:restriction_list' %}">Restricciones</a></li>
+            <li><a class="dropdown-item" href="{% url 'users_app:app_list' %}">Aplicaciones</a></li>
+            <li><a class="dropdown-item" href="{% url 'users_app:role_list' %}">Roles</a></li>
             <li>
                 <hr class="dropdown-divider" />
             </li>

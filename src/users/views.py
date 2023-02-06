@@ -32,6 +32,8 @@ restriction_title = "Restricciones"
 restriction_desc = "Todo tipo de acciones prohibidas para los usuarios"
 app_view_title = "Aplicaciones"
 app_view_desc = "Módulos del sistema"
+role_title = "Roles"
+role_desc = "Función que un usuario desempeña dentro del sistema"
 
 
 # Create your views here.
@@ -320,11 +322,7 @@ class AppList(generic.ListView):
             name_count = objects.filter(name__exact=url["name"]).count()
             route_count = objects.filter(route__exact=url["route"]).count()
             if name_count == 0 or route_count == 0:
-                app = Apps(
-                    name = url["name"],
-                    route = url["route"],
-                    description = 'App'
-                )
+                app = Apps(name=url["name"], route=url["route"], description="App")
                 app.save()
 
     def get_queryset(self):
@@ -333,7 +331,7 @@ class AppList(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(AppList, self).get_context_data(**kwargs)
-        
+
         self.set_urls_in_db()
         context["app_title"] = app_title
         context["title_view"] = app_view_title
@@ -371,6 +369,137 @@ class AppEditModal(generic.UpdateView):
             print(" ")
             print(exception)
             return HttpResponseRedirect(reverse_lazy("users_app:app_list"))
+
+    def form_invalid(self, form, **kwargs):
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+
+        form_invalid_message(self.request)
+        return self.render_to_response(ctx)
+
+
+# USER GROUPS
+class RoleList(generic.ListView):
+    # login_url = "/login"
+    model = Roles
+    template_name = "roles/role_list.html"
+    paginate_by = 25
+
+    def get_queryset(self):
+        data = Roles.objects.all().order_by("id")
+        return data
+
+    def get_context_data(self, **kwargs):
+        context = super(RoleList, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = role_title
+        context["description_view"] = role_desc
+        return context
+
+
+class RoleCreate(generic.CreateView):
+    # login_url = "/login"
+    model = Roles
+    form_class = RoleForm
+    template_name = "roles/role_create_modal.html"
+
+    def get_success_url(self):
+        created_message(self.request)
+        return reverse_lazy("users_app:role_list")
+
+    def get_context_data(self, **kwargs):
+        context = super(RoleCreate, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = role_title
+        context["description_view"] = role_desc
+        return context
+
+    def form_valid(self, form):
+        objects = diplicate_roles(self, form)
+        if objects > 0:
+            duplicate_message(self.request)
+            return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
+        try:
+            return super().form_valid(form)
+        except Exception as exception:
+            error_message(self.request)
+            print(" ")
+            print(exception)
+            return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
+
+    def form_invalid(self, form, **kwargs):
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+
+        form_invalid_message(self.request)
+        return self.render_to_response(ctx)
+
+
+class RoleEditModal(generic.UpdateView):
+    # login_url = '/login'
+    model = Roles
+    form_class = RoleForm
+    template_name = "roles/role_update_modal.html"
+
+    def get_success_url(self):
+        updated_message(self.request)
+        return reverse_lazy("users_app:role_list")
+
+    def get_context_data(self, **kwargs):
+        context = super(RoleEditModal, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = role_title
+        context["description_view"] = role_desc
+        return context
+
+    def form_valid(self, form):
+        objects = diplicate_roles(self, form)
+        if objects > 0:
+            duplicate_message(self.request)
+            return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
+        try:
+            form.instance.updated_at = datetime.now()
+            return super().form_valid(form)
+        except Exception as exception:
+            error_message(self.request)
+            print(" ")
+            print(exception)
+            return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
+
+    def form_invalid(self, form, **kwargs):
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+
+        form_invalid_message(self.request)
+        return self.render_to_response(ctx)
+
+
+class RoleDeleteModal(generic.UpdateView):
+    # login_url = '/login'
+    model = Roles
+    form_class = FormDelete
+    template_name = "roles/role_delete_modal.html"
+
+    def get_success_url(self):
+        deleted_message(self.request)
+        return reverse_lazy("users_app:role_list")
+
+    def get_context_data(self, **kwargs):
+        context = super(RoleDeleteModal, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = role_title
+        context["description_view"] = role_desc
+        return context
+
+    def form_valid(self, form):
+        try:
+            form.instance.deleted_at = datetime.now()
+            return super().form_valid(form)
+        except Exception as exception:
+            error_message(self.request)
+            print(" ")
+            print(exception)
+            return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
 
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)

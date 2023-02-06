@@ -63,3 +63,22 @@ def diplicate_apps(self, form):
     count_name = apps.filter(name__exact=name).count()
     count_route = apps.filter(route__exact=route).count()
     return count_name, count_route
+
+
+def diplicate_roles(self, form):
+    """
+    If the role name already exists in the database, then return the count of the role name.
+    
+    :param form: The form instance that is being validated
+    :return: The count of the number of roles that have the same name as the role being created or
+    updated.
+    """
+    _id = self.kwargs.get("pk", None)
+    roles = Roles.objects.all()
+
+    if _id:
+        roles = roles.exclude(id=_id)
+
+    role_name = form.instance.role_name
+    count = roles.filter(role_name__exact=role_name).count()
+    return count

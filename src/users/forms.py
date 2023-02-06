@@ -133,3 +133,38 @@ class AppForm(forms.ModelForm):
 
     def clean(self):
         datos = self.cleaned_data
+
+
+class RoleForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(RoleForm, self).__init__(*args, **kwargs)
+        self.fields["role_name"].label = "Nombre"
+        self.fields["description"].label = "Descripción"
+
+    class Meta:
+        model = Roles
+
+        fields = [
+            "role_name",
+            "description",
+        ]
+
+        widgets = {
+            "role_name": forms.TextInput(
+                attrs={
+                    "placeholder": "Nombre del rol",
+                    "class": "form-control",
+                    "minlength": "1",
+                    "maxlength": "50",
+                }
+            ),
+            "description": forms.Textarea(
+                attrs={
+                    "placeholder": "Descripción del rol",
+                    "class": "form-control",
+                }
+            ),
+        }
+
+    def clean(self):
+        datos = self.cleaned_data

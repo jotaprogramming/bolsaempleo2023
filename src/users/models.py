@@ -31,6 +31,7 @@ class Apps(models.Model):
 
 class Roles(models.Model):
     role_name = models.CharField(max_length=50, unique=True, null=False)
+    description = models.TextField(null=False)
     created_at = models.DateTimeField(auto_now_add=True, null=False)
     updated_at = models.DateTimeField(auto_now_add=False, editable=True, null=True)
     deleted_at = models.DateTimeField(auto_now_add=False, editable=True, null=True)

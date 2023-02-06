@@ -35,4 +35,11 @@ urlpatterns = [
         AppEditModal.as_view(),
         name="app_edit",
     ),
+    # USER GROUPS
+    path("role/list", RoleList.as_view(), name="role_list"),
+    path("role/add", RoleCreate.as_view(), name="role_add"),
+    path("role/edit/<int:pk>", RoleEditModal.as_view(), name="role_edit"),
+    path(
+        "role/delete/<int:pk>", RoleDeleteModal.as_view(), name="role_delete"
+    ),
 ]

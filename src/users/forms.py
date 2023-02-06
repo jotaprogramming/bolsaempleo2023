@@ -168,3 +168,55 @@ class RoleForm(forms.ModelForm):
 
     def clean(self):
         datos = self.cleaned_data
+
+
+class RuleForm(forms.ModelForm):
+    app = forms.ModelMultipleChoiceField(
+        queryset=Apps.objects.filter(deleted_at=None),
+        required=True,
+        label="Aplicación",
+        widget=forms.SelectMultiple(attrs={"class": "form-select"}),
+    )
+
+    role = forms.ModelMultipleChoiceField(
+        queryset=Roles.objects.filter(deleted_at=None),
+        required=True,
+        label="Rol",
+        widget=forms.SelectMultiple(attrs={"class": "form-select"}),
+    )
+
+    restriction = forms.ModelMultipleChoiceField(
+        queryset=Restrictions.objects.filter(deleted_at=None),
+        required=False,
+        label="Restricción",
+        widget=forms.SelectMultiple(attrs={"class": "form-select"}),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(RuleForm, self).__init__(*args, **kwargs)
+        self.fields["code"].label = "Código"
+        self.fields["app"].label = "Aplicación"
+
+    class Meta:
+        model = Rules
+
+        fields = [
+            "code",
+            "app",
+            "role",
+            "restriction",
+        ]
+
+        widgets = {
+            "code": forms.TextInput(
+                attrs={
+                    "placeholder": "Código de la normativa",
+                    "class": "form-control",
+                    "minlength": "1",
+                    "maxlength": "6",
+                }
+            ),
+        }
+
+    def clean(self):
+        datos = self.cleaned_data

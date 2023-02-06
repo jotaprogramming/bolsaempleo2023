@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from .managers import *
 
 
 # Create your models here.
@@ -10,6 +11,9 @@ class UserGroups(models.Model):
     updated_at = models.DateTimeField(auto_now_add=False, editable=True, null=True)
     deleted_at = models.DateTimeField(auto_now_add=False, editable=True, null=True)
 
+    def __str__(self):
+        return "{}".format(self.group_name)
+
 
 class Restrictions(models.Model):
     code = models.CharField(max_length=3, unique=True, null=False)
@@ -18,6 +22,9 @@ class Restrictions(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=False)
     updated_at = models.DateTimeField(auto_now_add=False, editable=True, null=True)
     deleted_at = models.DateTimeField(auto_now_add=False, editable=True, null=True)
+
+    def __str__(self):
+        return "{}".format(self.name)
 
 
 class Apps(models.Model):
@@ -28,6 +35,9 @@ class Apps(models.Model):
     updated_at = models.DateTimeField(auto_now_add=False, editable=True, null=True)
     deleted_at = models.DateTimeField(auto_now_add=False, editable=True, null=True)
 
+    def __str__(self):
+        return "{}".format(self.name)
+
 
 class Roles(models.Model):
     role_name = models.CharField(max_length=50, unique=True, null=False)
@@ -36,20 +46,27 @@ class Roles(models.Model):
     updated_at = models.DateTimeField(auto_now_add=False, editable=True, null=True)
     deleted_at = models.DateTimeField(auto_now_add=False, editable=True, null=True)
 
+    def __str__(self):
+        return "{}".format(self.role_name)
+
 
 class Rules(models.Model):
+    code = models.CharField(max_length=6, unique=True, null=False)
     app = models.ManyToManyField(Apps, related_name="app_rule", blank=False)
     restriction = models.ManyToManyField(
         Restrictions,
         related_name="restriction_rule",
-        blank=False,
+        blank=True,
     )
-    role = models.ManyToManyField(
-        Roles, related_name="role_rule", blank=False
-    )
+    role = models.ManyToManyField(Roles, related_name="role_rule", blank=False)
     created_at = models.DateTimeField(auto_now_add=True, null=False)
     updated_at = models.DateTimeField(auto_now_add=False, editable=True, null=True)
     deleted_at = models.DateTimeField(auto_now_add=False, editable=True, null=True)
+
+    objects = RulesManager()
+
+    def __str__(self):
+        return "{}".format(self.code)
 
 
 class Users(models.Model):

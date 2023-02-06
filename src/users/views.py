@@ -11,6 +11,7 @@ from django.urls import reverse_lazy, reverse
 from django.views import generic
 from django.db import IntegrityError
 from django.conf import settings
+from django.db.models import Q, F, Count,CharField, DecimalField, Value, Sum, Avg, Min, Max
 
 # EXTRA MODULES
 import sweetify
@@ -34,6 +35,8 @@ app_view_title = "Aplicaciones"
 app_view_desc = "Módulos del sistema"
 role_title = "Roles"
 role_desc = "Función que un usuario desempeña dentro del sistema"
+rule_title = "Reglas"
+rule_desc = "Serie de normativas que deben cumplir los usuarios del sistema"
 
 
 # Create your views here.
@@ -378,7 +381,7 @@ class AppEditModal(generic.UpdateView):
         return self.render_to_response(ctx)
 
 
-# USER GROUPS
+# ROLES
 class RoleList(generic.ListView):
     # login_url = "/login"
     model = Roles
@@ -500,6 +503,141 @@ class RoleDeleteModal(generic.UpdateView):
             print(" ")
             print(exception)
             return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
+
+    def form_invalid(self, form, **kwargs):
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+
+        form_invalid_message(self.request)
+        return self.render_to_response(ctx)
+
+
+# RULES
+class RuleList(generic.ListView):
+    # login_url = "/login"
+    model = Rules
+    template_name = "rules/rule_list.html"
+    paginate_by = 25
+
+    def get_queryset(self):
+        data = Rules.objects.get_nums()
+        return data
+
+    def get_context_data(self, **kwargs):
+        context = super(RuleList, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = rule_title
+        context["description_view"] = rule_desc
+        return context
+
+
+class RuleCreate(generic.CreateView):
+    # login_url = "/login"
+    model = Rules
+    form_class = RuleForm
+    template_name = "rules/rule_create_modal.html"
+
+    def get_success_url(self):
+        created_message(self.request)
+        return reverse_lazy("users_app:rule_list")
+
+    def get_context_data(self, **kwargs):
+        context = super(RuleCreate, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = rule_title
+        context["description_view"] = rule_desc
+        return context
+
+    def form_valid(self, form):
+        objects = diplicate_rules(self, form)
+        if objects > 0:
+            duplicate_message(self.request)
+            return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
+        try:
+            return super().form_valid(form)
+        except Exception as exception:
+            error_message(self.request)
+            print(" ")
+            print(exception)
+            return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
+
+    def form_invalid(self, form, **kwargs):
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+
+        form_invalid_message(self.request)
+        return self.render_to_response(ctx)
+
+
+class RuleEditModal(generic.UpdateView):
+    # login_url = '/login'
+    model = Rules
+    form_class = RuleForm
+    template_name = "rules/rule_update_modal.html"
+
+    def get_success_url(self):
+        updated_message(self.request)
+        return reverse_lazy("users_app:rule_list")
+
+    def get_context_data(self, **kwargs):
+        context = super(RuleEditModal, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = rule_title
+        context["description_view"] = rule_desc
+        return context
+
+    def form_valid(self, form):
+        objects = diplicate_rules(self, form)
+        if objects > 0:
+            duplicate_message(self.request)
+            return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
+        try:
+            form.instance.updated_at = datetime.now()
+            return super().form_valid(form)
+        except Exception as exception:
+            error_message(self.request)
+            print(" ")
+            print(exception)
+            return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
+
+    def form_invalid(self, form, **kwargs):
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+
+        form_invalid_message(self.request)
+        return self.render_to_response(ctx)
+
+
+class RuleDeleteModal(generic.UpdateView):
+    # login_url = '/login'
+    model = Rules
+    form_class = FormDelete
+    template_name = "rules/rule_delete_modal.html"
+
+    def get_queryset(self):
+        data = Rules.objects.get_nums()
+        return data
+
+    def get_success_url(self):
+        deleted_message(self.request)
+        return reverse_lazy("users_app:rule_list")
+
+    def get_context_data(self, **kwargs):
+        context = super(RuleDeleteModal, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = rule_title
+        context["description_view"] = rule_desc
+        return context
+
+    def form_valid(self, form):
+        try:
+            form.instance.deleted_at = datetime.now()
+            return super().form_valid(form)
+        except Exception as exception:
+            error_message(self.request)
+            print(" ")
+            print(exception)
+            return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
 
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)

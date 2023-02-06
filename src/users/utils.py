@@ -68,7 +68,7 @@ def diplicate_apps(self, form):
 def diplicate_roles(self, form):
     """
     If the role name already exists in the database, then return the count of the role name.
-    
+
     :param form: The form instance that is being validated
     :return: The count of the number of roles that have the same name as the role being created or
     updated.
@@ -81,4 +81,23 @@ def diplicate_roles(self, form):
 
     role_name = form.instance.role_name
     count = roles.filter(role_name__exact=role_name).count()
+    return count
+
+
+def diplicate_rules(self, form):
+    """
+    If the role name already exists in the database, then return the count of the role name.
+
+    :param form: The form instance that is being validated
+    :return: The count of the number of roles that have the same name as the role being created or
+    updated.
+    """
+    _id = self.kwargs.get("pk", None)
+    rules = Rules.objects.all()
+
+    if _id:
+        rules = rules.exclude(id=_id)
+
+    code = form.instance.code
+    count = rules.filter(code__exact=code).count()
     return count

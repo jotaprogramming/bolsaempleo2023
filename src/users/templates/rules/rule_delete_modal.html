@@ -2,7 +2,7 @@
 
 <div class="modal-dialog modal-dialog-centered">
   <div class="modal-content">
-    <form method="POST" action="{% url 'users_app:restriction_delete' object.id %}" id="form">
+    <form method="POST" action="{% url 'users_app:rule_delete' object.id %}" id="form">
       <div class="modal-header">
         <h5 class="modal-title">Eliminar</h5>
         <button
@@ -23,21 +23,17 @@
             {{object.code}}
           </small>
           <small class="m-0 col-12">
-            <strong>Nombre:</strong>
-            {{object.name}}
+            <strong>Aplicaciones: </strong>
+            {{object.num_apps}}
           </small>
           <small class="m-0 col-12">
-            <strong>Descripción</strong>
-            {{object.description}}
-          </small>
-          <small class="m-0 col-12">
-            <strong>Creado:</strong>
-            {{object.created_at}}
+            <strong>Roles: </strong>
+            {{object.num_roles}}
           </small>
           {% if object.updated_at %}
           <small class="m-0 col-12">
-            <strong>Actualizado:</strong>
-            {{object.updated_at}}
+            <strong>Restricciones: </strong>
+            {{object.num_restrictions}}
           </small>
           {% endif %}
         </div>

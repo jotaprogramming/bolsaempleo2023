@@ -25,8 +25,9 @@
 }
 
 .w-sliding{
+    /* overflow: hidden; */
     width: 0 !important;
-    transition: width 300ms ease-in;
+    transition: all 150ms ease-in-out;
 }
 
 /* WIDTH AND HEIGHT */
@@ -89,6 +90,17 @@
     width: 100% !important;
 } */
 
+.btn-center{
+    min-height: 38px;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-sliding:hover .w-sliding{
+    margin-left: .5rem;
+    width: fit-content !important;
+}
 
 /* BORDERS */
 

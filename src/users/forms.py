@@ -41,9 +41,9 @@ class UserGroupForm(forms.ModelForm):
         datos = self.cleaned_data
 
 
-class UserGroupFormDelete(forms.ModelForm):
+class FormDelete(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(UserGroupFormDelete, self).__init__(*args, **kwargs)
+        super(FormDelete, self).__init__(*args, **kwargs)
         self.fields["deleted_at"].required = False
 
     class Meta:
@@ -63,3 +63,48 @@ class UserGroupFormDelete(forms.ModelForm):
                 }
             ),
         }
+
+
+class RestrictionForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(RestrictionForm, self).__init__(*args, **kwargs)
+        self.fields["code"].label = "Código"
+        self.fields["name"].label = "Nombre"
+        self.fields["description"].label = "Descripción"
+
+    class Meta:
+        model = Restrictions
+
+        fields = [
+            "code",
+            "name",
+            "description",
+        ]
+
+        widgets = {
+            "code": forms.TextInput(
+                attrs={
+                    "placeholder": "Código de la restricción",
+                    "class": "form-control",
+                    "minlength": "1",
+                    "maxlength": "3",
+                }
+            ),
+            "name": forms.TextInput(
+                attrs={
+                    "placeholder": "Nombre de la restricción",
+                    "class": "form-control",
+                    "minlength": "1",
+                    "maxlength": "25",
+                }
+            ),
+            "description": forms.Textarea(
+                attrs={
+                    "placeholder": "Descripción de la restricción",
+                    "class": "form-control",
+                }
+            ),
+        }
+
+    def clean(self):
+        datos = self.cleaned_data

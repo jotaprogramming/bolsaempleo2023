@@ -1,0 +1,19 @@
+<div class="modal-header">
+  <h5 class="modal-title">Crear</h5>
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="modal"
+    aria-label="Close"
+  ></button>
+</div>
+<div class="modal-body">
+  {% csrf_token %}
+  <div class="d-flex flex-column gap-2">{{form}}</div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+    Cerrar
+  </button>
+  <button type="submit" class="btn btn-primary">Guardar</button>
+</div>

@@ -18,14 +18,20 @@ import sweetify
 from users.forms import *
 from users.models import *
 from core.utils import *
+from users.utils import *
 
 # PROJECT FORMS
 
 # GLOBAL VARIABLES
-title_app = "Grupo de usuarios"
+app_title = "Usuarios"
+usergroup_title = "Grupos de usuarios"
+usergroup_desc = "Conjunto de usuarios que comparten un mismo propósito"
+restriction_title = "Restricciones"
+restriction_desc = "Todo tipo de acciones prohibidas para los usuarios"
 
 
 # Create your views here.
+# USER GROUPS
 class UserGroupList(generic.ListView):
     # login_url = "/login"
     model = UserGroups
@@ -38,7 +44,9 @@ class UserGroupList(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super(UserGroupList, self).get_context_data(**kwargs)
-        context["title_app"] = title_app
+        context["app_title"] = app_title
+        context["title_view"] = usergroup_title
+        context["description_view"] = usergroup_desc
         return context
 
 
@@ -49,29 +57,19 @@ class UserGroupCreate(generic.CreateView):
     template_name = "usergroups/usergroup_create_modal.html"
 
     def get_success_url(self):
-        swal_title = "Éxito"
-        swal_msg = "Registro creado satisfactoriamente"
-        swal_time = 5000
-        sweetify.success(
-            self.request,
-            title=swal_title,
-            text=swal_msg,
-            icon="success",
-            timer=swal_time,
-            timerProgressBar="true",
-            button="Ok",
-        )
+        created_message(self.request)
         return reverse_lazy("users_app:usergroup_list")
 
     def get_context_data(self, **kwargs):
         context = super(UserGroupCreate, self).get_context_data(**kwargs)
-        context["title_app"] = title_app
+        context["app_title"] = app_title
+        context["title_view"] = usergroup_title
+        context["description_view"] = usergroup_desc
         return context
 
     def form_valid(self, form):
-        group_name = form.instance.group_name
-        groups = UserGroups.objects.filter(group_name__exact=group_name).count()
-        if groups:
+        objects = diplicate_usergroups(self, form)
+        if objects > 0:
             duplicate_message(self.request)
             return HttpResponseRedirect(reverse_lazy("users_app:usergroup_list"))
         try:
@@ -86,18 +84,7 @@ class UserGroupCreate(generic.CreateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        swal_title = "Advertencia"
-        swal_msg = "Formulario inválido"
-        swal_time = 5000
-        sweetify.warning(
-            self.request,
-            title=swal_title,
-            text=swal_msg,
-            icon="warning",
-            timer=swal_time,
-            timerProgressBar="true",
-            button="Ok",
-        )
+        form_invalid_message(self.request)
         return self.render_to_response(ctx)
 
 
@@ -108,26 +95,21 @@ class UserGroupEditModal(generic.UpdateView):
     template_name = "usergroups/usergroup_update_modal.html"
 
     def get_success_url(self):
-        swal_title = "Éxito"
-        swal_msg = "Registro actualizado satisfactoriamente"
-        swal_time = 5000
-        sweetify.success(
-            self.request,
-            title=swal_title,
-            text=swal_msg,
-            icon="success",
-            timer=swal_time,
-            timerProgressBar="true",
-            button="Ok",
-        )
+        updated_message(self.request)
         return reverse_lazy("users_app:usergroup_list")
 
     def get_context_data(self, **kwargs):
         context = super(UserGroupEditModal, self).get_context_data(**kwargs)
-        context["title_app"] = title_app
+        context["app_title"] = app_title
+        context["title_view"] = usergroup_title
+        context["description_view"] = usergroup_desc
         return context
 
     def form_valid(self, form):
+        objects = diplicate_usergroups(self, form)
+        if objects > 0:
+            duplicate_message(self.request)
+            return HttpResponseRedirect(reverse_lazy("users_app:usergroup_list"))
         try:
             form.instance.updated_at = datetime.now()
             return super().form_valid(form)
@@ -141,45 +123,25 @@ class UserGroupEditModal(generic.UpdateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        swal_title = "Advertencia"
-        swal_msg = "Formulario inválido"
-        swal_time = 5000
-        sweetify.warning(
-            self.request,
-            title=swal_title,
-            text=swal_msg,
-            icon="warning",
-            timer=swal_time,
-            timerProgressBar="true",
-            button="Ok",
-        )
+        form_invalid_message(self.request)
         return self.render_to_response(ctx)
 
 
 class UserGroupDeleteModal(generic.UpdateView):
     # login_url = '/login'
     model = UserGroups
-    form_class = UserGroupFormDelete
+    form_class = FormDelete
     template_name = "usergroups/usergroup_delete_modal.html"
 
     def get_success_url(self):
-        swal_title = "Éxito"
-        swal_msg = "Registro eliminado satisfactoriamente"
-        swal_time = 5000
-        sweetify.success(
-            self.request,
-            title=swal_title,
-            text=swal_msg,
-            icon="success",
-            timer=swal_time,
-            timerProgressBar="true",
-            button="Ok",
-        )
+        deleted_message(self.request)
         return reverse_lazy("users_app:usergroup_list")
 
     def get_context_data(self, **kwargs):
         context = super(UserGroupDeleteModal, self).get_context_data(**kwargs)
-        context["title_app"] = title_app
+        context["app_title"] = app_title
+        context["title_view"] = usergroup_title
+        context["description_view"] = usergroup_desc
         return context
 
     def form_valid(self, form):
@@ -196,45 +158,138 @@ class UserGroupDeleteModal(generic.UpdateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        swal_title = "Advertencia"
-        swal_msg = "Formulario inválido"
-        swal_time = 5000
-        sweetify.warning(
-            self.request,
-            title=swal_title,
-            text=swal_msg,
-            icon="warning",
-            timer=swal_time,
-            timerProgressBar="true",
-            button="Ok",
-        )
+        form_invalid_message(self.request)
         return self.render_to_response(ctx)
 
 
-"""
-class HomePage(LoginRequiredMixin, generic.FormView):
-    login_url = '/login'
-    model = HomePage 
-    form_class = HomePageForm
-    template_name='home/home_page.html'
+# RESTRICTIONS
 
-    def get_success_url(self):
-        messages.success(self.request, '...')
-        return reverse_lazy('home_app:home_page')
 
-    def get_context_data(self, **kwargs):
-        context = super(HomePage, self).get_context_data(**kwargs)      
-        return context 
+class RestrictionList(generic.ListView):
+    # login_url = "/login"
+    model = Restrictions
+    template_name = "restrictions/restriction_list.html"
+    paginate_by = 25
 
     def get_queryset(self):
-        data = Model.objects.all()
+        data = Restrictions.objects.all().order_by("id")
         return data
 
+    def get_context_data(self, **kwargs):
+        context = super(RestrictionList, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = restriction_title
+        context["description_view"] = restriction_desc
+        return context
+
+
+class RestrictionCreate(generic.CreateView):
+    # login_url = "/login"
+    model = Restrictions
+    form_class = RestrictionForm
+    template_name = "restrictions/restriction_create_modal.html"
+
+    def get_success_url(self):
+        created_message(self.request)
+        return reverse_lazy("users_app:restriction_list")
+
+    def get_context_data(self, **kwargs):
+        context = super(RestrictionCreate, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = restriction_title
+        context["description_view"] = restriction_desc
+        return context
+
     def form_valid(self, form):
-        return super().form_valid(form)
+        count_code, count_name = diplicate_restrictions(self, form)
+        if count_code > 0 or count_name > 0:
+            duplicate_message(self.request)
+            return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
+        try:
+            return super().form_valid(form)
+        except Exception as exception:
+            error_message(self.request)
+            print(" ")
+            print(exception)
+            return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
 
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)
-        ctx['form'] = form
+        ctx["form"] = form
+
+        form_invalid_message(self.request)
         return self.render_to_response(ctx)
-"""
+
+
+class RestrictionEditModal(generic.UpdateView):
+    # login_url = '/login'
+    model = Restrictions
+    form_class = RestrictionForm
+    template_name = "restrictions/restriction_update_modal.html"
+
+    def get_success_url(self):
+        updated_message(self.request)
+        return reverse_lazy("users_app:restriction_list")
+
+    def get_context_data(self, **kwargs):
+        context = super(RestrictionEditModal, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = restriction_title
+        context["description_view"] = restriction_desc
+        return context
+
+    def form_valid(self, form):
+        count_code, count_name = diplicate_restrictions(self, form)
+        if count_code > 0 or count_name > 0:
+            duplicate_message(self.request)
+            return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
+        try:
+            form.instance.updated_at = datetime.now()
+            return super().form_valid(form)
+        except Exception as exception:
+            error_message(self.request)
+            print(" ")
+            print(exception)
+            return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
+
+    def form_invalid(self, form, **kwargs):
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+
+        form_invalid_message(self.request)
+        return self.render_to_response(ctx)
+
+
+class RestrictionDeleteModal(generic.UpdateView):
+    # login_url = '/login'
+    model = Restrictions
+    form_class = FormDelete
+    template_name = "restrictions/restriction_delete_modal.html"
+
+    def get_success_url(self):
+        deleted_message(self.request)
+        return reverse_lazy("users_app:restriction_list")
+
+    def get_context_data(self, **kwargs):
+        context = super(RestrictionDeleteModal, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = restriction_title
+        context["description_view"] = restriction_desc
+        return context
+
+    def form_valid(self, form):
+        try:
+            form.instance.deleted_at = datetime.now()
+            return super().form_valid(form)
+        except Exception as exception:
+            error_message(self.request)
+            print(" ")
+            print(exception)
+            return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
+
+    def form_invalid(self, form, **kwargs):
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+
+        form_invalid_message(self.request)
+        return self.render_to_response(ctx)

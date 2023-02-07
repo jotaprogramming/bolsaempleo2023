@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+{% block content %}
+<form method="POST" action="" id="form">
+    {% csrf_token %}
+    {{form}}
+    <button type="submit" class="btn btn-success" id="btn_save">Ingresar</button>
+</form>
+{% endblock content %}

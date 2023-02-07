@@ -5,7 +5,7 @@
   {% include 'partials/_display.html' %}
   <div class="row gy-3 mt-3">
     <div class="col-12">
-        <button
+      {% comment %} <button
         type="button"
         class="btn btn-primary btn-center"
         name="createButtons"
@@ -13,7 +13,7 @@
       >
         <i class="lni lni-plus"></i>
         <span class="ms-2">Crear</span>
-      </button>
+      </button> {% endcomment %}
     </div>
     <div class="col-12">
       <table class="table">
@@ -45,8 +45,6 @@
               {% endif %}
             </td>
             <td>
-              <!-- data-bs-toggle="modal"
-                                data-bs-target="#userGroupModal" -->
               {% if not row.deleted_at %}
               <button
                 type="button"

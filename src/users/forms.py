@@ -1,9 +1,18 @@
+# PYTHON MODULES
+import inspect
+
 # DJANGO MODULES
 from django import forms
 from django.conf import settings
+from django.contrib.auth import _get_backends
+from django.contrib.auth.forms import AuthenticationForm, UsernameField
+from django.utils.text import capfirst
+from django.utils.translation import gettext_lazy as _
+
 
 # PROJECT MODULES
 from users.models import *
+from users.utils import *
 
 
 class UserGroupForm(forms.ModelForm):
@@ -194,29 +203,178 @@ class RuleForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(RuleForm, self).__init__(*args, **kwargs)
-        self.fields["code"].label = "Código"
+        self.fields["user"].label = "Usuario"
         self.fields["app"].label = "Aplicación"
+        self.fields["role"].label = "Rol"
+        self.fields["restriction"].label = "Restricción"
 
     class Meta:
         model = Rules
 
         fields = [
-            "code",
+            "user",
             "app",
             "role",
             "restriction",
         ]
 
         widgets = {
-            "code": forms.TextInput(
+            "user": forms.Select(attrs={"class": "form-select"}),
+        }
+
+
+class UserForm(forms.ModelForm):
+    repeat_pass = forms.CharField(
+        label="Repetir Contraseña",
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "Repite la contraseña",
+                "class": "form-control",
+                "minlength": "8",
+            }
+        ),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        self.fields["username"].label = "Usuario"
+        self.fields["email"].label = "Correo electrónico"
+        self.fields["password"].label = "Contraseña"
+        self.fields["is_superuser"].label = "¿Es superusuario?"
+        self.fields["is_superuser"].required = False
+        self.fields["is_staff"].label = "¿Es administrativo?"
+        self.fields["is_staff"].required = False
+        self.fields["is_active"].label = "¿Es activo?"
+        self.fields["is_active"].required = False
+
+    class Meta:
+        model = User
+
+        fields = [
+            "email",
+            "username",
+            "password",
+            "repeat_pass",
+            "is_superuser",
+            "is_staff",
+            "is_active",
+        ]
+
+        widgets = {
+            "username": forms.TextInput(
                 attrs={
-                    "placeholder": "Código de la normativa",
+                    "placeholder": "Nombre de usuario",
                     "class": "form-control",
-                    "minlength": "1",
-                    "maxlength": "6",
+                    "minlength": "3",
+                    "maxlength": "150",
+                }
+            ),
+            "password": forms.PasswordInput(
+                attrs={
+                    "placeholder": "Contraseña",
+                    "class": "form-control",
+                    "minlength": "8",
+                }
+            ),
+            "email": forms.EmailInput(
+                attrs={
+                    "placeholder": "Correo Electrónico",
+                    "class": "form-control",
+                }
+            ),
+            "is_superuser": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
+                }
+            ),
+            "is_staff": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
+                }
+            ),
+            "is_active": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
                 }
             ),
         }
 
-    def clean(self):
-        datos = self.cleaned_data
+    def clean_repeat_pass(self):
+        if self.cleaned_data["password"] != self.cleaned_data["repeat_pass"]:
+            self.add_error("repeat_pass", "Contraseña incorrecta")
+
+
+class UserFormUpdate(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserFormUpdate, self).__init__(*args, **kwargs)
+        self.fields["username"].label = "Usuario"
+        self.fields["email"].label = "Correo electrónico"
+        self.fields["is_superuser"].label = "¿Es superusuario?"
+        self.fields["is_superuser"].required = False
+        self.fields["is_staff"].label = "¿Es administrativo?"
+        self.fields["is_staff"].required = False
+        self.fields["is_active"].label = "¿Es activo?"
+        self.fields["is_active"].required = False
+
+    class Meta:
+        model = User
+
+        fields = [
+            "email",
+            "username",
+            "is_superuser",
+            "is_staff",
+            "is_active",
+        ]
+
+        widgets = {
+            "username": forms.TextInput(
+                attrs={
+                    "placeholder": "Nombre de usuario",
+                    "class": "form-control",
+                    "minlength": "3",
+                    "maxlength": "150",
+                }
+            ),
+            "email": forms.EmailInput(
+                attrs={
+                    "placeholder": "Correo Electrónico",
+                    "class": "form-control",
+                }
+            ),
+            "is_superuser": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
+                }
+            ),
+            "is_staff": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
+                }
+            ),
+            "is_active": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
+                }
+            ),
+        }
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(
+        label=_("User"),
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": _("User"),
+            }
+        ),
+    )
+    password = forms.CharField(
+        label=_("Password"),
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={"class": "form-control", "placeholder": _("Password")}
+        ),
+    )

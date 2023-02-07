@@ -1,0 +1,85 @@
+{% load static %}
+
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <form method="POST" action="{% url 'users_app:user_add' %}" id="form">
+      {% comment %} {% include 'partials/_form_create_modal.html' %} {% endcomment %}
+      <div class="modal-header">
+        <h5 class="modal-title">Crear</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+        <div class="d-flex flex-column gap-2">
+          <div class="">
+            <label for="id_email" class="form-label">
+              {{form.email.label}}
+            </label>
+            {{form.email}}
+            <div id="emailHelp" class="form-text">{{form.email.help_text}}</div>
+          </div>
+          <div class="">
+            <label for="id_username" class="form-label">
+              {{form.username.label}}
+            </label>
+            {{form.username}}
+            <div id="usernameHelp" class="form-text">{{form.username.help_text}}</div>
+          </div>
+          <div class="">
+            <label for="id_password" class="form-label">
+              {{form.password.label}}
+            </label>
+            {{form.password}}
+            <div id="passwordHelp" class="form-text">{{form.password.help_text}}</div>
+          </div>
+          <div class="">
+            <label for="id_repeat_pass" class="form-label">
+              {{form.repeat_pass.label}}
+            </label>
+            {{form.repeat_pass}}
+            <div id="repeat_passHelp" class="form-text">{{form.repeat_pass.help_text}}</div>
+          </div>
+          <div class="">
+            <div class="form-check form-switch">
+              {{form.is_superuser}}
+              <label for="id_is_superuser" class="form-check-label">
+                {{form.is_superuser.label}}
+              </label>
+            </div>
+            <div id="is_superuserHelp" class="form-text">{{form.is_superuser.help_text}}</div>
+          </div>
+          <div class="">
+            <div class="form-check form-switch">
+              {{form.is_staff}}
+              <label for="id_is_staff" class="form-check-label">
+                {{form.is_staff.label}}
+              </label>
+            </div>
+            <div id="is_staffHelp" class="form-text">{{form.is_staff.help_text}}</div>
+          </div>
+          <div class="">
+            <div class="form-check form-switch">
+              {{form.is_active}}
+              <label for="id_is_active" class="form-check-label">
+                {{form.is_active.label}}
+              </label>
+            </div>
+            <div id="is_activeHelp" class="form-text">{{form.is_active.help_text}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+      
+    </form>
+  </div>
+</div>

@@ -20,7 +20,7 @@
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th>Código</th>
+              <th>Usuario</th>
               <th>Aplicaciones</th>
               <th>Roles</th>
               <th>Restricciones</th>
@@ -33,7 +33,7 @@
             {% for row in object_list %}
             <tr>
               <td scope="row">{{row.id}}</td>
-              <td>{{row.code}}</td>
+              <td>{{row.user}}</td>
               <td>{{row.num_apps}}</td>
               <td>{{row.num_roles}}</td>
               <td>{{row.num_restrictions}}</td>
@@ -47,8 +47,6 @@
                 {% endif %}
               </td>
               <td>
-                <!-- data-bs-toggle="modal"
-                                data-bs-target="#userGroupModal" -->
                 {% if not row.deleted_at %}
                 <button
                   type="button"

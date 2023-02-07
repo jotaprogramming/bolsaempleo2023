@@ -5,13 +5,26 @@ import json
 # DJANGO MODULES
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.contrib import messages
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse, resolve
 from django.views import generic
 from django.db import IntegrityError
 from django.conf import settings
-from django.db.models import Q, F, Count,CharField, DecimalField, Value, Sum, Avg, Min, Max
+from django.db.models import (
+    Q,
+    F,
+    Count,
+    CharField,
+    DecimalField,
+    Value,
+    Sum,
+    Avg,
+    Min,
+    Max,
+)
+from django.utils.translation import gettext_lazy as _
 
 # EXTRA MODULES
 import sweetify
@@ -26,25 +39,31 @@ from jobboard.utils import *
 # PROJECT FORMS
 
 # GLOBAL VARIABLES
-app_title = "Usuarios"
-usergroup_title = "Grupos de usuarios"
-usergroup_desc = "Conjunto de usuarios que comparten un mismo propósito"
-restriction_title = "Restricciones"
-restriction_desc = "Todo tipo de acciones prohibidas para los usuarios"
-app_view_title = "Aplicaciones"
-app_view_desc = "Módulos del sistema"
-role_title = "Roles"
-role_desc = "Función que un usuario desempeña dentro del sistema"
-rule_title = "Reglas"
-rule_desc = "Serie de normativas que deben cumplir los usuarios del sistema"
+app_title = _("Usuarios")
+usergroup_title = _("Grupos de usuarios")
+usergroup_desc = _("Conjunto de usuarios que comparten un mismo propósito")
+restriction_title = _("Restricciones")
+restriction_desc = _("Todo tipo de acciones prohibidas para los usuarios")
+app_view_title = _("Aplicaciones")
+app_view_desc = _("Módulos del sistema")
+role_title = _("Roles")
+role_desc = _("Función que un usuario desempeña dentro del sistema")
+rule_title = _("Reglas")
+rule_desc = _("Serie de normativas que deben cumplir los usuarios del sistema")
+user_title = _("Usuarios")
+user_desc = _("Actores del sistema")
+login_title = _("Ingresar")
+login_desc = _("Inicio de sesión")
+register_title = _("Registro")
+register_desc = _("Registrarse")
 
 
 # Create your views here.
 
 
 # USER GROUPS
-class UserGroupList(generic.ListView):
-    # login_url = "/login"
+class UserGroupList(LoginRequiredMixin, generic.ListView):
+    login_url = "/login"
     model = UserGroups
     template_name = "usergroups/usergroup_list.html"
     paginate_by = 25
@@ -61,8 +80,8 @@ class UserGroupList(generic.ListView):
         return context
 
 
-class UserGroupCreate(generic.CreateView):
-    # login_url = "/login"
+class UserGroupCreate(LoginRequiredMixin, generic.CreateView):
+    login_url = "/login"
     model = UserGroups
     form_class = UserGroupForm
     template_name = "usergroups/usergroup_create_modal.html"
@@ -79,11 +98,12 @@ class UserGroupCreate(generic.CreateView):
         return context
 
     def form_valid(self, form):
-        objects = diplicate_usergroups(self, form)
+        objects = duplicate_usergroups(self, form)
         if objects > 0:
             duplicate_message(self.request)
             return HttpResponseRedirect(reverse_lazy("users_app:usergroup_list"))
         try:
+            form.instance.group_name = str(form.instance.group_name).lower()
             return super().form_valid(form)
         except Exception as exception:
             error_message(self.request)
@@ -99,8 +119,8 @@ class UserGroupCreate(generic.CreateView):
         return self.render_to_response(ctx)
 
 
-class UserGroupEditModal(generic.UpdateView):
-    # login_url = '/login'
+class UserGroupEditModal(LoginRequiredMixin, generic.UpdateView):
+    login_url = "/login"
     model = UserGroups
     form_class = UserGroupForm
     template_name = "usergroups/usergroup_update_modal.html"
@@ -117,12 +137,13 @@ class UserGroupEditModal(generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        objects = diplicate_usergroups(self, form)
+        objects = duplicate_usergroups(self, form)
         if objects > 0:
             duplicate_message(self.request)
             return HttpResponseRedirect(reverse_lazy("users_app:usergroup_list"))
         try:
-            form.instance.updated_at = datetime.now()
+            form.instance.group_name = str(form.instance.group_name).lower()
+            form.instance.updated_at = timezone.now()
             return super().form_valid(form)
         except Exception as exception:
             error_message(self.request)
@@ -138,8 +159,8 @@ class UserGroupEditModal(generic.UpdateView):
         return self.render_to_response(ctx)
 
 
-class UserGroupDeleteModal(generic.UpdateView):
-    # login_url = '/login'
+class UserGroupDeleteModal(LoginRequiredMixin, generic.UpdateView):
+    login_url = "/login"
     model = UserGroups
     form_class = FormDelete
     template_name = "usergroups/usergroup_delete_modal.html"
@@ -157,7 +178,7 @@ class UserGroupDeleteModal(generic.UpdateView):
 
     def form_valid(self, form):
         try:
-            form.instance.deleted_at = datetime.now()
+            form.instance.deleted_at = timezone.now()
             return super().form_valid(form)
         except Exception as exception:
             error_message(self.request)
@@ -176,8 +197,8 @@ class UserGroupDeleteModal(generic.UpdateView):
 # RESTRICTIONS
 
 
-class RestrictionList(generic.ListView):
-    # login_url = "/login"
+class RestrictionList(LoginRequiredMixin, generic.ListView):
+    login_url = "/login"
     model = Restrictions
     template_name = "restrictions/restriction_list.html"
     paginate_by = 25
@@ -194,8 +215,8 @@ class RestrictionList(generic.ListView):
         return context
 
 
-class RestrictionCreate(generic.CreateView):
-    # login_url = "/login"
+class RestrictionCreate(LoginRequiredMixin, generic.CreateView):
+    login_url = "/login"
     model = Restrictions
     form_class = RestrictionForm
     template_name = "restrictions/restriction_create_modal.html"
@@ -212,11 +233,13 @@ class RestrictionCreate(generic.CreateView):
         return context
 
     def form_valid(self, form):
-        count_code, count_name = diplicate_restrictions(self, form)
+        count_code, count_name = duplicate_restrictions(self, form)
         if count_code > 0 or count_name > 0:
             duplicate_message(self.request)
             return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
         try:
+            form.instance.code = str(form.instance.code).upper()
+            form.instance.name = str(form.instance.name).lower()
             return super().form_valid(form)
         except Exception as exception:
             error_message(self.request)
@@ -232,8 +255,8 @@ class RestrictionCreate(generic.CreateView):
         return self.render_to_response(ctx)
 
 
-class RestrictionEditModal(generic.UpdateView):
-    # login_url = '/login'
+class RestrictionEditModal(LoginRequiredMixin, generic.UpdateView):
+    login_url = "/login"
     model = Restrictions
     form_class = RestrictionForm
     template_name = "restrictions/restriction_update_modal.html"
@@ -250,12 +273,14 @@ class RestrictionEditModal(generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        count_code, count_name = diplicate_restrictions(self, form)
+        count_code, count_name = duplicate_restrictions(self, form)
         if count_code > 0 or count_name > 0:
             duplicate_message(self.request)
             return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
         try:
-            form.instance.updated_at = datetime.now()
+            form.instance.code = str(form.instance.code).upper()
+            form.instance.name = str(form.instance.name).lower()
+            form.instance.updated_at = timezone.now()
             return super().form_valid(form)
         except Exception as exception:
             error_message(self.request)
@@ -271,8 +296,8 @@ class RestrictionEditModal(generic.UpdateView):
         return self.render_to_response(ctx)
 
 
-class RestrictionDeleteModal(generic.UpdateView):
-    # login_url = '/login'
+class RestrictionDeleteModal(LoginRequiredMixin, generic.UpdateView):
+    login_url = "/login"
     model = Restrictions
     form_class = FormDelete
     template_name = "restrictions/restriction_delete_modal.html"
@@ -290,7 +315,7 @@ class RestrictionDeleteModal(generic.UpdateView):
 
     def form_valid(self, form):
         try:
-            form.instance.deleted_at = datetime.now()
+            form.instance.deleted_at = timezone.now()
             return super().form_valid(form)
         except Exception as exception:
             error_message(self.request)
@@ -307,8 +332,8 @@ class RestrictionDeleteModal(generic.UpdateView):
 
 
 # APPS
-class AppList(generic.ListView):
-    # login_url = "/login"
+class AppList(LoginRequiredMixin, generic.ListView):
+    login_url = "/login"
     model = Apps
     template_name = "apps/app_list.html"
     paginate_by = 25
@@ -342,8 +367,8 @@ class AppList(generic.ListView):
         return context
 
 
-class AppEditModal(generic.UpdateView):
-    # login_url = '/login'
+class AppEditModal(LoginRequiredMixin, generic.UpdateView):
+    login_url = "/login"
     model = Apps
     form_class = AppForm
     template_name = "apps/app_update_modal.html"
@@ -360,12 +385,12 @@ class AppEditModal(generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        count_name, count_route = diplicate_apps(self, form)
+        count_name, count_route = duplicate_apps(self, form)
         if count_name > 0 or count_route > 0:
             duplicate_message(self.request)
             return HttpResponseRedirect(reverse_lazy("users_app:app_list"))
         try:
-            form.instance.updated_at = datetime.now()
+            form.instance.updated_at = timezone.now()
             return super().form_valid(form)
         except Exception as exception:
             error_message(self.request)
@@ -382,8 +407,8 @@ class AppEditModal(generic.UpdateView):
 
 
 # ROLES
-class RoleList(generic.ListView):
-    # login_url = "/login"
+class RoleList(LoginRequiredMixin, generic.ListView):
+    login_url = "/login"
     model = Roles
     template_name = "roles/role_list.html"
     paginate_by = 25
@@ -400,8 +425,8 @@ class RoleList(generic.ListView):
         return context
 
 
-class RoleCreate(generic.CreateView):
-    # login_url = "/login"
+class RoleCreate(LoginRequiredMixin, generic.CreateView):
+    login_url = "/login"
     model = Roles
     form_class = RoleForm
     template_name = "roles/role_create_modal.html"
@@ -418,11 +443,12 @@ class RoleCreate(generic.CreateView):
         return context
 
     def form_valid(self, form):
-        objects = diplicate_roles(self, form)
+        objects = duplicate_roles(self, form)
         if objects > 0:
             duplicate_message(self.request)
             return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
         try:
+            form.instance.role_name = str(form.instance.role_name).lower()
             return super().form_valid(form)
         except Exception as exception:
             error_message(self.request)
@@ -438,8 +464,8 @@ class RoleCreate(generic.CreateView):
         return self.render_to_response(ctx)
 
 
-class RoleEditModal(generic.UpdateView):
-    # login_url = '/login'
+class RoleEditModal(LoginRequiredMixin, generic.UpdateView):
+    login_url = "/login"
     model = Roles
     form_class = RoleForm
     template_name = "roles/role_update_modal.html"
@@ -456,12 +482,13 @@ class RoleEditModal(generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        objects = diplicate_roles(self, form)
+        objects = duplicate_roles(self, form)
         if objects > 0:
             duplicate_message(self.request)
             return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
         try:
-            form.instance.updated_at = datetime.now()
+            form.instance.role_name = str(form.instance.role_name).lower()
+            form.instance.updated_at = timezone.now()
             return super().form_valid(form)
         except Exception as exception:
             error_message(self.request)
@@ -477,8 +504,8 @@ class RoleEditModal(generic.UpdateView):
         return self.render_to_response(ctx)
 
 
-class RoleDeleteModal(generic.UpdateView):
-    # login_url = '/login'
+class RoleDeleteModal(LoginRequiredMixin, generic.UpdateView):
+    login_url = "/login"
     model = Roles
     form_class = FormDelete
     template_name = "roles/role_delete_modal.html"
@@ -496,7 +523,7 @@ class RoleDeleteModal(generic.UpdateView):
 
     def form_valid(self, form):
         try:
-            form.instance.deleted_at = datetime.now()
+            form.instance.deleted_at = timezone.now()
             return super().form_valid(form)
         except Exception as exception:
             error_message(self.request)
@@ -513,8 +540,8 @@ class RoleDeleteModal(generic.UpdateView):
 
 
 # RULES
-class RuleList(generic.ListView):
-    # login_url = "/login"
+class RuleList(LoginRequiredMixin, generic.ListView):
+    login_url = "/login"
     model = Rules
     template_name = "rules/rule_list.html"
     paginate_by = 25
@@ -531,8 +558,8 @@ class RuleList(generic.ListView):
         return context
 
 
-class RuleCreate(generic.CreateView):
-    # login_url = "/login"
+class RuleCreate(LoginRequiredMixin, generic.CreateView):
+    login_url = "/login"
     model = Rules
     form_class = RuleForm
     template_name = "rules/rule_create_modal.html"
@@ -549,10 +576,10 @@ class RuleCreate(generic.CreateView):
         return context
 
     def form_valid(self, form):
-        objects = diplicate_rules(self, form)
-        if objects > 0:
-            duplicate_message(self.request)
-            return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
+        # objects = duplicate_rules(self, form)
+        # if objects > 0:
+        #     duplicate_message(self.request)
+        #     return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
         try:
             return super().form_valid(form)
         except Exception as exception:
@@ -569,8 +596,8 @@ class RuleCreate(generic.CreateView):
         return self.render_to_response(ctx)
 
 
-class RuleEditModal(generic.UpdateView):
-    # login_url = '/login'
+class RuleEditModal(LoginRequiredMixin, generic.UpdateView):
+    login_url = "/login"
     model = Rules
     form_class = RuleForm
     template_name = "rules/rule_update_modal.html"
@@ -587,12 +614,13 @@ class RuleEditModal(generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        objects = diplicate_rules(self, form)
-        if objects > 0:
-            duplicate_message(self.request)
-            return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
+        # objects = duplicate_rules(self, form)
+        # if objects > 0:
+        #     duplicate_message(self.request)
+        #     return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
         try:
-            form.instance.updated_at = datetime.now()
+            form.instance.code = str(form.instance.code).upper()
+            form.instance.updated_at = timezone.now()
             return super().form_valid(form)
         except Exception as exception:
             error_message(self.request)
@@ -608,8 +636,8 @@ class RuleEditModal(generic.UpdateView):
         return self.render_to_response(ctx)
 
 
-class RuleDeleteModal(generic.UpdateView):
-    # login_url = '/login'
+class RuleDeleteModal(LoginRequiredMixin, generic.UpdateView):
+    login_url = "/login"
     model = Rules
     form_class = FormDelete
     template_name = "rules/rule_delete_modal.html"
@@ -631,7 +659,7 @@ class RuleDeleteModal(generic.UpdateView):
 
     def form_valid(self, form):
         try:
-            form.instance.deleted_at = datetime.now()
+            form.instance.deleted_at = timezone.now()
             return super().form_valid(form)
         except Exception as exception:
             error_message(self.request)
@@ -645,3 +673,189 @@ class RuleDeleteModal(generic.UpdateView):
 
         form_invalid_message(self.request)
         return self.render_to_response(ctx)
+
+
+# USERS
+class UserList(LoginRequiredMixin, generic.ListView):
+    login_url = "/login"
+    model = User
+    template_name = "users/user_list.html"
+    paginate_by = 25
+
+    def get_queryset(self):
+        data = User.objects.all()
+        return data
+
+    def get_context_data(self, **kwargs):
+        context = super(UserList, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = user_title
+        context["description_view"] = user_desc
+        return context
+
+
+class UserCreate(LoginRequiredMixin, generic.FormView):
+    login_url = "/login"
+    model = User
+    form_class = UserForm
+    template_name = "users/user_create_modal.html"
+
+    def get_success_url(self):
+        created_message(self.request)
+        return reverse_lazy("users_app:user_list")
+
+    def get_context_data(self, **kwargs):
+        context = super(UserCreate, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = user_title
+        context["description_view"] = user_desc
+        return context
+
+    def form_valid(self, form):
+        objects = duplicate_users(self, form)
+        if objects > 0:
+            duplicate_message(self.request)
+            return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
+        try:
+            username = str(form.instance.username).lower()
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+            is_superuser = form.cleaned_data["is_superuser"]
+            is_staff = form.cleaned_data["is_staff"]
+            is_active = form.cleaned_data["is_active"]
+            User.objects.create_user(
+                username=username,
+                email=email,
+                password=password,
+                is_superuser=is_superuser,
+                is_staff=is_staff,
+                is_active=is_active,
+            )
+            return super().form_valid(form)
+        except Exception as exception:
+            error_message(self.request)
+            print(" ")
+            print(exception)
+            return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
+
+    def form_invalid(self, form, **kwargs):
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+
+        form_invalid_message(self.request)
+        return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
+
+
+class UserEditModal(LoginRequiredMixin, generic.UpdateView):
+    login_url = "/login"
+    model = User
+    form_class = UserFormUpdate
+    template_name = "users/user_update_modal.html"
+
+    def get_success_url(self):
+        updated_message(self.request)
+        return reverse_lazy("users_app:user_list")
+
+    def get_context_data(self, **kwargs):
+        context = super(UserEditModal, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = user_title
+        context["description_view"] = user_desc
+        return context
+
+    def form_valid(self, form):
+        objects = duplicate_users(self, form)
+        if objects > 0:
+            duplicate_message(self.request)
+            return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
+        try:
+            form.instance.username = str(form.instance.username).lower()
+            return super().form_valid(form)
+        except Exception as exception:
+            error_message(self.request)
+            print(" ")
+            print(exception)
+            return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
+
+    def form_invalid(self, form, **kwargs):
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+
+        form_invalid_message(self.request)
+        return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
+
+
+class UserDeleteModal(LoginRequiredMixin, generic.UpdateView):
+    login_url = "/login"
+    model = User
+    form_class = FormDelete
+    template_name = "users/user_delete_modal.html"
+
+    def get_queryset(self):
+        data = User.objects.all()
+        return data
+
+    def get_success_url(self):
+        deleted_message(self.request)
+        return reverse_lazy("users_app:user_list")
+
+    def get_context_data(self, **kwargs):
+        context = super(UserDeleteModal, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = user_title
+        context["description_view"] = user_desc
+        return context
+
+    def form_valid(self, form):
+        try:
+            form.instance.is_active = False
+            return super().form_valid(form)
+        except Exception as exception:
+            error_message(self.request)
+            print(" ")
+            print(exception)
+            return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
+
+    def form_invalid(self, form, **kwargs):
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+
+        form_invalid_message(self.request)
+        return self.render_to_response(ctx)
+
+
+class UserLogin(generic.FormView):
+    model = User
+    form_class = LoginForm
+    template_name = "users/login.html"
+
+    def get_success_url(self):
+        user = self.request.user
+        if user.is_superuser:
+            return reverse_lazy("users_app:user_list")
+        else:
+            return reverse_lazy("users_app:user_list")
+
+    def get_context_data(self, **kwargs):
+        context = super(UserLogin, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = login_title
+        context["description_view"] = login_desc
+        return context
+
+
+    def form_valid(self, form):
+        username = form.cleaned_data["username"]
+        password = form.cleaned_data["password"]
+        user = authenticate(
+            username=username,
+            password=password,
+        )
+        login(self.request, user)
+        return super().form_valid(form)
+
+
+class UserLogout(generic.View):
+    def get(self, request, *args, **kargs):
+        logout(request)
+        return HttpResponseRedirect(reverse("users_app:user_list"))

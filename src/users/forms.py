@@ -229,7 +229,7 @@ class UserForm(forms.ModelForm):
         required=True,
         widget=forms.PasswordInput(
             attrs={
-                "placeholder": "Repite la contraseña",
+                "placeholder": "Confirmar contraseña",
                 "class": "form-control",
                 "minlength": "8",
             }
@@ -279,7 +279,7 @@ class UserForm(forms.ModelForm):
             ),
             "email": forms.EmailInput(
                 attrs={
-                    "placeholder": "Correo Electrónico",
+                    "placeholder": "Correo electrónico",
                     "class": "form-control",
                 }
             ),
@@ -339,7 +339,7 @@ class UserFormUpdate(forms.ModelForm):
             ),
             "email": forms.EmailInput(
                 attrs={
-                    "placeholder": "Correo Electrónico",
+                    "placeholder": "Correo electrónico",
                     "class": "form-control",
                 }
             ),
@@ -360,6 +360,7 @@ class UserFormUpdate(forms.ModelForm):
             ),
         }
 
+
 class LoginForm(AuthenticationForm):
     username = forms.CharField(
         label=_("User"),
@@ -378,3 +379,69 @@ class LoginForm(AuthenticationForm):
             attrs={"class": "form-control", "placeholder": _("Password")}
         ),
     )
+
+
+class RegisterForm(forms.ModelForm):
+    repeat_pass = forms.CharField(
+        label="Repetir Contraseña",
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "Repita la contraseña",
+                "class": "form-control",
+                "minlength": "8",
+            }
+        ),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(RegisterForm, self).__init__(*args, **kwargs)
+        self.fields["username"].label = "Usuario"
+        self.fields["email"].label = "Correo electrónico"
+        self.fields["password"].label = "Contraseña"
+
+    class Meta:
+        model = User
+
+        fields = [
+            "username",
+            "email",
+            "password",
+            "repeat_pass",
+        ]
+
+        widgets = {
+            "username": forms.TextInput(
+                attrs={
+                    "placeholder": "Nombre de usuario",
+                    "class": "form-control",
+                    "minlength": "3",
+                    "maxlength": "150",
+                }
+            ),
+            "password": forms.PasswordInput(
+                attrs={
+                    "placeholder": "Contraseña",
+                    "class": "form-control",
+                    "minlength": "8",
+                }
+            ),
+            "email": forms.EmailInput(
+                attrs={
+                    "placeholder": "Correo electrónico",
+                    "class": "form-control",
+                }
+            ),
+        }
+
+    def clean(self):
+        username = self.cleaned_data["username"]
+        user_cache = User.objects.filter(username=username).count()
+        if user_cache > 0:
+            if username == 'admin' or username == 'root':
+                self.add_error("username", _(f'Nombre de usuario no permitido'))
+            else:
+                self.add_error("username", _(f'El nombre de usuario ya existe'))
+
+        if self.cleaned_data["password"] != self.cleaned_data["repeat_pass"]:
+            self.add_error("repeat_pass", _(f'Contraseña inválida'))

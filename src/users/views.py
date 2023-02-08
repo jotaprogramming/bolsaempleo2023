@@ -33,6 +33,7 @@ import sweetify
 from users.forms import *
 from users.models import *
 from core.utils import *
+from core.middlewares import UserLoggedMixin
 from users.utils import *
 from jobboard.utils import *
 
@@ -66,7 +67,7 @@ class UserGroupList(LoginRequiredMixin, generic.ListView):
     login_url = "/login"
     model = UserGroups
     template_name = "usergroups/usergroup_list.html"
-    paginate_by = 25
+    paginate_by = 10
 
     def get_queryset(self):
         data = UserGroups.objects.all().order_by("id")
@@ -201,7 +202,7 @@ class RestrictionList(LoginRequiredMixin, generic.ListView):
     login_url = "/login"
     model = Restrictions
     template_name = "restrictions/restriction_list.html"
-    paginate_by = 25
+    paginate_by = 10
 
     def get_queryset(self):
         data = Restrictions.objects.all().order_by("id")
@@ -336,7 +337,7 @@ class AppList(LoginRequiredMixin, generic.ListView):
     login_url = "/login"
     model = Apps
     template_name = "apps/app_list.html"
-    paginate_by = 25
+    paginate_by = 10
 
     def set_urls_in_db(self):
         """
@@ -346,10 +347,20 @@ class AppList(LoginRequiredMixin, generic.ListView):
         urls = get_url_names()
 
         for url in urls:
-            objects = Apps.objects.all()
-            name_count = objects.filter(name__exact=url["name"]).count()
-            route_count = objects.filter(route__exact=url["route"]).count()
-            if name_count == 0 or route_count == 0:
+            objects = Apps.objects.all().order_by("id")
+            f_objects = objects.filter(
+                name__exact=url["name"], route__exact=url["route"]
+            )
+            if not f_objects:
+                name_cache = objects.filter(name__exact=url["name"])
+                if name_cache:
+                    name_cache.update(route=url["route"], updated_at=timezone.now())
+                    continue
+                else:
+                    route_cache = objects.filter(route__exact=url["route"])
+                    if route_cache:
+                        route_cache.update(name=url["name"], updated_at=timezone.now())
+                        continue
                 app = Apps(name=url["name"], route=url["route"], description="App")
                 app.save()
 
@@ -411,7 +422,7 @@ class RoleList(LoginRequiredMixin, generic.ListView):
     login_url = "/login"
     model = Roles
     template_name = "roles/role_list.html"
-    paginate_by = 25
+    paginate_by = 10
 
     def get_queryset(self):
         data = Roles.objects.all().order_by("id")
@@ -544,7 +555,7 @@ class RuleList(LoginRequiredMixin, generic.ListView):
     login_url = "/login"
     model = Rules
     template_name = "rules/rule_list.html"
-    paginate_by = 25
+    paginate_by = 10
 
     def get_queryset(self):
         data = Rules.objects.get_nums()
@@ -680,10 +691,10 @@ class UserList(LoginRequiredMixin, generic.ListView):
     login_url = "/login"
     model = User
     template_name = "users/user_list.html"
-    paginate_by = 25
+    paginate_by = 10
 
     def get_queryset(self):
-        data = User.objects.all()
+        data = User.objects.all().order_by("id")
         return data
 
     def get_context_data(self, **kwargs):
@@ -792,7 +803,7 @@ class UserDeleteModal(LoginRequiredMixin, generic.UpdateView):
     template_name = "users/user_delete_modal.html"
 
     def get_queryset(self):
-        data = User.objects.all()
+        data = User.objects.all().order_by("id")
         return data
 
     def get_success_url(self):
@@ -824,17 +835,17 @@ class UserDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return self.render_to_response(ctx)
 
 
-class UserLogin(generic.FormView):
+class UserLogin(UserLoggedMixin, generic.FormView):
     model = User
     form_class = LoginForm
     template_name = "users/login.html"
 
     def get_success_url(self):
         user = self.request.user
-        if user.is_superuser:
+        if user.is_staff:
             return reverse_lazy("users_app:user_list")
         else:
-            return reverse_lazy("users_app:user_list")
+            return reverse_lazy("home_app:home_page")
 
     def get_context_data(self, **kwargs):
         context = super(UserLogin, self).get_context_data(**kwargs)
@@ -842,7 +853,6 @@ class UserLogin(generic.FormView):
         context["title_view"] = login_title
         context["description_view"] = login_desc
         return context
-
 
     def form_valid(self, form):
         username = form.cleaned_data["username"]
@@ -858,4 +868,63 @@ class UserLogin(generic.FormView):
 class UserLogout(generic.View):
     def get(self, request, *args, **kargs):
         logout(request)
-        return HttpResponseRedirect(reverse("users_app:user_list"))
+        return HttpResponseRedirect(reverse("users_app:login"))
+
+
+class RegisterView(UserLoggedMixin, generic.FormView):
+    model = User
+    form_class = RegisterForm
+    template_name = "users/register.html"
+
+    def get_success_url(self):
+        created_message(self.request)
+        return reverse_lazy("users_app:login")
+
+    def get_context_data(self, **kwargs):
+        context = super(RegisterView, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = register_title
+        context["description_view"] = register_desc
+        return context
+
+    def form_valid(self, form):
+        objects = duplicate_users(self, form)
+        if objects > 0:
+            user_duplicate_message(self.request)
+            return HttpResponseRedirect(reverse_lazy("home_app:register"))
+        try:
+            username = str(form.instance.username).lower()
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+            User.objects.create_user(
+                username=username,
+                email=email,
+                password=password,
+            )
+            return super().form_valid(form)
+        except Exception as exception:
+            error_message(self.request)
+            print(" ")
+            print(exception)
+            return HttpResponseRedirect(reverse_lazy("home_app:register"))
+
+    def form_invalid(self, form, **kwargs):
+        ctx = self.get_context_data(**kwargs)
+        json_errors = form.errors.as_json()
+        errors = json.loads(json_errors)
+        try:
+            all_error = errors["__all__"][0]
+        except:
+            all_error = errors
+
+        msg_error = ""
+
+        if len(all_error.keys()) > 0:
+            print(all_error.items())
+            for key, value in all_error.items():
+                for msg in value:
+                    msg_error += f"{msg['message']};\n"
+
+        ctx["form"] = form
+        form_invalid_message(self.request, msg=msg_error)
+        return self.render_to_response(ctx)

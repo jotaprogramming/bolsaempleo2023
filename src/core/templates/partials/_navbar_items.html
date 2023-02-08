@@ -1,6 +1,6 @@
 <ul class="navbar-nav mb-2 mb-lg-0">
     <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Contacto</a>
+        <a class="nav-link" aria-current="page" href="#">Contacto</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="#">Ayuda</a>
@@ -33,6 +33,13 @@
         <ul class="dropdown-menu dropdown-menu-lg-end">
             <li><a class="dropdown-item" href="{% url 'users_app:logout' %}">Cerrar sesión</a></li>
         </ul>
+    </li>
+    {% else %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'users_app:login' %}">Ingresar</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'users_app:register' %}">Registrarse</a>
     </li>
     {% endif %}
 </ul>

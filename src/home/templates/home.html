@@ -1,0 +1,5 @@
+{% extends 'core/base.html' %} {% load static %} {% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %} {% block content %}
+<section class="my-5">{% include 'partials/_display.html' %}</section>
+{% endblock content %}

@@ -1,14 +1,48 @@
-{% extends 'core/base.html' %}
-{% load static %}
-
-{% block title %}
+{% extends 'core/base.html' %} {% load static %} {% block title %}
 <title>{{app_title}} | {{title_view}}</title>
-{% endblock title %}
-
-{% block content %}
-<form method="POST" action="" id="form">
+{% endblock title %} {% block content %}
+<section class="my-5">
+  <form method="POST" action="" id="form">
     {% csrf_token %}
-    {{form}}
-    <button type="submit" class="btn btn-success" id="btn_save">Ingresar</button>
-</form>
+    <div class="d-flex flex-column gap-3">
+      <div class="">
+        <div class="input-group">
+          {% comment %} <span class="input-group-text">
+            {% include 'partials/icon_element/_user_icon.html' %}
+          </span> {% endcomment %}
+          {{form.username}}
+        </div>
+      </div>
+      <div class="">
+        <div class="input-group">
+          <span class="input-group-text">
+            {% include 'partials/icon_element/_email_icon.html' %}
+          </span>
+          {{form.email}}
+        </div>
+      </div>
+      <div class="">
+        <div class="input-group">
+          <span class="input-group-text">
+            {% include 'partials/icon_element/_padlock_icon.html' %}
+          </span>
+          {{form.password}}
+        </div>
+      </div>
+      <div class="">
+        <div class="input-group">
+          <span class="input-group-text">
+            {% include 'partials/icon_element/_key_icon.html' %}
+          </span>
+          {{form.repeat_pass}}
+        </div>
+      </div>
+      <div class="">
+        <button type="submit" class="btn btn-primary rounded-pill" id="btn_save">
+          Registrarse
+        </button>
+      </div>
+    </div>
+  </form>
+</section>
 {% endblock content %}

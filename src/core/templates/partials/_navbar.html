@@ -12,9 +12,7 @@
         <button class="navbar-toggler mx-3" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
-            <figure class="h-center m-0 p-2 border-0">
-                <img class="w1m-h-auto" src="{% static 'core/assets/icon/icon-menu-burger.svg' %}" alt="icon-burger">
-            </figure>
+            {% include 'partials/icon_element/_burger_icon.html' %}
         </button>
         <div class="collapse navbar-collapse p-2 justify-content-between me-3" id="navbarSupportedContent">
             <form class="d-flex search-container" role="search">

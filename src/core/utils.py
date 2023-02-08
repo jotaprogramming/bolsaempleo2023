@@ -6,14 +6,14 @@ import sweetify
 from pprint import pprint
 
 
-def form_invalid_message(request):
+def form_invalid_message(request, msg=None):
     """
     It's a function that displays a message in the browser when a form is invalid.
     
     :param request: The request object
     """
     swal_title = "Advertencia"
-    swal_msg = "Formulario inválido"
+    swal_msg = msg if msg else "Formulario inválido"
     swal_time = 5000
     sweetify.warning(
         request,
@@ -120,6 +120,26 @@ def error_message(request):
         title=swal_title,
         text=swal_msg,
         icon="error",
+        timer=swal_time,
+        timerProgressBar="true",
+        button="Ok",
+    )
+
+
+def user_duplicate_message(request):
+    """
+    It's a function that takes a request object and returns a sweetify warning message
+    
+    :param request: The request object
+    """
+    swal_title = "Advertencia"
+    swal_msg = "El nombre de usuario ingresado ya está en uso"
+    swal_time = 5000
+    sweetify.warning(
+        request,
+        title=swal_title,
+        text=swal_msg,
+        icon="warning",
         timer=swal_time,
         timerProgressBar="true",
         button="Ok",

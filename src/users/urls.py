@@ -74,5 +74,8 @@ urlpatterns = [
     path("user/delete/<int:pk>", UserDeleteModal.as_view(), name="user_delete"),
     # LOG
     path("login/", UserLogin.as_view(), name="login"),
-    path("logout/", UserLogout.as_view(), name="logout"),
+    path("logout", UserLogout.as_view(), name="logout"),
+    path("register", RegisterView.as_view(), name="register"),
+    # TEST
+    path("test/test", RegisterView.as_view(), name="test"),
 ]

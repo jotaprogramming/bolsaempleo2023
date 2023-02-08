@@ -73,6 +73,9 @@
         </tbody>
       </table>
     </div>
+    {% if is_paginated %}
+    {% include 'partials/_pagination_sm.html' %}
+    {% endif %}
   </div>
 </section>
 

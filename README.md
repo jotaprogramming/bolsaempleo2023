@@ -66,3 +66,26 @@ docker-compose stop
 ```bash
 docker-compose down
 ```
+
+## Estructura de carpetas
+
+```bash
+.
+├──src······················#Código fuente del proyecto
+├──.gitignore···············#Carpetas y Archivos que serán ignorados por GIT
+├──docker-compose.yml·······#Archivo de configuración de Docker Compose
+├──Dockerfile···············#Archivo de configuración de Docker
+├──requirements.md··········#Lista de las dependencias del proyecto
+└──README.md················#Documentación útil para el desarrollo del proyecto
+```
+
+```bash
+.src 
+├──app······················#Aplicaciones del proyecto
+├──core·····················#Núcleo de las aplicaciones
+├──home·····················#Aplicación de inicio
+├──jobboard·················#Sitio web del projecto
+├──media····················#Carpeta para el almacenamiento de archivos multimedia
+├──users····················#Aplicación de usuarios (sistema de usuarios)
+└──manage.py················#Archivo principal de Django
+```

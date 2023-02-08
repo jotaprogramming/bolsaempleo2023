@@ -1,6 +1,6 @@
 # Proyecto de grado
 
-## Dependencies
+## Dependencias
 
 - Python 3.11.1
 - Django 4.1.6
@@ -8,7 +8,7 @@
 - Docker 4.16.1
 <!-- - Redis 7.0.8 -->
 
-## Commands
+## Comandos
 
 ### Ejecutar el proyecto
 

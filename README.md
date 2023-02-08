@@ -87,7 +87,6 @@ docker-compose down
 ├──jobboard·················#Sitio web del projecto
 ├──media····················#Carpeta para el almacenamiento de archivos multimedia
 ├──users····················#Aplicación de usuarios (sistema de usuarios)
-├──.env·····················#Variables de entorno
 └──manage.py················#Archivo principal de Django
 ```
 

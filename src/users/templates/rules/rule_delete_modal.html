@@ -19,8 +19,8 @@
         </h6>
         <div class="row mb-2 text-secondary">
           <small class="m-0 col-12">
-            <strong>Código:</strong>
-            {{object.code}}
+            <strong>Usuario:</strong>
+            {{object.user}}
           </small>
           <small class="m-0 col-12">
             <strong>Aplicaciones: </strong>
@@ -30,12 +30,10 @@
             <strong>Roles: </strong>
             {{object.num_roles}}
           </small>
-          {% if object.updated_at %}
           <small class="m-0 col-12">
             <strong>Restricciones: </strong>
             {{object.num_restrictions}}
           </small>
-          {% endif %}
         </div>
         <div class="alert alert-warning" role="alert">
           ¿Está seguro que desea continuar?

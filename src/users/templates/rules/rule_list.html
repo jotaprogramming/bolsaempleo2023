@@ -36,7 +36,12 @@
             <td>{{row.user}}</td>
             <td>{{row.num_apps}}</td>
             <td>{{row.num_roles}}</td>
-            <td>{{row.num_restrictions}}</td>
+            <td>
+              {{row.num_restrictions}}
+              {% for restriction in row.restrictions %}
+              {{restriction}}
+              {% endfor %}
+            </td>
             <td>
               {% if row.deleted_at %} Eliminado el {{row.deleted_at}} {% elif
               row.updated_at %} Actualizado el {{row.updated_at}} {% else %}

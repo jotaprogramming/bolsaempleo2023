@@ -14,4 +14,7 @@ RUN python -m pip install -r requirements.txt
 
 COPY ./src/ /code/
 
-EXPOSE 3000
+COPY ./entrypoint.sh /
+ENTRYPOINT ["sh", "/entrypoint.sh"]
+
+EXPOSE 8000

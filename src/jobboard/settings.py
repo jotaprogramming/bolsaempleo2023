@@ -87,6 +87,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "jobboard.wsgi.application"
 
+DB_OPT = env("DB_OPT")
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -98,7 +99,7 @@ DATABASES = {
     # ImproperlyConfigured exception if not found
     #
     # The db() method is an alias for db_url().
-    "default": env.db("POSTGRES_URL"),
+    "default": env.db("POSTGRES_URL" if DB_OPT == "docker" else "DATABASE_URL"),
     "settings": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "settings.sqlite3",
@@ -154,4 +155,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-SWEETIFY_SWEETALERT_LIBRARY = 'sweetalert2'
+SWEETIFY_SWEETALERT_LIBRARY = "sweetalert2"

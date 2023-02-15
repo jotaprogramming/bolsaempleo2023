@@ -1,0 +1,22 @@
+:root {
+    /* COLORS */
+    --black: #0f0f0f;
+    --white: #f8f8f8;
+    --orange: #f4893c;
+    --burnt-orange: #ff5c16;
+    --salmon: #fadbce;
+    --shaded-orange: #ff843271;
+    --shaded-gray: #f5f5f571;
+    /* FILTERS */
+    --f-black: invert(0%) sepia(19%) saturate(24%) hue-rotate(318deg) brightness(96%) contrast(88%);
+    --f-white: invert(100%) sepia(82%) saturate(219%) hue-rotate(203deg) brightness(115%) contrast(95%);
+    --f-orange: invert(64%) sepia(28%) saturate(1695%) hue-rotate(334deg) brightness(100%) contrast(92%);
+    --f-burnt-orange: invert(46%) sepia(70%) saturate(3289%) hue-rotate(349deg) brightness(101%) contrast(104%);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Quicksand', sans-serif;
+}

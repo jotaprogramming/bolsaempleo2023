@@ -141,7 +141,13 @@ docker-compose down
 
 8. Solicite el archivo de configuraciones de las variables de entorno
 
-9. Asegúrese que el servidor de PostgreSQL esté funcionando y ejecute las migraciones
+9. Modifique el `settings.py`
+
+   ```python
+   "default": env.db(),
+   ```
+
+10. Asegúrese que el servidor de PostgreSQL esté funcionando y ejecute las migraciones
 
    ```bash
    python src/manage.py makemigrations
@@ -151,7 +157,7 @@ docker-compose down
    python src/manage.py migrate
    ```
 
-10. Levante el servidor de Django
+11. Levante el servidor de Django
 
     ```bash
     python src/manage.py runserver 0:8000

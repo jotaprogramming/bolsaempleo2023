@@ -1,0 +1,46 @@
+/* STYLES FOR PARTIALS */
+
+.search-container{
+    max-width: 40rem;
+}
+
+.pop-up-position{
+    position: fixed;
+    top: 5rem;
+    right: 0;
+    z-index: 10;
+    max-width: 18rem;
+}
+
+.pop-up-position .alert {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: .5rem 1rem !important;
+}
+
+.pop-up-position .alert .btn-close {
+    position: relative !important;
+    padding: 0;
+    min-width: 1rem;
+    min-height: 1rem;
+}
+
+.pop-up-position .alert > *{
+    font-size: 14px;
+}
+
+.pagination-800,
+.pagination-250 {
+    overflow: hidden;
+}
+
+.pagination-800 {
+    max-width: 800px;
+}
+
+.pagination-250 {
+    max-width: 250px;
+}

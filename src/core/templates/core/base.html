@@ -19,6 +19,9 @@
     {% comment %} STYLESHEETS {% endcomment %}
     <link rel="stylesheet" href="{% static 'core/stylesheets/main.css' %}" />
 
+    {% block styles %}
+    {% endblock styles %}
+
     {% comment %} FAVICON {% endcomment %}
     <link
       rel="apple-touch-icon"

@@ -630,7 +630,6 @@ class RuleEditModal(LoginRequiredMixin, generic.UpdateView):
         #     duplicate_message(self.request)
         #     return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
         try:
-            form.instance.code = str(form.instance.code).upper()
             form.instance.updated_at = timezone.now()
             return super().form_valid(form)
         except Exception as exception:

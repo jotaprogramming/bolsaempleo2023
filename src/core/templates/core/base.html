@@ -62,9 +62,9 @@
   </head>
   
   <body>
-    <header class="header">{% include 'partials/_navbar.html' %}</header>
+    <header class="header-container">{% include 'partials/_navbar.html' %}</header>
     {% include 'partials/_popup_alert.html' %}
-    <main class="container">{% block content %} {% endblock content %}</main>
+    <main class="body-container">{% block content %} {% endblock content %}</main>
 
     <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" aria-hidden="true"></div>
 

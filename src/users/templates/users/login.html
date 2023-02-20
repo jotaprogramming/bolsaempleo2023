@@ -1,7 +1,11 @@
 {% extends 'core/base.html' %} {% load static %} {% block title %}
 <title>{{app_title}} | {{title_view}}</title>
-{% endblock title %} {% block content %}
-<section class="my-5">
+{% endblock title %} 
+
+{% block content %}
+  
+<section class="">{% include 'partials/_log_reg_box.html' %}</section>
+<!-- <section class="my-5">
   <form method="POST" action="" id="form">
     {% csrf_token %}
     <div class="d-flex flex-column gap-3">
@@ -25,5 +29,5 @@
       </div>
     </div>
   </form>
-</section>
+</section> -->
 {% endblock content %}

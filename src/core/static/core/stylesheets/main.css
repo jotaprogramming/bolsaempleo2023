@@ -3,8 +3,54 @@
 @import url('./custom-bootstrap.css');
 @import url('./partials.css');
 
-/* FONTS */
 
+
+
+.header-container{
+    width: 100%;
+    height: 60px;
+    /* background-color: rgb(24, 154, 89); */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid #d7d7d7;
+}
+.body-container{
+    width: 100%;
+    height: calc(100vh - 60px);
+    /* background-color: lightcoral; */
+    position: relative;
+}
+
+.container-log-reg{
+    width: 100%;
+    height: calc(100vh - 60px);
+    /* background-color: yellow; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.log-reg-box{
+    width: 85%;
+    height: 85%;
+    /* background-color: aqua; */
+    border-radius: 10px;
+    border: 5px solid #d7d7d7;
+    display: flex;
+    flex-direction: column;
+}
+/* .box-left{
+    
+}
+.box-right{
+
+} */
+
+.brandi{
+    height: 100%;
+    width: 100%;
+}
+/* FONTS */
 .font-size-normal {
     font-size: 1rem;
 }
@@ -74,6 +120,15 @@
 
 /* BUTTONS */
 
+.brand-btn{
+    height: 100%;
+    max-width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
 .big-btn {
     padding: 1rem 3rem !important;
 }
@@ -112,3 +167,5 @@
 .corners {
     border-radius: 0 !important;
 }
+
+

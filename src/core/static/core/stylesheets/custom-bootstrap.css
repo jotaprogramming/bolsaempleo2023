@@ -1,7 +1,7 @@
 .btn-primary {
     color: var(--white) !important;
     background-color: var(--orange) !important;
-    border-color: var(--orange) !important;
+    /* border-color: var(--orange) !important; */
 }
 
 .btn-primary:hover {
@@ -17,6 +17,8 @@
     color: var(--white) !important;
     background-color: var(--orange) !important;
 }
+
+
 
 textarea:focus,
 input[type="text"]:focus,

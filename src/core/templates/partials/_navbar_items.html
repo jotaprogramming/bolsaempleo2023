@@ -1,9 +1,9 @@
-<ul class="navbar-nav mb-2 mb-lg-0">
+<ul class="navbar-nav mb-2 mb-lg-0 prueba">
     <li class="nav-item">
-        <a class="nav-link" aria-current="page" href="#">Contacto</a>
+        <a class="nav-link" aria-current="page" href="{% url 'home_app:help' %}">Contacto</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">Ayuda</a>
+        <a class="nav-link" href="">Ayuda</a>
     </li>
     {% if user.is_staff %}
     <li class="nav-item dropdown">
@@ -39,7 +39,8 @@
         <a class="nav-link" href="{% url 'users_app:login' %}">Ingresar</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'users_app:register' %}">Registrarse</a>
+        <!-- <a class="nav-link" href="{% url 'users_app:register' %}">Registrarse</a> -->
+        <a class="nav-link" href="{% url 'users_app:pre_register' %}">Registrarse</a>
     </li>
     {% endif %}
 </ul>

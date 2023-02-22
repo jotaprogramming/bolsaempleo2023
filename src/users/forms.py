@@ -279,7 +279,8 @@ class UserForm(forms.ModelForm):
             ),
             "email": forms.EmailInput(
                 attrs={
-                    "placeholder": "Correo electrónico",
+                    
+                    #"placeholder": "Correo electrónico",
                     "class": "form-control",
                 }
             ),
@@ -339,7 +340,7 @@ class UserFormUpdate(forms.ModelForm):
             ),
             "email": forms.EmailInput(
                 attrs={
-                    "placeholder": "Correo electrónico",
+                    #"placeholder": "Correo electrónico",
                     "class": "form-control",
                 }
             ),
@@ -367,8 +368,8 @@ class LoginForm(AuthenticationForm):
         required=True,
         widget=forms.TextInput(
             attrs={
-                "class": "form-control",
-                "placeholder": _("User"),
+                "class": "single-input",
+                # "placeholder": _("User"),
             }
         ),
     )
@@ -376,7 +377,10 @@ class LoginForm(AuthenticationForm):
         label=_("Password"),
         required=True,
         widget=forms.PasswordInput(
-            attrs={"class": "form-control", "placeholder": _("Password")}
+            attrs={
+                "class": "single-input", 
+                # "placeholder": _("Password")
+            }
         ),
     )
 
@@ -387,9 +391,19 @@ class RegisterForm(forms.ModelForm):
         required=True,
         widget=forms.PasswordInput(
             attrs={
-                "placeholder": "Repita la contraseña",
-                "class": "form-control",
+                # "placeholder": "Repita la contraseña",
+                "class": "single-input",
                 "minlength": "8",
+            }
+        ),
+    )
+    email = forms.CharField(
+        label=_("Email"),
+        required= True,
+        widget= forms.EmailInput(
+            attrs={
+                "class": "single-input",
+                
             }
         ),
     )
@@ -413,23 +427,25 @@ class RegisterForm(forms.ModelForm):
         widgets = {
             "username": forms.TextInput(
                 attrs={
-                    "placeholder": "Nombre de usuario",
-                    "class": "form-control",
+                    # "placeholder": "Nombre de usuario",
+                    "class": "single-input",
                     "minlength": "3",
                     "maxlength": "150",
                 }
             ),
             "password": forms.PasswordInput(
                 attrs={
-                    "placeholder": "Contraseña",
-                    "class": "form-control",
+                    # "placeholder": "Contraseña",
+                    "class": "single-input",
                     "minlength": "8",
                 }
             ),
             "email": forms.EmailInput(
                 attrs={
-                    "placeholder": "Correo electrónico",
-                    "class": "form-control",
+                    # "placeholder": "Correo electrónico",
+                    "class": "single-input",
+                    "minlength": "3",
+                    
                 }
             ),
         }

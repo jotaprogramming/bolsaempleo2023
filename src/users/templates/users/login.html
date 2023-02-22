@@ -3,31 +3,72 @@
 {% endblock title %} 
 
 {% block content %}
-  
-<section class="">{% include 'partials/_log_reg_box.html' %}</section>
-<!-- <section class="my-5">
-  <form method="POST" action="" id="form">
-    {% csrf_token %}
-    <div class="d-flex flex-column gap-3">
-      <div class="">
-        <div class="input-group">
-          {{form.username}}
+  <article class="forms-content">
+    <section class="content-box">
+      <section class="content-left d-none d-lg-block">
+        {% include 'partials/_log_reg_left-content.html' %}
+      </section>
+      <section class="content-rigth">
+        <div class="content-forms">
+          <div class="form-head text-center">
+            <h3 class="head-title text-uppercase">{{description_view}}</h3>
+            <h3 class="head-subtitle">Digite sus Credenciales</h3>
+          </div>
+          <div class="form-body">
+            <h4 class="body-text m-0">Recuerde que puede usar
+              tanto su correo electrónico como su usuario
+            </h4>
+            <form action="" method="post" id="form">
+              {% csrf_token %}
+              <div class="set-input my-3">
+                {{form.username}}
+                <span class="input-placeholder">Usuario</span>
+                <span class="input-icon"><i class="lni lni-user"></i></span>
+              </div>
+              <div class="set-input my-3">
+                {{form.password}}
+                <span class="input-placeholder">Contraseña</span>
+                <span class="input-icon"><i class="lni lni-lock"></i></span>
+              </div>
+              
+              <a class="text-dark" href="">Eh olvidado mi usuario o contraseña</a>
+              <button class="default-btn my-3" type="submit" id="btn_save">{{title_view}}</button>
+            </form>
+          </div>
+          <div class="form-footer text-center">
+            <span class="">Si aun no tiene Usuario y Contraseña <br>registrese <b><a class="text-dark" href="{% url 'users_app:pre_register' %}">AQUI</a></b> </span>
+            
+
+          </div>
         </div>
-      </div>
-      <div class="">
-        <div class="input-group">
-          <span class="input-group-text">
-            {% include 'partials/icon_element/_padlock_icon.html' %}
-          </span>
-          {{form.password}}
-        </div>
-      </div>
-      <div class="">
-        <button type="submit" class="btn btn-primary rounded-pill" id="btn_save">
-          Ingresar
-        </button>
-      </div>
-    </div>
-  </form>
-</section> -->
+      </section>
+     
+    </section>
+  </article>
+   
 {% endblock content %}
+ <!-- <section class="my-5">
+      <form method="POST" action="" id="form">
+        {% csrf_token %}
+        <div class="d-flex flex-column gap-3">
+          <div class="">
+            <div class="input-group">
+              {{form.username}}
+            </div>
+          </div>
+          <div class="">
+            <div class="input-group">
+              <span class="input-group-text">
+                {% include 'partials/icon_element/_padlock_icon.html' %}
+              </span>
+              {{form.password}}
+            </div>
+          </div>
+          <div class="">
+            <button type="submit" class="btn btn-primary rounded-pill" id="btn_save">
+              Ingresar
+            </button>
+          </div>
+        </div>
+      </form>
+    </section> -->

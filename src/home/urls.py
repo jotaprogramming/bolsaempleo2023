@@ -9,4 +9,6 @@ app_name = "home_app"
 
 urlpatterns = [
     path("", HomeView.as_view(), name="home_page"),
+    path("help", HelpView.as_view(), name="help"),
+    
 ]

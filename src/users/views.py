@@ -57,7 +57,9 @@ login_title = _("Ingresar")
 login_desc = _("Inicio de sesión")
 register_title = _("Registro")
 register_desc = _("Registrarse")
-
+pre_register_desc = _("Registrarse")
+pre_register_title = _("Seleccion")
+account_already = _("si ya dispone de Usuario y Contraseña")
 
 # Create your views here.
 
@@ -869,7 +871,24 @@ class UserLogout(generic.View):
         logout(request)
         return HttpResponseRedirect(reverse("users_app:login"))
 
+#----------------------------------------------
 
+
+class PreRegisterView(UserLoggedMixin, generic.TemplateView):
+   selection_url = '/pre_register'
+   template_name='users/selection_register.html'
+   
+   def get_context_data(self, **kwargs):
+       context = super(PreRegisterView, self).get_context_data(**kwargs)
+       context["app_title"] = app_title
+       context["title_view"] = pre_register_title
+       context["description_view"] = pre_register_desc
+       context["account_view"] = account_already
+       
+       return context
+   
+
+#----------------------------------------------------
 class RegisterView(UserLoggedMixin, generic.FormView):
     model = User
     form_class = RegisterForm
@@ -884,6 +903,8 @@ class RegisterView(UserLoggedMixin, generic.FormView):
         context["app_title"] = app_title
         context["title_view"] = register_title
         context["description_view"] = register_desc
+        context["account_view"] = account_already
+        #context["img_url"] = 'core/assets/img/img.jpg'
         return context
 
     def form_valid(self, form):

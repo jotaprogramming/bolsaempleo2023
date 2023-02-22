@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %} {% load static %} 
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+{% block content %}
+  <article class="forms-content">
+    <section class="content-box">
+      <section class="content-left d-none d-lg-block">
+        {% include 'partials/_log_reg_left-content.html' %}
+      </section>
+      <section class="content-rigth">
+        <div class="content-forms">
+          <div class="form-head text-center">
+            <h3 class="head-title text-uppercase">{{description_view}}</h3>
+            <h3 class="head-subtitle">Seleccione una opcion segun lo que este buscando</h3>
+          </div>
+          <div class="form-body">
+            <div class="body-box-content">
+              <a class="btn-register btn-register-graduate" href="{% url 'users_app:register' %}">
+                <span class="btn-register-icon"><i class="lni lni-graduation"></i></span>
+                <span class="btn-register-text">Estoy buscando trabajo</span>
+              </a>
+              <a class="btn-register btn-register-company" href="{% url 'users_app:register' %}">
+                <span class="btn-register-icon"><i class="lni lni-apartment"></i></span>
+                <span class="btn-register-text">Estoy buscando candidatos</span>
+              </a>
+            </div>
+          </div>
+          <div class="form-footer text-center">
+            <span>{{account_view}}<br>ingrese <b><a class="text-dark" href="{% url 'users_app:login' %}">AQUI</a></b> </span>
+            
+
+          </div>
+        </div>
+      </section>
+     
+    </section>
+  </article>
+   
+{% endblock content %}

@@ -1,7 +1,61 @@
-{% extends 'core/base.html' %} {% load static %} {% block title %}
+{% extends 'core/base.html' %} {% load static %} 
+{% block title %}
 <title>{{app_title}} | {{title_view}}</title>
-{% endblock title %} {% block content %}
-<section class="my-5">
+{% endblock title %}
+
+{% block content %}
+  <article class="forms-content">
+    <section class="content-box">
+      <section class="content-left d-none d-lg-block">
+        {% include 'partials/_log_reg_left-content.html' %}
+      </section>
+      <section class="content-rigth">
+        <div class="content-forms">
+          <div class="form-head text-center">
+            <h3 class="head-title text-uppercase">{{title_view}}</h3>
+            <h3 class="head-subtitle">Por favor, diligencie todos los campos</h3>
+          </div>
+          <div class="form-body">
+            <form action="" method="post" id="form">
+              {% csrf_token %}
+              <div class="set-input my-3">
+                {{form.username}}
+                <span class="input-placeholder">Usuario</span>
+                <span class="input-icon"><i class="lni lni-user"></i></span>
+              </div>
+              <div class="set-input my-3">
+                {{form.email}}
+                <span class="input-placeholder">correo electrónico</span>
+                <span class="input-icon"><i class="lni lni-envelope"></i></span>
+              </div>
+              <div class="set-input my-3">
+                {{form.password}}
+                <span class="input-placeholder">Contraseña</span>
+                <span class="input-icon"><i class="lni lni-lock"></i></span>
+              </div>
+              <div class="set-input my-3">
+                {{form.repeat_pass}}
+                <span class="input-placeholder">Repita la Contraseña</span>
+                <span class="input-icon"><i class="lni lni-lock"></i></span>
+              </div>
+              <button class="default-btn my-3" type="submit " id="btn_save">{{description_view}}</button>
+            </form>
+
+          </div>
+          <div class="form-footer text-center">
+            <span>{{account_view}} <br>ingrese <b><a class="text-dark" href="{% url 'users_app:login' %}">AQUI</a></b> </span>
+            
+
+          </div>
+        </div>
+      </section>
+     
+    </section>
+  </article>
+   
+{% endblock content %}
+
+<!-- <section class="my-5">
   <form method="POST" action="" id="form">
     {% csrf_token %}
     <div class="d-flex flex-column gap-3">
@@ -45,4 +99,4 @@
     </div>
   </form>
 </section>
-{% endblock content %}
+-->

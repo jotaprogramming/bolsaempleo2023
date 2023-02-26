@@ -60,6 +60,9 @@ register_desc = _("Registrarse")
 pre_register_desc = _("Registrarse")
 pre_register_title = _("Seleccion")
 account_already = _("si ya dispone de Usuario y Contraseña")
+student_register_desc = _("Registro Estudiantes")
+company_register_desc = _("Registro Empresas")
+recover_title = _("Recuperar Credenciales")
 
 # Create your views here.
 
@@ -887,6 +890,45 @@ class PreRegisterView(UserLoggedMixin, generic.TemplateView):
        
        return context
    
+
+class RegisterStudentView(UserLoggedMixin, generic.TemplateView):
+      model = User
+      form_class = RegisterForm
+      student_register_url = '/student_register'
+      template_name = 'users/register_student.html'
+      
+      def get_context_data(self, **kwargs):
+        context = super(RegisterStudentView, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = student_register_desc
+        context["desciption_view"] = register_title
+        return context
+
+class RegisterCompanyView(UserLoggedMixin, generic.TemplateView):
+     model = User
+     form_class = RegisterForm
+     company_register_url = '/company_register'
+     template_name = 'users/register_company.html'
+     
+     def get_context_data(self, **kwargs):
+        context = super(RegisterCompanyView, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = company_register_desc
+        context["desciption_view"] = register_title
+        
+        return context
+
+
+class CredentialsRecoverView(UserLoggedMixin, generic.TemplateView):
+    credentials_recover_url ='/credentials_recover'
+    template_name = 'users/credentials_recover.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(CredentialsRecoverView, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = recover_title
+        return context
+    
 
 #----------------------------------------------------
 class RegisterView(UserLoggedMixin, generic.FormView):

@@ -77,6 +77,9 @@ urlpatterns = [
     path("logout", UserLogout.as_view(), name="logout"),
     path("register", RegisterView.as_view(), name="register"),
     path("pre_register", PreRegisterView.as_view(), name="pre_register"),
+    path("student_register", RegisterStudentView.as_view(), name="register_student"),
+    path("company_register", RegisterCompanyView.as_view(), name="register_company"),
+    path("credentials_recover", CredentialsRecoverView.as_view(), name="credentials_recover"),
     # TEST
     path("test/test", RegisterView.as_view(), name="test"),
 ]

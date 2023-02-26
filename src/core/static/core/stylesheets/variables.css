@@ -15,7 +15,7 @@
     --f-burnt-orange: invert(46%) sepia(70%) saturate(3289%) hue-rotate(349deg) brightness(101%) contrast(104%);
     /* Borders */
     
-
+    --border-extralight-gray:1px solid var(--extralight-gray:#D7D7D7);
 }
 
 * {

@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 app_title = _("Home")
 home_title = _("Bolsa de Empleo")
 home_desc = _("Proyecto de grado 2023")
-help_title = _("ayuda")
+help_title = _("Ayuda")
 help_desc = _("Contacto")
 
 

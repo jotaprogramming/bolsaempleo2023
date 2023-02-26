@@ -4,7 +4,37 @@
 {% endblock title %}
 
 {% block content %}
-  <article class="forms-content">
+<article class="body-content">
+  <section class="content-at">
+    <div class="box-content-in-left d-none d-lg-block">l</div> 
+    <div class="box-content-in-right">
+      <div class="right-content">
+        <div class="r-content r-header-content">
+          <h3 class="r-header-title text-uppercase">{{description_view}}</h3>
+          <h3 class="r-header-subtitle">Seleccione una opcion segun lo que este buscando</h3>
+        </div>
+        <div class="r-content r-body-content">
+          <div class="btn-regis-select">
+            <a class="btn-selection" href="{% url 'users_app:register_student' %}">
+              <span class="btn-selection-icon"><i class="lni lni-graduation"></i></span>
+              <span class="btn-selection-text">Estoy buscando trabajo</span>
+            </a>
+            <a class="btn-selection" href="{% url 'users_app:register_company' %}">
+              <span class="btn-selection-icon"><i class="lni lni-apartment"></i></span>
+              <span class="btn-selection-text">Estoy buscando candidatos</span>
+            </a>
+          </div>
+        </div>
+        <div class="r-content r-footer-content text-center">
+          <span class="r-footer-link">Si ya tiene Usuario y Contraseña <br>ingrese <b><a class="text-dark fw-bold" href="{% url 'users_app:login' %}">AQUI</a></b></span>
+        </div>
+       
+      </div>
+    </div>
+  </section>
+</article>
+
+  <!-- <article class="forms-content">
     <section class="content-box">
       <section class="content-left d-none d-lg-block">
         {% include 'partials/_log_reg_left-content.html' %}
@@ -36,6 +66,6 @@
       </section>
      
     </section>
-  </article>
+  </article> -->
    
 {% endblock content %}

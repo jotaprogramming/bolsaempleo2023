@@ -413,10 +413,12 @@ class RegisterForm(forms.ModelForm):
         self.fields["username"].label = "Usuario"
         self.fields["email"].label = "Correo electrónico"
         self.fields["password"].label = "Contraseña"
+        
+        
 
     class Meta:
         model = User
-
+        
         fields = [
             "username",
             "email",
@@ -448,6 +450,7 @@ class RegisterForm(forms.ModelForm):
                     
                 }
             ),
+         
         }
 
     def clean(self):

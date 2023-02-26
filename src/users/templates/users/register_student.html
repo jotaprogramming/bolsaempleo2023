@@ -1,0 +1,92 @@
+{% extends 'core/base.html' %} {% load static %} 
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+
+{% block content%}
+<article class="body-content">
+    <section class="content-at">
+      <div class="register-content">
+        <div class=" register-header">
+         <div class="header-link-back ">
+          <i class="lni lni-arrow-left-circle"></i>
+          <a href="{% url 'users_app:pre_register' %}"> Volver</a>
+        </div>
+         <div class="header-title">
+          <h3 class="r-header-title text-uppercase text-center">{{desciption_view}}</h3>
+         </div>
+        </div>
+        <div class=" register-body">
+            <div class="first-group-inputs ">
+                <div class="set-input max-w">
+                    <input class="single-input" type="text" required>
+                    <span class="input-placeholder">Nombres</span>
+                    <span class="input-icon"><i class="lni lni-user"></i></span>
+                </div>
+                <div class="set-input max-w">
+                    <input class="single-input" type="text" required>
+                    <span class="input-placeholder">Apellidos</span>
+                    <span class="input-icon"><i class="lni lni-consulting"></i></span>
+                </div>
+                <div class="set-input max-w">
+                    <input class="single-input" type="text" required>
+                    <span class="input-placeholder">Numero Identificacion</span>
+                    <span class="input-icon"><i class="lni lni-license"></i></span>
+                </div>
+                <div class="set-input max-w">
+                    <input class="single-input" type="text" required>
+                    <span class="input-placeholder">Telefono Contacto</span>
+                    <span class="input-icon"><i class="lni lni-phone"></i></span>
+                </div>
+                <div class="register-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                   
+                </div>
+            </div>
+            <div class="second-group-inputs">
+                <div class="set-input max-w">
+                    <input class="single-input" type="text" required>
+                    <span class="input-placeholder">Correo Personal</span>
+                    <span class="input-icon"><i class="lni lni-envelope"></i></span>
+                </div>
+                <div class="set-input max-w">
+                    <input class="single-input" type="text" required>
+                    <span class="input-placeholder">Correo Institucional</span>
+                    <span class="input-icon"><i class="lni lni-envelope"></i></span>
+                </div>
+                <div class="set-input max-w">
+                    <input class="single-input" type="text" required>
+                    <span class="input-placeholder">Contraseña</span>
+                    <span class="input-icon"><i class="lni lni-lock"></i></span>
+                </div>
+                <div class="set-input max-w">
+                    <input class="single-input" type="text" required>
+                    <span class="input-placeholder">Repetir Contraseña</span>
+                    <span class="input-icon"><i class="lni lni-lock"></i></span>
+                </div>
+            </div>
+            <button class="default-btn " type="submit" id="btn_save">Registrarse</button>
+          
+          
+           
+            
+           
+          
+        </div>
+        <div class=" register-footer  text-center ">
+            <button class="default-btn  mx-w" type="submit" id="btn_save">Registrarse</button>
+          <span class="r-footer-link">Si ya tiene Usuario y Contraseña <br>ingrese <b><a class="text-dark fw-bold" href="{% url 'users_app:login' %}">AQUI</a></b></span>
+        </div>
+      </div>
+    </section>
+  </article>
+{% endblock content%}
+
+  <!-- <div class="set-input max-w">
+                    <input class="single-input" type="text" required>
+                    <span class="input-placeholder">Repetir Contraseña</span>
+                    <span class="input-icon"><i class="lni lni-lock"></i></span>
+                </div> -->

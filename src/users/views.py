@@ -25,6 +25,7 @@ from django.db.models import (
     Max,
 )
 from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext
 
 # EXTRA MODULES
 import sweetify
@@ -40,23 +41,23 @@ from jobboard.utils import *
 # PROJECT FORMS
 
 # GLOBAL VARIABLES
-app_title = _("Usuarios")
-usergroup_title = _("Grupos de usuarios")
-usergroup_desc = _("Conjunto de usuarios que comparten un mismo propósito")
-restriction_title = _("Restricciones")
-restriction_desc = _("Todo tipo de acciones prohibidas para los usuarios")
-app_view_title = _("Aplicaciones")
-app_view_desc = _("Módulos del sistema")
+app_title = _("Users")
+usergroup_title = _("User groups")
+usergroup_desc = _("Set of users sharing the same purpose")
+restriction_title = _("Restrictions")
+restriction_desc = _("All types of actions prohibited for users")
+app_view_title = _("Applications")
+app_view_desc = _("System modules")
 role_title = _("Roles")
-role_desc = _("Función que un usuario desempeña dentro del sistema")
-rule_title = _("Reglas")
-rule_desc = _("Serie de normativas que deben cumplir los usuarios del sistema")
-user_title = _("Usuarios")
-user_desc = _("Actores del sistema")
-login_title = _("Ingresar")
-login_desc = _("Inicio de sesión")
-register_title = _("Registro")
-register_desc = _("Registrarse")
+role_desc = _("Role that a user plays within the system")
+rule_title = _("Rules")
+rule_desc = _("Set of regulations to be complied with by system users")
+user_title = _("Users")
+user_desc = _("Actors in the system")
+login_title = _("Enter")
+login_desc = _("Login")
+register_title = _("Registration")
+register_desc = _("Register")
 
 
 # Create your views here.

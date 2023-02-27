@@ -1,5 +1,9 @@
 /* STYLES FOR PARTIALS */
 
+.burger-menu{
+    margin: .5rem;
+}
+
 .search-container{
     max-width: 40rem;
 }
@@ -45,9 +49,12 @@
     max-width: 250px;
 }
 
-
-/* Style of login,register main-container */
-
-   
-
-
+@media (max-width:475px) {
+    .navbar-brand{
+        /* background-color: red !important; */
+        display: none !important;
+        /* opacity: 0; */
+        /* visibility: hidden; */
+        /* width: 0; */
+    }
+}

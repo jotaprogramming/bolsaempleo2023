@@ -9,11 +9,13 @@
 /* BOX CONTENT SIZES - (LOGIN,REGISTER,ETC....) */
 .body-content{
     width: 100%;
+    max-width: 100vw;
     height: calc(100vh - 60px);
     /* background-color: aqua; */
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow-x: hidden;
 }
 .content-at{
     width: 100%;
@@ -38,7 +40,7 @@
 .header-container{
     grid-area: header;
     width: 100%;
-    height: 60px;
+    /* height: 64px; */
     /* background-color: rgb(24, 154, 89);  */
     display: flex;
     flex-direction: column;
@@ -58,6 +60,7 @@
 }
 .box-content-in-right{
     width: 100%;
+    max-width: 600px;
     height: 100%;
     /* background-color: lightsalmon; */
     display: flex;
@@ -258,6 +261,7 @@
 .brandi{
     height: 100%;
     width: 100%;
+    background-color: #fff;
 }
 /* FONTS */
 .font-size-normal {
@@ -331,6 +335,7 @@
 
 .image-content{
     width: fit-content;
+    /* width: 100%; */
     max-width: 100%;
     height: 100%;
     overflow: hidden;
@@ -377,9 +382,5 @@
     border-top-left-radius:10px ;
     border-bottom-left-radius:10px;
 }
-
-
-
-
 
 

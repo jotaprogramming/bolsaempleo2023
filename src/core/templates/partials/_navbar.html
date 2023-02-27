@@ -1,0 +1,24 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary p-0 m-0">
+    <div class="container-fluid p-0">
+        <a class="navbar-brand btn btn-primary text-uppercase big-btn corners font-size-normal" href="/">
+            {% if brand_name %}
+            {{brand_name}}
+            {% else %}
+            Ingeniería de Sistemas
+            {%endif %}
+        </a>
+        <button class="navbar-toggler mx-3" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            {% include 'partials/icon_element/_burger_icon.html' %}
+        </button>
+        <div class="collapse navbar-collapse p-2 justify-content-between me-3" id="navbarSupportedContent">
+            <form class="d-flex search-container" role="search">
+                {% include 'partials/_search_input.html' %}
+            </form>
+            {% include 'partials/_navbar_items.html' %}
+        </div>
+    </div>
+</nav>

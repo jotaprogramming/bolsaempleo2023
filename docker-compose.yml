@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  web:
+    volumes:
+      - web-static:/app/static
+    env_file:
+      - .env
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - web-static:/www/static
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+    
+  postgres:
+    image: postgres:15.1
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=db_job
+      - POSTGRES_USER=adminpg
+      - POSTGRES_PASSWORD=proygrado@2023
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "adminpg@2023"
+    ports:
+      - "8054:8054"
+    depends_on:
+      - postgres
+
+volumes:
+  web-static:
+  pgdata:
+  redisdata:

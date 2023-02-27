@@ -1,0 +1,114 @@
+/* HERE ONLY THE GENERAL STYLE SHEETS WILL GO */
+@import url('./variables.css');
+@import url('./custom-bootstrap.css');
+@import url('./partials.css');
+
+/* FONTS */
+
+.font-size-normal {
+    font-size: 1rem;
+}
+
+/* POSITION */
+
+.h-center,
+.w-center {
+    display: flex !important;
+}
+
+.h-center {
+    align-items: center;
+}
+
+.w-center {
+    justify-content: center;
+}
+
+.w-sliding{
+    /* overflow: hidden; */
+    width: 0 !important;
+    transition: all 150ms ease-in-out;
+}
+
+/* WIDTH AND HEIGHT */
+
+.h1-w-auto {
+    height: 1rem;
+    width: auto;
+}
+
+.w075-h-auto {
+    height: auto;
+    width: .75rem;
+}
+
+.w1-h-auto {
+    height: auto;
+    width: 1rem;
+}
+
+.w1m-h-auto {
+    height: auto;
+    width: 1.5rem;
+}
+
+.w2-h-auto {
+    height: auto;
+    width: 2rem;
+}
+
+.w3-h-auto {
+    height: auto;
+    width: 3rem;
+}
+
+.w4-h-auto {
+    height: auto;
+    width: 4rem;
+}
+
+.w5-h-auto {
+    height: auto;
+    width: 5rem;
+}
+
+/* BUTTONS */
+
+.big-btn {
+    padding: 1rem 3rem !important;
+}
+
+.btn-light-orange:hover {
+    color: var(--white) !important;
+    background-color: var(--orange) !important;
+}
+
+.btn-light-orange:hover img {
+    filter: var(--f-white) !important;
+}
+
+/* #search_btn:checked ~ .w-sliding {
+    width: 100% !important;
+}
+
+.btn-light-orange:hover ~ .w-sliding{
+    width: 100% !important;
+} */
+
+.btn-center{
+    min-height: 38px;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-sliding:hover .w-sliding{
+    margin-left: .5rem;
+    width: fit-content !important;
+}
+
+/* BORDERS */
+
+.corners {
+    border-radius: 0 !important;
+}

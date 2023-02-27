@@ -1,5 +1,6 @@
 from django.db import models
 from .managers import *
+from config.models import Cities, DocumentType
 
 from django.utils.translation import gettext_lazy as _
 
@@ -126,3 +127,71 @@ class Rules(models.Model):
     class Meta:
         verbose_name = _("rule")
         verbose_name_plural = _("rules")
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(
+        User,
+        related_name="user_profile_user",
+        verbose_name=_("user"),
+        blank=False,
+        on_delete=models.PROTECT,
+    )
+    document_type = models.ForeignKey(
+        DocumentType,
+        related_name="user_document_type",
+        verbose_name=_("document type"),
+        blank=False,
+        on_delete=models.PROTECT,
+    )
+    id_number = models.CharField(
+        _("user identification number"), max_length=25, null=False
+    )
+    name = models.CharField(
+        _("user's short name"), max_length=100, blank=True
+    )
+    phone = models.CharField(
+        _("cell phone number"), max_length=25, blank=False
+    )
+    email = models.CharField(
+        _("contact e-mail address"), max_length=250, blank=False
+    )
+    address = models.CharField(
+        _("address of residence or work stay"), max_length=250, blank=False
+    )
+    city = models.ForeignKey(
+        Cities,
+        related_name="user_city",
+        verbose_name=_("city"),
+        blank=False,
+        on_delete=models.PROTECT,
+    )
+    created_at = models.DateTimeField(_("created at"), auto_now_add=True, null=False)
+    updated_at = models.DateTimeField(
+        _("updated at"), auto_now_add=False, editable=True, null=True
+    )
+    deleted_at = models.DateTimeField(
+        _("deleted at"), auto_now_add=False, editable=True, null=True
+    )
+
+    def __str__(self):
+        return "{}".format(self.id_number)
+
+    class Meta:
+        verbose_name = _("user profile")
+        verbose_name_plural = _("user profiles")
+
+
+class CurriculumVitae(models.Model):
+    userprofile = models.OneToOneField(
+        UserProfile,
+        related_name="user_cv",
+        verbose_name=_("user profile"),
+        blank=True,
+        on_delete=models.PROTECT,
+    )
+    cv_path = models.TextField(_("path"), null=False)
+
+    class Meta:
+        verbose_name = _("curriculum vitae")
+        verbose_name_plural = _("curriculum vitae")

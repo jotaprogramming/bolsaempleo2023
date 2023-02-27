@@ -30,6 +30,7 @@ class HelpView(generic.TemplateView):
         context = super(HelpView, self).get_context_data(**kwargs)
         context["app_title"] = help_title
         context["title_view"] = help_desc
-        #context["img_url"] = 'static/core/assets/img/login.jpg'
+        context["image_url"] = 'core/assets/img/annie-spratt-goholCAVTRs-unsplash-compressed.jpg'
+        context["image_alt"] = 'annie-spratt-goholCAVTRs-unsplash'
         return context
     

@@ -856,6 +856,10 @@ class UserLogin(UserLoggedMixin, generic.FormView):
         context["app_title"] = app_title
         context["title_view"] = login_title
         context["description_view"] = login_desc
+        context["image_url"] = 'core/assets/img/jess-bailey-mexeVPlTB6k-unsplash-compressed.jpg'
+        context["image_alt"] = 'jess-bailey-mexeVPlTB6k-unsplash'
+        context["graduate_text"] = 'Para estudiantes y egresados de Ingenieria de Sistemas'
+        context["company_text"] = 'Para empresas en busca de grandes Talentos'
         return context
 
     def form_valid(self, form):
@@ -887,6 +891,10 @@ class PreRegisterView(UserLoggedMixin, generic.TemplateView):
        context["title_view"] = pre_register_title
        context["description_view"] = pre_register_desc
        context["account_view"] = account_already
+       context["image_url"] = 'core/assets/img/jess-bailey-mexeVPlTB6k-unsplash-compressed.jpg'
+       context["image_alt"] = 'jess-bailey-mexeVPlTB6k-unsplash'
+       context["graduate_text"] = 'Para estudiantes y egresados de Ingenieria de Sistemas'
+       context["company_text"] = 'Para empresas en busca de grandes Talentos'
        
        return context
    
@@ -902,6 +910,7 @@ class RegisterStudentView(UserLoggedMixin, generic.TemplateView):
         context["app_title"] = app_title
         context["title_view"] = student_register_desc
         context["desciption_view"] = register_title
+        
         return context
 
 class RegisterCompanyView(UserLoggedMixin, generic.TemplateView):
@@ -927,6 +936,10 @@ class CredentialsRecoverView(UserLoggedMixin, generic.TemplateView):
         context = super(CredentialsRecoverView, self).get_context_data(**kwargs)
         context["app_title"] = app_title
         context["title_view"] = recover_title
+        context["image_url"] = 'core/assets/img/jess-bailey-mexeVPlTB6k-unsplash-compressed.jpg'
+        context["image_alt"] = 'jess-bailey-mexeVPlTB6k-unsplash'
+        context["graduate_text"] = 'Para estudiantes y egresados de Ingenieria de Sistemas'
+        context["company_text"] = 'Para empresas en busca de grandes Talentos'
         return context
     
 

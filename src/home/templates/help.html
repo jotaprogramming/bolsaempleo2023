@@ -4,11 +4,13 @@
 <title>{{app_title}} | {{title_view}}</title>
 {% endblock title %}
 
-{% block content %}
+{% block contentfluid %}
 
 <article class="body-content">
   <section class="content-at">
-    <div class="box-content-in-left d-none d-lg-block">l</div>
+    <div class="box-content-in-left d-lg-block">
+      {% include 'partials/_log_reg_left-content.html' %}
+    </div>
     <div class="box-content-in-right">
       <div class="right-content">
         <div class="r-content r-header-content">
@@ -46,7 +48,7 @@
           </div>
         </div>
         <div class="r-content r-footer-content text-center">
-          <span class="r-footer-link">Si no puede comunicarse con nuestro equipo,hagalo desde nuestras redes sociales</span>
+          <span class="r-footer-link">Si no puede comunicarse por estos medios, hágalo desde nuestras redes sociales</span>
           <div class="footer-icons">
             <a
             class="text-dark ft-icon" href=""><i class="lni lni-twitter-fill"></i>
@@ -120,4 +122,4 @@
   </section>
 </article> -->
 
-{% endblock content %}
+{% endblock contentfluid %}

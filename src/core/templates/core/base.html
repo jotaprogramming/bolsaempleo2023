@@ -71,7 +71,14 @@
   <body class="container-grid">
     <header class="header-container">{% include 'partials/_navbar.html' %}</header>
     {% include 'partials/_popup_alert.html' %}
-    <main class="body-container">{% block content %} {% endblock content %}</main>
+    <main class="body-container">
+      <div class="container">
+        {% block content %} {% endblock content %}
+      </div>
+      <div class="w-100">
+        {% block contentfluid %} {% endblock contentfluid %}
+      </div>
+    </main>
     <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

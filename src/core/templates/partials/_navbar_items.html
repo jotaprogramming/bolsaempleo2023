@@ -29,6 +29,7 @@
             {{user.email}}
         </a>
         <ul class="dropdown-menu dropdown-menu-lg-end">
+            <li><a class="dropdown-item" href="{% url 'users_app:userprofile' request.user.username %}">Perfil</a></li>
             <li><a class="dropdown-item" href="{% url 'users_app:logout' %}">Cerrar sesión</a></li>
         </ul>
     </li>

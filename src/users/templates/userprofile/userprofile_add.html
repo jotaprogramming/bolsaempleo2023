@@ -1,0 +1,79 @@
+{% extends 'core/base.html' %} {% load static %} 
+
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %} {% block content %}
+<section class="my-5">
+  {% include 'partials/_display.html' %}
+  <div class="d-flex flex-column">
+    <form method="POST" action="{% url 'users_app:userprofile_add' username %}" id="form">
+      <div class="">
+        {% csrf_token %}
+        <div class="d-flex flex-column gap-2">
+          <div class="">
+            <label for="id_document_type" class="form-label">
+              {{form.document_type.label}}
+            </label>
+            {{form.document_type}}
+            <div id="document_typeHelp" class="form-text">{{form.document_type.help_text}}</div>
+          </div>
+          <div class="">
+            <label for="id_id_number" class="form-label">
+              {{form.id_number.label}}
+            </label>
+            {{form.id_number}}
+            <div id="id_numberHelp" class="form-text">{{form.id_number.help_text}}</div>
+          </div>
+          <div class="">
+            <label for="id_name" class="form-label">
+              {{form.name.label}}
+            </label>
+            {{form.name}}
+            <div id="nameHelp" class="form-text">{{form.name.help_text}}</div>
+          </div>
+          <div class="">
+            <label for="id_phone" class="form-label">
+              {{form.phone.label}}
+            </label>
+            {{form.phone}}
+            <div id="phoneHelp" class="form-text">{{form.phone.help_text}}</div>
+          </div>
+          <div class="">
+            <label for="id_email" class="form-label">
+              {{form.email.label}}
+            </label>
+            {{form.email}}
+            <div id="emailHelp" class="form-text">{{form.email.help_text}}</div>
+          </div>
+          <div class="">
+            <label for="id_address" class="form-label">
+              {{form.address.label}}
+            </label>
+            {{form.address}}
+            <div id="addressHelp" class="form-text">{{form.address.help_text}}</div>
+          </div>
+          <div class="">
+            <label for="id_city" class="form-label">
+              {{form.city.label}}
+            </label>
+            {{form.city}}
+            <div id="cityHelp" class="form-text">{{form.city.help_text}}</div>
+          </div>
+          <div class="">
+            <label for="id_about_me" class="form-label">
+              {{form.about_me.label}}
+            </label>
+            {{form.about_me}}
+            <div id="about_meHelp" class="form-text">{{form.about_me.help_text}}</div>
+          </div>
+        </div>
+      </div>
+      <div class="">
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+      
+    </form>
+  </div>
+</section>
+
+{% endblock content %}

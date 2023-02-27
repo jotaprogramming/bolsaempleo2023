@@ -53,6 +53,8 @@ rule_title = _("Reglas")
 rule_desc = _("Serie de normativas que deben cumplir los usuarios del sistema")
 user_title = _("Usuarios")
 user_desc = _("Actores del sistema")
+userprofile_title = _("Perfiles de usuario")
+userprofile_desc = _("Perfiles de usuario del sistema")
 login_title = _("Ingresar")
 login_desc = _("Inicio de sesión")
 register_title = _("Registro")
@@ -856,10 +858,14 @@ class UserLogin(UserLoggedMixin, generic.FormView):
         context["app_title"] = app_title
         context["title_view"] = login_title
         context["description_view"] = login_desc
-        context["image_url"] = 'core/assets/img/jess-bailey-mexeVPlTB6k-unsplash-compressed.jpg'
-        context["image_alt"] = 'jess-bailey-mexeVPlTB6k-unsplash'
-        context["graduate_text"] = 'Para estudiantes y egresados de Ingenieria de Sistemas'
-        context["company_text"] = 'Para empresas en busca de grandes Talentos'
+        context[
+            "image_url"
+        ] = "core/assets/img/jess-bailey-mexeVPlTB6k-unsplash-compressed.jpg"
+        context["image_alt"] = "jess-bailey-mexeVPlTB6k-unsplash"
+        context[
+            "graduate_text"
+        ] = "Para estudiantes y egresados de Ingenieria de Sistemas"
+        context["company_text"] = "Para empresas en busca de grandes Talentos"
         return context
 
     def form_valid(self, form):
@@ -878,72 +884,7 @@ class UserLogout(generic.View):
         logout(request)
         return HttpResponseRedirect(reverse("users_app:login"))
 
-#----------------------------------------------
 
-
-class PreRegisterView(UserLoggedMixin, generic.TemplateView):
-   selection_url = '/pre_register'
-   template_name='users/selection_register.html'
-   
-   def get_context_data(self, **kwargs):
-       context = super(PreRegisterView, self).get_context_data(**kwargs)
-       context["app_title"] = app_title
-       context["title_view"] = pre_register_title
-       context["description_view"] = pre_register_desc
-       context["account_view"] = account_already
-       context["image_url"] = 'core/assets/img/jess-bailey-mexeVPlTB6k-unsplash-compressed.jpg'
-       context["image_alt"] = 'jess-bailey-mexeVPlTB6k-unsplash'
-       context["graduate_text"] = 'Para estudiantes y egresados de Ingenieria de Sistemas'
-       context["company_text"] = 'Para empresas en busca de grandes Talentos'
-       
-       return context
-   
-
-class RegisterStudentView(UserLoggedMixin, generic.TemplateView):
-      model = User
-      form_class = RegisterForm
-      student_register_url = '/student_register'
-      template_name = 'users/register_student.html'
-      
-      def get_context_data(self, **kwargs):
-        context = super(RegisterStudentView, self).get_context_data(**kwargs)
-        context["app_title"] = app_title
-        context["title_view"] = student_register_desc
-        context["desciption_view"] = register_title
-        
-        return context
-
-class RegisterCompanyView(UserLoggedMixin, generic.TemplateView):
-     model = User
-     form_class = RegisterForm
-     company_register_url = '/company_register'
-     template_name = 'users/register_company.html'
-     
-     def get_context_data(self, **kwargs):
-        context = super(RegisterCompanyView, self).get_context_data(**kwargs)
-        context["app_title"] = app_title
-        context["title_view"] = company_register_desc
-        context["desciption_view"] = register_title
-        
-        return context
-
-
-class CredentialsRecoverView(UserLoggedMixin, generic.TemplateView):
-    credentials_recover_url ='/credentials_recover'
-    template_name = 'users/credentials_recover.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super(CredentialsRecoverView, self).get_context_data(**kwargs)
-        context["app_title"] = app_title
-        context["title_view"] = recover_title
-        context["image_url"] = 'core/assets/img/jess-bailey-mexeVPlTB6k-unsplash-compressed.jpg'
-        context["image_alt"] = 'jess-bailey-mexeVPlTB6k-unsplash'
-        context["graduate_text"] = 'Para estudiantes y egresados de Ingenieria de Sistemas'
-        context["company_text"] = 'Para empresas en busca de grandes Talentos'
-        return context
-    
-
-#----------------------------------------------------
 class RegisterView(UserLoggedMixin, generic.FormView):
     model = User
     form_class = RegisterForm
@@ -959,7 +900,7 @@ class RegisterView(UserLoggedMixin, generic.FormView):
         context["title_view"] = register_title
         context["description_view"] = register_desc
         context["account_view"] = account_already
-        #context["img_url"] = 'core/assets/img/img.jpg'
+        # context["img_url"] = 'core/assets/img/img.jpg'
         return context
 
     def form_valid(self, form):
@@ -985,21 +926,194 @@ class RegisterView(UserLoggedMixin, generic.FormView):
 
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)
-        json_errors = form.errors.as_json()
-        errors = json.loads(json_errors)
-        try:
-            all_error = errors["__all__"][0]
-        except:
-            all_error = errors
-
-        msg_error = ""
-
-        if len(all_error.keys()) > 0:
-            print(all_error.items())
-            for key, value in all_error.items():
-                for msg in value:
-                    msg_error += f"{msg['message']};\n"
-
         ctx["form"] = form
+        msg_error = get_errors(form)
         form_invalid_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
+
+
+# USER PROFILE
+
+
+class UserProfileDetail(LoginRequiredMixin, generic.TemplateView):
+    login_url = "/login"
+    model = UserProfile
+    template_name = "userprofile/userprofile_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(UserProfileDetail, self).get_context_data(**kwargs)
+        username_param = self.kwargs.get("slug", "")
+        try:
+            obj = UserProfile.objects.get(user__username=username_param)
+            username = obj.user.username
+            about_me = obj.about_me
+            alias = obj.name or username
+            context["object"] = obj
+            context["title_view"] = alias
+            context["description_view"] = about_me
+        except:
+            pass
+        context["app_title"] = app_title
+        context["username"] = username_param
+        return context
+
+
+class UserProfileCreate(LoginRequiredMixin, generic.CreateView):
+    model = UserProfile
+    form_class = UserProfileForm
+    template_name = "userprofile/userprofile_add.html"
+
+    def get_success_url(self):
+        return reverse_lazy("users_app:userprofile", args=[self.request.user.username])
+
+    def get_context_data(self, **kwargs):
+        context = super(UserProfileCreate, self).get_context_data(**kwargs)
+        username_param = self.kwargs.get("slug", "")
+
+        context["app_title"] = app_title
+        context["title_view"] = 'Perfil'
+        context["description_view"] = f'@{username_param}'
+        context["username"] = username_param
+        return context
+
+    def form_valid(self, form):
+        try:
+            username_param = self.kwargs.get("slug", "")
+            user = User.objects.get(username=username_param)
+            form.instance.user = user.id
+            return super().form_valid(form)
+        except Exception as exception:
+            error_message(self.request)
+            print(" ")
+            print(exception)
+            return HttpResponseRedirect(reverse_lazy("users_app:userprofile", args=[self.request.user.username]))
+        
+        # try:
+        #     user_id = self.request.user.id
+        #     document_type = form.cleaned_data["document_type"]
+        #     id_number = form.cleaned_data["id_number"]
+        #     name = form.cleaned_data["name"]
+        #     phone = form.cleaned_data["phone"]
+        #     email = form.cleaned_data["email"]
+        #     address = form.cleaned_data["address"]
+        #     city = form.cleaned_data["city"]
+        #     city_id = city.id
+        #     about_me = form.cleaned_data["about_me"]
+        #     pprint(
+        #         {
+        #             "user_id": user_id,
+        #             "document_type": document_type,
+        #             "id_number": id_number,
+        #             "name": name,
+        #             "phone": phone,
+        #             "email": email,
+        #             "address": address,
+        #             "city": city,
+        #             "about_me": about_me,
+        #         }
+        #     )
+        #     userprofile = UserProfile.objects.create(
+        #         user_id=user_id,
+        #         document_type=document_type,
+        #         id_number=id_number,
+        #         name=name,
+        #         phone=phone,
+        #         email=email,
+        #         address=address,
+        #         city_id=city_id,
+        #         about_me=about_me,
+        #     )
+        #     userprofile.save()
+        #     print(userprofile)
+        #     return super().form_valid(form)
+        # except Exception as exception:
+        #     error_message(self.request)
+        #     print(" ")
+        #     print(exception)
+        #     return HttpResponseRedirect(reverse_lazy("home_app:register"))
+        
+        return super().form_valid(form)
+        
+    def form_invalid(self, form, **kwargs):
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+        msg_error = get_errors(form)
+        form_invalid_message(self.request, msg=msg_error)
+        return self.render_to_response(ctx)
+
+
+# ----------------------------------------------
+
+
+class PreRegisterView(UserLoggedMixin, generic.TemplateView):
+    # selection_url = "/pre_register"
+    template_name = "users/selection_register.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(PreRegisterView, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = pre_register_title
+        context["description_view"] = pre_register_desc
+        context["account_view"] = account_already
+        context[
+            "image_url"
+        ] = "core/assets/img/jess-bailey-mexeVPlTB6k-unsplash-compressed.jpg"
+        context["image_alt"] = "jess-bailey-mexeVPlTB6k-unsplash"
+        context[
+            "graduate_text"
+        ] = "Para estudiantes y egresados de Ingenieria de Sistemas"
+        context["company_text"] = "Para empresas en busca de grandes Talentos"
+
+        return context
+
+
+class RegisterStudentView(UserLoggedMixin, generic.TemplateView):
+    model = User
+    form_class = RegisterForm
+    # student_register_url = "/student_register"
+    template_name = "users/register_student.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(RegisterStudentView, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = student_register_desc
+        context["desciption_view"] = register_title
+
+        return context
+
+
+class RegisterCompanyView(UserLoggedMixin, generic.TemplateView):
+    model = User
+    form_class = RegisterForm
+    # company_register_url = "/company_register"
+    template_name = "users/register_company.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(RegisterCompanyView, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = company_register_desc
+        context["desciption_view"] = register_title
+
+        return context
+
+
+class CredentialsRecoverView(UserLoggedMixin, generic.TemplateView):
+    # credentials_recover_url = "/credentials_recover"
+    template_name = "users/credentials_recover.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(CredentialsRecoverView, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = recover_title
+        context[
+            "image_url"
+        ] = "core/assets/img/jess-bailey-mexeVPlTB6k-unsplash-compressed.jpg"
+        context["image_alt"] = "jess-bailey-mexeVPlTB6k-unsplash"
+        context[
+            "graduate_text"
+        ] = "Para estudiantes y egresados de Ingenieria de Sistemas"
+        context["company_text"] = "Para empresas en busca de grandes Talentos"
+        return context
+
+
+# ----------------------------------------------------

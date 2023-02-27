@@ -9,7 +9,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils import timezone
 from django.core.mail import send_mail
-
+from django.template.defaultfilters import slugify
 
 # Create your models here.
 class UserGroups(models.Model):
@@ -147,15 +147,9 @@ class UserProfile(models.Model):
     id_number = models.CharField(
         _("user identification number"), max_length=25, null=False
     )
-    name = models.CharField(
-        _("user's short name"), max_length=100, blank=True
-    )
-    phone = models.CharField(
-        _("cell phone number"), max_length=25, blank=False
-    )
-    email = models.CharField(
-        _("contact e-mail address"), max_length=250, blank=False
-    )
+    name = models.CharField(_("user's short name"), max_length=100, blank=True)
+    phone = models.CharField(_("cell phone number"), max_length=25, blank=False)
+    email = models.CharField(_("contact e-mail address"), max_length=250, blank=False)
     address = models.CharField(
         _("address of residence or work stay"), max_length=250, blank=False
     )
@@ -166,6 +160,7 @@ class UserProfile(models.Model):
         blank=False,
         on_delete=models.PROTECT,
     )
+    about_me = models.TextField(_("About Me"), blank=True)
     created_at = models.DateTimeField(_("created at"), auto_now_add=True, null=False)
     updated_at = models.DateTimeField(
         _("updated at"), auto_now_add=False, editable=True, null=True
@@ -175,7 +170,10 @@ class UserProfile(models.Model):
     )
 
     def __str__(self):
-        return "{}".format(self.id_number)
+        return "{}".format(self.user.first_name)
+
+    def slug(self):
+        return slugify(self.user.username)
 
     class Meta:
         verbose_name = _("user profile")
@@ -191,6 +189,9 @@ class CurriculumVitae(models.Model):
         on_delete=models.PROTECT,
     )
     cv_path = models.TextField(_("path"), null=False)
+
+    def __str__(self):
+        return "{}".format(self.userprofile.user.first_name)
 
     class Meta:
         verbose_name = _("curriculum vitae")

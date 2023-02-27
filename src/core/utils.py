@@ -1,5 +1,6 @@
 # PYTHON MODULES
 import importlib
+import json
 
 # EXTRA MODULES
 import sweetify
@@ -144,3 +145,22 @@ def user_duplicate_message(request):
         timerProgressBar="true",
         button="Ok",
     )
+
+
+def get_errors(form):
+    json_errors = form.errors.as_json()
+    errors = json.loads(json_errors)
+    try:
+        all_error = errors["__all__"][0]
+    except:
+        all_error = errors
+
+    msg_error = ""
+
+    if len(all_error.keys()) > 0:
+        print(all_error.items())
+        for key, value in all_error.items():
+            for msg in value:
+                msg_error += f"{msg['message']};\n"
+
+    return msg_error

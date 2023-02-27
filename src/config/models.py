@@ -18,7 +18,7 @@ class Countries(models.Model):
     )
 
     def __str__(self):
-        return "{}".format(self.group_name)
+        return "{}".format(self.name)
 
     class Meta:
         verbose_name = _("country")
@@ -51,7 +51,7 @@ class Districts(models.Model):
     )
 
     def __str__(self):
-        return "{}".format(self.group_name)
+        return "{}".format(self.name)
 
     class Meta:
         verbose_name = _("district")
@@ -81,11 +81,11 @@ class Cities(models.Model):
     )
 
     def __str__(self):
-        return "{}".format(self.group_name)
+        return "{}".format(self.name)
 
     class Meta:
-        verbose_name = _("district")
-        verbose_name_plural = _("districts")
+        verbose_name = _("city")
+        verbose_name_plural = _("cities")
     
 
 class Currencies(models.Model):
@@ -110,7 +110,7 @@ class Currencies(models.Model):
     )
 
     def __str__(self):
-        return "{}".format(self.group_name)
+        return "{}".format(self.iso)
 
     class Meta:
         verbose_name = _("currency")
@@ -132,7 +132,7 @@ class DocumentType(models.Model):
     )
 
     def __str__(self):
-        return "{}".format(self.group_name)
+        return "{}".format(self.acronym)
 
     class Meta:
         verbose_name = _("document type")

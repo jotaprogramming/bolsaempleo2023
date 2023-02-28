@@ -99,11 +99,7 @@ DATABASES = {
     # ImproperlyConfigured exception if not found
     #
     # The db() method is an alias for db_url().
-<<<<<<< HEAD
-    "default": env.db(),
-=======
     "default": env.db("POSTGRES_URL" if DB_OPT == "docker" else "DATABASE_URL"),
->>>>>>> 4b99c5e31f0e086d411d6b412a547b1a539ecb4c
     "settings": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "settings.sqlite3",

@@ -4,8 +4,8 @@
 <section class="my-5">
   {% include 'partials/_display.html' %}
   <div class="d-flex flex-column">
-    <div class="col-12">
-      {% if username %}
+    <div class="col-1">
+      {% if object.user %}
       <a
         class="btn btn-primary btn-center"
         href="{% url 'users_app:userprofile_edit' username %}"

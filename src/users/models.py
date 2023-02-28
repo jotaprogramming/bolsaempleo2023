@@ -137,6 +137,7 @@ class UserProfile(models.Model):
         blank=False,
         on_delete=models.PROTECT,
     )
+    slug = models.SlugField(max_length=120, unique=True)
     document_type = models.ForeignKey(
         DocumentType,
         related_name="user_document_type",

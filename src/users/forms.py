@@ -459,104 +459,78 @@ class RegisterForm(forms.ModelForm):
         if self.cleaned_data["password"] != self.cleaned_data["repeat_pass"]:
             self.add_error("repeat_pass", _(f"Contraseña inválida"))
 
-
 class UserProfileForm(forms.Form):
-
-    document_type = forms.ModelChoiceField(
-        queryset=DocumentType.objects.all(),
-        required=True,
-        widget=forms.Select(attrs={"class": "form-select"}),
-    )
-    id_number = forms.CharField(
-        required=True,
-        widget=forms.TextInput(attrs={"class": "form-control", "minlength": "1"}),
-    )
-    name = forms.CharField(
-        required=True,
-        widget=forms.TextInput(attrs={"class": "form-control", "minlength": "1"}),
-    )
-    phone = forms.CharField(
-        required=True,
-        widget=forms.TextInput(attrs={"class": "form-control", "minlength": "1"}),
-    )
-    email = forms.EmailField(
-        required=True,
-        widget=forms.EmailInput(attrs={"class": "form-control"}),
-    )
-    address = forms.CharField(
-        required=True,
-        widget=forms.TextInput(attrs={"class": "form-control", "minlength": "1"}),
-    )
-    city = forms.ModelChoiceField(
-        queryset=Cities.objects.all(),
-        required=True,
-        widget=forms.Select(attrs={"class": "form-select"}),
-    )
     about_me = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.Textarea(attrs={"class": "form-control", "minlength": "1"}),
     )
 
-    # class Meta:
-    #     # model = UserProfile
 
-    #     fields = [
-    #         "document_type",
-    #         "id_number",
-    #         "name",
-    #         "phone",
-    #         "email",
-    #         "address",
-    #         "city",
-    #         "about_me",
-    #     ]
+class UserProfileModelForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserProfileModelForm, self).__init__(*args, **kwargs)
+        self.fields["about_me"].require = False
 
-    #     widgets = {
-    #         "document_type": forms.Select(
-    #             attrs={
-    #                 "class": "form-select",
-    #             }
-    #         ),
-    #         "id_number": forms.TextInput(
-    #             attrs={
-    #                 "class": "form-control",
-    #                 "minlength": "1",
-    #             }
-    #         ),
-    #         "name": forms.TextInput(
-    #             attrs={
-    #                 "class": "form-control",
-    #                 "minlength": "1",
-    #             }
-    #         ),
-    #         "phone": forms.TextInput(
-    #             attrs={
-    #                 "class": "form-control",
-    #                 "minlength": "1",
-    #             }
-    #         ),
-    #         "email": forms.EmailInput(
-    #             attrs={
-    #                 # "placeholder": "Correo electrónico",
-    #                 "class": "form-control",
-    #                 "minlength": "3",
-    #             }
-    #         ),
-    #         "address": forms.TextInput(
-    #             attrs={
-    #                 "class": "form-control",
-    #                 "minlength": "1",
-    #             }
-    #         ),
-    #         "city": forms.Select(
-    #             attrs={
-    #                 "class": "form-select",
-    #             }
-    #         ),
-    #         "about_me": forms.Textarea(
-    #             attrs={
-    #                 "class": "form-control",
-    #                 "minlength": "1",
-    #             }
-    #         ),
-    #     }
+    class Meta:
+        model = UserProfile
+
+        fields = [
+            "document_type",
+            "id_number",
+            "name",
+            "phone",
+            "email",
+            "address",
+            "city",
+            "about_me",
+        ]
+
+        widgets = {
+            "document_type": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+            "id_number": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "minlength": "1",
+                }
+            ),
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "minlength": "1",
+                }
+            ),
+            "phone": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "minlength": "1",
+                }
+            ),
+            "email": forms.EmailInput(
+                attrs={
+                    # "placeholder": "Correo electrónico",
+                    "class": "form-control",
+                    "minlength": "3",
+                }
+            ),
+            "address": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "minlength": "1",
+                }
+            ),
+            "city": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+            "about_me": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "minlength": "1",
+                }
+            ),
+        }

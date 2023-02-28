@@ -24,7 +24,7 @@ from django.db.models import (
     Min,
     Max,
 )
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
 
 # EXTRA MODULES
 import sweetify
@@ -59,8 +59,8 @@ login_title = _("Ingresar")
 login_desc = _("Inicio de sesión")
 register_title = _("Registro")
 register_desc = _("Registrarse")
-pre_register_desc = _("Registrarse")
-pre_register_title = _("Seleccion")
+register_choices_desc = _("Registrarse")
+register_choices_title = _("Seleccion")
 account_already = _("si ya dispone de Usuario y Contraseña")
 student_register_desc = _("Registro Estudiantes")
 company_register_desc = _("Registro Empresas")
@@ -95,7 +95,7 @@ class UserGroupCreate(LoginRequiredMixin, generic.CreateView):
     template_name = "usergroups/usergroup_create_modal.html"
 
     def get_success_url(self):
-        created_message(self.request)
+        success_message(self.request)
         return reverse_lazy("users_app:usergroup_list")
 
     def get_context_data(self, **kwargs):
@@ -108,7 +108,7 @@ class UserGroupCreate(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         objects = duplicate_usergroups(self, form)
         if objects > 0:
-            duplicate_message(self.request)
+            warning_message(self.request, msg="El registro ya existe")
             return HttpResponseRedirect(reverse_lazy("users_app:usergroup_list"))
         try:
             form.instance.group_name = str(form.instance.group_name).lower()
@@ -123,7 +123,8 @@ class UserGroupCreate(LoginRequiredMixin, generic.CreateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        form_invalid_message(self.request)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
 
 
@@ -134,7 +135,7 @@ class UserGroupEditModal(LoginRequiredMixin, generic.UpdateView):
     template_name = "usergroups/usergroup_update_modal.html"
 
     def get_success_url(self):
-        updated_message(self.request)
+        success_message(self.request, msg="Registro actualizado satisfactoriamente")
         return reverse_lazy("users_app:usergroup_list")
 
     def get_context_data(self, **kwargs):
@@ -147,7 +148,7 @@ class UserGroupEditModal(LoginRequiredMixin, generic.UpdateView):
     def form_valid(self, form):
         objects = duplicate_usergroups(self, form)
         if objects > 0:
-            duplicate_message(self.request)
+            warning_message(self.request, msg="El registro ya existe")
             return HttpResponseRedirect(reverse_lazy("users_app:usergroup_list"))
         try:
             form.instance.group_name = str(form.instance.group_name).lower()
@@ -163,7 +164,8 @@ class UserGroupEditModal(LoginRequiredMixin, generic.UpdateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        form_invalid_message(self.request)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
 
 
@@ -174,7 +176,7 @@ class UserGroupDeleteModal(LoginRequiredMixin, generic.UpdateView):
     template_name = "usergroups/usergroup_delete_modal.html"
 
     def get_success_url(self):
-        deleted_message(self.request)
+        success_message(self.request, msg="Registro eliminado satisfactoriamente")
         return reverse_lazy("users_app:usergroup_list")
 
     def get_context_data(self, **kwargs):
@@ -198,7 +200,8 @@ class UserGroupDeleteModal(LoginRequiredMixin, generic.UpdateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        form_invalid_message(self.request)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
 
 
@@ -230,7 +233,7 @@ class RestrictionCreate(LoginRequiredMixin, generic.CreateView):
     template_name = "restrictions/restriction_create_modal.html"
 
     def get_success_url(self):
-        created_message(self.request)
+        success_message(self.request)
         return reverse_lazy("users_app:restriction_list")
 
     def get_context_data(self, **kwargs):
@@ -243,7 +246,7 @@ class RestrictionCreate(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         count_code, count_name = duplicate_restrictions(self, form)
         if count_code > 0 or count_name > 0:
-            duplicate_message(self.request)
+            warning_message(self.request, msg="El registro ya existe")
             return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
         try:
             form.instance.code = str(form.instance.code).upper()
@@ -259,7 +262,8 @@ class RestrictionCreate(LoginRequiredMixin, generic.CreateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        form_invalid_message(self.request)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
 
 
@@ -270,7 +274,7 @@ class RestrictionEditModal(LoginRequiredMixin, generic.UpdateView):
     template_name = "restrictions/restriction_update_modal.html"
 
     def get_success_url(self):
-        updated_message(self.request)
+        success_message(self.request, msg="Registro actualizado satisfactoriamente")
         return reverse_lazy("users_app:restriction_list")
 
     def get_context_data(self, **kwargs):
@@ -283,7 +287,7 @@ class RestrictionEditModal(LoginRequiredMixin, generic.UpdateView):
     def form_valid(self, form):
         count_code, count_name = duplicate_restrictions(self, form)
         if count_code > 0 or count_name > 0:
-            duplicate_message(self.request)
+            warning_message(self.request, msg="El registro ya existe")
             return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
         try:
             form.instance.code = str(form.instance.code).upper()
@@ -300,7 +304,8 @@ class RestrictionEditModal(LoginRequiredMixin, generic.UpdateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        form_invalid_message(self.request)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
 
 
@@ -311,7 +316,7 @@ class RestrictionDeleteModal(LoginRequiredMixin, generic.UpdateView):
     template_name = "restrictions/restriction_delete_modal.html"
 
     def get_success_url(self):
-        deleted_message(self.request)
+        success_message(self.request, msg="Registro eliminado satisfactoriamente")
         return reverse_lazy("users_app:restriction_list")
 
     def get_context_data(self, **kwargs):
@@ -335,7 +340,8 @@ class RestrictionDeleteModal(LoginRequiredMixin, generic.UpdateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        form_invalid_message(self.request)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
 
 
@@ -392,7 +398,7 @@ class AppEditModal(LoginRequiredMixin, generic.UpdateView):
     template_name = "apps/app_update_modal.html"
 
     def get_success_url(self):
-        updated_message(self.request)
+        success_message(self.request, msg="Registro actualizado satisfactoriamente")
         return reverse_lazy("users_app:app_list")
 
     def get_context_data(self, **kwargs):
@@ -405,7 +411,7 @@ class AppEditModal(LoginRequiredMixin, generic.UpdateView):
     def form_valid(self, form):
         count_name, count_route = duplicate_apps(self, form)
         if count_name > 0 or count_route > 0:
-            duplicate_message(self.request)
+            warning_message(self.request, msg="El registro ya existe")
             return HttpResponseRedirect(reverse_lazy("users_app:app_list"))
         try:
             form.instance.updated_at = timezone.now()
@@ -420,7 +426,8 @@ class AppEditModal(LoginRequiredMixin, generic.UpdateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        form_invalid_message(self.request)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
 
 
@@ -450,7 +457,7 @@ class RoleCreate(LoginRequiredMixin, generic.CreateView):
     template_name = "roles/role_create_modal.html"
 
     def get_success_url(self):
-        created_message(self.request)
+        success_message(self.request)
         return reverse_lazy("users_app:role_list")
 
     def get_context_data(self, **kwargs):
@@ -463,7 +470,7 @@ class RoleCreate(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         objects = duplicate_roles(self, form)
         if objects > 0:
-            duplicate_message(self.request)
+            warning_message(self.request, msg="El registro ya existe")
             return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
         try:
             form.instance.role_name = str(form.instance.role_name).lower()
@@ -478,7 +485,8 @@ class RoleCreate(LoginRequiredMixin, generic.CreateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        form_invalid_message(self.request)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
 
 
@@ -489,7 +497,7 @@ class RoleEditModal(LoginRequiredMixin, generic.UpdateView):
     template_name = "roles/role_update_modal.html"
 
     def get_success_url(self):
-        updated_message(self.request)
+        success_message(self.request, msg="Registro actualizado satisfactoriamente")
         return reverse_lazy("users_app:role_list")
 
     def get_context_data(self, **kwargs):
@@ -502,7 +510,7 @@ class RoleEditModal(LoginRequiredMixin, generic.UpdateView):
     def form_valid(self, form):
         objects = duplicate_roles(self, form)
         if objects > 0:
-            duplicate_message(self.request)
+            warning_message(self.request, msg="El registro ya existe")
             return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
         try:
             form.instance.role_name = str(form.instance.role_name).lower()
@@ -518,7 +526,8 @@ class RoleEditModal(LoginRequiredMixin, generic.UpdateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        form_invalid_message(self.request)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
 
 
@@ -529,7 +538,7 @@ class RoleDeleteModal(LoginRequiredMixin, generic.UpdateView):
     template_name = "roles/role_delete_modal.html"
 
     def get_success_url(self):
-        deleted_message(self.request)
+        success_message(self.request, msg="Registro eliminado satisfactoriamente")
         return reverse_lazy("users_app:role_list")
 
     def get_context_data(self, **kwargs):
@@ -553,7 +562,8 @@ class RoleDeleteModal(LoginRequiredMixin, generic.UpdateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        form_invalid_message(self.request)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
 
 
@@ -583,7 +593,7 @@ class RuleCreate(LoginRequiredMixin, generic.CreateView):
     template_name = "rules/rule_create_modal.html"
 
     def get_success_url(self):
-        created_message(self.request)
+        success_message(self.request)
         return reverse_lazy("users_app:rule_list")
 
     def get_context_data(self, **kwargs):
@@ -610,7 +620,8 @@ class RuleCreate(LoginRequiredMixin, generic.CreateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        form_invalid_message(self.request)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
 
 
@@ -621,7 +632,7 @@ class RuleEditModal(LoginRequiredMixin, generic.UpdateView):
     template_name = "rules/rule_update_modal.html"
 
     def get_success_url(self):
-        updated_message(self.request)
+        success_message(self.request, msg="Registro actualizado satisfactoriamente")
         return reverse_lazy("users_app:rule_list")
 
     def get_context_data(self, **kwargs):
@@ -649,7 +660,8 @@ class RuleEditModal(LoginRequiredMixin, generic.UpdateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        form_invalid_message(self.request)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
 
 
@@ -664,7 +676,7 @@ class RuleDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return data
 
     def get_success_url(self):
-        deleted_message(self.request)
+        success_message(self.request, msg="Registro eliminado satisfactoriamente")
         return reverse_lazy("users_app:rule_list")
 
     def get_context_data(self, **kwargs):
@@ -688,7 +700,8 @@ class RuleDeleteModal(LoginRequiredMixin, generic.UpdateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        form_invalid_message(self.request)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
 
 
@@ -718,7 +731,7 @@ class UserCreate(LoginRequiredMixin, generic.FormView):
     template_name = "users/user_create_modal.html"
 
     def get_success_url(self):
-        created_message(self.request)
+        success_message(self.request)
         return reverse_lazy("users_app:user_list")
 
     def get_context_data(self, **kwargs):
@@ -731,7 +744,9 @@ class UserCreate(LoginRequiredMixin, generic.FormView):
     def form_valid(self, form):
         objects = duplicate_users(self, form)
         if objects > 0:
-            duplicate_message(self.request)
+            warning_message(
+                self.request, msg="El nombre de usuario ingresado ya está en uso"
+            )
             return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
         try:
             username = str(form.instance.username).lower()
@@ -759,7 +774,8 @@ class UserCreate(LoginRequiredMixin, generic.FormView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        form_invalid_message(self.request)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
 
 
@@ -770,7 +786,7 @@ class UserEditModal(LoginRequiredMixin, generic.UpdateView):
     template_name = "users/user_update_modal.html"
 
     def get_success_url(self):
-        updated_message(self.request)
+        success_message(self.request, msg="Registro actualizado satisfactoriamente")
         return reverse_lazy("users_app:user_list")
 
     def get_context_data(self, **kwargs):
@@ -783,7 +799,9 @@ class UserEditModal(LoginRequiredMixin, generic.UpdateView):
     def form_valid(self, form):
         objects = duplicate_users(self, form)
         if objects > 0:
-            duplicate_message(self.request)
+            warning_message(
+                self.request, msg="El nombre de usuario ingresado ya está en uso"
+            )
             return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
         try:
             form.instance.username = str(form.instance.username).lower()
@@ -798,7 +816,8 @@ class UserEditModal(LoginRequiredMixin, generic.UpdateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        form_invalid_message(self.request)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
 
 
@@ -813,7 +832,7 @@ class UserDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return data
 
     def get_success_url(self):
-        deleted_message(self.request)
+        success_message(self.request, msg="Registro eliminado satisfactoriamente")
         return reverse_lazy("users_app:user_list")
 
     def get_context_data(self, **kwargs):
@@ -837,7 +856,8 @@ class UserDeleteModal(LoginRequiredMixin, generic.UpdateView):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
-        form_invalid_message(self.request)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
 
 
@@ -891,7 +911,7 @@ class RegisterView(UserLoggedMixin, generic.FormView):
     template_name = "users/register.html"
 
     def get_success_url(self):
-        created_message(self.request)
+        success_message(self.request)
         return reverse_lazy("users_app:login")
 
     def get_context_data(self, **kwargs):
@@ -906,7 +926,9 @@ class RegisterView(UserLoggedMixin, generic.FormView):
     def form_valid(self, form):
         objects = duplicate_users(self, form)
         if objects > 0:
-            user_duplicate_message(self.request)
+            warning_message(
+                self.request, msg="El nombre de usuario ingresado ya está en uso"
+            )
             return HttpResponseRedirect(reverse_lazy("home_app:register"))
         try:
             username = str(form.instance.username).lower()
@@ -927,8 +949,8 @@ class RegisterView(UserLoggedMixin, generic.FormView):
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
-        msg_error = get_errors(form)
-        form_invalid_message(self.request, msg=msg_error)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
 
 
@@ -959,101 +981,116 @@ class UserProfileDetail(LoginRequiredMixin, generic.TemplateView):
 
 
 class UserProfileCreate(LoginRequiredMixin, generic.CreateView):
+    login_url = "/login"
     model = UserProfile
-    form_class = UserProfileForm
+    form_class = UserProfileModelForm
     template_name = "userprofile/userprofile_add.html"
 
     def get_success_url(self):
-        return reverse_lazy("users_app:userprofile", args=[self.request.user.username])
+        slug = self.kwargs.get("slug", "")
+        success_message(self.request)
+        return reverse_lazy("users_app:userprofile", args=[slug])
 
     def get_context_data(self, **kwargs):
         context = super(UserProfileCreate, self).get_context_data(**kwargs)
-        username_param = self.kwargs.get("slug", "")
+        slug = self.kwargs.get("slug", "")
 
         context["app_title"] = app_title
-        context["title_view"] = 'Perfil'
-        context["description_view"] = f'@{username_param}'
-        context["username"] = username_param
+        context["title_view"] = "Perfil"
+        context["description_view"] = f"@{slug}"
+        context["username"] = slug
         return context
 
     def form_valid(self, form):
+        slug = self.kwargs.get("slug", "")
         try:
-            username_param = self.kwargs.get("slug", "")
-            user = User.objects.get(username=username_param)
-            form.instance.user = user.id
+            user = User.objects.get(username=slug)
+            form.instance.email = normalize_email(form.instance.email)
+            form.instance.user_id = user.id
             return super().form_valid(form)
         except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:userprofile", args=[self.request.user.username]))
-        
-        # try:
-        #     user_id = self.request.user.id
-        #     document_type = form.cleaned_data["document_type"]
-        #     id_number = form.cleaned_data["id_number"]
-        #     name = form.cleaned_data["name"]
-        #     phone = form.cleaned_data["phone"]
-        #     email = form.cleaned_data["email"]
-        #     address = form.cleaned_data["address"]
-        #     city = form.cleaned_data["city"]
-        #     city_id = city.id
-        #     about_me = form.cleaned_data["about_me"]
-        #     pprint(
-        #         {
-        #             "user_id": user_id,
-        #             "document_type": document_type,
-        #             "id_number": id_number,
-        #             "name": name,
-        #             "phone": phone,
-        #             "email": email,
-        #             "address": address,
-        #             "city": city,
-        #             "about_me": about_me,
-        #         }
-        #     )
-        #     userprofile = UserProfile.objects.create(
-        #         user_id=user_id,
-        #         document_type=document_type,
-        #         id_number=id_number,
-        #         name=name,
-        #         phone=phone,
-        #         email=email,
-        #         address=address,
-        #         city_id=city_id,
-        #         about_me=about_me,
-        #     )
-        #     userprofile.save()
-        #     print(userprofile)
-        #     return super().form_valid(form)
-        # except Exception as exception:
-        #     error_message(self.request)
-        #     print(" ")
-        #     print(exception)
-        #     return HttpResponseRedirect(reverse_lazy("home_app:register"))
-        
-        return super().form_valid(form)
-        
+            message = getattr(exception, "message", list(exception))
+            error_message(self.request, msg=message)
+            return HttpResponseRedirect(
+                reverse_lazy(
+                    "users_app:userprofile_add", args=[slug]
+                )
+            )
+
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
-        msg_error = get_errors(form)
-        form_invalid_message(self.request, msg=msg_error)
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
+
+
+class UserProfileEdit(LoginRequiredMixin, generic.UpdateView):
+    login_url = "/login"
+    model = UserProfile
+    form_class = UserProfileModelForm
+    template_name = "userprofile/userprofile_edit.html"
+
+    def get_object(self, queryset=None):
+        slug = self.kwargs.get("slug", "")
+        obj = UserProfile.objects.get(user__username=slug)
+        return obj
+
+    def get_success_url(self):
+        slug = self.kwargs.get("slug", "")
+        success_message(self.request, msg="Registro actualizado satisfactoriamente")
+        return reverse_lazy("users_app:userprofile", args=[slug])
+
+    def get_context_data(self, **kwargs):
+        context = super(UserProfileEdit, self).get_context_data(**kwargs)
+        slug = self.kwargs.get("slug", "")
+
+        context["app_title"] = app_title
+        context["title_view"] = "Perfil"
+        context["description_view"] = f"@{slug}"
+        context["username"] = slug
+        return context
+
+    def form_valid(self, form):
+        slug = self.kwargs.get("slug", "")
+        try:
+            form.instance.updated_at = datetime.now()
+            form.instance.email = normalize_email(form.instance.email)
+            return super().form_valid(form)
+        except Exception as exception:
+            message = getattr(exception, "message", list(exception))
+            error_message(self.request, msg=message)
+            return HttpResponseRedirect(
+                reverse_lazy(
+                    "users_app:userprofile_edit", args=[slug]
+                )
+            )
+
+    def form_invalid(self, form, **kwargs):
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
+        return HttpResponseRedirect(
+            reverse_lazy(
+                "users_app:userprofile_edit", args=[self.request.user.username]
+            )
+        )
 
 
 # ----------------------------------------------
 
 
 class PreRegisterView(UserLoggedMixin, generic.TemplateView):
-    # selection_url = "/pre_register"
+    # selection_url = "/register_choices"
     template_name = "users/selection_register.html"
 
     def get_context_data(self, **kwargs):
         context = super(PreRegisterView, self).get_context_data(**kwargs)
         context["app_title"] = app_title
-        context["title_view"] = pre_register_title
-        context["description_view"] = pre_register_desc
+        context["title_view"] = register_choices_title
+        context["description_view"] = register_choices_desc
         context["account_view"] = account_already
         context[
             "image_url"

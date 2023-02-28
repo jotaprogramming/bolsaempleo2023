@@ -1,0 +1,125 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+{% block contentfluid %}
+
+<article class="body-content">
+  <section class="content-at">
+    <div class="box-content-in-left d-lg-block">
+      {% include 'partials/_log_reg_left-content.html' %}
+    </div>
+    <div class="box-content-in-right">
+      <div class="right-content">
+        <div class="r-content r-header-content">
+          <h3 class="r-header-title text-uppercase">{{title_view}}</h3>
+          <h3 class="r-header-subtitle">Póngase en contacto con nuestros departamentos de servicio al cliente</h3>
+        </div>
+        <div class="r-content r-body-content">
+          <select class="form-select my-4" aria-label="">
+            <option class="btn-options" selected>Bucaramanga</option>
+            <option class="btn-options" value="1">San Gil</option>
+            <option class="btn-options" value="2">Barrancabermeja</option>
+          </select>
+          <div class="group-inputs-readonly ">
+            <div class="input-readonly">
+              <input class="input-read" type="text" readonly>
+              <span class="placeholder-read">texto@example</span>
+              <span class="icon-readonly">
+                <i class="lni lni-envelope"></i>
+              </span>
+            </div>
+            <div class="input-readonly">
+              <input class="input-read" type="text" readonly>
+              <span class="placeholder-read">texto</span>
+              <span class="icon-readonly">
+                <i class="lni lni-phone"></i>
+              </span>
+            </div>
+            <div class="input-readonly">
+              <input class="input-read" type="text" readonly>
+              <span class="placeholder-read">texto</span>
+              <span class="icon-readonly">
+                <i class="lni lni-whatsapp"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="r-content r-footer-content text-center">
+          <span class="r-footer-link">Si no puede comunicarse por estos medios, hágalo desde nuestras redes sociales</span>
+          <div class="footer-icons">
+            <a
+            class="text-dark ft-icon" href=""><i class="lni lni-twitter-fill"></i>
+          </a>
+          <a
+            class="text-dark ft-icon" href=""><i class="lni lni-facebook-fill"></i>
+          </a>
+          <a
+            class="text-dark ft-icon" href=""><i class="lni lni-instagram-fill"></i>
+          </a>
+          </div>
+        </div>
+      </div>
+  </section>
+
+
+
+</article>
+<!-- <article class="forms-content">
+  <section class="content-box">
+    <section class="content-left d-none d-lg-block">
+      {% include 'partials/_log_reg_left-content.html' %}
+    </section>
+    <section class="content-rigth">
+      <div class="content-forms">
+        <div class="form-head text-center">
+          <h3 class="head-title text-uppercase">soporte</h3>
+          <h3 class="head-subtitle">Póngase en contacto con nuestros departamentos de servicio al cliente</h3>
+        </div>
+        <div class="form-body">
+          <select class="form-select my-3" aria-label="">
+            <option class="btn-options" selected>Bucaramanga</option>
+            <option class="btn-options" value="1">San Gil</option>
+            <option class="btn-options" value="2">Barrancabermeja</option>
+          </select>
+          <div class="group-inputs-readonly my-4">
+            <div class="input-readonly">
+              <input class="input-read" type="text" readonly>
+              <span class="placeholder-read">texto</span>
+              <span class="icon-readonly">
+                <i class="lni lni-envelope"></i>
+              </span>
+            </div>
+            <div class="input-readonly">
+              <input class="input-read" type="text" readonly>
+              <span class="placeholder-read">texto</span>
+              <span class="icon-readonly">
+                <i class="lni lni-phone"></i>
+              </span>
+            </div>
+            <div class="input-readonly">
+              <input class="input-read" type="text" readonly>
+              <span class="placeholder-read">texto</span>
+              <span class="icon-readonly">
+                <i class="lni lni-whatsapp"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="form-footer text-center">
+          <span class="foter-text ">Si no puede comunicarse con nuestro equipo, hágalo desde nuestras redes
+            sociales</span>
+          <div class="footer-icons">
+            <a class="f-icon" href=""><i class="lni lni-twitter-fill"></i></a>
+            <a class="f-icon" href=""> <i class="lni lni-facebook-fill"></i></a>
+            <a class="f-icon" href=""> <i class="lni lni-instagram-fill"></i></a>
+          </div>
+      </div>
+    </section>
+
+  </section>
+</article> -->
+
+{% endblock contentfluid %}

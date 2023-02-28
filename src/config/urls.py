@@ -5,10 +5,8 @@ from django.urls import path
 # PROJECT MODULES
 from .views import *
 
-app_name = "home_app"
+app_name = "config_app"
 
 urlpatterns = [
-    path("", HomeView.as_view(), name="home_page"),
-    path("help", HelpView.as_view(), name="help"),
     
 ]

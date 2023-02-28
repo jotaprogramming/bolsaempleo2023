@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %} {% load static %} {% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %} {% block content %}
+<section class="my-5">
+  {% include 'partials/_display.html' %}
+  <div class="d-flex flex-column">
+    <div class="col-1">
+      {% if object.user %}
+      <a
+        class="btn btn-primary btn-center"
+        href="{% url 'users_app:userprofile_edit' username %}"
+      >
+        <i class="lni lni-pencil"></i>
+        <span class="ms-2">Editar</span>
+      </a>
+      {% else %}
+      <a
+        class="btn btn-primary btn-center"
+        href="{% url 'users_app:userprofile_add' username %}"
+      >
+        <i class="lni lni-pencil"></i>
+        <span class="ms-2">Editar</span>
+      </a>
+      {% endif %}
+    </div>
+    <p>Alias: {{ object.name }}</p>
+    <p>Nombre de usuario: {{ object.user.username }}</p>
+    <p>Correo de registro: {{ object.user.email }}</p>
+    <p>Nombre completo: {{ object.user.first_name }}</p>
+    <p>Documento: {{ object.document_type }} {{ object.id_number }}</p>
+    <p>Teléfono: {{ object.phone }}</p>
+    <p>Correo de contacto: {{ object.email }}</p>
+    <p>Dirección: {{ object.address }}</p>
+    <p>Ciudad: {{ object.city.name }}, {{ object.city.district.name }}</p>
+    {% if object.user_cv.cv_path %}
+    <p>Hoja de vida:</p>
+    <img src="{{ object.user_cv.cv_path }}" alt="cv" class="img-thumbnail">
+    {% endif %}
+
+  </div>
+</section>
+
+{% endblock content %}

@@ -26,6 +26,7 @@
               <th>Fecha de Ingreso</th>
               <th>Activo</th>
               <th>Última sesión</th>
+              <th>Perfil</th>
               <th>Editar</th>
               <th>Eliminar</th>
             </tr>
@@ -58,6 +59,16 @@
                 {{row.last_login}}
                 {% else %}
                 Aún no ha iniciado sesión
+                {% endif %}
+              </td>
+              <td>
+                {% if row.user_profile_user %}
+                <a
+                  href="{% url 'users_app:userprofile' row.username %}"
+                  class="btn btn-outline-secondary btn-center"
+                  >
+                  <i class="lni lni-user"></i>
+                </a>
                 {% endif %}
               </td>
               <td>

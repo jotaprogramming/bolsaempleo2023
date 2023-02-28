@@ -1,29 +1,48 @@
 {% extends 'core/base.html' %} {% load static %} {% block title %}
 <title>{{app_title}} | {{title_view}}</title>
-{% endblock title %} {% block content %}
-<section class="my-5">
-  <form method="POST" action="" id="form">
-    {% csrf_token %}
-    <div class="d-flex flex-column gap-3">
-      <div class="">
-        <div class="input-group">
-          {{form.username}}
+{% endblock title %} 
+
+{% block contentfluid %}
+
+  <article class="body-content">
+    <section class="content-at">
+      <div class="box-content-in-left d-none d-lg-block">
+        {% include 'partials/_log_reg_left-content.html' %}
+      </div> 
+      <div class="box-content-in-right">
+        <div class="right-content">
+          <div class="r-content r-header-content">
+            <h3 class="r-header-title text-uppercase">{{description_view}}</h3>
+            <h3 class="r-header-subtitle">Digite sus Credenciales</h3>
+          </div>
+          <div class="r-content r-body-content mt-5">
+            <h4 class="body-text m-0">Recuerde que puede usar
+              tanto su correo electrónico como su usuario
+            </h4>
+            <form action="" method="post" id="form">
+              {% csrf_token %}
+              <div class="set-input">
+                {{form.username}}
+                <span class="input-placeholder">Usuario</span>
+                <span class="input-icon"><i class="lni lni-user"></i></span>
+              </div>
+              <div class="set-input my-3">
+                {{form.password}}
+                <span class="input-placeholder">Contraseña</span>
+                <span class="input-icon"><i class="lni lni-lock"></i></span>
+              </div>
+              <a class="text-dark" href="{% url 'users_app:credentials_recover' %}">Recuperar Usuario o Contraseña</a>
+              <button class="default-btn my-3 d-block" type="submit" id="btn_save">{{title_view}}</button>
+            </form>
+          </div>
+          <div class="r-content r-footer-content text-center">
+            <span class="r-footer-link">Si aun no tiene Usuario y Contraseña <br>registrese <b><a class="text-dark fw-bold" href="{% url 'users_app:register_choices' %}">AQUI</a></b></span>
+          </div>
+         
         </div>
       </div>
-      <div class="">
-        <div class="input-group">
-          <span class="input-group-text">
-            {% include 'partials/icon_element/_padlock_icon.html' %}
-          </span>
-          {{form.password}}
-        </div>
-      </div>
-      <div class="">
-        <button type="submit" class="btn btn-primary rounded-pill" id="btn_save">
-          Ingresar
-        </button>
-      </div>
-    </div>
-  </form>
-</section>
-{% endblock content %}
+    </section>
+  </article>
+  
+   
+{% endblock contentfluid %}

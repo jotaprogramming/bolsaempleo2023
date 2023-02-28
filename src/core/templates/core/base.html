@@ -8,13 +8,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% block title %}
     <title>Bolsa de Empleo</title>
-    {% endblock title %} {% comment %} FONTS {% endcomment %}
+    {% endblock title %} 
+    {% comment %} FONTS {% endcomment %}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600&display=swap"
       rel="stylesheet"
     />
+    <link 
+      href="https://fonts.googleapis.com/css2?family=Rambla&display=swap" rel="stylesheet"
+    >
+    <link 
+      href="https://fonts.googleapis.com/css2?family=Quattrocento&display=swap" rel="stylesheet"
+    >
 
     {% comment %} STYLESHEETS {% endcomment %}
     <link rel="stylesheet" href="{% static 'core/stylesheets/main.css' %}" />
@@ -51,7 +58,7 @@
       rel="stylesheet"
       integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
       crossorigin="anonymous"
-    />
+    >
 
     {% comment %} FONTAWESOME {% endcomment %}
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
@@ -61,11 +68,17 @@
     ></script>
   </head>
   
-  <body>
-    <header class="header">{% include 'partials/_navbar.html' %}</header>
+  <body class="container-grid">
+    <header class="header-container">{% include 'partials/_navbar.html' %}</header>
     {% include 'partials/_popup_alert.html' %}
-    <main class="container">{% block content %} {% endblock content %}</main>
-
+    <main class="body-container">
+      <div class="container">
+        {% block content %} {% endblock content %}
+      </div>
+      <div class="w-100">
+        {% block contentfluid %} {% endblock contentfluid %}
+      </div>
+    </main>
     <div class="modal fade" id="defaultModal" tabindex="-1" role="dialog" aria-hidden="true"></div>
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

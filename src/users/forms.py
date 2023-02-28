@@ -279,7 +279,7 @@ class UserForm(forms.ModelForm):
             ),
             "email": forms.EmailInput(
                 attrs={
-                    "placeholder": "Correo electrónico",
+                    # "placeholder": "Correo electrónico",
                     "class": "form-control",
                 }
             ),
@@ -339,7 +339,7 @@ class UserFormUpdate(forms.ModelForm):
             ),
             "email": forms.EmailInput(
                 attrs={
-                    "placeholder": "Correo electrónico",
+                    # "placeholder": "Correo electrónico",
                     "class": "form-control",
                 }
             ),
@@ -367,8 +367,8 @@ class LoginForm(AuthenticationForm):
         required=True,
         widget=forms.TextInput(
             attrs={
-                "class": "form-control",
-                "placeholder": _("User"),
+                "class": "single-input",
+                # "placeholder": _("User"),
             }
         ),
     )
@@ -376,7 +376,10 @@ class LoginForm(AuthenticationForm):
         label=_("Password"),
         required=True,
         widget=forms.PasswordInput(
-            attrs={"class": "form-control", "placeholder": _("Password")}
+            attrs={
+                "class": "single-input",
+                # "placeholder": _("Password")
+            }
         ),
     )
 
@@ -387,9 +390,18 @@ class RegisterForm(forms.ModelForm):
         required=True,
         widget=forms.PasswordInput(
             attrs={
-                "placeholder": "Repita la contraseña",
-                "class": "form-control",
+                # "placeholder": "Repita la contraseña",
+                "class": "single-input",
                 "minlength": "8",
+            }
+        ),
+    )
+    email = forms.CharField(
+        label=_("Email"),
+        required=True,
+        widget=forms.EmailInput(
+            attrs={
+                "class": "single-input",
             }
         ),
     )
@@ -413,23 +425,24 @@ class RegisterForm(forms.ModelForm):
         widgets = {
             "username": forms.TextInput(
                 attrs={
-                    "placeholder": "Nombre de usuario",
-                    "class": "form-control",
+                    # "placeholder": "Nombre de usuario",
+                    "class": "single-input",
                     "minlength": "3",
                     "maxlength": "150",
                 }
             ),
             "password": forms.PasswordInput(
                 attrs={
-                    "placeholder": "Contraseña",
-                    "class": "form-control",
+                    # "placeholder": "Contraseña",
+                    "class": "single-input",
                     "minlength": "8",
                 }
             ),
             "email": forms.EmailInput(
                 attrs={
-                    "placeholder": "Correo electrónico",
-                    "class": "form-control",
+                    # "placeholder": "Correo electrónico",
+                    "class": "single-input",
+                    "minlength": "3",
                 }
             ),
         }
@@ -438,10 +451,86 @@ class RegisterForm(forms.ModelForm):
         username = self.cleaned_data["username"]
         user_cache = User.objects.filter(username=username).count()
         if user_cache > 0:
-            if username == 'admin' or username == 'root':
-                self.add_error("username", _(f'Nombre de usuario no permitido'))
+            if username == "admin" or username == "root":
+                self.add_error("username", _(f"Nombre de usuario no permitido"))
             else:
-                self.add_error("username", _(f'El nombre de usuario ya existe'))
+                self.add_error("username", _(f"El nombre de usuario ya existe"))
 
         if self.cleaned_data["password"] != self.cleaned_data["repeat_pass"]:
-            self.add_error("repeat_pass", _(f'Contraseña inválida'))
+            self.add_error("repeat_pass", _(f"Contraseña inválida"))
+
+class UserProfileForm(forms.Form):
+    about_me = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={"class": "form-control", "minlength": "1"}),
+    )
+
+
+class UserProfileModelForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserProfileModelForm, self).__init__(*args, **kwargs)
+        self.fields["about_me"].require = False
+
+    class Meta:
+        model = UserProfile
+
+        fields = [
+            "document_type",
+            "id_number",
+            "name",
+            "phone",
+            "email",
+            "address",
+            "city",
+            "about_me",
+        ]
+
+        widgets = {
+            "document_type": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+            "id_number": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "minlength": "1",
+                }
+            ),
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "minlength": "1",
+                }
+            ),
+            "phone": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "minlength": "1",
+                }
+            ),
+            "email": forms.EmailInput(
+                attrs={
+                    # "placeholder": "Correo electrónico",
+                    "class": "form-control",
+                    "minlength": "3",
+                }
+            ),
+            "address": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "minlength": "1",
+                }
+            ),
+            "city": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+            "about_me": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "minlength": "1",
+                }
+            ),
+        }

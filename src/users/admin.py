@@ -28,3 +28,13 @@ class RulesAdmin(admin.ModelAdmin):
 @admin.register(Apps)
 class AppAdmin(admin.ModelAdmin):
     exclude = ["created_at", "updated_at", "deleted_at"]
+
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    exclude = ["created_at", "updated_at", "deleted_at"]
+
+
+@admin.register(CurriculumVitae)
+class CurriculumVitaeAdmin(admin.ModelAdmin):
+    exclude = []

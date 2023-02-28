@@ -1,9 +1,6 @@
 <ul class="navbar-nav mb-2 mb-lg-0">
     <li class="nav-item">
-        <a class="nav-link" aria-current="page" href="#">Contacto</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#">Ayuda</a>
+        <a class="nav-link" aria-current="page" href="{% url 'home_app:help' %}">Ayuda</a>
     </li>
     {% if user.is_staff %}
     <li class="nav-item dropdown">
@@ -21,6 +18,7 @@
             </li>
             <li><a class="dropdown-item" href="{% url 'users_app:rule_list' %}">Reglas</a></li>
             <li><a class="dropdown-item" href="{% url 'users_app:user_list' %}">Usuarios</a></li>
+            <li><a class="dropdown-item" href="/admin">Panel Administrativo de Django</a></li>
         </ul>
     </li>
     {% endif %}
@@ -31,6 +29,7 @@
             {{user.email}}
         </a>
         <ul class="dropdown-menu dropdown-menu-lg-end">
+            <li><a class="dropdown-item" href="{% url 'users_app:userprofile' request.user.username %}">Perfil</a></li>
             <li><a class="dropdown-item" href="{% url 'users_app:logout' %}">Cerrar sesión</a></li>
         </ul>
     </li>
@@ -39,7 +38,7 @@
         <a class="nav-link" href="{% url 'users_app:login' %}">Ingresar</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'users_app:register' %}">Registrarse</a>
+        <a class="nav-link" href="{% url 'users_app:register_choices' %}">Registrarse</a>
     </li>
     {% endif %}
 </ul>

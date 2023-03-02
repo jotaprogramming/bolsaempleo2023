@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # MODULES
     "sweetify",
+    "coverage",
     # APPs
     "core",
     "home",

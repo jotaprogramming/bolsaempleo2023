@@ -150,7 +150,7 @@ class UserProfile(models.Model):
     )
     name = models.CharField(_("user's short name"), max_length=100, blank=True)
     phone = models.CharField(_("cell phone number"), max_length=25, blank=False)
-    email = models.CharField(_("contact e-mail address"), max_length=250, blank=False)
+    email = models.EmailField(_("contact e-mail address"), max_length=250, blank=False)
     address = models.CharField(
         _("address of residence or work stay"), max_length=250, blank=False
     )
@@ -171,7 +171,7 @@ class UserProfile(models.Model):
     )
 
     def __str__(self):
-        return "{}".format(self.user.first_name)
+        return "{}".format(self.user.username)
 
     def slug(self):
         return slugify(self.user.username)
@@ -192,7 +192,7 @@ class CurriculumVitae(models.Model):
     cv_path = models.TextField(_("path"), null=False)
 
     def __str__(self):
-        return "{}".format(self.userprofile.user.first_name)
+        return "{}".format(self.userprofile.user.username)
 
     class Meta:
         verbose_name = _("curriculum vitae")

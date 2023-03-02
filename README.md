@@ -34,6 +34,30 @@ python src/manage.py migrate <app>
 >
 > `--fake` asegura que se ejecute la última versión y salte las migraciones faltantes
 
+### Coverage
+
+#### Ejecutar testing
+
+```bash
+coverage run manage.py test -v 2
+```
+
+#### General reporte
+
+```bash
+coverage html
+```
+
+```bash
+coverage html -d coverage_resolved
+```
+
+### Ejecutar las pruebas
+
+```bash
+python managepy test
+```
+
 ### Docker
 
 #### Ejecutar CLI
@@ -149,13 +173,13 @@ docker-compose down
 
 10. Asegúrese que el servidor de PostgreSQL esté funcionando y ejecute las migraciones
 
-   ```bash
-   python src/manage.py makemigrations
-   ```
+    ```bash
+    python src/manage.py makemigrations
+    ```
 
-   ```bash
-   python src/manage.py migrate
-   ```
+    ```bash
+    python src/manage.py migrate
+    ```
 
 11. Levante el servidor de Django
 

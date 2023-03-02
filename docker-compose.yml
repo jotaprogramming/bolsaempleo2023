@@ -1,13 +1,11 @@
 version: '3.9'
 services:
   web:
-    restart: always
+    # restart: always
     build: .
     # command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./src:/code
-      - web-django:/usr/src/app
-      - web-static:/usr/src/app/static
     ports:
       - "3000:8000"
     env_file: ./src/.env
@@ -47,7 +45,7 @@ services:
   #   volumes:
   #     - redisdata:/data
 volumes:
-  web-django:
-  web-static:
+  # web-django:
+  # web-static:
   pgdata:
-  redisdata:
+  # redisdata:

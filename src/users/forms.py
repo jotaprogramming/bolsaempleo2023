@@ -115,9 +115,6 @@ class RestrictionForm(forms.ModelForm):
             ),
         }
 
-    def clean(self):
-        datos = self.cleaned_data
-
 
 class AppForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -139,9 +136,6 @@ class AppForm(forms.ModelForm):
                 }
             ),
         }
-
-    def clean(self):
-        datos = self.cleaned_data
 
 
 class RoleForm(forms.ModelForm):
@@ -174,9 +168,6 @@ class RoleForm(forms.ModelForm):
                 }
             ),
         }
-
-    def clean(self):
-        datos = self.cleaned_data
 
 
 class RuleForm(forms.ModelForm):
@@ -447,17 +438,22 @@ class RegisterForm(forms.ModelForm):
             ),
         }
 
-    def clean(self):
-        username = self.cleaned_data["username"]
-        user_cache = User.objects.filter(username=username).count()
-        if user_cache > 0:
-            if username == "admin" or username == "root":
-                self.add_error("username", _(f"Nombre de usuario no permitido"))
-            else:
-                self.add_error("username", _(f"El nombre de usuario ya existe"))
+    # def clean_username_not_allowed(self):
+    #     user_cache = User.objects.filter(username=self.cleaned_data["username"]).count()
 
+    #     if user_cache > 0:
+    #         if (
+    #             self.cleaned_data["username"] == "admin"
+    #             or self.cleaned_data["username"] == "root"
+    #         ):
+    #             self.add_error("username", _(f"Nombre de usuario no permitido"))
+    #         else:
+    #             self.add_error("username", _(f"El nombre de usuario ya existe"))
+
+    def clean_repeat_pass(self):
         if self.cleaned_data["password"] != self.cleaned_data["repeat_pass"]:
             self.add_error("repeat_pass", _(f"Contraseña inválida"))
+
 
 class UserProfileForm(forms.Form):
     about_me = forms.CharField(

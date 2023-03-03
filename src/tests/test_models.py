@@ -21,13 +21,11 @@ from datetime import datetime
 
 # Create your tests here.
 class UserGroupTest(TestCase):
+    fixtures = ["usergroups_fixtures.json"]
+
     @classmethod
     def setUpTestData(cls):
-        cls.usergroup = UserGroups.objects.create(
-            group_name="one group",
-            description="one group description",
-            created_at=datetime.now(),
-        )
+        cls.usergroup = UserGroups.objects.get(pk=1)
 
     def test_if_usergroup_is_an_instance(self):
         self.assertTrue(isinstance(self.usergroup, UserGroups))
@@ -37,14 +35,11 @@ class UserGroupTest(TestCase):
 
 
 class RestrictionsTest(TestCase):
+    fixtures = ["restrictions_fixtures.json"]
+
     @classmethod
     def setUpTestData(cls):
-        cls.restriction = Restrictions.objects.create(
-            code="RD",
-            name="Read",
-            description="Don't read",
-            created_at=datetime.now(),
-        )
+        cls.restriction = Restrictions.objects.get(pk=1)
 
     def test_if_restriction_is_an_instance(self):
         self.assertTrue(isinstance(self.restriction, Restrictions))
@@ -57,14 +52,11 @@ class RestrictionsTest(TestCase):
 
 
 class AppsTest(TestCase):
+    fixtures = ["apps_fixtures.json"]
+
     @classmethod
     def setUpTestData(cls):
-        cls.app = Apps.objects.create(
-            name="users_app:app_list",
-            route="user/app/list",
-            description="application list",
-            created_at=datetime.now(),
-        )
+        cls.app = Apps.objects.get(pk=1)
 
     def test_if_app_is_an_instance(self):
         self.assertTrue(isinstance(self.app, Apps))
@@ -77,13 +69,11 @@ class AppsTest(TestCase):
 
 
 class RolesTest(TestCase):
+    fixtures = ["roles_fixtures.json"]
+
     @classmethod
     def setUpTestData(cls):
-        cls.role = Roles.objects.create(
-            role_name="staff",
-            description="administrative actors",
-            created_at=datetime.now(),
-        )
+        cls.role = Roles.objects.get(pk=1)
 
     def test_if_role_is_an_instance(self):
         self.assertTrue(isinstance(self.role, Roles))
@@ -93,40 +83,16 @@ class RolesTest(TestCase):
 
 
 class UserProfileTest(TestCase):
+    fixtures = [
+        "config_fixtures.json",
+        "users_fixtures.json",
+        "userprofile_fixture.json",
+    ]
+
     @classmethod
     def setUpTestData(cls):
-        cls.user = User.objects.create_user(username="admin", password="123")
-        country = Countries.objects.create(
-            iso="COL",
-            name="Colombia",
-            created_at=datetime.now(),
-        )
-        district = Districts.objects.create(
-            iso="SAN",
-            zipcode="68XXXX",
-            name="Santander",
-            country=country,
-            created_at=datetime.now(),
-        )
-        city = Cities.objects.create(
-            zipcode="680001",
-            name="Bucaramanga",
-            district=district,
-            created_at=datetime.now(),
-        )
-        document_type = DocumentType.objects.create(
-            acronym="CC", name="Cédula de ciudadanía"
-        )
-        document_type.country.set([country])
-        cls.profile = UserProfile.objects.create(
-            user=cls.user,
-            document_type=document_type,
-            id_number="1001222333",
-            phone="3001112222",
-            email="admin@example.com",
-            city=city,
-            created_at=datetime.now(),
-        )
+        cls.user = User.objects.get(pk=1)
+        cls.profile = UserProfile.objects.get(pk=1)
 
     def test_if_profile_is_an_instance(self):
         self.assertTrue(isinstance(self.profile, UserProfile))
@@ -139,44 +105,17 @@ class UserProfileTest(TestCase):
 
 
 class CurriculumVitaeTest(TestCase):
+    fixtures = [
+        "config_fixtures.json",
+        "users_fixtures.json",
+        "userprofile_fixture.json",
+        "curriculumvitae_fixtures.json",
+    ]
+
     @classmethod
     def setUpTestData(cls):
-        cls.user = User.objects.create_user(username="admin", password="123")
-        country = Countries.objects.create(
-            iso="COL",
-            name="Colombia",
-            created_at=datetime.now(),
-        )
-        district = Districts.objects.create(
-            iso="SAN",
-            zipcode="68XXXX",
-            name="Santander",
-            country=country,
-            created_at=datetime.now(),
-        )
-        city = Cities.objects.create(
-            zipcode="680001",
-            name="Bucaramanga",
-            district=district,
-            created_at=datetime.now(),
-        )
-        document_type = DocumentType.objects.create(
-            acronym="CC", name="Cédula de ciudadanía"
-        )
-        document_type.country.set([country])
-        profile = UserProfile.objects.create(
-            user=cls.user,
-            document_type=document_type,
-            id_number="1001222333",
-            phone="3001112222",
-            email="admin@example.com",
-            city=city,
-            created_at=datetime.now(),
-        )
-        cls.cv = CurriculumVitae.objects.create(
-            userprofile=profile,
-            cv_path="/cv.png",
-        )
+        cls.user = User.objects.get(pk=1)
+        cls.cv = CurriculumVitae.objects.get(pk=1)
 
     def test_if_cv_is_an_instance(self):
         self.assertTrue(isinstance(self.cv, CurriculumVitae))

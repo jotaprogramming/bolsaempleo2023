@@ -110,14 +110,8 @@ class UserGroupCreate(LoginRequiredMixin, generic.CreateView):
         if objects > 0:
             warning_message(self.request, msg="El registro ya existe")
             return HttpResponseRedirect(reverse_lazy("users_app:usergroup_list"))
-        try:
-            form.instance.group_name = str(form.instance.group_name).lower()
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:usergroup_list"))
+        form.instance.group_name = str(form.instance.group_name).lower()
+        return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)
@@ -150,15 +144,10 @@ class UserGroupEditModal(LoginRequiredMixin, generic.UpdateView):
         if objects > 0:
             warning_message(self.request, msg="El registro ya existe")
             return HttpResponseRedirect(reverse_lazy("users_app:usergroup_list"))
-        try:
-            form.instance.group_name = str(form.instance.group_name).lower()
-            form.instance.updated_at = timezone.now()
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:usergroup_list"))
+
+        form.instance.group_name = str(form.instance.group_name).lower()
+        form.instance.updated_at = timezone.now()
+        return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)
@@ -187,22 +176,8 @@ class UserGroupDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        try:
-            form.instance.deleted_at = timezone.now()
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:usergroup_list"))
-
-    def form_invalid(self, form, **kwargs):
-        ctx = self.get_context_data(**kwargs)
-        ctx["form"] = form
-
-        msg_error = get_form_errors(form)
-        warning_message(self.request, msg=msg_error)
-        return self.render_to_response(ctx)
+        form.instance.deleted_at = timezone.now()
+        return super().form_valid(form)
 
 
 # RESTRICTIONS
@@ -244,19 +219,13 @@ class RestrictionCreate(LoginRequiredMixin, generic.CreateView):
         return context
 
     def form_valid(self, form):
-        count_code, count_name = duplicate_restrictions(self, form)
-        if count_code > 0 or count_name > 0:
-            warning_message(self.request, msg="El registro ya existe")
-            return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
-        try:
-            form.instance.code = str(form.instance.code).upper()
-            form.instance.name = str(form.instance.name).lower()
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
+        # count_code, count_name = duplicate_restrictions(self, form)
+        # if count_code > 0 or count_name > 0:
+        #     warning_message(self.request, msg="El registro ya existe")
+        #     return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
+        form.instance.code = str(form.instance.code).upper()
+        form.instance.name = str(form.instance.name).lower()
+        return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)
@@ -264,7 +233,7 @@ class RestrictionCreate(LoginRequiredMixin, generic.CreateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return self.render_to_response(ctx)
+        return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
 
 
 class RestrictionEditModal(LoginRequiredMixin, generic.UpdateView):
@@ -285,20 +254,15 @@ class RestrictionEditModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        count_code, count_name = duplicate_restrictions(self, form)
-        if count_code > 0 or count_name > 0:
-            warning_message(self.request, msg="El registro ya existe")
-            return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
-        try:
-            form.instance.code = str(form.instance.code).upper()
-            form.instance.name = str(form.instance.name).lower()
-            form.instance.updated_at = timezone.now()
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
+        # count_code, count_name = duplicate_restrictions(self, form)
+        # if count_code > 0 or count_name > 0:
+        #     warning_message(self.request, msg="El registro ya existe")
+        #     return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
+
+        form.instance.code = str(form.instance.code).upper()
+        form.instance.name = str(form.instance.name).lower()
+        form.instance.updated_at = timezone.now()
+        return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)
@@ -306,7 +270,7 @@ class RestrictionEditModal(LoginRequiredMixin, generic.UpdateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return self.render_to_response(ctx)
+        return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
 
 
 class RestrictionDeleteModal(LoginRequiredMixin, generic.UpdateView):
@@ -327,22 +291,8 @@ class RestrictionDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        try:
-            form.instance.deleted_at = timezone.now()
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
-
-    def form_invalid(self, form, **kwargs):
-        ctx = self.get_context_data(**kwargs)
-        ctx["form"] = form
-
-        msg_error = get_form_errors(form)
-        warning_message(self.request, msg=msg_error)
-        return self.render_to_response(ctx)
+        form.instance.deleted_at = timezone.now()
+        return super().form_valid(form)
 
 
 # APPS
@@ -409,26 +359,13 @@ class AppEditModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        count_name, count_route = duplicate_apps(self, form)
-        if count_name > 0 or count_route > 0:
-            warning_message(self.request, msg="El registro ya existe")
-            return HttpResponseRedirect(reverse_lazy("users_app:app_list"))
-        try:
-            form.instance.updated_at = timezone.now()
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:app_list"))
+        # count_name, count_route = duplicate_apps(self, form)
+        # if count_name > 0 or count_route > 0:
+        #     warning_message(self.request, msg="El registro ya existe")
+        #     return HttpResponseRedirect(reverse_lazy("users_app:app_list"))
 
-    def form_invalid(self, form, **kwargs):
-        ctx = self.get_context_data(**kwargs)
-        ctx["form"] = form
-
-        msg_error = get_form_errors(form)
-        warning_message(self.request, msg=msg_error)
-        return self.render_to_response(ctx)
+        form.instance.updated_at = timezone.now()
+        return super().form_valid(form)
 
 
 # ROLES
@@ -468,18 +405,13 @@ class RoleCreate(LoginRequiredMixin, generic.CreateView):
         return context
 
     def form_valid(self, form):
-        objects = duplicate_roles(self, form)
-        if objects > 0:
-            warning_message(self.request, msg="El registro ya existe")
-            return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
-        try:
-            form.instance.role_name = str(form.instance.role_name).lower()
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
+        # objects = duplicate_roles(self, form)
+        # if objects > 0:
+        #     warning_message(self.request, msg="El registro ya existe")
+        #     return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
+
+        form.instance.role_name = str(form.instance.role_name).lower()
+        return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)
@@ -487,7 +419,7 @@ class RoleCreate(LoginRequiredMixin, generic.CreateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return self.render_to_response(ctx)
+        return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
 
 
 class RoleEditModal(LoginRequiredMixin, generic.UpdateView):
@@ -508,19 +440,14 @@ class RoleEditModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        objects = duplicate_roles(self, form)
-        if objects > 0:
-            warning_message(self.request, msg="El registro ya existe")
-            return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
-        try:
-            form.instance.role_name = str(form.instance.role_name).lower()
-            form.instance.updated_at = timezone.now()
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
+        # objects = duplicate_roles(self, form)
+        # if objects > 0:
+        #     warning_message(self.request, msg="El registro ya existe")
+        #     return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
+
+        form.instance.role_name = str(form.instance.role_name).lower()
+        form.instance.updated_at = timezone.now()
+        return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)
@@ -528,7 +455,7 @@ class RoleEditModal(LoginRequiredMixin, generic.UpdateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return self.render_to_response(ctx)
+        return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
 
 
 class RoleDeleteModal(LoginRequiredMixin, generic.UpdateView):
@@ -549,22 +476,8 @@ class RoleDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        try:
-            form.instance.deleted_at = timezone.now()
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
-
-    def form_invalid(self, form, **kwargs):
-        ctx = self.get_context_data(**kwargs)
-        ctx["form"] = form
-
-        msg_error = get_form_errors(form)
-        warning_message(self.request, msg=msg_error)
-        return self.render_to_response(ctx)
+        form.instance.deleted_at = timezone.now()
+        return super().form_valid(form)
 
 
 # RULES
@@ -608,13 +521,7 @@ class RuleCreate(LoginRequiredMixin, generic.CreateView):
         # if objects > 0:
         #     duplicate_message(self.request)
         #     return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
-        try:
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
+        return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)
@@ -622,7 +529,7 @@ class RuleCreate(LoginRequiredMixin, generic.CreateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return self.render_to_response(ctx)
+        return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
 
 
 class RuleEditModal(LoginRequiredMixin, generic.UpdateView):
@@ -647,14 +554,8 @@ class RuleEditModal(LoginRequiredMixin, generic.UpdateView):
         # if objects > 0:
         #     duplicate_message(self.request)
         #     return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
-        try:
-            form.instance.updated_at = timezone.now()
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
+        form.instance.updated_at = timezone.now()
+        return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)
@@ -662,7 +563,7 @@ class RuleEditModal(LoginRequiredMixin, generic.UpdateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return self.render_to_response(ctx)
+        return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
 
 
 class RuleDeleteModal(LoginRequiredMixin, generic.UpdateView):
@@ -687,22 +588,8 @@ class RuleDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        try:
-            form.instance.deleted_at = timezone.now()
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
-
-    def form_invalid(self, form, **kwargs):
-        ctx = self.get_context_data(**kwargs)
-        ctx["form"] = form
-
-        msg_error = get_form_errors(form)
-        warning_message(self.request, msg=msg_error)
-        return self.render_to_response(ctx)
+        form.instance.deleted_at = timezone.now()
+        return super().form_valid(form)
 
 
 # USERS
@@ -731,7 +618,7 @@ class UserCreate(LoginRequiredMixin, generic.FormView):
     template_name = "users/user_create_modal.html"
 
     def get_success_url(self):
-        success_message(self.request)
+        success_message(self.request, msg="Usuario creado satisfactoriamente")
         return reverse_lazy("users_app:user_list")
 
     def get_context_data(self, **kwargs):
@@ -742,33 +629,27 @@ class UserCreate(LoginRequiredMixin, generic.FormView):
         return context
 
     def form_valid(self, form):
-        objects = duplicate_users(self, form)
-        if objects > 0:
-            warning_message(
-                self.request, msg="El nombre de usuario ingresado ya está en uso"
-            )
-            return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
-        try:
-            username = str(form.instance.username).lower()
-            email = form.cleaned_data["email"]
-            password = form.cleaned_data["password"]
-            is_superuser = form.cleaned_data["is_superuser"]
-            is_staff = form.cleaned_data["is_staff"]
-            is_active = form.cleaned_data["is_active"]
-            User.objects.create_user(
-                username=username,
-                email=email,
-                password=password,
-                is_superuser=is_superuser,
-                is_staff=is_staff,
-                is_active=is_active,
-            )
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
+        # objects = duplicate_users(self, form)
+        # if objects > 0:
+        #     warning_message(
+        #         self.request, msg="El nombre de usuario ingresado ya está en uso"
+        #     )
+        #     return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
+        username = str(form.instance.username).lower()
+        email = form.cleaned_data["email"]
+        password = form.cleaned_data["password"]
+        is_superuser = form.cleaned_data["is_superuser"]
+        is_staff = form.cleaned_data["is_staff"]
+        is_active = form.cleaned_data["is_active"]
+        User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+            is_superuser=is_superuser,
+            is_staff=is_staff,
+            is_active=is_active,
+        )
+        return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)
@@ -797,20 +678,14 @@ class UserEditModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        objects = duplicate_users(self, form)
-        if objects > 0:
-            warning_message(
-                self.request, msg="El nombre de usuario ingresado ya está en uso"
-            )
-            return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
-        try:
-            form.instance.username = str(form.instance.username).lower()
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
+        # objects = duplicate_users(self, form)
+        # if objects > 0:
+        #     warning_message(
+        #         self.request, msg="El nombre de usuario ingresado ya está en uso"
+        #     )
+        #     return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
+        form.instance.username = str(form.instance.username).lower()
+        return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)
@@ -843,22 +718,8 @@ class UserDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        try:
-            form.instance.is_active = False
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
-
-    def form_invalid(self, form, **kwargs):
-        ctx = self.get_context_data(**kwargs)
-        ctx["form"] = form
-
-        msg_error = get_form_errors(form)
-        warning_message(self.request, msg=msg_error)
-        return self.render_to_response(ctx)
+        form.instance.is_active = False
+        return super().form_valid(form)
 
 
 class UserLogin(UserLoggedMixin, generic.FormView):
@@ -926,9 +787,15 @@ class RegisterView(UserLoggedMixin, generic.FormView):
     def form_valid(self, form):
         objects = duplicate_users(self, form)
         if objects > 0:
-            warning_message(
-                self.request, msg="El nombre de usuario ingresado ya está en uso"
-            )
+            if (
+                self.cleaned_data["username"] == "admin"
+                or self.cleaned_data["username"] == "root"
+            ):
+                msg = _(f"Nombre de usuario no permitido")
+            else:
+                msg = _(f"El nombre de usuario ya existe")
+
+            warning_message(self.request, msg=msg)
             return HttpResponseRedirect(reverse_lazy("home_app:register"))
         try:
             username = str(form.instance.username).lower()
@@ -1012,9 +879,7 @@ class UserProfileCreate(LoginRequiredMixin, generic.CreateView):
             message = getattr(exception, "message", list(exception))
             error_message(self.request, msg=message)
             return HttpResponseRedirect(
-                reverse_lazy(
-                    "users_app:userprofile_add", args=[slug]
-                )
+                reverse_lazy("users_app:userprofile_add", args=[slug])
             )
 
     def form_invalid(self, form, **kwargs):
@@ -1061,9 +926,7 @@ class UserProfileEdit(LoginRequiredMixin, generic.UpdateView):
             message = getattr(exception, "message", list(exception))
             error_message(self.request, msg=message)
             return HttpResponseRedirect(
-                reverse_lazy(
-                    "users_app:userprofile_edit", args=[slug]
-                )
+                reverse_lazy("users_app:userprofile_edit", args=[slug])
             )
 
     def form_invalid(self, form, **kwargs):

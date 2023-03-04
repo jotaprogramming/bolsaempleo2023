@@ -5,7 +5,10 @@
     "fields": {
       "username": "admin",
       "email": "email@something.com",
-      "password": "Somepassword"
+      "password": "Somepassword",
+      "is_superuser": true,
+      "is_staff": true,
+      "is_active": true
     }
   },
   {

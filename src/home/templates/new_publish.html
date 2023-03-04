@@ -1,0 +1,73 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+
+{% block content %}
+<section class="base__size">
+    <div class="aside__container d-none d-lg-block">
+        <div class="aside-content">
+            <div class="sub-nav">
+                <h5 class="m-0 sub-nav__title">Lorem</h5>
+                <div class="sub-nav__items">
+                    <ul class="m-0 p-0">
+                        <li class="create-publish">
+                            <a class="" href="/publicate">Publicaciones</a>
+                            <p class="m-0 text-orange">creando...</p>
+                        </li>
+                        <li>
+                            <a href="/profile_company">Perfil</a>
+                        </li>
+
+                        <li>
+                            <a href="/notifications">Notificaciones</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!-- <h3 class="m-0 filter-type__text">Filtrar Por</h3>
+            <div class="aside-filters">
+                {% include 'partials/_filters.html' %}
+            </div> -->
+        </div>
+    </div>
+    <div class="no-aside__container">
+        <div class="new-edit__publish">
+            <div class="new-pubish">
+                <div class="new-publish__head">
+                    <a href="/publicate" class="publish-head__link">Volver</a>
+                    <p class="m-0 publish-head__title text-uppercase">nueva publicacion</p>
+                    <p class="m-0 publish-head__subtitle ">Todos los campos con <span style="color:orange">*</span> son
+                        obligatorios</p>
+                </div>
+                <div class="new-publish__body">
+                    <div class="group-create__row">
+                        <div class="set-input max-w">
+                            <input class="single-input pdl-0" type="text" required>
+                            <span class="input-placeholder pdl-0">Titulo <span style="color: red;">*</span></span>
+                        </div>
+                        <div class="set-input max-w">
+                            <input class="single-input" type="text" required>
+                            <span class="input-placeholder">Salario Mensual <span style="color: red;">*</span></span>
+                        </div>
+                        <select class="" aria-label="Default select example">
+                            <option selected>Moneda <span style="color:red">*</span></option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                        <div class="set-input max-w">
+                            <input class="single-input" type="text" required>
+                            <span class="input-placeholder">N° Vacantes</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="new-publish__footer"></div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

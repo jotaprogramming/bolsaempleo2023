@@ -33,3 +33,73 @@ editButtons.forEach((element) => {
 deleteButtons.forEach((element) => {
   elementOpenModal(element);
 });
+
+
+
+
+
+
+
+// Slider Assets
+const slider = document.querySelector("#slider");
+let sliderSection = document.querySelectorAll(".slider__section");
+let sliderSectionLast = sliderSection[sliderSection.length -1];
+
+const btnLeft = document.querySelector("#btn-left");
+const btnRight = document.querySelector("#btn-right");
+
+
+slider.insertAdjacentElement('afterbegin',sliderSectionLast);
+
+function Next(){
+    let sliderSectionFirst = document.querySelectorAll(".slider__section")[0];
+    slider.style.marginLeft = "-100%";
+    slider.style.transition = "all 0.5s";
+    setTimeout(function (){
+        slider.style.transition ="none";
+        slider.insertAdjacentElement('beforeend',sliderSectionFirst);
+        slider.style.marginLeft = "0";
+
+    }, 500);
+}
+function Prev(){
+    let sliderSection= document.querySelectorAll(".slider__section");
+    let sliderSectionLast = sliderSection[sliderSection.length -1];
+    slider.style.marginLeft = "0";
+    slider.style.transition = "all 0.5s";
+    setTimeout(function (){
+        slider.style.transition ="none";
+        slider.insertAdjacentElement('afterbegin',sliderSectionLast);
+        slider.style.marginLeft = "-100%";
+
+    }, 500);
+}
+btnRight.addEventListener('click',function(){
+    Next();
+});
+btnLeft.addEventListener('click',function(){
+    Prev();
+});
+
+
+setInterval(() => {
+   Next();
+}, 4000);
+
+
+
+
+
+//profile animation
+const wrapper = document.querySelector('.wrapper');
+const securityLink = document.querySelector('.security-link')
+const profileLink = document.querySelector('.profile-link')
+
+
+securityLink.addEventListener('click',()=> {
+  wrapper.classList.add('active');
+})
+
+profileLink.addEventListener('click',()=> {
+  wrapper.classList.remove('active');
+})

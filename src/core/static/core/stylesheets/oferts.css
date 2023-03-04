@@ -1,0 +1,181 @@
+@import url('./variables.css');
+
+
+
+.bottom-icons{
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    /* background-color: yellow; */
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+}
+.divisor{
+    width: 90%;
+    border: 1px solid var(--extralight-gray);
+    margin-left: 5%;
+}
+.ofert{
+    width: 100%;
+    height: auto;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px 2px #d7d7d7b8;
+    padding: 10px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.ofert-header{
+    width: 100%;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.ofert-body{
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 18px; 
+    text-align: justify; 
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    padding: 5px; 
+}
+.ofert-footer{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.ofert-header__top{
+    /* background-color: yellow; */
+    display: flex;
+    justify-content: space-between;
+}
+.ofert-header__title{
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+}
+.ofert-header__icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    rotate: 90deg;
+}
+
+.ofert-header__middle{
+    width: 300px;
+    height: 40px;
+    /* background-color: rgb(125, 226, 157); */
+    position: relative;
+    overflow-x: scroll;
+    display: flex;
+}
+.ofert-header__bottom{
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+.group-ofert__container{
+    width: 100%;
+    height: 100%;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    /* background-color: green; */
+}
+.ofert-orderby{
+    width: 100%;
+    min-width: 300px;
+    max-width: 500px;
+    height: fit-content;
+    /* background-color: aqua; */
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  
+   
+    /* background-color: burlywood; */
+}
+.ofert-orderby__btn{
+    width: 100%;
+    display: flex;
+    gap: 1rem;
+    
+    
+}
+.orderby__btn{
+    background-color: transparent;
+    border: none;
+    padding: 3px 10px;
+}
+.orderby__btn:hover{
+    color: var(--orange);
+}
+
+.orderby__btn--bl{
+    background-color: transparent;
+    border: none;
+    border-left: 2px solid var(--extralight-gray);
+    padding: 3px 10px;
+}
+.orderby__btn--br{
+    background-color: transparent;
+    border: none;
+    border-right: 2px solid var(--extralight-gray);
+    padding: 3px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.oferts-container{
+    width: 100%;
+    height: 100%;
+    /* background-color: #4853BA; */
+    padding: 32px 16px 0px;
+    overflow-y: scroll;
+
+}
+.oferts-container__content{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-bottom: 20px;
+    /* background-color: yellow; */
+
+}
+.order-by__text{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    text-transform: capitalize;
+    padding-left: 10px;
+}
+.salary-hoped{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;   
+    width: 100%; 
+    text-align: left;
+}
+.watch-ofert{
+    width: 300px;
+    background-color: var(--orange);
+    height: 40px;
+    padding:6px 12px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: #fff;
+}

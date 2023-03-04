@@ -1,0 +1,32 @@
+{% load static %}
+
+
+<button class="ofert">
+    <div class="ofert-header">
+        <div class="ofert-header__top">
+            <p class="m-0 ofert-header__title text-uppercase">se busca programador</p>
+            <p class="m-0 ofert-header__icon"><i class=" lni lni-line-dotted"></i></p>
+        </div>
+        <div class="ofert-header__middle">
+           {% include 'partials/_tags.html' %}
+        </div>
+        <div class="ofert-header__bottom">
+            <div class="bottom-icons">
+                <p class="m-0"><i class="lni lni-apartment"></i> Company S.A.S</p>
+                <p class="m-0"><i class="lni lni-money-location"></i>Bucaramanga</p>
+            </div>
+            <div class="bottom-icons">
+                <p class="m-0"><i class="lni lni-briefcase"></i> Contrato Idenfinido</p>
+                <p class="m-0"><i class="lni lni-alarm-clock"></i>Tiempo Completo</p>
+            </div>
+        </div>
+        <div class="divisor"></div>
+    </div>
+    <p class="ofert-body m-0">
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quidem in, asperiores, corrupti porro sed nihil, sint eum fugiat delectus itaque accusamus distinctio labore possimus tenetur laudantium. Aut ipsa a pariatur?
+    </p>
+    <div class="ofert-footer">
+        <p class="salary-hoped m-0">Salario Esperado: <b>$3.000.000</b></p>
+        <a class="watch-ofert" href="">Ver Oferta</a>
+    </div>
+</button>

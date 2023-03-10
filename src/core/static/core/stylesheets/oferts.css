@@ -1,7 +1,132 @@
 @import url('./variables.css');
 
+.card_ofert{
+    width: 100%;
+    height: auto;
+    min-height: 300px;
+    max-width: 1000px;
+    border-radius: 10px;
+    border: 1px solid var(--extralight-gray);
+    background-color: transparent;
+    padding: 1.5rem 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.card_ofert:hover{
+    border: 2px solid var(--orange);
+    box-shadow: 1px 1px 5px 2px var(--extralight-gray);
+}
+.card_ofert__top{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  
+}
+.card_ofert__middle{
+    width: 100%;
+    /* background-color: yellow; */
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 18px;
+    text-align: justify;
+}
+.card_ofert__bottom{
+    width: 100%;
+    /* background-color: #D84B4B; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.ofert_container{
+    width: 100%;
+    height: 100%;
+    /* background-color: yellow; */
+    min-height: 600px;
+    max-height: 700px;
+    max-width: 1400px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 32px;
+}
+.ofert_container::-webkit-scrollbar {
+    -webkit-appearance: inherit;
+}
+
+.ofert_container::-webkit-scrollbar:vertical {
+    width:2px;
+}
+
+.ofert_container::-webkit-scrollbar-button:increment,
+.ofert_container::-webkit-scrollbar-button {
+    display: none;
+} 
 
 
+.ofert_container::-webkit-scrollbar-thumb {
+    background-color: #bab6b6;
+    border-radius: 20px;
+    border: 3px solid #f1f2f3;
+}
+
+.ofert_container::-webkit-scrollbar-track {
+    border-radius: 5px;  
+}
+.ofert_header{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+}
+.ofert_header__title{
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+}
+.ofert_header__tags{
+    max-width: 550px;
+    width: auto;
+    height: 40px;
+    display: flex;
+    /* background-color: brown; */
+    overflow-x: auto;
+}
+
+.ofert_header__priority{
+    width: auto;
+    display: flex;
+    justify-content: center;
+    padding: 4px 16px;
+    background-color:#D84B4B;
+    color: #fff;
+}
+.ofert_top__header{
+    display: flex;
+    justify-content: space-between;
+}
+.ofert_top__bottom{
+    width: 100%;
+    display: flex;
+    gap: 1.5rem;
+
+}
+.ofert_icons{
+    width: auto;
+    /* background-color: yellow; */
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+}
+.ofert_icons__icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .bottom-icons{
     font-weight: 400;
     font-size: 12px;
@@ -29,30 +154,7 @@
     flex-direction: column;
     gap: 10px;
 }
-.ofert-header{
-    width: 100%;
-    min-width: 300px;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-.ofert-body{
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 18px; 
-    text-align: justify; 
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    padding: 5px; 
-}
-.ofert-footer{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
+
 .ofert-header__top{
     /* background-color: yellow; */
     display: flex;
@@ -178,4 +280,96 @@
     border-radius: 20px;
     text-decoration: none;
     color: #fff;
+}
+.watch_ofert{
+    max-width: 200px;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.single__tag{
+    display: flex;
+    width: 120px;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+.single__tag--yellow{
+    /* background-color: #E9C237; */
+}
+.salary_hoped{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    text-align: left;
+}
+.orderby_btn{
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+.orderby_btn__text{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+}
+.orderby_btn__filters{
+    display: flex;
+}
+.filter_btn{
+    background-color: transparent;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    border: none;
+}
+.filter_btn--bordR{
+    border-right:2px solid var(--extralight-gray) ;
+}
+.filter_btn--bordL{
+    border-left:2px solid var(--extralight-gray) ;
+}
+.filter_btn:hover{
+    color: var(--orange);
+}
+
+.no_txt__deco{
+    text-decoration: none;
+    color: var(--black);
+}
+
+.similar_oferts{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.similar_oferts__ofert{
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--extralight-gray);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background-color: transparent;
+}
+.similar_oferts__ofert:hover{
+    border: 1px solid var(--orange);
+}
+.similar_ofert__title{
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+}
+.similar_ofert__title--salary{
+   color: var(--orange);
+}   
+.similar_ofert__location{
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
 }

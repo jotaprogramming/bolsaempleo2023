@@ -17,5 +17,11 @@ urlpatterns = [
     path("oferts", OfertsView.as_view(), name="oferts"),
     path("postulations", PostulationView.as_view(), name="postulate"),
     path("new_publicate", NewPublicateView.as_view(), name="new_publish"),
+    path("edit_profile", EditProfileView.as_view(), name="edit_profile"),
+    path("ofert_detail", OfertDetailView.as_view(), name="ofert_detail"),
+    path("edit_publish", PreEditView.as_view(), name="pre_edit_publish"),
+    path("candidate", CandidateView.as_view(), name="candidates"),
+    path("moderate_est", ModeratorEstView.as_view(), name="moderator"),
+    path("moderate_comp", ModeratorCompView.as_view(), name="moderator"),
     
 ]

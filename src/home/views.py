@@ -11,15 +11,20 @@ help_title = _("Ayuda")
 help_desc = _("Contacto")
 profile_title = _("Profile")
 profile_view = _("Perfil")
+profile_edit = _("Editar")
 profilecompany_title = _("CompanyProfile")
 profilecompany_view = _("Perfil Empresarial")
 notifications_title = _("Notifications")
 notifications_view = _("Notificaciones")
 ofert_title = _("Ofertas")
 ofert_view = _("Ofertas")
+ofert_desc = _("Detalles")
 new_publish = _("Crear Nuevo")
 publish_view = _("Publicar")
 postulate_view = _("Postular")
+candidate_desc =_("Candidatos")
+mod_view=_("Moderate")
+mod_desc=_("Moderador")
 
 
 class HomeView(generic.TemplateView):
@@ -125,3 +130,68 @@ class NewPublicateView(generic.TemplateView):
         context["app_title"] = ofert_title
         context["title_view"] = new_publish
         return context
+    
+    
+class EditProfileView(generic.TemplateView):
+    profile_url = '/edit_profile'
+    template_name='edit_profile.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(EditProfileView, self).get_context_data(**kwargs)
+        context["app_title"] = profile_view
+        context["title_view"] = profile_edit
+        return context    
+    
+    
+class OfertDetailView(generic.TemplateView):
+    profile_url = '/ofert_detail'
+    template_name='ofert_desc.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(OfertDetailView, self).get_context_data(**kwargs)
+        context["app_title"] = ofert_view
+        context["title_view"] = ofert_desc
+        return context   
+    
+    
+class PreEditView(generic.TemplateView):
+    profile_url = '/edit_publish'
+    template_name='pre_edit_publish.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(PreEditView, self).get_context_data(**kwargs)
+        context["app_title"] = ofert_view
+        context["title_view"] = ofert_desc
+        return context 
+    
+class CandidateView(generic.TemplateView):
+    profile_url = '/candidate'
+    template_name='candidates.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(CandidateView, self).get_context_data(**kwargs)
+        context["app_title"] = ofert_view
+        context["title_view"] = candidate_desc
+        return context 
+    
+    
+class ModeratorEstView(generic.TemplateView):
+    profile_url = '/moderate_est'
+    template_name='moderator_student.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(ModeratorEstView, self).get_context_data(**kwargs)
+        context["app_title"] = mod_view
+        context["title_view"] = mod_desc
+        return context 
+    
+    
+class ModeratorCompView(generic.TemplateView):
+    profile_url = '/moderate_comp'
+    template_name='mod_company.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(ModeratorCompView, self).get_context_data(**kwargs)
+        context["app_title"] = mod_view
+        context["title_view"] = mod_desc
+        return context 

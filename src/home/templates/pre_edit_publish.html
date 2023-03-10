@@ -4,18 +4,17 @@
 <title>{{app_title}} | {{title_view}}</title>
 {% endblock title %}
 
-
 {% block content %}
-<section class="base__size ">
+<section class="base__size">
     <div class="aside__container d-none d-lg-block">
         <div class="aside-content">
             <div class="sub-nav">
                 <h5 class="m-0 sub-nav__title">Lorem</h5>
                 <div class="sub-nav__items">
                     <ul class="m-0 p-0">
-                        <li class="create-publish">
-                            <a class="" href="/publicate">Publicaciones</a>
-                            <p class="m-0 text-orange">creando...</p>
+                        <li>
+                            <a href="/profile_company">Publicaciones</a>
+                            <p class="m-0 text-orange">Visualizando</p>
                         </li>
                         <li>
                             <a href="/profile_company">Perfil</a>
@@ -34,11 +33,54 @@
             </div> -->
         </div>
     </div>
-    <div class="no-aside__container ">
-      
-        <section class="new_publish__content" id="">
+    <div class="no-aside__container modal_content">
+        <div class="publish_info">
+            <a class="text-dark  publish_link__back"  href="/publicate">volver</a>
+            <p class="publish_info__ofert-number text-uppercase">publicacion n° 1</p>
+            <div class="publish_info__content">
+                <p class=" info_publish">Informacion de la Oferta</p>
+                <a href="/candidate">Ver Candidatos</a>
+            </div>
+            <div class="publish_info__header">
+                <div class="publish_info__top">
+                    <p class="m-0"><b>Titulo</b> <span class="text-uppercase">se busca desarrollador(a) web</span></p>
+                    <p class="m-0"><b>Fecha Publicacion</b> <span class="text-capitalize"> 2 de febrero,2023</span></p>
+                </div>
+                <div class="publish_info__middle">
+                    <p class="m-0"><b>Salario Mensual</b> <span>$ 3.000.000</span></p>
+                    <p class="m-0"><b>N° Vacantes</b> 10</p>
+                    <p class="m-0"><b>Ubicacion</b> <span class="text-capitalize">bucaramanga, santander</span></p>
+                </div>
+                <div class="publish_info__bottom">
+                    <p class="m-0"><b>Contrato</b> Termino Indefinido</p>
+                    <p class="m-0"><b>Jornada</b> Tiempo Completo</p>
+                    <p class="m-0"><b>Fecha contratacion</b> <span class="text-capitalize">01 de agosto,2023</span></p>
+                </div>
+            </div>
+            <div class="publish_info__body">
+                <p class=" m-0 detail_content__subtitle">Descripcion</p>
+                <p class="detail_content__description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Dignissimos corporis sed corrupti quasi perferendis odit libero modi ratione accusamus? Optio id
+                    deserunt veniam molestias ex, quibusdam ducimus! Sed, optio reiciendis?
+                    Non tempora molestias vitae! Reprehenderit omnis tenetur nesciunt quas, eius minima perspiciatis
+                    consectetur obcaecati libero culpa, ipsum esse dignissimos laboriosam mollitia possimus nobis
+                    aliquam, cum repellendus nostrum vero odit quo?
+                    Reiciendis, aut corrupti qui similique natus recusandae porro nemo incidunt. Doloribus similique
+                    optio alias eum corporis! Quibusdam quia atque error voluptas pariatur voluptatem, nisi numquam
+                    voluptates? Perferendis nemo earum mollitia.</p>
+            </div>
+            <div class="publish_info__footer">
+                <div class="detail_content__requeriment">
+                    <p class="m-0 detail_content__subtitle">Requisitos</p>
+                    <p class="m-0"><b> Disponibilidad para viajar:</b> No</p>
+                    <p class="m-0"> <b>Disponibilidad de cambio de residencia:</b> No</p>
+                </div>
+                <a href=""></a>
+                <button class="apply_btn" type="submit" id="open_modal">Editar Publicacion</button>
+            </div>
+        </div>
 
-            <a class="text-dark  publish_link__back publish_link__back--center"  href="/publicate">volver</a>
+        <section class="modaly_container" id="modal-container">
             <div class="modaly_container_content">
                 <div class="modal_header__content">
                     <p class="m-0 modal_header__title text-uppercase">editar publicacion</p>
@@ -147,12 +189,24 @@
                     </div>
                 </div>
                 <div class="modal_inputs__btn">
-                    
+                    <button id="close" class="modal__btn">Cerra</button>
                     <button id="" type="submit" class="modal__btn modal__btn--edit">Editar</button>
                 </div>
             </div>
         </section>
-      
     </div>
 </section>
+<script>
+    const btn_open = document.getElementById('open_modal');
+    const modal_container = document.getElementById('modal-container');
+    const close = document.getElementById('close');
+
+    btn_open.addEventListener('click', () => {
+        modal_container.classList.add('show');
+    });
+
+    close.addEventListener('click', () => {
+        modal_container.classList.remove('show');
+    });
+</script>
 {% endblock content %}

@@ -90,16 +90,7 @@ setInterval(() => {
 
 
 
-//profile animation
-const wrapper = document.querySelector('.wrapper');
-const securityLink = document.querySelector('.security-link')
-const profileLink = document.querySelector('.profile-link')
 
 
-securityLink.addEventListener('click',()=> {
-  wrapper.classList.add('active');
-})
 
-profileLink.addEventListener('click',()=> {
-  wrapper.classList.remove('active');
-})
+

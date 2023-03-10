@@ -47,32 +47,6 @@
     </div>
 </div>
 
-
-    <!-- <section class="slider-container ">
-   
-       
-        <div class="first-content  d-none">
-            <div class="top-content">
-                <h1 class="top-header">Encuentra trabajo con nosotros</h1>
-                <div class="top-body">
-                    <div class="top-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Vel voluptas aliquid
-                        a eius fugit saepe aliquam quaerat quod doloribus cum, omnis porro sed corrupti dicta eos odio
-                        architecto vitae labore.
-                    </div>
-                    <a class="top-btn" href="">
-                        Ingresar Aqui
-                    </a>
-                </div>
-            </div>
-            <div class="bottom-content">
-                <img src="{% static 'core/assets/img/img.svg' %}" alt="">
-            </div>
-        </div>
-        
-     
-    
-
-</section> -->
 <article class="break">
     <h3 class="text-light">¿Que Ofrecemos?</h3>
     <span class="text-light text-center">Un portal donde las empresas y nuestros egresados de ingeniería de sistemas
@@ -91,7 +65,7 @@
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates </p>
             </div>
             <div class="s-card-footer">
-                <a class="" href="">Registrate Aqui</a>
+                <a class="" href="{% url 'users_app:register_company' %}">Registrate Aqui</a>
             </div>
         </div>
         <div class="single-card">
@@ -104,7 +78,7 @@
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates </p>
             </div>
             <div class="s-card-footer">
-                <a class="" href="">Registrate Aqui</a>
+                <a class="" href="{% url 'users_app:register_student' %}">Registrate Aqui</a>
             </div>
         </div>
     </div>

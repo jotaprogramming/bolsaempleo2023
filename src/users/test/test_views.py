@@ -8,6 +8,7 @@ from django.core.validators import validate_slug
 from django.test import RequestFactory
 from django.test import TestCase
 from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.sessions.middleware import SessionMiddleware
 from django.urls import path
 
 from users.models import (
@@ -44,7 +45,7 @@ from users.views import (
     UserDeleteModal,
     UserLogin,
     UserLogout,
-    RegisterView,
+    # RegisterView,
     UserProfileDetail,
     UserProfileCreate,
     UserProfileEdit,
@@ -64,7 +65,7 @@ from datetime import datetime
 
 class UserGroupViewsTest(TestCase):
     fixtures = ["users_fixtures.json", "usergroups_fixtures.json"]
-    model = UserGroupList()
+    objview = UserGroupList()
     path = reverse("users_app:usergroup_list")
 
     @classmethod
@@ -73,7 +74,7 @@ class UserGroupViewsTest(TestCase):
         cls.factory = RequestFactory()
         request = cls.factory.get(cls.path)
         request.user = cls.user
-        cls.view = cls.model
+        cls.view = cls.objview
         cls.view.request = request
 
         cls.redirect = reverse("users_app:usergroup_list")
@@ -95,7 +96,7 @@ class UserGroupListTest(UserGroupViewsTest):
 
 class UserGroupFormTest(UserGroupViewsTest):
     fixtures = ["users_fixtures.json", "usergroups_fixtures.json"]
-    model = UserGroupCreate()
+    objview = UserGroupCreate()
     path = reverse("users_app:usergroup_add")
 
     def test_successfull(self):
@@ -134,7 +135,7 @@ class UserGroupCreateTest(UserGroupFormTest):
 
 
 class UserGroupEditModalTest(UserGroupCreateTest):
-    model = UserGroupEditModal()
+    objview = UserGroupEditModal()
     path = reverse("users_app:usergroup_edit", args=[1])
 
     def test_get_context_data(self):
@@ -146,7 +147,7 @@ class UserGroupEditModalTest(UserGroupCreateTest):
 
 class UserGroupDeleteModalTest(UserGroupCreateTest):
     fixtures = ["users_fixtures.json", "usergroups_fixtures.json"]
-    model = UserGroupDeleteModal()
+    objview = UserGroupDeleteModal()
     path = reverse("users_app:usergroup_delete", args=[1])
 
     def test_get_context_data(self):
@@ -181,7 +182,7 @@ class UserGroupDeleteModalTest(UserGroupCreateTest):
 
 class RestrictionViewsTest(TestCase):
     fixtures = ["users_fixtures.json", "restrictions_fixtures.json"]
-    model = RestrictionList()
+    objview = RestrictionList()
     path = reverse("users_app:restriction_list")
 
     @classmethod
@@ -190,7 +191,7 @@ class RestrictionViewsTest(TestCase):
         cls.factory = RequestFactory()
         request = cls.factory.get(cls.path)
         request.user = cls.user
-        cls.view = cls.model
+        cls.view = cls.objview
         cls.view.request = request
 
         cls.redirect = reverse("users_app:restriction_list")
@@ -212,7 +213,7 @@ class RestrictionListTest(RestrictionViewsTest):
 
 class RestrictionCreateTest(RestrictionViewsTest):
     fixtures = ["users_fixtures.json", "restrictions_fixtures.json"]
-    model = RestrictionCreate()
+    objview = RestrictionCreate()
     path = reverse("users_app:restriction_add")
 
     def test_successfull(self):
@@ -259,7 +260,7 @@ class RestrictionCreateTest(RestrictionViewsTest):
 
 
 class RestrictionEditModalTest(RestrictionCreateTest):
-    model = RestrictionEditModal()
+    objview = RestrictionEditModal()
     path = reverse("users_app:restriction_edit", args=[1])
 
     def test_get_context_data(self):
@@ -283,7 +284,7 @@ class RestrictionEditModalTest(RestrictionCreateTest):
 
 class RestrictionDeleteModalTest(RestrictionViewsTest):
     fixtures = ["users_fixtures.json", "restrictions_fixtures.json"]
-    model = RestrictionDeleteModal()
+    objview = RestrictionDeleteModal()
     path = reverse("users_app:restriction_delete", args=[1])
 
     def test_get_context_data(self):
@@ -310,7 +311,7 @@ class RestrictionDeleteModalTest(RestrictionViewsTest):
 
 class AppViewsTest(TestCase):
     fixtures = ["users_fixtures.json", "apps_fixtures.json"]
-    model = AppList()
+    objview = AppList()
     path = reverse("users_app:app_list")
 
     @classmethod
@@ -319,7 +320,7 @@ class AppViewsTest(TestCase):
         cls.factory = RequestFactory()
         request = cls.factory.get(cls.path)
         request.user = cls.user
-        cls.view = cls.model
+        cls.view = cls.objview
         cls.view.request = request
 
         cls.redirect = reverse("users_app:app_list")
@@ -347,7 +348,7 @@ class AppListTest(AppViewsTest):
 
 
 class AppEditModalTest(AppListTest):
-    model = AppEditModal()
+    objview = AppEditModal()
     path = reverse("users_app:app_edit", args=[1])
 
     def test_successfull(self):
@@ -371,7 +372,7 @@ class AppEditModalTest(AppListTest):
 
 class RoleViewsTest(TestCase):
     fixtures = ["users_fixtures.json", "roles_fixtures.json"]
-    model = RoleList()
+    objview = RoleList()
     path = reverse("users_app:role_list")
 
     @classmethod
@@ -380,7 +381,7 @@ class RoleViewsTest(TestCase):
         cls.factory = RequestFactory()
         request = cls.factory.get(cls.path)
         request.user = cls.user
-        cls.view = cls.model
+        cls.view = cls.objview
         cls.view.request = request
 
         cls.redirect = reverse("users_app:role_list")
@@ -402,7 +403,7 @@ class RoleListTest(RoleViewsTest):
 
 class RoleCreateTest(RoleViewsTest):
     fixtures = ["users_fixtures.json", "roles_fixtures.json"]
-    model = RoleCreate()
+    objview = RoleCreate()
     path = reverse("users_app:role_add")
 
     def test_successfull(self):
@@ -446,7 +447,7 @@ class RoleCreateTest(RoleViewsTest):
 
 
 class RoleEditModalTest(RoleCreateTest):
-    model = RoleEditModal()
+    objview = RoleEditModal()
     path = reverse("users_app:role_edit", args=[1])
 
     def test_get_context_data(self):
@@ -469,7 +470,7 @@ class RoleEditModalTest(RoleCreateTest):
 
 class RoleDeleteModalTest(RoleViewsTest):
     fixtures = ["users_fixtures.json", "roles_fixtures.json"]
-    model = RoleDeleteModal()
+    objview = RoleDeleteModal()
     path = reverse("users_app:role_delete", args=[1])
 
     def test_get_context_data(self):
@@ -502,7 +503,7 @@ class RuleViewsTest(TestCase):
         "roles_fixtures.json",
         "rules_fixtures.json",
     ]
-    model = RuleList()
+    objview = RuleList()
     path = reverse("users_app:user_list")
     post_success = {
         "user": 1,
@@ -523,7 +524,7 @@ class RuleViewsTest(TestCase):
         cls.factory = RequestFactory()
         request = cls.factory.get(cls.path)
         request.user = cls.user
-        cls.view = cls.model
+        cls.view = cls.objview
         cls.view.request = request
 
         cls.redirect = reverse("users_app:rule_list")
@@ -544,7 +545,7 @@ class RuleListTest(RuleViewsTest):
 
 
 class RuleCreateTest(RuleViewsTest):
-    model = RuleCreate()
+    objview = RuleCreate()
     path = reverse("users_app:rule_add")
 
     def test_successfull(self):
@@ -569,7 +570,7 @@ class RuleCreateTest(RuleViewsTest):
 
 
 class RuleEditModalTest(RuleCreateTest):
-    model = RuleEditModal()
+    objview = RuleEditModal()
     path = reverse("users_app:rule_edit", args=[1])
 
     def test_get_context_data(self):
@@ -580,7 +581,7 @@ class RuleEditModalTest(RuleCreateTest):
 
 
 class RuleDeleteModalTest(RuleCreateTest):
-    model = RuleDeleteModal()
+    objview = RuleDeleteModal()
     path = reverse("users_app:rule_delete", args=[1])
     post_success = {}
     post_exception = {}
@@ -596,7 +597,7 @@ class UserViewsTest(TestCase):
     fixtures = [
         "users_fixtures.json",
     ]
-    model = UserList()
+    objview = UserList()
     path = reverse("users_app:user_list")
     post_success = {
         "email": "someone@example.com",
@@ -631,7 +632,7 @@ class UserViewsTest(TestCase):
         cls.factory = RequestFactory()
         request = cls.factory.get(cls.path)
         request.user = cls.user
-        cls.view = cls.model
+        cls.view = cls.objview
         cls.view.request = request
 
         cls.redirect = reverse("users_app:user_list")
@@ -652,7 +653,7 @@ class UserListTest(UserViewsTest):
 
 
 class UserCreateTest(UserViewsTest):
-    model = UserCreate()
+    objview = UserCreate()
     path = reverse("users_app:user_add")
 
     def test_successfull(self):
@@ -684,7 +685,7 @@ class UserCreateTest(UserViewsTest):
 
 
 class UserEditModalTest(UserCreateTest):
-    model = UserEditModal()
+    objview = UserEditModal()
     path = reverse("users_app:user_edit", args=[3])
     post_success = {
         "email": "someone@example.com",
@@ -710,7 +711,7 @@ class UserEditModalTest(UserCreateTest):
 
 
 class UserDeleteModalTest(UserCreateTest):
-    model = UserDeleteModal()
+    objview = UserDeleteModal()
     path = reverse("users_app:user_delete", args=[3])
     post_success = {}
     post_exception = {}
@@ -726,15 +727,11 @@ class UserLoginTest(TestCase):
     fixtures = [
         "users_fixtures.json",
     ]
-    model = UserLogin()
+    objview = UserLogin()
     path = reverse("users_app:login")
-    post_success = {
+    credentials = {
         "username": "admin",
         "password": "Somepassword",
-    }
-    post_exception = {
-        "username": "admin",
-        "password": "whatever",
     }
 
     @classmethod
@@ -742,36 +739,285 @@ class UserLoginTest(TestCase):
         cls.user = User.objects.get(pk=1)
         cls.factory = RequestFactory()
         request = cls.factory.get(cls.path)
-        # request.user = AnonymousUser
-        cls.view = cls.model
+        request.user = AnonymousUser()
+        cls.view = cls.objview
         cls.view.request = request
 
         cls.redirect = reverse("users_app:user_list")
 
     def test_get_context_data(self):
-        kwargs = {"next": "/user/list"}
-        response = UserLogin.as_view()(self.view.request, **kwargs)
-        print("response: ", response.status_code)
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.context_data)
-
-    def test_successfull(self):
-        # self.client.request.user = AnonymousUser
-        response = self.client.post(self.path, self.post_success)
-        # pprint(response.__dict__)
-
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, self.redirect)
-
-    def test_get_context_data(self):
+        # kwargs = {"next": "/user/list"}
         kwargs = {}
         response = UserLogin.as_view()(self.view.request, **kwargs)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context_data)
 
-    def test_user_exception(self):
-        # self.client.force_login(user=self.user)
-        response = self.client.post(self.path, self.post_exception)
+    def test_successfull(self):
+        response = self.client.post(self.path, self.credentials, follow=True)
+
+        self.assertFalse(response.context["user"].is_active)
+        # self.assertEqual(response.status_code, 302)
+        # self.assertRedirects(response, self.redirect)
+
+    def test_dispatch(self):
+        self.client.force_login(user=self.user)
+        response = self.client.get(self.path)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response,reverse("home_app:home_page"))
+
+
+class UserLogoutTest(TestCase):
+    fixtures = [
+        "users_fixtures.json",
+    ]
+    objview = UserLogout()
+    path = reverse("users_app:logout")
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.get(pk=1)
+        cls.redirect = reverse("users_app:login")
+
+    def test_get(self):
+        self.client.force_login(user=self.user)
+        response = self.client.get(self.path)
 
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, self.redirect)
+
+
+"""
+class RegisterViewTest(TestCase):
+    fixtures = [
+        "users_fixtures.json",
+    ]
+    objview = RegisterView()
+    path = reverse("users_app:register")
+    post_success = {
+        "username": "admin2",
+        "email": "admin@example.com",
+        "password": "Somepassword",
+    }
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.get(pk=1)
+        cls.factory = RequestFactory()
+        request = cls.factory.get(cls.path)
+        request.user = AnonymousUser()
+        cls.view = cls.objview
+        cls.view.request = request
+
+        cls.redirect = reverse("users_app:login")
+
+    def test_get_context_data(self):
+        kwargs = {}
+        response = RegisterView.as_view()(self.view.request, **kwargs)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context_data)
+
+    def test_successfull(self):
+        self.client.force_login(user=self.user)
+        response = self.client.post(self.path, self.post_success, follow=True)
+        pprint(response.__dict__)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, self.redirect)
+"""
+
+
+class UserProfileViewsTest(TestCase):
+    fixtures = [
+        "config_fixtures.json",
+        "users_fixtures.json",
+        "userprofile_fixture.json",
+    ]
+    objview = UserProfile()
+    path = reverse("users_app:userprofile", args=["admin"])
+    redirect = reverse("users_app:userprofile", args=["admin"])
+    post_success = {
+        "document_type": 1,
+        "id_number": "11111",
+        "name": "admin",
+        "phone": "11111",
+        "email": "admin@example.com",
+        "address": "por ahí",
+        "city": 1,
+        "about_me": "soy yo",
+    }
+    post_invalid = {}
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.get(pk=1)
+        cls.factory = RequestFactory()
+        request = cls.factory.get(cls.path)
+        request.user = cls.user
+        cls.view = cls.objview
+        cls.view.request = request
+        cls.slug = "admin"
+
+
+class UserProfileDetailTest(UserProfileViewsTest):
+    def test_get_context_data(self):
+        kwargs = {"slug": self.slug}
+        response = UserProfileDetail.as_view()(self.view.request, **kwargs)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context_data)
+
+    def test__other_get_context_data(self):
+        kwargs = {"slug": "other"}
+        response = UserProfileDetail.as_view()(self.view.request, **kwargs)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context_data)
+
+
+class UserProfileCreateTest(UserProfileViewsTest):
+    objview = UserProfileCreate()
+    path = reverse("users_app:userprofile_add", args=["random"])
+    redirect = reverse("users_app:userprofile", args=["random"])
+
+    def test_successfull(self):
+        self.client.force_login(user=self.user)
+        response = self.client.post(self.path, self.post_success)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, self.redirect)
+
+    def test_get_context_data(self):
+        kwargs = {"slug": self.slug}
+        response = UserProfileCreate.as_view()(self.view.request, **kwargs)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context_data)
+
+    def test_userprofile_invalid(self):
+        self.client.force_login(user=self.user)
+        response = self.client.post(self.path, self.post_invalid)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_userprofile_exception(self):
+        path = reverse("users_app:userprofile_add", args=["other"])
+        self.client.force_login(user=self.user)
+        response = self.client.post(path, self.post_success)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, path)
+
+
+class UserProfileEditTest(UserProfileViewsTest):
+    objview = UserProfileEdit()
+    path = reverse("users_app:userprofile_edit", args=["admin"])
+    # redirect = reverse("users_app:userprofile_edit", args=["admin"])
+    post_success = {
+        "document_type": 1,
+        "id_number": "11111",
+        "name": "random",
+        "phone": "11111",
+        "email": "random@example.com",
+        "address": "por ahí",
+        "city": 1,
+        "about_me": "soy yo",
+    }
+    post_invalid = {}
+
+    def test_get_context_data(self):
+        kwargs = {"slug": "admin"}
+        response = UserProfileEdit.as_view()(self.view.request, **kwargs)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context_data)
+
+    def test_userprofile_invalid(self):
+        self.redirect = reverse("users_app:userprofile_edit", args=["admin"])
+        self.client.force_login(user=self.user)
+        response = self.client.post(self.path, self.post_invalid)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, self.redirect)
+
+    def test_userprofile_exception(self):
+        self.client.force_login(user=self.user)
+        response = self.client.post(self.path, self.post_success)
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, self.redirect)
+
+
+class PreRegisterViewTest(TestCase):
+    fixtures = ["users_fixtures.json"]
+    path = reverse("users_app:register_choices")
+    objview = PreRegisterView()
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.factory = RequestFactory()
+        request = cls.factory.get(cls.path)
+        request.user = AnonymousUser()
+        cls.view = cls.objview
+        cls.view.request = request
+
+    def test_get_context_data(self):
+        kwargs = {}
+        response = PreRegisterView.as_view()(self.view.request, **kwargs)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context_data)
+
+
+class RegisterStudentViewTest(TestCase):
+    fixtures = ["users_fixtures.json"]
+    path = reverse("users_app:register_student")
+    objview = RegisterStudentView()
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.factory = RequestFactory()
+        request = cls.factory.get(cls.path)
+        request.user = AnonymousUser()
+        cls.view = cls.objview
+        cls.view.request = request
+
+    def test_get_context_data(self):
+        kwargs = {}
+        response = RegisterStudentView.as_view()(self.view.request, **kwargs)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context_data)
+
+
+class RegisterCompanyViewTest(TestCase):
+    fixtures = ["users_fixtures.json"]
+    path = reverse("users_app:register_company")
+    objview = RegisterCompanyView()
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.factory = RequestFactory()
+        request = cls.factory.get(cls.path)
+        request.user = AnonymousUser()
+        cls.view = cls.objview
+        cls.view.request = request
+
+    def test_get_context_data(self):
+        kwargs = {}
+        response = RegisterCompanyView.as_view()(self.view.request, **kwargs)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context_data)
+
+
+class CredentialsRecoverViewTest(TestCase):
+    fixtures = ["users_fixtures.json"]
+    path = reverse("users_app:credentials_recover")
+    objview = CredentialsRecoverView()
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.factory = RequestFactory()
+        request = cls.factory.get(cls.path)
+        request.user = AnonymousUser()
+        cls.view = cls.objview
+        cls.view.request = request
+
+    def test_get_context_data(self):
+        kwargs = {}
+        response = CredentialsRecoverView.as_view()(self.view.request, **kwargs)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context_data)

@@ -12,6 +12,7 @@ from django.urls import reverse_lazy, reverse, resolve
 from django.views import generic
 from django.db import IntegrityError
 from django.conf import settings
+from django.utils.timezone import now
 from django.db.models import (
     Q,
     F,
@@ -766,6 +767,7 @@ class UserLogout(generic.View):
         return HttpResponseRedirect(reverse("users_app:login"))
 
 
+"""
 class RegisterView(UserLoggedMixin, generic.FormView):
     model = User
     form_class = RegisterForm
@@ -797,21 +799,15 @@ class RegisterView(UserLoggedMixin, generic.FormView):
 
             warning_message(self.request, msg=msg)
             return HttpResponseRedirect(reverse_lazy("home_app:register"))
-        try:
-            username = str(form.instance.username).lower()
-            email = form.cleaned_data["email"]
-            password = form.cleaned_data["password"]
-            User.objects.create_user(
-                username=username,
-                email=email,
-                password=password,
-            )
-            return super().form_valid(form)
-        except Exception as exception:
-            error_message(self.request)
-            print(" ")
-            print(exception)
-            return HttpResponseRedirect(reverse_lazy("home_app:register"))
+        username = str(form.instance.username).lower()
+        email = form.cleaned_data["email"]
+        password = form.cleaned_data["password"]
+        User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+        )
+        return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)
@@ -819,7 +815,7 @@ class RegisterView(UserLoggedMixin, generic.FormView):
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
-
+"""
 
 # USER PROFILE
 
@@ -876,7 +872,7 @@ class UserProfileCreate(LoginRequiredMixin, generic.CreateView):
             form.instance.user_id = user.id
             return super().form_valid(form)
         except Exception as exception:
-            message = getattr(exception, "message", list(exception))
+            message = getattr(exception, "message", str(exception))
             error_message(self.request, msg=message)
             return HttpResponseRedirect(
                 reverse_lazy("users_app:userprofile_add", args=[slug])
@@ -918,16 +914,9 @@ class UserProfileEdit(LoginRequiredMixin, generic.UpdateView):
 
     def form_valid(self, form):
         slug = self.kwargs.get("slug", "")
-        try:
-            form.instance.updated_at = datetime.now()
-            form.instance.email = normalize_email(form.instance.email)
-            return super().form_valid(form)
-        except Exception as exception:
-            message = getattr(exception, "message", list(exception))
-            error_message(self.request, msg=message)
-            return HttpResponseRedirect(
-                reverse_lazy("users_app:userprofile_edit", args=[slug])
-            )
+        form.instance.updated_at = now()
+        form.instance.email = normalize_email(form.instance.email)
+        return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
         ctx = self.get_context_data(**kwargs)

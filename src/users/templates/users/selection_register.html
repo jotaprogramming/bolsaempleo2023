@@ -3,6 +3,7 @@
 <title>{{app_title}} | {{title_view}}</title>
 {% endblock title %}
 
+<<<<<<< HEAD
 {% block content %}
 <article class="content__center">
   <section class="principal__container">
@@ -14,6 +15,19 @@
             {{description_view}}
           </p>
           <p class="right_content__subtitle m-0 text-center">Seleccione una opcion segun lo que este buscando</p>
+=======
+{% block contentfluid %}
+<article class="body-content">
+  <section class="content-at">
+    <div class="box-content-in-left d-none d-lg-block">
+      {% include 'partials/_log_reg_left-content.html' %}
+    </div> 
+    <div class="box-content-in-right">
+      <div class="right-content">
+        <div class="r-content r-header-content">
+          <h3 class="r-header-title text-uppercase">{{description_view}}</h3>
+          <h3 class="r-header-subtitle">Seleccione una opcion segun lo que este buscando</h3>
+>>>>>>> 17957607de971aa6ac81b1ab1ab6ea6007df23eb
         </div>
         <div class="rigth_content right_content__body">
           <div class="register_selection">
@@ -47,7 +61,12 @@
     </svg>
   </div>
 </article>
+<<<<<<< HEAD
 
 
  
 {% endblock content %}
+=======
+   
+{% endblock contentfluid %}
+>>>>>>> 17957607de971aa6ac81b1ab1ab6ea6007df23eb

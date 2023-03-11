@@ -4,6 +4,7 @@
 {% endblock title %}
 
 
+<<<<<<< HEAD
 {% block content%}
 <article class="content__center">
     <section class="principal__container">
@@ -12,6 +13,27 @@
                 <div class="header_link__back">
                     <i class="lni lni-arrow-left-circle"></i>
                     <a href="{% url 'users_app:pre_register' %}"> Volver</a>
+=======
+{% block contentfluid%}
+<article class="body-content">
+    <section class="content-at">
+      <div class="register-content">
+        <div class=" register-header">
+         <div class="header-link-back ">
+          <i class="lni lni-arrow-left-circle"></i>
+          <a href="{% url 'users_app:register_choices' %}"> Volver</a>
+        </div>
+         <div class="header-title">
+          <h3 class="r-header-title text-uppercase text-center">{{desciption_view}}</h3>
+         </div>
+        </div>
+        <div class=" register-body">
+            <div class="first-group-inputs ">
+                <div class="set-input max-w">
+                    <input class="single-input" type="text" required>
+                    <span class="input-placeholder">Nombres</span>
+                    <span class="input-icon"><i class="lni lni-user"></i></span>
+>>>>>>> 17957607de971aa6ac81b1ab1ab6ea6007df23eb
                 </div>
                 <div class="right_content__header">
                     <h3 class="right_content__title text-uppercase text-center">{{desciption_view}}</h3>
@@ -97,7 +119,7 @@
       </svg>
     </div>
   </article>
-{% endblock content%}
+{% endblock contentfluid%}
 
   <!-- <div class="set-input max-w">
                     <input class="single-input" type="text" required>

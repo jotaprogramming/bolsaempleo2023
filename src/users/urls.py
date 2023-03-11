@@ -75,11 +75,25 @@ urlpatterns = [
     # LOG
     path("login/", UserLogin.as_view(), name="login"),
     path("logout", UserLogout.as_view(), name="logout"),
-    path("register", RegisterView.as_view(), name="register"),
-    path("pre_register", PreRegisterView.as_view(), name="pre_register"),
-    path("student_register", RegisterStudentView.as_view(), name="register_student"),
-    path("company_register", RegisterCompanyView.as_view(), name="register_company"),
-    path("credentials_recover", CredentialsRecoverView.as_view(), name="credentials_recover"),
-    # TEST
-    path("test/test", RegisterView.as_view(), name="test"),
+    # path("register", RegisterView.as_view(), name="register"),
+    path("register/choices", PreRegisterView.as_view(), name="register_choices"),
+    path("register/student", RegisterStudentView.as_view(), name="register_student"),
+    path("register/company", RegisterCompanyView.as_view(), name="register_company"),
+    path(
+        "credentials/recover",
+        CredentialsRecoverView.as_view(),
+        name="credentials_recover",
+    ),
+    # USER PROFILE
+    path("profile/<slug:slug>", UserProfileDetail.as_view(), name="userprofile"),
+    path(
+        "profile/<slug:slug>/add",
+        UserProfileCreate.as_view(),
+        name="userprofile_add",
+    ),
+    path(
+        "profile/<slug:slug>/edit",
+        UserProfileEdit.as_view(),
+        name="userprofile_edit",
+    ),
 ]

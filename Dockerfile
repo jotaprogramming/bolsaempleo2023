@@ -1,9 +1,11 @@
-FROM python:3.11.1
+FROM python:3.11.2-alpine
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 RUN mkdir -p /code
+
+COPY ./src/ /code/
 
 WORKDIR /code
 
@@ -12,9 +14,7 @@ COPY requirements.txt /code/
 RUN python -m pip install --upgrade pip
 RUN python -m pip install -r requirements.txt
 
-COPY ./src/ /code/
-
 COPY ./entrypoint.sh /
 ENTRYPOINT ["sh", "/entrypoint.sh"]
 
-EXPOSE 8000
+# EXPOSE 8000

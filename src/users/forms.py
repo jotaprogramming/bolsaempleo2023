@@ -279,8 +279,7 @@ class UserForm(forms.ModelForm):
             ),
             "email": forms.EmailInput(
                 attrs={
-                    
-                    #"placeholder": "Correo electrónico",
+                    # "placeholder": "Correo electrónico",
                     "class": "form-control",
                 }
             ),
@@ -340,7 +339,7 @@ class UserFormUpdate(forms.ModelForm):
             ),
             "email": forms.EmailInput(
                 attrs={
-                    #"placeholder": "Correo electrónico",
+                    # "placeholder": "Correo electrónico",
                     "class": "form-control",
                 }
             ),
@@ -378,7 +377,7 @@ class LoginForm(AuthenticationForm):
         required=True,
         widget=forms.PasswordInput(
             attrs={
-                "class": "single-input", 
+                "class": "single-input",
                 # "placeholder": _("Password")
             }
         ),
@@ -399,11 +398,10 @@ class RegisterForm(forms.ModelForm):
     )
     email = forms.CharField(
         label=_("Email"),
-        required= True,
-        widget= forms.EmailInput(
+        required=True,
+        widget=forms.EmailInput(
             attrs={
                 "class": "single-input",
-                
             }
         ),
     )
@@ -413,12 +411,10 @@ class RegisterForm(forms.ModelForm):
         self.fields["username"].label = "Usuario"
         self.fields["email"].label = "Correo electrónico"
         self.fields["password"].label = "Contraseña"
-        
-        
 
     class Meta:
         model = User
-        
+
         fields = [
             "username",
             "email",
@@ -447,20 +443,94 @@ class RegisterForm(forms.ModelForm):
                     # "placeholder": "Correo electrónico",
                     "class": "single-input",
                     "minlength": "3",
-                    
                 }
             ),
-         
         }
 
     def clean(self):
         username = self.cleaned_data["username"]
         user_cache = User.objects.filter(username=username).count()
         if user_cache > 0:
-            if username == 'admin' or username == 'root':
-                self.add_error("username", _(f'Nombre de usuario no permitido'))
+            if username == "admin" or username == "root":
+                self.add_error("username", _(f"Nombre de usuario no permitido"))
             else:
-                self.add_error("username", _(f'El nombre de usuario ya existe'))
+                self.add_error("username", _(f"El nombre de usuario ya existe"))
 
         if self.cleaned_data["password"] != self.cleaned_data["repeat_pass"]:
-            self.add_error("repeat_pass", _(f'Contraseña inválida'))
+            self.add_error("repeat_pass", _(f"Contraseña inválida"))
+
+class UserProfileForm(forms.Form):
+    about_me = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={"class": "form-control", "minlength": "1"}),
+    )
+
+
+class UserProfileModelForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserProfileModelForm, self).__init__(*args, **kwargs)
+        self.fields["about_me"].require = False
+
+    class Meta:
+        model = UserProfile
+
+        fields = [
+            "document_type",
+            "id_number",
+            "name",
+            "phone",
+            "email",
+            "address",
+            "city",
+            "about_me",
+        ]
+
+        widgets = {
+            "document_type": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+            "id_number": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "minlength": "1",
+                }
+            ),
+            "name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "minlength": "1",
+                }
+            ),
+            "phone": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "minlength": "1",
+                }
+            ),
+            "email": forms.EmailInput(
+                attrs={
+                    # "placeholder": "Correo electrónico",
+                    "class": "form-control",
+                    "minlength": "3",
+                }
+            ),
+            "address": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "minlength": "1",
+                }
+            ),
+            "city": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+            "about_me": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "minlength": "1",
+                }
+            ),
+        }

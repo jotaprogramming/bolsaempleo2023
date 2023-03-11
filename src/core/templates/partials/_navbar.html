@@ -1,28 +1,19 @@
 {% load static %}
 
-<<<<<<< HEAD
 
 <nav class="navbar navbar-expand-lg  p-0 m-0 brandi ">
     <div class="container-fluid p-0 brandi">
         <a class="navbar-brand px-2 py-0 m-0 text-light brand-btn text-capitalize" href="/">
-=======
-<nav class="navbar navbar-expand-lg p-0 m-0 brandi">
-    {% comment %} <nav class="navbar navbar-expand-lg bg-body-tertiary p-0 m-0"> {% endcomment %}
-    <div class="container-fluid p-0">
-        {% comment %} <a class="navbar-brand px-2 py-0 m-0 btn-primary brand-btn text-uppercase" href="/">
-            {% if brand_name %}
-            {{brand_name}}
-            {% else %}
-            Ingeniería de Sistemas
-            {%endif %}
-        </a> {% endcomment %}
-        <a class="navbar-brand btn btn-primary text-uppercase big-btn corners font-size-normal" href="/">
->>>>>>> 17957607de971aa6ac81b1ab1ab6ea6007df23eb
-            {% if brand_name %}
-            {{brand_name}}
-            {% else %}
-                job
-            {%endif %}
+            <span style="z-index: 1;">
+                {% if brand_name %}
+                {{brand_name}}
+                {% else %}
+                    job
+                {%endif %}
+            </span>
+            <div class="try-img">
+                <img src="{% static 'core/assets/img/boxy.png' %}" alt="">
+             </div>
         </a>
         <button class="navbar-toggler border-0 burger-menu" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -40,9 +31,4 @@
             {% include 'partials/_navbar_items.html' %}
         </div>
     </div>
-<<<<<<< HEAD
-
 </nav>
-=======
-</nav>
->>>>>>> 17957607de971aa6ac81b1ab1ab6ea6007df23eb

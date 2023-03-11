@@ -71,8 +71,6 @@
 
 }
 
-<<<<<<< HEAD
-=======
 .first-group-inputs,
 .second-group-inputs{
     width: 100%;
@@ -149,7 +147,6 @@
 .register-icon span:nth-child(3){
     animation-delay: -0.4s;
 }
->>>>>>> 17957607de971aa6ac81b1ab1ab6ea6007df23eb
 
 
 
@@ -176,7 +173,7 @@
 
 .wave-form{
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
     position: relative;
 }
 .custom-shape-divider-bottom-1677713782 {

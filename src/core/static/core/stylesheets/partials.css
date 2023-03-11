@@ -49,7 +49,6 @@
     max-width: 250px;
 }
 
-<<<<<<< HEAD
 
 /* Style for TAGs */
 
@@ -97,7 +96,6 @@
     line-height: 15px;
 }
 
-=======
 @media (max-width:475px) {
     .navbar-brand{
         /* background-color: red !important; */
@@ -107,4 +105,3 @@
         /* width: 0; */
     }
 }
->>>>>>> 17957607de971aa6ac81b1ab1ab6ea6007df23eb

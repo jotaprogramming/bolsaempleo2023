@@ -46,6 +46,7 @@
 /* style to center all content inside the full screen (most used - login,register) */
 .content__center{
     width: 100%;
+    min-height: calc(100vh - 56px);
     height: 100%;
     /* background-color: yellow; */
     display: flex;
@@ -67,6 +68,7 @@
     max-height: 600px;
     display: flex;
     justify-content: space-between;
+    overflow: hidden;
 }
 .no-aside__container{
     width: calc(100% - 300px);
@@ -76,15 +78,20 @@
 
 .....Content in login & register .............*/
 .container_left{
-    width:calc(100% - 600px);
+    width: calc(100% - 600px);
     max-width: 400px;
-    height: 100%;
-    background-color: lightpink;
+    /* height: 100%; */
+    /* background-color: lightpink; */
+    max-height: 600px;
+    max-width: 1080px;
+    display: flex;
+    /* justify-content: center; */
+    overflow: hidden;
 }
 .container_right{
     max-width: 600px;
     width:600px;
-    height: 100%;
+    /* height: 100%; */
     /* background-color: green; */
 }
 .rigth_content{
@@ -370,9 +377,6 @@
 
 
 /* .........INPUTS FEATURES.............. */
-<<<<<<< HEAD
-
-=======
 .input-icon{
     position: absolute;
     font-size: 18px;
@@ -435,7 +439,6 @@
     color: #F4893C;
     border-right: 1px solid #F4893C;
 }
->>>>>>> 17957607de971aa6ac81b1ab1ab6ea6007df23eb
 
 
 
@@ -455,12 +458,9 @@
 .brandi{
     height: 100%;
     width: 100%;
-<<<<<<< HEAD
     z-index: 999;
    
-=======
     background-color: #fff;
->>>>>>> 17957607de971aa6ac81b1ab1ab6ea6007df23eb
 }
 /* FONTS */
 .font-size-normal {
@@ -536,7 +536,7 @@
     width: fit-content;
     /* width: 100%; */
     max-width: 100%;
-    height: 100%;
+    /* height: 100%; */
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -583,7 +583,6 @@
 }
 
 
-<<<<<<< HEAD
 /* ASIDE STYLES  */
 .filter-type__text{
     font-weight: 600;
@@ -709,5 +708,3 @@
 
 
 
-=======
->>>>>>> 17957607de971aa6ac81b1ab1ab6ea6007df23eb

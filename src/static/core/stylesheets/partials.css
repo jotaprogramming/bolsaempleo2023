@@ -1,5 +1,9 @@
 /* STYLES FOR PARTIALS */
 
+.burger-menu{
+    margin: .5rem;
+}
+
 .search-container{
     max-width: 40rem;
 }
@@ -46,8 +50,58 @@
 }
 
 
-/* Style of login,register main-container */
+/* Style for TAGs */
 
    
 
+.single__tag{
+    width: 130px;
+    min-width: 130px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
+}
+.single__tag--yellow{
+    background-color: #E9C237;
+}
+.single__tag--blue{
+    background-color: #34B9C1;
+    margin-left: -33px;
+}
+.single__tag--green{
+    background-color: #5DB63D;
+    margin-left: -33px;
+}
+.single__tag--darkblue{
+    margin-left: -33px;
+    background-color: #4853BA;
+}
+.single__tag--purple{
+    margin-left: -33px;
+    background-color: #943FC8;
+}
+.tag{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 100%;
+    padding-left: 10px;
+    color: #fff;
+    margin: 0;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 15px;
+}
 
+@media (max-width:475px) {
+    .navbar-brand{
+        /* background-color: red !important; */
+        display: none !important;
+        /* opacity: 0; */
+        /* visibility: hidden; */
+        /* width: 0; */
+    }
+}

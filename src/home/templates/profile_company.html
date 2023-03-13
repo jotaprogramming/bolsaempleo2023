@@ -1,0 +1,177 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+
+{% block content %}
+<section class="base__size">
+    <div class="aside__container d-none d-lg-block">
+       <div class="aside-content">
+            <div class="sub-nav">
+                <h5 class="m-0 sub-nav__title">Lorem Empresarial</h5>
+                <div class="sub-nav__items">
+                    <ul class="m-0 p-0">
+                        <li>
+                            <a href="">Perfil</a>
+                        </li>
+                      
+                        <li>
+                            <a href="">Publicaciones</a>
+                        </li>
+                        <li>
+                            <a href="/notifications">Notificaciones</a>
+                        </li>
+                      
+                    </ul>
+                </div>
+            </div>
+       </div>
+    </div>
+    <div class="no-aside__container">
+        <div class="profile-content__container">
+            <div class="dropdown d-block d-lg-none">
+                <button class=" dropdown-toggle navy-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Navega dandole Aqui
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a class="dropdown-item" href="/profile_company">Perfil</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="/publicate">Publicaciones</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="profile__info">
+                <h3 class="profile__info-title m-0">perfil Empresarial</h3>
+                <div class="img-card__info">
+                    <div class="img-content__info">
+                        <img src="{% static 'core/assets/img/montains.jpg' %}" alt="">
+                    </div>
+                    <div class="curriculum-title">
+                        <p class="curriculum-title__title m-0">Lorem S.A</p>
+                        <p class="curriculum-title__desc m-0">Numero uno en Ibiza</p>
+                        
+                    </div>
+                    <button class="update-img">Actualizar</button>
+                  
+                </div>
+                <div class="profile-info__data">
+                    <div class="own-data">
+                        <h4 class="data-title text-capitalize">Informacion del representante legal </h4>
+                        <div class="data-info">
+                            <div class="data-info__row">
+                                <div class="group-data">
+                                    <p class="group-data__title m-0">Representante Legal</p>
+                                    <p class="group-data__desc m-0 text-capitalize">paquito arma porros conlacola</p>
+                                </div>
+                                <div class="group-data">
+                                    <p class="group-data__title m-0">Identificacion</p>
+                                    <p class="group-data__desc m-0 text-capitalize">123456789</p>
+                                </div>
+                            </div>
+                            <div class="data-info__row">
+                                <div class="group-data">
+                                    <p class="group-data__title m-0"> Correo electronico</p>
+                                    <p class="group-data__desc m-0 text-capitalize">myemail@...</p>
+                                </div>
+                                <div class="group-data">
+                                    <p class="group-data__title m-0">Telefono</p>
+                                    <p class="group-data__desc m-0 text-capitalize">123456789</p>
+                                </div>   
+                            </div>
+                            <div class="data-info__row">
+                                <div class="group-data">
+                                    <p class="group-data__title m-0">ubicacion</p>
+                                    <p class="group-data__desc m-0 ">calle X No. XX-XX</p>
+                                </div>
+                                <div class="group-data">
+                                    <p class="group-data__title m-0">whatever!</p>
+                                    <p class="group-data__desc m-0 ">....</p>
+                                </div>
+                            </div>
+                        <h4 class="data-title text-capitalize">Informacion de la empresa </h4>
+                            <div class="data-info__row">
+                                <div class="group-data ">
+                                    <p class="group-data__title m-0">NIT</p>
+                                    <p class="group-data__desc m-0 ">123456</p>
+                                </div>
+                                <div class="group-data ">
+                                    <p class="group-data__title m-0">razon social</p>
+                                    <p class="group-data__desc m-0 ">financiera</p>
+                                </div>
+                            </div>
+                            <div class="data-info__row">
+                                <div class="group-data ">
+                                    <p class="group-data__title m-0">director(a) Recursos Humanos</p>
+                                    <p class="group-data__desc m-0 ">Paco Porros</p>
+                                </div>
+                                <div class="group-data ">
+                                    <p class="group-data__title m-0">telefono</p>
+                                    <p class="group-data__desc m-0 ">123456789</p>
+                                </div>
+                            </div>
+                            <div class="data-info__row">
+                                <div class="group-data ">
+                                    <p class="group-data__title m-0">identificacion</p>
+                                    <p class="group-data__desc m-0 ">123456789</p>
+                                </div>
+                                <div class="group-data ">
+                                    <p class="group-data__title m-0">correo electronico</p>
+                                    <p class="group-data__desc m-0 ">pacog@...</p>
+                                </div>
+                            </div>
+                            <div class="data-info__btn">
+                                <button class="data-info__btn--edit">Editar</button>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="account-data">
+                        <h4 class="data-title">Informacion de Usuario</h4>
+                        <div class="data-info">
+                            <div class="data-info__row">
+                                <div class="group-data">
+                                    <p class="group-data__title m-0">nombre de usuario</p>
+                                    <p class="group-data__desc m-0 text-capitalize">@paquito</p>
+                                </div>
+                                <div class="group-data">
+                                    <p class="group-data__title m-0">correo de registro</p>
+                                    <p class="group-data__desc m-0 text-capitalize">registrado@...</p>
+                                </div> 
+                            </div>
+                            <div class="data-info__btn">
+                                <button class="data-info__btn--change my-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample"">Cambiar Contraseña</button>
+                                <!-- <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                    Button with data-bs-target
+                                  </button> -->
+                                <div class="collapse my-2" id="collapseExample">
+                                    <div class="">
+                                        <div class="data-info__row">
+                                            <div class="set-input max-w ">
+                                                <input class="single-input" type="text" required>
+                                                <span class="input-placeholder">Nueva Contraseña</span>
+                                                <span class="input-icon"><i class="lni lni-lock"></i></span>
+                                            </div>
+                                            <div class="set-input max-w ">
+                                                <input class="single-input" type="text" required>
+                                                <span class="input-placeholder">Repetir Contraeña</span>
+                                                <span class="input-icon"><i class="lni lni-lock"></i></span>
+                                            </div>
+                                        </div>
+                                        <button class="data-info__btn--change my-3">Actuaizar</button>
+                                    </div>
+                                  </div>
+                            </div>
+                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

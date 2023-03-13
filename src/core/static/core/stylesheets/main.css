@@ -3,7 +3,191 @@
 @import url('./custom-bootstrap.css');
 @import url('./partials.css');
 @import url('./mystyles.css');
+@import url('./oferts.css');
+@import url('./login.css');
+@import url('./register.css');
+@import url('./help.css');
+@import url('./profiles.css');
+@import url('./ofert_detail.css');
+@import url('./edit_publish.css');
+@import url('./candidate.css');
+@import url('./inputs.css');
+@import url('./home_page.css');
+@import url('./notifys.css');
+@import url('./publish.css');
+@import url('./moderator.css');
 
+
+.new_publish__content{
+    width: 100%;
+    height: 100%;
+    /* background-color: #F4893C; */
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    gap: 1rem;
+}
+
+/*...........................SIZES................. */
+/* adjusting size to views wich needs an aside */
+.base__size{
+    width: 100%;
+    height: calc(100vh - 60px);
+    display: flex;
+}
+/* Size body - cover full screen */
+.body-container{
+    width: 100%;
+    height: calc(100vh - 60px);
+    /* background-color: indigo; */
+}
+/* style to center all content inside the full screen (most used - login,register) */
+.content__center{
+    width: 100%;
+    min-height: calc(100vh - 56px);
+    height: 100%;
+    /* background-color: yellow; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.content__center--column{
+    flex-direction: column;
+    gap: 1rem;
+    overflow-y: auto;
+}
+/* container(box) which contain  login,register content*/
+.principal__container{
+    width: 80%;
+    height: 80%;
+    border-radius: 10px;
+    border: 1px solid var(--extralight-gray);
+    max-width: 1080px;
+    max-height: 600px;
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+}
+.no-aside__container{
+    width: calc(100% - 300px);
+    /* background-color: lightcoral; */
+}
+/* .................Shared Components............ 
+
+.....Content in login & register .............*/
+.container_left{
+    width: calc(100% - 600px);
+    max-width: 400px;
+    /* height: 100%; */
+    /* background-color: lightpink; */
+    max-height: 600px;
+    max-width: 1080px;
+    display: flex;
+    /* justify-content: center; */
+    overflow: hidden;
+}
+.container_right{
+    max-width: 600px;
+    width:600px;
+    /* height: 100%; */
+    /* background-color: green; */
+}
+.rigth_content{
+    width: 300px;
+    /* background-color: greenyellow; */
+}
+.right_content__header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.right_content__subtitle{
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+}
+
+.right_content__title{
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 40px;
+}
+.rigth_content__link--footer{
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 18px;
+    text-align: center;
+    
+}
+
+
+
+
+
+
+.aside-content::-webkit-scrollbar {
+    -webkit-appearance: inherit;
+}
+
+.aside-content::-webkit-scrollbar:vertical {
+    width:5px;
+}
+
+.aside-content::-webkit-scrollbar-button:increment,
+.aside-content::-webkit-scrollbar-button {
+    display: none;
+} 
+
+
+.aside-content::-webkit-scrollbar-thumb {
+    background-color: #bab6b6;
+    border-radius: 20px;
+    border: 3px solid #f1f2f3;
+}
+
+.aside-content::-webkit-scrollbar-track {
+    border-radius: 5px;  
+}
+
+/* Shared Components */
+
+
+.hr{
+    width: 90%;
+    border: 1px solid var(--extralight-gray);
+    margin: 1rem auto;
+}
+
+/* .normal_btn{
+    width: 100%;
+    max-width: 300px;
+    background-color: #fff; 
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--orange);
+    color: var(--orange);
+}
+.normal_btn:hover{
+    background-color: var(--orange); 
+   color: #fff;
+} */
+.normal_btn{
+    width: 100%;
+    height: 40px;
+    max-width: 300px;
+    background-color: var(--orange);
+    padding: 6px 12px;
+    border-radius: 1rem;
+    border: none;
+    color: #fff;
+    margin-top: 1rem;
+}
+.normal_btn:hover{
+    background-color: #ff5c16;
+}
 
 
 /* BOX CONTENT SIZES - (LOGIN,REGISTER,ETC....) */
@@ -45,15 +229,23 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-bottom: 1px solid #d7d7d7;
+    background-color: transparent;
+    position: relative;
 }
-
-.body-container{
+.try-img{
+    width: 270px;
+    height: 100px;
+    position: absolute;
+    left: 0;
+    top: -3px;
+    bottom: -500%;
+}
+.try-img img{
     width: 100%;
     height: 100%;
-    grid-area: main;
-    /* background-color: lightcoral; */
+    object-fit: cover;
 }
+
 .box-content-in-left{
     width: calc(100% - 600px);
     height: 100%;
@@ -86,14 +278,19 @@
 }
 /* ..........BUTTONS FEATURES............. */
 
+
 .brand-btn{
     height: 100%;
-    max-width: 300px;
+    max-width: 250px;
+    width: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
-
+    
+   
 }
+
+
 
 .big-btn {
     padding: 1rem 3rem !important;
@@ -261,6 +458,8 @@
 .brandi{
     height: 100%;
     width: 100%;
+    z-index: 999;
+   
     background-color: #fff;
 }
 /* FONTS */
@@ -337,7 +536,7 @@
     width: fit-content;
     /* width: 100%; */
     max-width: 100%;
-    height: 100%;
+    /* height: 100%; */
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -382,5 +581,130 @@
     border-top-left-radius:10px ;
     border-bottom-left-radius:10px;
 }
+
+
+/* ASIDE STYLES  */
+.filter-type__text{
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;    
+}
+.aside__container{
+    width: 260px;
+    height: 100%;
+    /* background-color: yellow;  */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 10px 60px 10px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px 2px #d7d7d7b8;
+    overflow-y: hidden;
+  
+    
+
+}
+.aside-content{
+    width: 100%;
+    height: 100%;
+    /* background-color: green; */
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+   
+}
+.aside-filters{
+    width: 100%;
+    height: auto;
+
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.single-filter{
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px 2px #d7d7d7b8;
+    padding: 16px 32px;
+    /* background-color: green; */
+
+}
+.single-filter__title{
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 18px;
+}
+.single-filter__rb-filter{
+    width: 100%;
+    /* background-color: orangered; */
+}
+
+.single-filter__rb-filter label{
+    /* background-color: #F4893C; */
+    padding: 3px;
+}
+.sub-nav{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    /* background-color: yellow; */
+}
+.sub-nav__items ul li{
+    list-style-type: none;
+    padding:3px 0;
+    display: flex;
+    flex-direction: column;
+    border-left: 5px solid var(--orange);
+}
+.sub-nav__items ul li a{
+    /* background-color: rebeccapurple; */
+    text-decoration: none;
+    padding: 6px 12px;
+    color: #0f0f0f;
+    width: 100%;
+}
+.sub-nav__items ul li p{
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 18px;
+    padding-left: 12px;
+}
+.sub-nav__items ul li a:hover{
+    color: var(--orange);
+    background-color: #f7f2f262;
+    border-radius: 10px;
+}
+.sub-nav__title{
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--extralight-gray);
+
+}
+@media screen and (min-width:1000px) {
+    /* .aside__container{
+        display: block;
+        width: 300px;
+        height: 100%;
+        background-color: yellow;
+    } */
+   
+}
+
+
+
+
+
+
+
+
+
 
 

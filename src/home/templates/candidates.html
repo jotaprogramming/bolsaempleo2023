@@ -1,0 +1,120 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+
+{% block content %}
+<section class="base__size">
+    <div class="aside__container d-none d-lg-block">
+        <div class="aside-content">
+            <div class="sub-nav">
+                <h5 class="m-0 sub-nav__title">Lorem</h5>
+                <div class="sub-nav__items">
+                    <ul class="m-0 p-0">
+                        <li>
+                            <a href="/publicate">Publicaciones</a>
+                            <p class="m-0 text-orange">Visualizando</p>
+                        </li>
+                        <li>
+                            <a href="/profile_company">Perfil</a>
+                        </li>
+
+                        <li>
+                            <a href="/notifications">Notificaciones</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!-- <h3 class="m-0 filter-type__text">Filtrar Por</h3>
+            <div class="aside-filters">
+                {% include 'partials/_filters.html' %}
+            </div> -->
+        </div>
+    </div>
+    <div class="no-aside__container">
+        <div class="publish_info">
+            <p class="publish_info__ofert-number text-uppercase m-0">publicacion n° 1</p>
+            <p class="m-0"><b>Estado de la oferta:</b> Disponible</p>
+            <p class="m-0"><b>N° Candidatos:</b> 5</p>
+            <p class="m-0"><b>Lista de Candidatos:</b></p>
+            <div class="candidate_container">
+                <div class="candidate_container__content">
+                    <div class="candidate_info__header">
+                        <div class="candidate_info__top">
+                            <p class="m-0 candiate_info__name">Juan de la Cruz</p>
+                            <p class="m-0 candiate_info__datetime">aplico el 03 de agosto,2023</p>
+                        </div>
+                        <p class="m-0 text-capitalize candidate_info__ubication">bucaramanga,santander</p>
+                    </div>
+                    <p class="candidate_info__body m-0">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sequi, optio. Consectetur ratione, quo quis vitae pariatur et suscipit officia nam at soluta quod veritatis aut perferendis tempora hic sit exercitationem.
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magnam eius facilis deserunt quia ea eligendi doloribus facere cumque doloremque quos! Qui natus autem voluptas eos sapiente excepturi nam? Natus, veritatis.
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias, mollitia commodi a cupiditate rerum labore, maxime consectetur in, veniam nisi optio deleniti ratione maiores aut nostrum quasi. Culpa, dolores amet?
+                    </p>
+                    <div class="candidate_info__footer">
+                        <p class="m-0 text-capitalize"><b>hoja de vida adjunta:</b> si</p>
+                        <p class="m-0 text-capitalize"><b>contratacion:</b> pendiente</p>
+                    </div>
+                </div>
+                <div class="candidate_container__content">
+                    <div class="candidate_info__header">
+                        <div class="candidate_info__top">
+                            <p class="m-0 candiate_info__name">Aldo Geo</p>
+                            <p class="m-0 candiate_info__datetime">aplico el 04 de agosto,2023</p>
+                        </div>
+                        <p class="m-0 text-capitalize candidate_info__ubication">Antioquia,Meta</p>
+                    </div>
+                    <p class="candidate_info__body m-0">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sequi, optio. Consectetur ratione, quo quis vitae pariatur et suscipit officia nam at soluta quod veritatis aut perferendis tempora hic sit exercitationem.
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magnam eius facilis deserunt quia ea eligendi doloribus facere cumque doloremque quos! Qui natus autem voluptas eos sapiente excepturi nam? Natus, veritatis.
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias, mollitia commodi a cupiditate rerum labore, maxime consectetur in, veniam nisi optio deleniti ratione maiores aut nostrum quasi. Culpa, dolores amet?
+                    </p>
+                    <div class="candidate_info__footer">
+                        <p class="m-0 text-capitalize"><b>hoja de vida adjunta:</b> si</p>
+                        <p class="m-0 text-capitalize"><b>contratacion:</b> pendiente</p>
+                    </div>
+                </div>
+                <div class="candidate_container__content">
+                    <div class="candidate_info__header">
+                        <div class="candidate_info__top">
+                            <p class="m-0 candiate_info__name">Juan de la Cruz</p>
+                            <p class="m-0 candiate_info__datetime">aplico el 03 de agosto,2023</p>
+                        </div>
+                        <p class="m-0 text-capitalize candidate_info__ubication">bucaramanga,santander</p>
+                    </div>
+                    <p class="candidate_info__body m-0">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sequi, optio. Consectetur ratione, quo quis vitae pariatur et suscipit officia nam at soluta quod veritatis aut perferendis tempora hic sit exercitationem.
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magnam eius facilis deserunt quia ea eligendi doloribus facere cumque doloremque quos! Qui natus autem voluptas eos sapiente excepturi nam? Natus, veritatis.
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias, mollitia commodi a cupiditate rerum labore, maxime consectetur in, veniam nisi optio deleniti ratione maiores aut nostrum quasi. Culpa, dolores amet?
+                    </p>
+                    <div class="candidate_info__footer">
+                        <p class="m-0 text-capitalize"><b>hoja de vida adjunta:</b> si</p>
+                        <p class="m-0 text-capitalize"><b>contratacion:</b> pendiente</p>
+                    </div>
+                </div>
+                <div class="candidate_container__content">
+                    <div class="candidate_info__header">
+                        <div class="candidate_info__top">
+                            <p class="m-0 candiate_info__name">Juan de la Cruz</p>
+                            <p class="m-0 candiate_info__datetime">aplico el 03 de agosto,2023</p>
+                        </div>
+                        <p class="m-0 text-capitalize candidate_info__ubication">bucaramanga,santander</p>
+                    </div>
+                    <p class="candidate_info__body m-0">
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sequi, optio. Consectetur ratione, quo quis vitae pariatur et suscipit officia nam at soluta quod veritatis aut perferendis tempora hic sit exercitationem.
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Magnam eius facilis deserunt quia ea eligendi doloribus facere cumque doloremque quos! Qui natus autem voluptas eos sapiente excepturi nam? Natus, veritatis.
+                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias, mollitia commodi a cupiditate rerum labore, maxime consectetur in, veniam nisi optio deleniti ratione maiores aut nostrum quasi. Culpa, dolores amet?
+                    </p>
+                    <div class="candidate_info__footer">
+                        <p class="m-0 text-capitalize"><b>hoja de vida adjunta:</b> si</p>
+                        <p class="m-0 text-capitalize"><b>contratacion:</b> pendiente</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

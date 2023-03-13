@@ -1,0 +1,72 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+{% block content %}
+<section class="base__size">
+    <div class="aside__container d-none d-lg-block">
+        <div class="aside-content">
+            <div class="sub-nav">
+                <h5 class="m-0 sub-nav__title">Lorem</h5>
+                <div class="sub-nav__items">
+                    <ul class="m-0 p-0">
+                        <li>
+                            <a href="/profile">Perfil Estudiante</a>
+                        </li>
+                        <li>
+                            <a href="/profile_company">Perfil Empresarial</a>
+                        </li>
+
+                        <li>
+                            <a href="/publicate">Publicaciones</a>
+                        </li>
+
+                        <li>
+                            <a href="/postulations">Postulaciones</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <h3 class="m-0 filter-type__text">Filtrar Por</h3>
+            <div class="aside-filters">
+               {% include 'partials/_filters.html' %}
+            </div>
+        </div>
+    </div>
+    <div class="no-aside__container notify">
+        <div class="notify-container">
+            <div class="dropdown d-block d-lg-none">
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a class="dropdown-item" href="/profile_company">Perfil</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="/publicate">Publicaciones</a>
+                    </li>
+                </ul>
+            </div>
+            <h3 class="text-capitalize letS-1">panel de notificaciones</h3>
+            <h6 class="text-capitalize">total notificaciones : 1</h6>
+            <div class="notify-container__content">
+                {% include 'partials/_note.html' %}
+
+            </div>
+            <div class="notify-container__content">
+                {% include 'partials/_note.html' %}
+
+            </div>
+            <div class="notify-container__content">
+                {% include 'partials/_note.html' %}
+
+            </div>
+            <div class="notify-container__content">
+                {% include 'partials/_note.html' %}
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

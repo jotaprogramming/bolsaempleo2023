@@ -1,0 +1,107 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+{% block content %}
+<section class="base__size">
+    <div class="aside__container d-none d-lg-block">
+        <div class="aside-content">
+            <div class="sub-nav">
+                <h5 class="m-0 sub-nav__title">MOD</h5>
+                <div class="sub-nav__items">
+                    <ul class="m-0 p-0">
+                        <li>
+                            <a href="/moderate_est">Estudiantes</a>
+                        </li>
+                        <li>
+                            <a href="/moderate_comp">Empresas</a>
+                            <p class="m-0 text-orange">Visualizando</p>
+                        </li>
+
+                        <li>
+                            <a href="/notifications">Configuracion</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            {% comment %}
+            <h3 class="m-0 filter-type__text">Filtrar Por</h3>
+            <div class="aside-filters">
+                {% include 'partials/_filters.html' %}
+            </div>
+            {% endcomment %}
+
+        </div>
+    </div>
+    <div class="no-aside__container">
+        <div class="publish-container">
+            <p class="publish-container__title text-uppercase m-0">Empresas</p>
+            <div class="publish-container__new-btn">
+                <a href="/new_publicate">
+                    <button type="submit" class="normal_btn text-capitalize">generar PDF</button>
+                </a>
+                </button>
+            </div>
+            <div class="publish-container__table">
+
+                <table class="publications-table">
+                    <tr class="rw-title">
+                        <th class="column-order__btn">
+                            <button class="orderby-btn">#
+                                <i class="lni lni-sort-alpha-asc"></i>
+                            </button>
+                        </th>
+                        <th>
+                           Nombre completo
+                        </th>
+                        <th>
+                            NIT
+                        </th>
+                        <th>
+                            Publicaciones
+                        </th>
+                        <th>
+                            estado
+                        </th>
+
+                    </tr>
+                    <tr class="row-info">
+                        <td class="text-center">1</td>
+                        <td class="ty">TuEmpresa</td>
+                        <td>123456789</td>
+                        <td>15</td>
+                        <td>activo</td>
+                        <td class="edit-icon">
+                            <a href="/profile_company" title="Editar"><i class="lni lni-pencil-alt"></i></a>
+                        </td>
+                    </tr>
+                    <tr class="row-info">
+                        <td class="text-center">2</td>
+                        <td class="ty">GTD</td>
+                        <td>123456789</td>
+                        <td>2</td>
+                        <td>inactivo</td>
+                        <td class="edit-icon">
+                            <a href="/profile_company" title="Editar"><i class="lni lni-pencil-alt"></i></a>
+                        </td>
+                    </tr>
+                    <tr class="row-info">
+                        <td class="text-center">3</td>
+                        <td class="ty">CuchiSAS</td>
+                        <td>123456789</td>
+                        <td>10</td>
+                        <td>activo</td>
+                        <td class="edit-icon">
+                            <a href="/profile_company" title="Editar"><i class="lni lni-pencil-alt"></i></a>
+                        </td>
+                    </tr>
+                    
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

@@ -1,0 +1,135 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+
+{% block content %}
+<section class="base__size">
+    <div class="aside__container d-none d-lg-block">
+       <div class="aside-content">
+            <div class="sub-nav">
+                <h5 class="m-0 sub-nav__title">Lorem Estudiante</h5>
+                <div class="sub-nav__items">
+                    <ul class="m-0 p-0">
+                        <li>
+                            <a href="">Perfil</a>
+                        </li>
+                       
+                        <li>
+                            <a href="">Postulaciones</a>
+                        </li>
+                       
+                        <li>
+                            <a href="/notifications">Notificaciones</a>
+                        </li>
+                      
+                    </ul>
+                </div>
+            </div>
+       </div>
+    </div>
+    <div class="no-aside__container">
+        <div class="profile-content__container">
+            <div class="dropdown d-block d-lg-none">
+                <button class=" dropdown-toggle navy-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Navega dandole Aqui
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li>
+                        <a class="dropdown-item" href="/profile">Perfil</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="/postulations">Postulaciones</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="profile__info">
+                
+                <h3 class="profile__info-title m-0">perfil</h3>
+                <div class="img-card__info">
+                    <div class="img-content__info">
+                        <img src="{% static 'core/assets/img/montains.jpg' %}" alt="">
+                    </div>
+                    <div class="curriculum-title">
+                        <p class="curriculum-title__title m-0">ingenieria de sistemas</p>
+                        <p class="curriculum-title__desc m-0">profesional TICs</p>
+                        
+                    </div>
+                    <button class="update-img">Actualizar</button>
+                  
+                </div>
+                <div class="profile-info__data">
+                    <div class="own-data">
+                        <h4 class="data-title">Informacion Personal</h4>
+                        <div class="data-info">
+                            <div class="data-info__row">
+                                <div class="group-data">
+                                    <p class="group-data__title m-0">nombre completo</p>
+                                    <p class="group-data__desc m-0 text-capitalize">paquito arma porros conlacola</p>
+                                </div>
+                                <div class="group-data">
+                                    <p class="group-data__title m-0">Identificacion</p>
+                                    <p class="group-data__desc m-0 text-capitalize">123456789</p>
+                                </div>
+                            </div>
+                            <div class="data-info__row">
+                                <div class="group-data">
+                                    <p class="group-data__title m-0"> Correo Institucional</p>
+                                    <p class="group-data__desc m-0 text-capitalize">myinstiemail@...</p>
+                                </div>
+                                <div class="group-data">
+                                    <p class="group-data__title m-0">Telefono</p>
+                                    <p class="group-data__desc m-0 text-capitalize">123456789</p>
+                                </div>   
+                            </div>
+                            <div class="data-info__row">
+                                <div class="group-data">
+                                    <p class="group-data__title m-0">direccion de residencia</p>
+                                    <p class="group-data__desc m-0 ">calle X No. XX-XX</p>
+                                </div>
+                                <div class="group-data">
+                                    <p class="group-data__title m-0">hoja de vida</p>
+                                    <a class="group-data__desc m-0 ">myCV.pdf</a>
+                                </div>
+                            </div>
+                            <div class="data-info__row">
+                                <div class="group-data group-data__about">
+                                    <p class="group-data__title m-0">sobre mi</p>
+                                    <p class="group-data__desc m-0 ">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloremque excepturi quas delectus vero obcaecati alias tempore, ratione pariatur aliquid ex rem libero, enim illo neque distinctio voluptas? Laborum, qui doloremque!</p>
+                                </div>
+                            </div>
+                            <div class="data-info__btn">
+                                <a href="/edit_profile">
+                                    <button class="data-info__btn--edit">Editar</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="account-data">
+                        <h4 class="data-title">Informacion de Usuario</h4>
+                        <div class="data-info">
+                            <div class="data-info__row">
+                                <div class="group-data">
+                                    <p class="group-data__title m-0">nombre de usuario</p>
+                                    <p class="group-data__desc m-0 text-capitalize">@paquito</p>
+                                </div>
+                                <div class="group-data">
+                                    <p class="group-data__title m-0">correo de registro</p>
+                                    <p class="group-data__desc m-0 text-capitalize">registrado@...</p>
+                                </div> 
+                            </div>
+                            <div class="data-info__btn">
+                                <button class="data-info__btn--change">Cambiar Contraseña</button>
+                            </div>
+                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

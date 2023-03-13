@@ -1,0 +1,73 @@
+@import url('./variables.css');
+
+
+.notify{
+    padding:64px 32px;
+    overflow-y: auto;
+}
+.notify-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    /* background-color: green; */
+}
+.notify-container__content{
+    width: 100%;
+    max-width: 800px;
+    /* background-color: rgb(39, 36, 223); */
+    border-radius: 10px;
+    box-shadow: 3px 3px 5px 3px #d7d7d75f;
+    border: none;
+}
+.notify-content{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 16px 32px;
+}
+.notify-content__icon{
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    color: orange;
+    width: 10%;
+    /* background-color: yellowgreen; */
+}
+.notify-content__header{
+    display: flex;
+    gap: 1rem;
+    
+}
+.notify-content__time{
+    width: 20%;
+    display: flex;
+    justify-content: center;
+}
+.notify-title__content{
+    padding: 5px;
+    width: 70%;
+}
+
+.title-content__title{
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;   
+}
+.title-content__subtitle,
+.notify-time
+{
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.notify-desc__content{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+}

@@ -1,0 +1,43 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+
+{% block content %}
+<section class="base__size">
+    <div class="aside__container d-none d-lg-block">
+        <div class="aside-content">
+            <div class="sub-nav">
+                <h5 class="m-0 sub-nav__title">Lorem</h5>
+                <div class="sub-nav__items">
+                    <ul class="m-0 p-0">
+                        <li>
+                            <a href="/profile_company">Perfil</a>
+                        </li>
+
+                        <li>
+                            <a href="/notifications">Notificaciones</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <h3 class="m-0 filter-type__text">Filtrar Por</h3>
+            <div class="aside-filters">
+                {% include 'partials/_filters.html' %}
+            </div>
+        </div>
+    </div>
+    <div class="no-aside__container">
+        <div class="postulations-container">
+            
+          <p>No se ha postulado a ninguna oferta</p>
+          <a href="/oferts">Buscar Oferta</a>
+         
+           
+        </div>
+    </div>
+</section>
+{% endblock content %}

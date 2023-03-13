@@ -463,8 +463,18 @@ class UserProfileForm(forms.Form):
 
 
 class UserProfileModelForm(forms.ModelForm):
+    fullname = forms.CharField(
+        label="Full name",
+        required=True,
+        widget=forms.TextInput(attrs={"class": "single-input", "minlength": "1"}),
+    )
+
     def __init__(self, *args, **kwargs):
         super(UserProfileModelForm, self).__init__(*args, **kwargs)
+        self.fields["name"].label = "Short name (optional)"
+        self.fields["email"].label = "Contact email"
+        self.fields["id_number"].label = "Identificaction number"
+        self.fields["address"].label = "Address"
         self.fields["about_me"].require = False
 
     class Meta:
@@ -489,32 +499,32 @@ class UserProfileModelForm(forms.ModelForm):
             ),
             "id_number": forms.TextInput(
                 attrs={
-                    "class": "form-control",
+                    "class": "single-input",
                     "minlength": "1",
                 }
             ),
             "name": forms.TextInput(
                 attrs={
-                    "class": "form-control",
+                    "class": "single-input",
                     "minlength": "1",
                 }
             ),
             "phone": forms.TextInput(
                 attrs={
-                    "class": "form-control",
+                    "class": "single-input",
                     "minlength": "1",
                 }
             ),
             "email": forms.EmailInput(
                 attrs={
                     # "placeholder": "Correo electrónico",
-                    "class": "form-control",
+                    "class": "single-input",
                     "minlength": "3",
                 }
             ),
             "address": forms.TextInput(
                 attrs={
-                    "class": "form-control",
+                    "class": "single-input",
                     "minlength": "1",
                 }
             ),
@@ -525,7 +535,7 @@ class UserProfileModelForm(forms.ModelForm):
             ),
             "about_me": forms.Textarea(
                 attrs={
-                    "class": "form-control",
+                    "class": "single-input",
                     "minlength": "1",
                 }
             ),

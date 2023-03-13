@@ -1,43 +1,173 @@
-{% extends 'core/base.html' %} {% load static %} {% block title %}
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}
 <title>{{app_title}} | {{title_view}}</title>
-{% endblock title %} {% block content %}
-<section class="my-5">
-  {% include 'partials/_display.html' %}
-  <div class="d-flex flex-column">
-    <div class="col-1">
-      {% if object.user %}
-      <a
-        class="btn btn-primary btn-center"
-        href="{% url 'users_app:userprofile_edit' username %}"
-      >
-        <i class="lni lni-pencil"></i>
-        <span class="ms-2">Editar</span>
-      </a>
-      {% else %}
-      <a
-        class="btn btn-primary btn-center"
-        href="{% url 'users_app:userprofile_add' username %}"
-      >
-        <i class="lni lni-pencil"></i>
-        <span class="ms-2">Editar</span>
-      </a>
-      {% endif %}
-    </div>
-    <p>Alias: {{ object.name }}</p>
-    <p>Nombre de usuario: {{ object.user.username }}</p>
-    <p>Correo de registro: {{ object.user.email }}</p>
-    <p>Nombre completo: {{ object.user.first_name }}</p>
-    <p>Documento: {{ object.document_type }} {{ object.id_number }}</p>
-    <p>Teléfono: {{ object.phone }}</p>
-    <p>Correo de contacto: {{ object.email }}</p>
-    <p>Dirección: {{ object.address }}</p>
-    <p>Ciudad: {{ object.city.name }}, {{ object.city.district.name }}</p>
-    {% if object.user_cv.cv_path %}
-    <p>Hoja de vida:</p>
-    <img src="{{ object.user_cv.cv_path }}" alt="cv" class="img-thumbnail">
-    {% endif %}
+{% endblock title %}
 
+{% block contentfluid %}
+<section class="base__size">
+  {% include 'partials/_user_aside.html' %}
+  <div class="no-aside__container">
+    <div class="profile-content__container">
+      <div class="dropdown d-block d-lg-none">
+        <button
+          class="dropdown-toggle navy-btn"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Navega dandole Aqui
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li>
+            <a
+              class="dropdown-item"
+              href="{% url 'users_app:userprofile' username %}"
+              >Perfil</a
+            >
+          </li>
+          <li>
+            <a class="dropdown-item" href="/postulations">Postulaciones</a>
+          </li>
+        </ul>
+      </div>
+      <div class="profile__info">
+        <h3 class="profile__info-title m-0">perfil</h3>
+        <div class="img-card__info">
+          <div class="img-content__info">
+            <img src="{% static 'core/assets/img/montains.jpg' %}" alt="" />
+          </div>
+          <div class="curriculum-title">
+            <p class="curriculum-title__title m-0">
+              {% if object.name %}
+              {{ object.name }}
+              {% else %}
+              {{ username }}
+              {% endif %}
+            </p>
+            <p class="curriculum-title__desc m-0">Especialización</p>
+          </div>
+          <button class="update-img">Actualizar</button>
+          {% comment %} {% if object.user %}
+          <a
+            class="btn btn-outline-primary btn-center"
+            href="{% url 'users_app:userprofile_edit' username %}"
+          >
+            <i class="lni lni-pencil"></i>
+            <span class="ms-2">Actualizar</span>
+          </a>
+          {% else %}
+          <a
+            class="btn btn-outline-primary btn-center"
+            href="{% url 'users_app:userprofile_add' username %}"
+          >
+            <i class="lni lni-pencil"></i>
+            <span class="ms-2">Actualizar</span>
+          </a>
+          {% endif %} {% endcomment %}
+        </div>
+        <div class="profile-info__data">
+          <div class="own-data">
+            <h4 class="data-title">Informacion Personal</h4>
+            <div class="data-info">
+              <div class="data-info__row">
+                <div class="group-data">
+                  <p class="group-data__title m-0">Nombre completo</p>
+                  <p class="group-data__desc m-0 text-capitalize">
+                    {% if object.user.first_name %} {{ object.user.first_name }}
+                    {% else %} ------ {% endif %}
+                  </p>
+                </div>
+                <div class="group-data">
+                  <p class="group-data__title m-0">Identificacion</p>
+                  <p class="group-data__desc m-0 text-capitalize">
+                    {{ object.id_number}}
+                  </p>
+                </div>
+              </div>
+              <div class="data-info__row">
+                <div class="group-data">
+                  <p class="group-data__title m-0">Correo Institucional</p>
+                  <p class="group-data__desc m-0 text-lowercase">
+                    {{ object.email }}
+                  </p>
+                </div>
+                <div class="group-data">
+                  <p class="group-data__title m-0">Telefono</p>
+                  <p class="group-data__desc m-0 text-capitalize">
+                    {{ object.phone }}
+                  </p>
+                </div>
+              </div>
+              <div class="data-info__row">
+                <div class="group-data">
+                  <p class="group-data__title m-0">Direccion de residencia</p>
+                  <p class="group-data__desc m-0">{{ object.address }}</p>
+                </div>
+                <div class="group-data">
+                  <p class="group-data__title m-0">hoja de vida</p>
+                  <a class="group-data__desc m-0">
+                    {% if cv %} {{ cv.cv_path }} {% else %} subir una {% endif %}
+                  </a>
+                </div>
+              </div>
+              <div class="data-info__row">
+                <div class="group-data group-data__about">
+                  <p class="group-data__title m-0">sobre mi</p>
+                  <p class="group-data__desc m-0">{{ object.about_me }}</p>
+                </div>
+              </div>
+              <div class="row justify-content-end">
+                <div class="col-2">
+                  {% if object.user %}
+                  <a
+                    class="btn btn-outline-primary btn-center"
+                    href="{% url 'users_app:userprofile_edit' username %}"
+                  >
+                    <i class="lni lni-pencil"></i>
+                    <span class="ms-2">Editar</span>
+                  </a>
+                  {% else %}
+                  <a
+                    class="btn btn-outline-primary btn-center data-info__btn--edit"
+                    href="{% url 'users_app:userprofile_add' username %}"
+                  >
+                    <i class="lni lni-pencil"></i>
+                    <span class="ms-2">Editar</span>
+                  </a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="hr"></div>
+          <div class="account-data">
+            <h4 class="data-title">Informacion de Usuario</h4>
+            <div class="data-info">
+              <div class="data-info__row">
+                <div class="group-data">
+                  <p class="group-data__title m-0">usuario</p>
+                  <p class="group-data__desc m-0 text-lowercase">
+                    @{{ username }}
+                  </p>
+                </div>
+                <div class="group-data">
+                  <p class="group-data__title m-0">correo de registro</p>
+                  <p class="group-data__desc m-0 text-lowercase">
+                    {{ object.user.email }}
+                  </p>
+                </div>
+              </div>
+              <div class="data-info__btn">
+                <button class="data-info__btn--change">
+                  Cambiar Contraseña
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
-
-{% endblock content %}
+{% endblock contentfluid %}

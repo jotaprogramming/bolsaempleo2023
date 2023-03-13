@@ -1,0 +1,110 @@
+{% load static %}
+<div class="profile-content__container">
+  <!-- <div class="dropdown d-block d-lg-none">
+          <button class=" dropdown-toggle navy-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Navega dandole Aqui
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                  <a class="dropdown-item" href="/profile">Perfil</a>
+                  
+
+              </li>
+              <li>
+                  <a class="dropdown-item" href="/postulations">Postulaciones</a>
+              </li>
+          </ul>
+      </div> -->
+  <div class="profile__info">
+    <h3 class="profile__info-title m-0">perfil</h3>
+    <!-- <div class="img-card__info">
+              <div class="img-content__info">
+                  <img src="{% static 'core/assets/img/montains.jpg' %}" alt="">
+              </div>
+              <div class="curriculum-title">
+                  <p class="curriculum-title__title m-0">ingenieria de sistemas</p>
+                  <p class="curriculum-title__desc m-0">profesional TICs</p>
+                  
+              </div>
+              <button class="update-img">Actualizar</button>
+            
+          </div> -->
+    <div class="profile-info__data">
+      <div class="own-data">
+        <h4 class="data-title">Informacion Personal</h4>
+        <div class="data-info">
+          <div class="data-info__row">
+            <div class="set-input max-w ">
+              <input type="text" name="fullname" class="single-input" minlength="1" required="" id="id_fullname" value="{{ fullname }}">
+              {% comment %} {{ form.fullname }} {% endcomment %}
+              <span class="input-placeholder">{{ form.fullname.label }}</span>
+              <span class="input-icon"><i class="lni lni-handshake"></i></span>
+            </div>
+            <div class="set-input max-w">
+              {{ form.name }}
+              <span class="input-placeholder">{{form.name.label}}</span>
+              <span class="input-icon"
+                ><i class="lni lni-handshake"></i
+              ></span>
+            </div>
+          </div>
+          <div class="data-info__row">
+            <div class="set-input max-w">
+              {{ form.document_type }}
+              <span class="input-placeholder">{{form.document_type.label}}</span>
+              <span class="input-icon"
+                ><i class="lni lni-handshake"></i
+              ></span>
+            </div>
+            <div class="set-input max-w">
+              {{form.id_number}}
+              <span class="input-placeholder">{{form.id_number.label}}</span>
+              <span class="input-icon"><i class="lni lni-license"></i></span>
+            </div>
+          </div>
+          <div class="data-info__row">
+            <div class="set-input max-w">
+              {{form.email}}
+              <span class="input-placeholder">{{form.email.label}}</span>
+              <span class="input-icon"><i class="lni lni-envelope"></i></span>
+            </div>
+            <div class="set-input max-w">
+              {{ form.phone }}
+              <span class="input-placeholder">{{ form.phone.label }}</span>
+              <span class="input-icon"><i class="lni lni-phone"></i></span>
+            </div>
+          </div>
+          <div class="data-info__row">
+            <div class="set-input max-w">
+              {{ form.city }}
+              <span class="input-placeholder">{{ form.city.label }}</span>
+              <span class="input-icon"><i class="lni lni-phone"></i></span>
+            </div>
+            <div class="set-input max-w">
+              {{ form.address }}
+              <span class="input-placeholder">{{ form.address.label }}</span>
+              <span class="input-icon"><i class="lni lni-"></i></span>
+            </div>
+          </div>
+          <div class="data-info__row data-info__row--select">
+            <div class=" ">
+              <input type="file" id="inputGroupFile01" />
+            </div>
+          </div>
+          <div class="data-info__row">
+            <div class="group-data group-data__about">
+              <p class="group-data__title m-0">sobre mi</p>
+              {{ form.about_me }}
+            </div>
+          </div>
+          <div class="data-info__btn">
+            {% comment %} <a href="/edit_profile">
+              <button class="data-info__btn--edit">Actualizar</button>
+            </a> {% endcomment %}
+            <button type="submit" class="data-info__btn--edit">Guardar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

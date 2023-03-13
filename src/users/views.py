@@ -830,15 +830,16 @@ class UserProfileDetail(LoginRequiredMixin, generic.TemplateView):
         username_param = self.kwargs.get("slug", "")
         try:
             obj = UserProfile.objects.get(user__username=username_param)
-            username = obj.user.username
+            cv = CurriculumVitae.objects.filter(userprofile__id=obj.id).values()
             about_me = obj.about_me
-            alias = obj.name or username
             context["object"] = obj
-            context["title_view"] = alias
+            context["cv"] = cv
             context["description_view"] = about_me
-        except:
+        except Exception as ex:
+            print(ex)
             pass
-        context["app_title"] = app_title
+        context["app_title"] = "Perfil"
+        context["title_view"] = username_param
         context["username"] = username_param
         return context
 
@@ -867,9 +868,11 @@ class UserProfileCreate(LoginRequiredMixin, generic.CreateView):
     def form_valid(self, form):
         slug = self.kwargs.get("slug", "")
         try:
-            user = User.objects.get(username=slug)
+            user = User.objects.filter(username=slug)
+            fullname = form.cleaned_data["fullname"]
+            user.update(first_name=fullname)
             form.instance.email = normalize_email(form.instance.email)
-            form.instance.user_id = user.id
+            form.instance.user_id = user.values()[0]["id"]
             return super().form_valid(form)
         except Exception as exception:
             message = getattr(exception, "message", str(exception))
@@ -910,10 +913,16 @@ class UserProfileEdit(LoginRequiredMixin, generic.UpdateView):
         context["title_view"] = "Perfil"
         context["description_view"] = f"@{slug}"
         context["username"] = slug
+        context["fullname"] = User.objects.filter(username=slug).values()[0][
+            "first_name"
+        ]
         return context
 
     def form_valid(self, form):
         slug = self.kwargs.get("slug", "")
+        user = User.objects.filter(username=slug)
+        fullname = form.cleaned_data["fullname"]
+        user.update(first_name=fullname)
         form.instance.updated_at = now()
         form.instance.email = normalize_email(form.instance.email)
         return super().form_valid(form)

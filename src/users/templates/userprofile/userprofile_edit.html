@@ -2,8 +2,26 @@
 
 {% block title %}
 <title>{{app_title}} | {{title_view}}</title>
-{% endblock title %} {% block content %}
-<section class="my-5">
+{% endblock title %}
+
+{% block contentfluid %}
+
+<section class="base__size">
+  {% include 'partials/_user_aside.html' %}
+  {% comment %} {% include 'partials/_display.html' %} {% endcomment %}
+  <div class="no-aside__container">
+    <form method="POST" action="{% url 'users_app:userprofile_edit' username %}" id="form">
+      {% csrf_token %}
+      {% include 'partials/_userprofile_form.html' %}
+    </form>
+  </div>
+  
+  </form>
+</section>
+
+{% endblock contentfluid %}
+
+{% comment %} <section class="my-5">
   {% include 'partials/_display.html' %}
   <div class="d-flex flex-column">
     <form method="POST" action="{% url 'users_app:userprofile_edit' username %}" id="form">
@@ -74,6 +92,4 @@
       
     </form>
   </div>
-</section>
-
-{% endblock content %}
+</section> {% endcomment %}

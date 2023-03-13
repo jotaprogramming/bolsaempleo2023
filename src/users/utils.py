@@ -85,12 +85,12 @@ def duplicate_usergroups(self, form):
 #     return count
 
 
-# def duplicate_rules(self, form):
+# def duplicate_traits(self, form):
 #     _id = self.kwargs.get("pk", None)
-#     rules = Rules.objects.all()
+#     traits = Traits.objects.all()
 
 #     if _id:
-#         rules = rules.exclude(id=_id)
+#         traits = traits.exclude(id=_id)
 
 #     user = form.instance.user
 #     print("user: ", user)
@@ -99,7 +99,7 @@ def duplicate_usergroups(self, form):
 #     restriction = form.instance.restriction
 #     role = form.instance.role
 #     print(app, restriction, role)
-#     count = rules.filter(
+#     count = traits.filter(
 #         user__exact=user,
 #         app__in=[app],
 #         restriction__in=[restriction],

@@ -15,11 +15,11 @@ from users.forms import (
     RestrictionForm,
     AppForm,
     RoleForm,
-    RuleForm,
+    TraitForm,
     UserForm,
     UserFormUpdate,
     RegisterForm,
-    UserProfileModelForm
+    UserProfileModelForm,
 )
 
 
@@ -73,14 +73,13 @@ class RoleFormTest(TestCase):
         )
 
 
-class RuleFormTest(TestCase):
+class TraitFormTest(TestCase):
     def test_label_field(self):
-        form = RuleForm()
+        form = TraitForm()
         self.assertTrue(
             form.fields["user"].label == "Usuario"
-            and form.fields["app"].label == "Aplicación"
+            and form.fields["usergroup"].label == "Grupo"
             and form.fields["role"].label == "Rol"
-            and form.fields["restriction"].label == "Restricción"
         )
 
 

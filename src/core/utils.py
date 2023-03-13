@@ -11,7 +11,7 @@ import sweetify
 from pprint import pprint
 
 
-def success_message(request, msg=_("Successfully created")):
+def success_message(request, msg=_("Successfully created"), time=5000):
     """
     It creates a success message with a title, message, icon, timer, and button.
     
@@ -20,7 +20,7 @@ def success_message(request, msg=_("Successfully created")):
     """
     swal_title = _("Success")
     swal_msg = msg
-    swal_time = 5000
+    swal_time = time
     sweetify.success(
         request,
         title=swal_title,

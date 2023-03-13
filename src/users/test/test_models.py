@@ -8,8 +8,8 @@ from users.models import (
     UserGroups,
     Restrictions,
     Apps,
-    Roles,
-    Rules,
+    Traits,
+    Traits,
     UserProfile,
     CurriculumVitae,
 )
@@ -73,10 +73,10 @@ class RolesTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        cls.role = Roles.objects.get(pk=1)
+        cls.role = Traits.objects.get(pk=1)
 
     def test_if_role_is_an_instance(self):
-        self.assertTrue(isinstance(self.role, Roles))
+        self.assertTrue(isinstance(self.role, Traits))
 
     def test_role_name(self):
         self.assertEqual(str(self.role), "staff")

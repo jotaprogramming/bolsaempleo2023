@@ -9,7 +9,7 @@
         type="button"
         class="btn btn-primary btn-center"
         name="createButtons"
-        id="{% url 'users_app:rule_add' %}"
+        id="{% url 'users_app:policy_add' %}"
       >
         <i class="lni lni-plus"></i>
         <span class="ms-2">Crear</span>
@@ -21,9 +21,8 @@
           <tr>
             <th scope="col">#</th>
             <th>Usuario</th>
-            <th>Aplicaciones</th>
-            <th>Roles</th>
-            <th>Restricciones</th>
+            <th>Grupo</th>
+            <th>Rol</th>
             <th>Estado</th>
             <th>Editar</th>
             <th>Eliminar</th>
@@ -34,14 +33,8 @@
           <tr>
             <td scope="row">{{row.id}}</td>
             <td>{{row.user}}</td>
-            <td>{{row.num_apps}}</td>
-            <td>{{row.num_roles}}</td>
-            <td>
-              {{row.num_restrictions}}
-              {% for restriction in row.restrictions %}
-              {{restriction}}
-              {% endfor %}
-            </td>
+            <td>{{row.usergroup}}</td>
+            <td>{{row.role}}</td>
             <td>
               {% if row.deleted_at %} Eliminado el {{row.deleted_at}} {% elif
               row.updated_at %} Actualizado el {{row.updated_at}} {% else %}
@@ -53,7 +46,7 @@
                 type="button"
                 class="btn btn-outline-primary btn-center"
                 name="editButtons"
-                id="{% url 'users_app:rule_edit' row.id %}"
+                id="{% url 'users_app:policy_edit' row.id %}"
               >
                 <i class="lni lni-pencil"></i>
               </button>
@@ -65,7 +58,7 @@
                 type="button"
                 class="btn btn-outline-danger btn-center"
                 name="deleteButtons"
-                id="{% url 'users_app:rule_delete' row.id %}"
+                id="{% url 'users_app:policy_delete' row.id %}"
               >
                 <i class="lni lni-trash-can"></i>
               </button>

@@ -11,6 +11,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 # PROJECT MODULES
+from config.models import *
 from users.models import *
 from users.utils import *
 
@@ -41,6 +42,45 @@ class UserGroupForm(forms.ModelForm):
             "description": forms.Textarea(
                 attrs={
                     "placeholder": "Descripción del grupo",
+                    "class": "form-control",
+                }
+            ),
+        }
+
+
+class PolicyForm(forms.ModelForm):
+    restriction = forms.ModelMultipleChoiceField(
+        queryset=Restrictions.objects.filter(deleted_at=None),
+        required=True,
+        label="Restricción",
+        widget=forms.SelectMultiple(attrs={"class": "form-select"}),
+    )
+
+    app = forms.ModelMultipleChoiceField(
+        queryset=Apps.objects.filter(deleted_at=None),
+        required=True,
+        label="Aplicaciones",
+        widget=forms.SelectMultiple(attrs={"class": "form-select"}),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(UserGroupForm, self).__init__(*args, **kwargs)
+        self.fields["usergroup"].label = "Grupo de usuarios"
+        self.fields["restriction"].label = "Descripción(es)"
+        self.fields["app"].label = "Aplicacion(es)"
+
+    class Meta:
+        model = Policies
+
+        fields = [
+            "usergroup",
+            "restriction",
+            "app",
+        ]
+
+        widgets = {
+            "usergroup": forms.Select(
+                attrs={
                     "class": "form-control",
                 }
             ),
@@ -139,6 +179,13 @@ class AppForm(forms.ModelForm):
 
 
 class RoleForm(forms.ModelForm):
+    restriction = forms.ModelMultipleChoiceField(
+        queryset=Restrictions.objects.filter(deleted_at=None),
+        required=False,
+        label="Restricción",
+        widget=forms.SelectMultiple(attrs={"class": "form-select"}),
+    )
+
     def __init__(self, *args, **kwargs):
         super(RoleForm, self).__init__(*args, **kwargs)
         self.fields["role_name"].label = "Nombre"
@@ -150,6 +197,7 @@ class RoleForm(forms.ModelForm):
         fields = [
             "role_name",
             "description",
+            "restriction",
         ]
 
         widgets = {
@@ -170,47 +218,61 @@ class RoleForm(forms.ModelForm):
         }
 
 
-class RuleForm(forms.ModelForm):
+class PolicyForm(forms.ModelForm):
     app = forms.ModelMultipleChoiceField(
         queryset=Apps.objects.filter(deleted_at=None),
-        required=True,
+        required=False,
         label="Aplicación",
-        widget=forms.SelectMultiple(attrs={"class": "form-select"}),
-    )
-
-    role = forms.ModelMultipleChoiceField(
-        queryset=Roles.objects.filter(deleted_at=None),
-        required=True,
-        label="Rol",
         widget=forms.SelectMultiple(attrs={"class": "form-select"}),
     )
 
     restriction = forms.ModelMultipleChoiceField(
         queryset=Restrictions.objects.filter(deleted_at=None),
-        required=False,
+        required=True,
         label="Restricción",
         widget=forms.SelectMultiple(attrs={"class": "form-select"}),
     )
 
     def __init__(self, *args, **kwargs):
-        super(RuleForm, self).__init__(*args, **kwargs)
-        self.fields["user"].label = "Usuario"
-        self.fields["app"].label = "Aplicación"
-        self.fields["role"].label = "Rol"
-        self.fields["restriction"].label = "Restricción"
+        super(PolicyForm, self).__init__(*args, **kwargs)
+        self.fields["usergroup"].label = "Grupo de Usuarios"
+        self.fields["restriction"].label = "Restricción(es)"
+        self.fields["app"].label = "Aplicación(es) (opcional)"
 
     class Meta:
-        model = Rules
+        model = Traits
+
+        fields = [
+            "usergroup",
+            "restriction",
+            "app",
+        ]
+
+        widgets = {
+            "usergroup": forms.Select(attrs={"class": "form-select"}),
+        }
+
+
+class TraitForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(TraitForm, self).__init__(*args, **kwargs)
+        self.fields["user"].label = "Usuario"
+        self.fields["usergroup"].label = "Grupo"
+        self.fields["role"].label = "Rol"
+
+    class Meta:
+        model = Traits
 
         fields = [
             "user",
-            "app",
+            "usergroup",
             "role",
-            "restriction",
         ]
 
         widgets = {
             "user": forms.Select(attrs={"class": "form-select"}),
+            "usergroup": forms.Select(attrs={"class": "form-select"}),
+            "role": forms.Select(attrs={"class": "form-select"}),
         }
 
 
@@ -399,6 +461,8 @@ class RegisterForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
+        self.fields["first_name"].required = True
+        self.fields["last_name"].required = True
         self.fields["username"].label = "Usuario"
         self.fields["email"].label = "Correo electrónico"
         self.fields["password"].label = "Contraseña"
@@ -407,6 +471,8 @@ class RegisterForm(forms.ModelForm):
         model = User
 
         fields = [
+            "first_name",
+            "last_name",
             "username",
             "email",
             "password",
@@ -414,6 +480,20 @@ class RegisterForm(forms.ModelForm):
         ]
 
         widgets = {
+            "first_name": forms.TextInput(
+                attrs={
+                    "class": "single-input",
+                    "minlength": "1",
+                    "maxlength": "150",
+                }
+            ),
+            "last_name": forms.TextInput(
+                attrs={
+                    "class": "single-input",
+                    "minlength": "1",
+                    "maxlength": "150",
+                }
+            ),
             "username": forms.TextInput(
                 attrs={
                     # "placeholder": "Nombre de usuario",
@@ -453,6 +533,145 @@ class RegisterForm(forms.ModelForm):
     def clean_repeat_pass(self):
         if self.cleaned_data["password"] != self.cleaned_data["repeat_pass"]:
             self.add_error("repeat_pass", _(f"Contraseña inválida"))
+
+
+class RegisterCompany(RegisterForm):
+    id_number = forms.CharField(
+        label=_("Número de identidad"),
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "single-input",
+            }
+        ),
+    )
+    phone = forms.CharField(
+        label=_("Teléfono"),
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "single-input",
+            }
+        ),
+    )
+    contact_email = forms.EmailField(
+        label=_("Correo electróncio de contacto"),
+        required=True,
+        widget=forms.EmailInput(
+            attrs={
+                "class": "single-input",
+            }
+        ),
+    )
+    address = forms.CharField(
+        label=_("Dirección"),
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Dirección",
+                "class": "single-input",
+            }
+        ),
+    )
+    district = forms.ModelChoiceField(
+        queryset=Districts.objects.all(),
+        label=_("Departamento"),
+        required=True,
+        widget=forms.Select(
+            attrs={
+                "class": "form-select",
+            }
+        ),
+    )
+    city = forms.ModelChoiceField(
+        queryset=Cities.objects.all(),
+        label=_("Ciudad"),
+        required=True,
+        widget=forms.Select(
+            attrs={
+                "class": "form-select",
+            }
+        ),
+    )
+
+
+class RegisterStudent(RegisterForm):
+    document_type = forms.ModelChoiceField(
+        queryset=DocumentType.objects.all(),
+        label=_("Tipo de documento"),
+        required=True,
+        widget=forms.Select(
+            attrs={
+                "class": "form-select",
+            }
+        ),
+    )
+    id_number = forms.CharField(
+        label=_("Número de identidad"),
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "single-input",
+            }
+        ),
+    )
+    phone = forms.CharField(
+        label=_("Teléfono"),
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "single-input",
+            }
+        ),
+    )
+    contact_email = forms.EmailField(
+        label=_("Correo electróncio de contacto"),
+        required=True,
+        widget=forms.EmailInput(
+            attrs={
+                "class": "single-input",
+            }
+        ),
+    )
+    address = forms.CharField(
+        label=_("Dirección"),
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Dirección",
+                "class": "single-input",
+            }
+        ),
+    )
+    district = forms.ModelChoiceField(
+        queryset=Districts.objects.all(),
+        label=_("Departamento"),
+        required=True,
+        widget=forms.Select(
+            attrs={
+                "class": "form-select",
+            }
+        ),
+    )
+    city = forms.ModelChoiceField(
+        queryset=Cities.objects.all(),
+        label=_("Ciudad"),
+        required=True,
+        widget=forms.Select(
+            attrs={
+                "class": "form-select",
+            }
+        ),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(RegisterForm, self).__init__(*args, **kwargs)
+        self.fields["first_name"].required = True
+        self.fields["last_name"].required = True
+        self.fields["username"].required = False
+        self.fields["username"].label = "Usuario"
+        self.fields["email"].label = "Correo electrónico"
+        self.fields["password"].label = "Contraseña"
 
 
 class UserProfileForm(forms.Form):

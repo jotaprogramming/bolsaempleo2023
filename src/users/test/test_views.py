@@ -15,8 +15,8 @@ from users.models import (
     UserGroups,
     Restrictions,
     Apps,
-    Roles,
-    Rules,
+    Traits,
+    Traits,
     UserProfile,
     CurriculumVitae,
 )
@@ -35,10 +35,10 @@ from users.views import (
     RoleCreate,
     RoleEditModal,
     RoleDeleteModal,
-    RuleList,
-    RuleCreate,
-    RuleEditModal,
-    RuleDeleteModal,
+    TraitList,
+    TraitCreate,
+    TraitEditModal,
+    TraitDeleteModal,
     UserList,
     UserCreate,
     UserEditModal,
@@ -396,7 +396,7 @@ class RoleViewsTest(TestCase):
 class RoleListTest(RoleViewsTest):
     def test_get_queryset(self):
         queryset = self.view.get_queryset()
-        data = Roles.objects.all().order_by("id")
+        data = Traits.objects.all().order_by("id")
 
         self.assertQuerysetEqual(queryset, data)
 
@@ -495,15 +495,15 @@ class RoleDeleteModalTest(RoleViewsTest):
         self.assertEqual(response.status_code, 302)
 
 
-class RuleViewsTest(TestCase):
+class TraitViewsTest(TestCase):
     fixtures = [
         "users_fixtures.json",
         "apps_fixtures.json",
         "restrictions_fixtures.json",
         "roles_fixtures.json",
-        "rules_fixtures.json",
+        "traits_fixtures.json",
     ]
-    objview = RuleList()
+    objview = TraitList()
     path = reverse("users_app:user_list")
     post_success = {
         "user": 1,
@@ -527,26 +527,26 @@ class RuleViewsTest(TestCase):
         cls.view = cls.objview
         cls.view.request = request
 
-        cls.redirect = reverse("users_app:rule_list")
+        cls.redirect = reverse("users_app:trait_list")
 
     def test_get_context_data(self):
         kwargs = {}
-        response = RuleList.as_view()(self.view.request, **kwargs)
+        response = TraitList.as_view()(self.view.request, **kwargs)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context_data)
 
 
-class RuleListTest(RuleViewsTest):
+class TraitListTest(TraitViewsTest):
     def test_get_queryset(self):
         queryset = self.view.get_queryset()
-        data = Rules.objects.all().order_by("id")
+        data = Traits.objects.all().order_by("id")
 
         self.assertQuerysetEqual(queryset, data)
 
 
-class RuleCreateTest(RuleViewsTest):
-    objview = RuleCreate()
-    path = reverse("users_app:rule_add")
+class TraitCreateTest(TraitViewsTest):
+    objview = TraitCreate()
+    path = reverse("users_app:trait_add")
 
     def test_successfull(self):
         self.client.force_login(user=self.user)
@@ -557,11 +557,11 @@ class RuleCreateTest(RuleViewsTest):
 
     def test_get_context_data(self):
         kwargs = {}
-        response = RuleCreate.as_view()(self.view.request, **kwargs)
+        response = TraitCreate.as_view()(self.view.request, **kwargs)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context_data)
 
-    def test_rule_exception(self):
+    def test_trait_exception(self):
         self.client.force_login(user=self.user)
         response = self.client.post(self.path, self.post_exception)
 
@@ -569,26 +569,26 @@ class RuleCreateTest(RuleViewsTest):
         self.assertRedirects(response, self.redirect)
 
 
-class RuleEditModalTest(RuleCreateTest):
-    objview = RuleEditModal()
-    path = reverse("users_app:rule_edit", args=[1])
+class TraitEditModalTest(TraitCreateTest):
+    objview = TraitEditModal()
+    path = reverse("users_app:trait_edit", args=[1])
 
     def test_get_context_data(self):
         kwargs = {"pk": 1}
-        response = RuleEditModal.as_view()(self.view.request, **kwargs)
+        response = TraitEditModal.as_view()(self.view.request, **kwargs)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context_data)
 
 
-class RuleDeleteModalTest(RuleCreateTest):
-    objview = RuleDeleteModal()
-    path = reverse("users_app:rule_delete", args=[1])
+class TraitDeleteModalTest(TraitCreateTest):
+    objview = TraitDeleteModal()
+    path = reverse("users_app:trait_delete", args=[1])
     post_success = {}
     post_exception = {}
 
     def test_get_context_data(self):
         kwargs = {"pk": 1}
-        response = RuleDeleteModal.as_view()(self.view.request, **kwargs)
+        response = TraitDeleteModal.as_view()(self.view.request, **kwargs)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context_data)
 
@@ -763,7 +763,7 @@ class UserLoginTest(TestCase):
         self.client.force_login(user=self.user)
         response = self.client.get(self.path)
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response,reverse("home_app:home_page"))
+        self.assertRedirects(response, reverse("home_app:home_page"))
 
 
 class UserLogoutTest(TestCase):

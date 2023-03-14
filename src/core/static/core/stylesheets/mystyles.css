@@ -95,15 +95,13 @@
 .register-body{
     
     padding: 10px;
-    /* background-color: #F4893C; */
+    background-color: #F4893C;
     width: 100%;
     height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    overflow-y: scroll;
-    overflow-x: hidden;
     max-height: 260px;
     
     

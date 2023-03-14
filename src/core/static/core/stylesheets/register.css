@@ -1,5 +1,12 @@
 @import url('./variables.css');
 
+.form_inputs{
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 /* Pre-Register --- Selection Buttons */
 .register_selection{
@@ -66,7 +73,6 @@
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    overflow-y: scroll;
     max-height: 260px;
     
     

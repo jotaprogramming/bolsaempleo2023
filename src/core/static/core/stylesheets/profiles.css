@@ -1,3 +1,6 @@
+.account-data{
+    padding-bottom: 1rem;
+}
 .curriculum-title{
     width: 60%;
     display: flex;
@@ -152,7 +155,7 @@
     padding: 15px;
     display: flex;
     flex-direction: column;
-    overflow-y:auto ;
+    
     gap: 1rem;
 }
 .profile__info{

@@ -1,0 +1,75 @@
+@import url('./variables.css');
+
+.postulations-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #4853BA;
+
+}
+.ko{
+   
+    width: 300px;
+    max-width: 600px;
+    /* background-color: yellow; */
+    position: relative;
+    height: 40px;
+    overflow-x: scroll;
+    display: flex;
+}
+.ky{
+    width: 300px;
+    max-width: 600px;
+    height: 40px;
+    background-color: aqua;
+    overflow-x: scroll;
+    display: flex;
+    flex-grow: unset;
+    position: relative;
+}
+.single-key{
+    width: 130px;
+    min-width: 130px;
+    height: 100%;
+    background-color: #E9C237;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
+}
+.single-key--blue{
+    background-color:#34B9C1 ;
+    margin-left: -33px;
+}
+.single-key--darkblue{
+    background-color:#4853BA ;
+    margin-left: -33px;
+
+
+}
+.single-key--green{
+    background-color:#5DB63D ;
+    margin-left: -33px;
+
+}
+.single-key--purple{
+    background-color:#943FC8 ;
+    margin-left: -33px;
+
+}
+.tag{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 100%;
+    /* background-color: orange; */
+    padding-left: 10px;
+    color: #fff;
+    margin: 0;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 15px;
+}

@@ -20,30 +20,30 @@ def duplicate_usergroups(self, form):
     if _id:
         groups = groups.exclude(id=_id)
 
+    code = form.instance.code
     group_name = form.instance.group_name
-    count = groups.filter(group_name__exact=group_name).count()
+    count = groups.filter(Q(code__exact=code) | Q(group_name__exact=group_name)).count()
     return count
 
 
-# def duplicate_restrictions(self, form):
-#     """
-#     It returns the number of times the code and name of the restriction being created or edited already
-#     exist in the database
+def duplicate_restrictions(self, form):
+    """
+    It returns the number of times the code and name of the restriction being created or edited already
+    exist in the database
 
-#     :param form: The form instance that is being validated
-#     :return: A tuple of two integers.
-#     """
-#     _id = self.kwargs.get("pk", None)
-#     restrictions = Restrictions.objects.all()
+    :param form: The form instance that is being validated
+    :return: A tuple of two integers.
+    """
+    _id = self.kwargs.get("pk", None)
+    restrictions = Restrictions.objects.all()
 
-#     if _id:
-#         restrictions = restrictions.exclude(id=_id)
+    if _id:
+        restrictions = restrictions.exclude(id=_id)
 
-#     code = form.instance.code
-#     name = form.instance.name
-#     count_code = restrictions.filter(code__exact=code).count()
-#     count_name = restrictions.filter(name__exact=name).count()
-#     return count_code, count_name
+    code = form.instance.code
+    name = form.instance.name
+    count = restrictions.filter(Q(code__exact=code) | Q(name__exact=name)).count()
+    return count
 
 
 # def duplicate_apps(self, form):
@@ -66,31 +66,32 @@ def duplicate_usergroups(self, form):
 #     return count_name, count_route
 
 
-# def duplicate_roles(self, form):
-#     """
-#     If the role name already exists in the database, then return the count of the role name.
+def duplicate_roles(self, form):
+    """
+    If the role name already exists in the database, then return the count of the role name.
 
-#     :param form: The form instance that is being validated
-#     :return: The count of the number of roles that have the same name as the role being created or
-#     updated.
-#     """
+    :param form: The form instance that is being validated
+    :return: The count of the number of roles that have the same name as the role being created or
+    updated.
+    """
+    _id = self.kwargs.get("pk", None)
+    roles = Roles.objects.all()
+
+    if _id:
+        roles = roles.exclude(id=_id)
+
+    code = form.instance.code
+    role_name = form.instance.role_name
+    count = roles.filter(Q(code__exact=code) | Q(role_name__exact=role_name)).count()
+    return count
+
+
+# def duplicate_traits(self, form):
 #     _id = self.kwargs.get("pk", None)
-#     roles = Roles.objects.all()
+#     traits = Traits.objects.all()
 
 #     if _id:
-#         roles = roles.exclude(id=_id)
-
-#     role_name = form.instance.role_name
-#     count = roles.filter(role_name__exact=role_name).count()
-#     return count
-
-
-# def duplicate_rules(self, form):
-#     _id = self.kwargs.get("pk", None)
-#     rules = Rules.objects.all()
-
-#     if _id:
-#         rules = rules.exclude(id=_id)
+#         traits = traits.exclude(id=_id)
 
 #     user = form.instance.user
 #     print("user: ", user)
@@ -99,7 +100,7 @@ def duplicate_usergroups(self, form):
 #     restriction = form.instance.restriction
 #     role = form.instance.role
 #     print(app, restriction, role)
-#     count = rules.filter(
+#     count = traits.filter(
 #         user__exact=user,
 #         app__in=[app],
 #         restriction__in=[restriction],

@@ -7,7 +7,8 @@
 {% block contentfluid %}
 <article class="content__center">
     <section class="principal__container">
-        <div class="register_content">
+        <form method="POST" class="register_content">
+            {% csrf_token %}
             <div class="register_header">
                 <div class="header_link__back">
                     <i class="lni lni-arrow-left-circle"></i>
@@ -19,79 +20,81 @@
             </div>
             <div class="register_body">
                 <div class="group_inputs ">
-                    <h3 class="register-col-text fw-bold">Datos Corporativos</h3>
+                    {% comment %} <h3 class="register-col-text fw-bold">Datos Corporativos</h3> {% endcomment %}
                     <div class="set-input max-w">
-                        <input class="single-input" type="text" required>
-                        <span class="input-placeholder">Razon Social</span>
+                        {{ form.first_name }}
+                        <span class="input-placeholder">Razón Social</span>
                         <span class="input-icon"><i class="lni lni-handshake"></i></span>
                     </div>
                     <div class="set-input max-w">
-                        <input class="single-input" type="text" required>
+                        {{ form.id_number }}
                         <span class="input-placeholder">NIT</span>
                         <span class="input-icon"><i class="lni lni-license"></i></span>
                     </div>
                     <div class="set-input max-w">
-                        <input class="single-input" type="text" required>
+                        {{ form.last_name }}
                         <span class="input-placeholder">Representante Legal</span>
                         <span class="input-icon"><i class="lni lni-customer"></i></span>
                     </div>
-                    <div class="set-input max-w">
+                    {% comment %} <div class="set-input max-w">
                         <input class="single-input" type="text" required>
                         <span class="input-placeholder">Cedula Representante Legal</span>
                         <span class="input-icon"><i class="lni lni-license"></i></span>
-                    </div>
-                    <div class="register_icon">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-
+                    </div> {% endcomment %}
+                    <div class="set-input max-w">
+                        {{ form.contact_email }}
+                        <span class="input-placeholder">{{ form.contact_email.label }}</span>
+                        <span class="input-icon"><i class="lni lni-envelope"></i></span>
                     </div>
                 </div>
                 <div class="group_inputs group_inputs__column ">
-                    <h3 class="register-col-text fw-bold">Datos de Recursos Humanos</h3>
-                    <div class="set-input max-w">
+                    {% comment %} <h3 class="register-col-text fw-bold">Datos de Recursos Humanos</h3> {% endcomment %}
+                    {% comment %} <div class="set-input max-w">
                         <input class="single-input" type="text" required>
                         <span class="input-placeholder">Encargado Recur. Humanos</span>
                         <span class="input-icon"><i class="lni lni-customer"></i></span>
-                    </div>
+                    </div> {% endcomment %}
                     <div class="set-input max-w">
-                        <input class="single-input" type="text" required>
-                        <span class="input-placeholder">Correo Electronico</span>
-                        <span class="input-icon"><i class="lni lni-envelope"></i></span>
-                    </div>
-                    <div class="set-input max-w">
-                        <input class="single-input" type="text" required>
-                        <span class="input-placeholder">Telefono Contacto</span>
+                        {{ form.phone }}
+                        <span class="input-placeholder">{{ form.phone.label }}</span>
                         <span class="input-icon"><i class="lni lni-phone"></i></span>
                     </div>
                     <div class="set-input max-w">
-                        <input class="single-input" type="text" required>
-                        <span class="input-placeholder">Direccion</span>
-                       
-                        <span class="input-icon"><i class="lni lni-money-location"></i></span>
+                        {{ form.district }}
+                        <span class="input-placeholder">{{ form.district.label }}</span>
+                        <span class="input-icon"><i class="lni lni-home"></i></span>
                     </div>
-                    
+                    <div class="set-input max-w">
+                        {{ form.city }}
+                        <span class="input-placeholder">{{ form.city.label }}</span>
+                        <span class="input-icon"><i class="lni lni-home"></i></span>
+                    </div>
+                    <div class="set-input max-w">
+                        {{ form.address }}
+                        <span class="input-placeholder">{{ form.address.label }}</span>
+                        <span class="input-icon"><i class="lni lni-home"></i></span>
+                    </div>
                 </div>
                 <div class="group_inputs  group_inputs__column ">
-                    <h3 class="register-col-text fw-bold">Datos de Usuarios</h3>
+                    {% comment %} <h3 class="register-col-text fw-bold">Datos de Usuario</h3> {% endcomment %}
                     <div class="set-input max-w">
-                        <input class="single-input" type="text" required>
-                        <span class="input-placeholder">Nombre de Usuario</span>
+                        {{ form.username }}
+                        <span class="input-placeholder">{{ form.username.label }}</span>
                         <span class="input-icon"><i class="lni lni-user"></i></span>
                     </div>
                     <div class="set-input max-w">
-                        <input class="single-input" type="text" required>
-                        <span class="input-placeholder">Correo Electronico</span>
+                        {{ form.email }}
+                        <span class="input-placeholder">{{ form.email.label }}</span>
                         <span class="input-icon"><i class="lni lni-envelope"></i></span>
                     </div>
                     <div class="set-input max-w">
-                        <input class="single-input" type="text" required>
-                        <span class="input-placeholder">Contraseña</span>
+                        {{ form.password }}
+                        <span class="input-placeholder">{{ form.password.label }}</span>
                         <span class="input-icon"><i class="lni lni-lock"></i></span>
                     </div>
                     <div class="set-input max-w">
-                        <input class="single-input" type="text" required>
-                        <span class="input-placeholder">Repetir Contraseña</span>
+                        {{ form.repeat_pass }}
+                        <span class="input-placeholder">{{ form.repeat_pass.label }}</span>
                         <span class="input-icon"><i class="lni lni-lock"></i></span>
                     </div>
                 </div>
@@ -104,7 +107,7 @@
                 <span class="rigth_content__link--footer">Si ya tiene Usuario y Contraseña <br>ingrese <b><a class="text-dark fw-bold"
                             href="{% url 'users_app:login' %}">AQUI</a></b></span>
             </div>
-        </div> 
+        </form> 
       
     </section>
     {% comment %} {% include 'partials/_shape_divider.html' %} {% endcomment %}

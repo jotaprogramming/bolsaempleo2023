@@ -2,12 +2,18 @@
 
 {% block title %}
 <title>{{app_title}} | {{title_view}}</title>
-{% endblock title %} {% block content %}
-<section class="my-5">
-  {% include 'partials/_display.html' %}
-  <div class="d-flex flex-column">
+{% endblock title %}
+
+{% block contentfluid %}
+
+<section class="base__size">
+  {% include 'partials/_user_aside.html' %}
+  {% comment %} {% include 'partials/_display.html' %} {% endcomment %}
+  <div class="no-aside__container">
     <form method="POST" action="{% url 'users_app:userprofile_add' username %}" id="form">
-      <div class="">
+      {% csrf_token %}
+      {% include 'partials/_userprofile_form.html' %}
+      {% comment %} <div class="">
         {% csrf_token %}
         <div class="d-flex flex-column gap-2">
           <div class="">
@@ -70,10 +76,11 @@
       </div>
       <div class="">
         <button type="submit" class="btn btn-primary">Guardar</button>
-      </div>
-      
+      </div>       {% endcomment %}
     </form>
   </div>
+  
+  </form>
 </section>
 
-{% endblock content %}
+{% endblock contentfluid %}

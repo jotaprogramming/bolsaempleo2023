@@ -19,6 +19,7 @@ from users.utils import *
 class UserGroupForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserGroupForm, self).__init__(*args, **kwargs)
+        self.fields["code"].label = "Código"
         self.fields["group_name"].label = "Nombre"
         self.fields["description"].label = "Descripción"
 
@@ -26,11 +27,20 @@ class UserGroupForm(forms.ModelForm):
         model = UserGroups
 
         fields = [
+            "code",
             "group_name",
             "description",
         ]
 
         widgets = {
+            "code": forms.TextInput(
+                attrs={
+                    "placeholder": "Código del grupo",
+                    "class": "form-control",
+                    "minlength": "1",
+                    "maxlength": "50",
+                }
+            ),
             "group_name": forms.TextInput(
                 attrs={
                     "placeholder": "Nombre del grupo",
@@ -66,16 +76,16 @@ class PolicyForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserGroupForm, self).__init__(*args, **kwargs)
         self.fields["usergroup"].label = "Grupo de usuarios"
-        self.fields["restriction"].label = "Descripción(es)"
         self.fields["app"].label = "Aplicacion(es)"
+        self.fields["restriction"].label = "Descripción(es)"
 
     class Meta:
         model = Policies
 
         fields = [
             "usergroup",
-            "restriction",
             "app",
+            "restriction",
         ]
 
         widgets = {
@@ -85,9 +95,6 @@ class PolicyForm(forms.ModelForm):
                 }
             ),
         }
-
-    def clean(self):
-        datos = self.cleaned_data
 
 
 class FormDelete(forms.ModelForm):
@@ -188,6 +195,7 @@ class RoleForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(RoleForm, self).__init__(*args, **kwargs)
+        self.fields["code"].label = "Código"
         self.fields["role_name"].label = "Nombre"
         self.fields["description"].label = "Descripción"
 
@@ -195,12 +203,21 @@ class RoleForm(forms.ModelForm):
         model = Roles
 
         fields = [
+            "code",
             "role_name",
             "description",
             "restriction",
         ]
 
         widgets = {
+            "code": forms.TextInput(
+                attrs={
+                    "placeholder": "Código del rol",
+                    "class": "form-control",
+                    "minlength": "1",
+                    "maxlength": "50",
+                }
+            ),
             "role_name": forms.TextInput(
                 attrs={
                     "placeholder": "Nombre del rol",
@@ -240,7 +257,7 @@ class PolicyForm(forms.ModelForm):
         self.fields["app"].label = "Aplicación(es) (opcional)"
 
     class Meta:
-        model = Traits
+        model = Policies
 
         fields = [
             "usergroup",

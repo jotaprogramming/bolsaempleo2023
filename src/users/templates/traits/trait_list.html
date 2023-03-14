@@ -9,7 +9,7 @@
         type="button"
         class="btn btn-primary btn-center"
         name="createButtons"
-        id="{% url 'users_app:policy_add' %}"
+        id="{% url 'users_app:trait_add' %}"
       >
         <i class="lni lni-plus"></i>
         <span class="ms-2">Crear</span>
@@ -46,7 +46,7 @@
                 type="button"
                 class="btn btn-outline-primary btn-center"
                 name="editButtons"
-                id="{% url 'users_app:policy_edit' row.id %}"
+                id="{% url 'users_app:trait_edit' row.id %}"
               >
                 <i class="lni lni-pencil"></i>
               </button>
@@ -58,7 +58,7 @@
                 type="button"
                 class="btn btn-outline-danger btn-center"
                 name="deleteButtons"
-                id="{% url 'users_app:policy_delete' row.id %}"
+                id="{% url 'users_app:trait_delete' row.id %}"
               >
                 <i class="lni lni-trash-can"></i>
               </button>

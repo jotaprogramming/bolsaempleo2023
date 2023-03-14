@@ -54,6 +54,9 @@ class Apps(models.Model):
 
 
 class UserGroups(models.Model):
+    code = models.CharField(
+        _("user group code"), max_length=3, unique=True, null=False
+    )
     group_name = models.CharField(
         _("user group name"), max_length=50, unique=True, null=False
     )
@@ -104,6 +107,12 @@ class Policies(models.Model):
 
     def __str__(self):
         return "{}".format(self.usergroup.group_name)
+    
+    def get_restrictions(self):
+        return self.restriction.all()
+    
+    def get_apps(self):
+        return self.app.all()
 
     class Meta:
         verbose_name = _("policy")
@@ -111,6 +120,9 @@ class Policies(models.Model):
 
 
 class Roles(models.Model):
+    code = models.CharField(
+        _("role code"), max_length=3, unique=True, null=False
+    )
     role_name = models.CharField(_("role name"), max_length=50, unique=True, null=False)
     description = models.TextField(_("description"), null=False)
     restriction = models.ManyToManyField(

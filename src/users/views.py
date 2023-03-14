@@ -109,11 +109,13 @@ class UserGroupCreate(LoginRequiredMixin, generic.CreateView):
         return context
 
     def form_valid(self, form):
+        form.instance.code = str(form.instance.code).upper()
+        form.instance.group_name = str(form.instance.group_name).lower()
+
         objects = duplicate_usergroups(self, form)
         if objects > 0:
             warning_message(self.request, msg="El registro ya existe")
             return HttpResponseRedirect(reverse_lazy("users_app:usergroup_list"))
-        form.instance.group_name = str(form.instance.group_name).lower()
         return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
@@ -122,7 +124,7 @@ class UserGroupCreate(LoginRequiredMixin, generic.CreateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return self.render_to_response(ctx)
+        return HttpResponseRedirect(reverse_lazy("users_app:usergroup_list"))
 
 
 class UserGroupEditModal(LoginRequiredMixin, generic.UpdateView):
@@ -143,13 +145,15 @@ class UserGroupEditModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
+        form.instance.code = str(form.instance.code).upper()
+        form.instance.group_name = str(form.instance.group_name).lower()
+        form.instance.updated_at = timezone.now()
+
         objects = duplicate_usergroups(self, form)
         if objects > 0:
             warning_message(self.request, msg="El registro ya existe")
             return HttpResponseRedirect(reverse_lazy("users_app:usergroup_list"))
 
-        form.instance.group_name = str(form.instance.group_name).lower()
-        form.instance.updated_at = timezone.now()
         return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
@@ -220,12 +224,13 @@ class RestrictionCreate(LoginRequiredMixin, generic.CreateView):
         return context
 
     def form_valid(self, form):
-        # count_code, count_name = duplicate_restrictions(self, form)
-        # if count_code > 0 or count_name > 0:
-        #     warning_message(self.request, msg="El registro ya existe")
-        #     return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
         form.instance.code = str(form.instance.code).upper()
         form.instance.name = str(form.instance.name).lower()
+
+        count = duplicate_restrictions(self, form)
+        if count > 0:
+            warning_message(self.request, msg="El registro ya existe")
+            return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
         return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
@@ -255,14 +260,15 @@ class RestrictionEditModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        # count_code, count_name = duplicate_restrictions(self, form)
-        # if count_code > 0 or count_name > 0:
-        #     warning_message(self.request, msg="El registro ya existe")
-        #     return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
-
+        count = duplicate_restrictions(self, form)
         form.instance.code = str(form.instance.code).upper()
         form.instance.name = str(form.instance.name).lower()
         form.instance.updated_at = timezone.now()
+
+        if count > 0:
+            warning_message(self.request, msg="El registro ya existe")
+            return HttpResponseRedirect(reverse_lazy("users_app:restriction_list"))
+
         return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
@@ -406,12 +412,14 @@ class RoleCreate(LoginRequiredMixin, generic.CreateView):
         return context
 
     def form_valid(self, form):
-        # objects = duplicate_roles(self, form)
-        # if objects > 0:
-        #     warning_message(self.request, msg="El registro ya existe")
-        #     return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
-
+        form.instance.code = str(form.instance.code).upper()
         form.instance.role_name = str(form.instance.role_name).lower()
+
+        objects = duplicate_roles(self, form)
+        if objects > 0:
+            warning_message(self.request, msg="El registro ya existe")
+            return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
+
         return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
@@ -441,13 +449,15 @@ class RoleEditModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        # objects = duplicate_roles(self, form)
-        # if objects > 0:
-        #     warning_message(self.request, msg="El registro ya existe")
-        #     return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
-
+        form.instance.code = str(form.instance.code).upper()
         form.instance.role_name = str(form.instance.role_name).lower()
         form.instance.updated_at = timezone.now()
+
+        objects = duplicate_roles(self, form)
+        if objects > 0:
+            warning_message(self.request, msg="El registro ya existe")
+            return HttpResponseRedirect(reverse_lazy("users_app:role_list"))
+
         return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
@@ -489,7 +499,7 @@ class PolicyList(LoginRequiredMixin, generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        data = Policies.objects.order_by()
+        data = Policies.objects.get_nums()
         return data
 
     def get_context_data(self, **kwargs):
@@ -1119,7 +1129,7 @@ class RegisterView(UserLoggedMixin, generic.FormView):
 
 class RegisterStudentView(UserLoggedMixin, generic.FormView):
     model = User
-    form_class = RegisterCompany
+    form_class = RegisterStudent
     template_name = "users/register_student.html"
 
     def get_success_url(self):
@@ -1151,31 +1161,46 @@ class RegisterStudentView(UserLoggedMixin, generic.FormView):
         email = form.cleaned_data["email"]
         password = form.cleaned_data["password"]
 
-        last_name_split = last_name.split(" ")
-        cod_name = f"{first_name[0]}{last_name_split[0]}"
-        last_id = User.objects.filter(username__icontains=cod_name).order_by("-id")
-        user_id = int(last_id[0].id) if last_id.count() > 0 else 0
-        username = f"{cod_name}{user_id + 1}".lower()
+        try:
+            last_name_split = last_name.split(" ")
+            cod_name = f"{first_name[0]}{last_name_split[0]}"
+            last_id = User.objects.filter(username__icontains=cod_name).order_by("-id")
+            user_id = int(last_id[0].id) if last_id.count() > 0 else 0
+            username = f"{cod_name}{user_id + 1}".lower()
 
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password,
-            first_name=first_name,
-            last_name=last_name,
-            is_active=False,
-        )
-        UserProfile.objects.create(
-            user_id=user.id,
-            document_type=document_type,
-            id_number=id_number,
-            phone=phone,
-            email=contact_email,
-            address=address,
-            city=city,
-            about_me="",
-        )
-        return super().form_valid(form)
+            usergroup = UserGroups.objects.get(code__icontains="GRA")
+            role = Roles.objects.get(code__icontains="MEM")
+
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password,
+                first_name=first_name,
+                last_name=last_name,
+                is_active=False,
+            )
+            UserProfile.objects.create(
+                user=user,
+                document_type=document_type,
+                id_number=id_number,
+                phone=phone,
+                email=contact_email,
+                address=address,
+                city=city,
+                about_me="",
+            )
+            Traits.objects.create(
+                user=user,
+                usergroup=usergroup,
+                role=role,
+            )
+            return super().form_valid(form)
+        except Exception as exception:
+            message = "¡Oh no! Algo ocurrió. Por favor comuníquese con soporte para encontrar una solución"
+            # message = getattr(exception, "message", str(exception))
+            print(f"Error when registering the student: {exception}")
+            error_message(self.request, msg=message)
+            return HttpResponseRedirect(reverse_lazy("users_app:register_student"))
 
 
 class RegisterCompanyView(UserLoggedMixin, generic.FormView):
@@ -1214,6 +1239,9 @@ class RegisterCompanyView(UserLoggedMixin, generic.FormView):
             email = form.cleaned_data["email"]
             password = form.cleaned_data["password"]
 
+            usergroup = UserGroups.objects.get(code__icontains="COM")
+            role = Roles.objects.get(code__icontains="ADM")
+
             user = User.objects.create_user(
                 username=username,
                 email=email,
@@ -1232,13 +1260,17 @@ class RegisterCompanyView(UserLoggedMixin, generic.FormView):
                 city=city,
                 about_me="",
             )
-        except Exception as exception:
-            # message = getattr(exception, "message", str(exception))
-            error_message(
-                self.request,
-                msg="Ocurrió un problema interno. Comuníquese con nuestro equipo de soporte para obtener más información",
+            Traits.objects.create(
+                user=user,
+                usergroup=usergroup,
+                role=role,
             )
-            return HttpResponseRedirect(reverse_lazy("users_app:company_register"))
+        except Exception as exception:
+            message = "¡Oh no! Algo ocurrió. Por favor comuníquese con soporte para encontrar una solución"
+            # message = getattr(exception, "message", str(exception))
+            print(f"Error when registering the student: {exception}")
+            error_message(self.request, msg=message)
+            return HttpResponseRedirect(reverse_lazy("users_app:register_company"))
 
         return super().form_valid(form)
 

@@ -30,6 +30,70 @@
     position: relative;
     display: flex;
     border-radius: 10px; 
+    background-color: #F4893C;
+}
+.select_input{
+    width: 100%;
+    height: 40px;
+    position: relative;
+    display: flex;
+    border: 1px solid #F4893C;
+    border-radius: 10px;
+}
+.select_input::after{
+    content: '\25BC';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    padding: 0 1rem;
+    cursor: pointer;
+    pointer-events: none;
+    transition:.25s all ease;
+    display: flex;
+    align-items: center;
+    color: #d7d7d7;
+}
+.select_input:hover::after{
+    color: #F4893C;
+}
+
+.select_input__icon{
+    font-size: 18px;
+    padding: 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid #F4893C;
+    color: var(--orange);
+}
+.select_input__select{
+    width: 100%;
+    height: 99%;
+    appearance: none;
+    outline: 0;
+    border: none;
+    padding: 0 10px;
+    border-radius: 10px;
+    
+    
+}
+.selec_input__floating-text{
+    font-size: 12px;
+    color: var(--orange);
+    background-color: #fff;
+    position: absolute;
+    pointer-events: none;
+    left: 0;
+    height: 20px;
+    border-left:1px solid #F4893C;
+    border-right:1px solid #F4893C;
+    letter-spacing: 1px;
+    transform: translateX(50px) translateY(-10px);
+    padding: 0 10px;
+
+    
+
 }
 .single-input{
     width: 100%;
@@ -117,4 +181,47 @@
 .set-input__create--date span{
     padding-left: 130px;
     color: #c4c0c0;
+}
+
+.upload_files__icon{
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    gap: 10px;
+    background-color: var(--orange);
+    height: 40px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    color: #fff;
+    padding: 0 5px;
+}
+.upload_files__icon span{
+    /* background-color: orangered; */
+    display: flex;
+    align-items: center;
+}
+.upload_input__file{
+    width: 100%;
+    max-width: 300px;
+    height: 40px;
+    /* background-color: aqua; */
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+}
+.upload_files{
+    width: 100%;
+    border: 1px solid #d7d7d7;
+    border-right: none;
+    display: flex;
+    align-items: center;
+    /* background-color: yellow; */
+    pointer-events: none;
+    padding: 7px;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+}
+.upload_files::file-selector-button{
+    display: none;
+
 }

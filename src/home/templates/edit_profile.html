@@ -5,7 +5,7 @@
 {% endblock title %}
 
 
-{% block content %}
+{% block contentfluid %}
 <section class="base__size">
     <div class="aside__container d-none d-lg-block">
         <div class="aside-content">
@@ -33,36 +33,23 @@
     </div>
     <div class="no-aside__container">
         <div class="profile-content__container">
-            <!-- <div class="dropdown d-block d-lg-none">
-                <button class=" dropdown-toggle navy-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Navega dandole Aqui
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                        <a class="dropdown-item" href="/profile">Perfil</a>
-                        
-
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="/postulations">Postulaciones</a>
-                    </li>
-                </ul>
-            </div> -->
             <div class="profile__info">
-
                 <h3 class="profile__info-title m-0">perfil</h3>
-                <!-- <div class="img-card__info">
+                {% comment %}
+                <div class="img-card__info">
                     <div class="img-content__info">
                         <img src="{% static 'core/assets/img/montains.jpg' %}" alt="">
                     </div>
                     <div class="curriculum-title">
                         <p class="curriculum-title__title m-0">ingenieria de sistemas</p>
                         <p class="curriculum-title__desc m-0">profesional TICs</p>
-                        
+
                     </div>
                     <button class="update-img">Actualizar</button>
-                  
-                </div> -->
+
+                </div>
+                {% endcomment %}
+
                 <div class="profile-info__data">
                     <div class="own-data">
                         <h4 class="data-title">Informacion Personal</h4>
@@ -75,15 +62,31 @@
                                 </div>
                                 <div class="set-input max-w ">
                                     <input class="single-input" type="text" required>
-                                    <span class="input-placeholder">Numero Identificacion</span>
+                                    <span class="input-placeholder">Correo Electronico</span>
+                                    <span class="input-icon"><i class="lni lni-envelope"></i></span>
+                                </div>
+                            </div>
+                            <div class="data-info__row">
+                                <div class="select_input max-w">
+                                    <span class="select_input__icon"><i class="lni lni-postcard"></i></span>
+                                    <select class="select_input__select" name="" id="dni-type">
+                                        <option value="dni" selected>Cedula</option>
+                                        <option value="not-dni">Cedula Extranjera</option>
+                                        <option value="passport">Pasaporte</option>
+                                    </select>
+                                    <label class="selec_input__floating-text" for="dni-type">Tipo Identificacion</label>
+                                </div>
+                                <div class="set-input max-w ">
+                                    <input class="single-input" type="text" required>
+                                    <span class="input-placeholder">Identificacion</span>
                                     <span class="input-icon"><i class="lni lni-license"></i></span>
                                 </div>
                             </div>
                             <div class="data-info__row">
                                 <div class="set-input max-w ">
                                     <input class="single-input" type="text" required>
-                                    <span class="input-placeholder">Correo Electronico</span>
-                                    <span class="input-icon"><i class="lni lni-envelope"></i></span>
+                                    <span class="input-placeholder">Celular</span>
+                                    <span class="input-icon"><i class="lni lni-whatsapp"></i></span>
                                 </div>
                                 <div class="set-input max-w ">
                                     <input class="single-input" type="text" required>
@@ -92,43 +95,50 @@
                                 </div>
                             </div>
                             <div class="data-info__row">
-                                <div class="set-input max-w ">
-                                    <input class="single-input" type="text" required>
-                                    <span class="input-placeholder">Telefono</span>
-                                    <span class="input-icon"><i class="lni lni-phone"></i></span>
+                                <div class="select_input max-w">
+                                    <span class="select_input__icon"><i class="lni lni-money-location"></i></span>
+                                    <select class="select_input__select" name="" id="location">
+                                        <option value="dni" selected>Bucaramanga</option>
+                                        <option value="not-dni">San Gil</option>
+                                        <option value="passport">Barrancabermeja</option>
+                                    </select>
+                                    <label class="selec_input__floating-text" for="location">Localidad</label>
                                 </div>
                                 <div class="set-input max-w ">
                                     <input class="single-input" type="text" required>
-                                    <span class="input-placeholder">whatever</span>
-                                    <span class="input-icon"><i class="lni lni-phone"></i></span>
+                                    <span class="input-placeholder">Direccion</span>
+                                    <span class="input-icon"><i class="lni lni-direction"></i></span>
                                 </div>
-                               
-                            </div>
-                            <div class="data-info__row data-info__row--select">
-                                <div class=" ">
-                                    <input type="file"  id="inputGroupFile01">
-                                  </div>
                             </div>
                             <div class="data-info__row">
                                 <div class="group-data group-data__about">
                                     <p class="group-data__title m-0">sobre mi</p>
-                                    <textarea name="" id="" cols="20" rows="4" class="texty">
-
-                                        </textarea>
+                                    <textarea name="" id="" cols="20" rows="4" class="texty"></textarea>
                                 </div>
                             </div>
-                            <div class="data-info__btn">
-                                <a href="/edit_profile">
-                                    <button class="data-info__btn--edit">Actualizar</button>
-                                </a>
+                            <div class="data-info__row">
+                                <div class="group-data group-data__cv">
+                                    <p class="group-data__title group-data__title--small m-0">Hoja de Vida</p>
+                                    <div class="upload_input__file">
+                                        <input class="upload_files" type="file" name="" id="upload-curriculum">
+                                        <label class="upload_files__icon" for="upload-curriculum">Cargar 
+                                            <span><i class="lni lni-arrow-up-circle"></i>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="data-info__row data-info__row--end">
+                                <button class="data-info__btn--update" type="submit">Actualizar</button>
+                            </div>
+
                         </div>
                     </div>
-                  
+
 
                 </div>
             </div>
         </div>
     </div>
 </section>
-{% endblock content %}
+{% endblock contentfluid %}

@@ -1,5 +1,22 @@
+.w-90{
+    max-width: 90%;
+}
+
+.bg-or{
+    background-color: orangered;
+}
 .account-data{
     padding-bottom: 1rem;
+}
+.btn_edit{
+    width: 100%;
+    max-width: 150px;
+    height: 40px;
+    background-color: var(--orange);
+    outline: 0;
+    border: 0;
+    border-radius: 20px 5px;
+    color: #fff;
 }
 .curriculum-title{
     width: 60%;
@@ -33,7 +50,8 @@
     height: auto;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.5rem;
+    
    
     /* background-color: yellow; */
 }
@@ -46,36 +64,37 @@
 .data-info__btn--edit{
     width: 100px;
     height: 100%;
+    max-height: 40px;
     border-radius:20px 5px ;
     color: #fff;
     background-color: var(--orange);
     border: none;
-    
 }
-.data-info__btn--change{
+.data-info__btn--update{
     width: auto;
     height: 100%;
-    border-radius:20px 5px ;
+    border-radius:20px 5px;
     color: #fff;
     background-color: var(--orange);
     border: none;
     padding: 6px 12px;
 }
 .data-info__row{
+    width: 100%;
     display: flex;
-    flex-direction: column;
+    justify-content: space-evenly;
     gap: 20px;
+
 }
-.data-info__row--select{
-    
-  
-    
+.data-info__row--end{
+    width: 100%;
+    justify-content: space-between;
 }
+
 .group-data{
     width: 100%;
     max-width: 300px;
     border-radius: 5px;
-    box-shadow: 3px 3px 5px 2px #f7c4a06d;
     border: none;
     display: flex;
     flex-direction: column;
@@ -84,6 +103,14 @@
 }
 .group-data__about{
     min-width: 100%;
+
+}
+.group-data__btn{
+    text-align: right;
+}
+.group-data__cv{
+    min-width: 100%;
+    display: flex;
 }
 .group-data__desc{
     font-weight: 400;
@@ -99,6 +126,11 @@
     font-size: 16px;
     line-height: 20px;
     text-transform: capitalize;   
+}
+.group-data__title--small{
+    font-size: 12px;
+    padding-left:10px ;
+
 }
 
 .img-card__info{
@@ -193,17 +225,7 @@
 }
 
 
-@media screen and (min-width:600px) {
-    .data-info{
-       
-    }
-    .data-info__row{
-        flex-direction: row;
-        justify-content: space-evenly;
-      
-        
-    }
-}
+
 
 
 .profile-content{
@@ -406,9 +428,11 @@
 
 }
 .texty{
-    width: 100%;
-    height: 60px;
+    width: 95%;
+    height: 100px;
     border: 1px solid #d7d7d7;
+    resize: none;
+    border-radius: 10px;
 }
 .cv{
     font-weight: 600;

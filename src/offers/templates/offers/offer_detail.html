@@ -14,6 +14,7 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between mb-3">
                     <div class="d-flex flex-column gap-3">
+                        {% if object.get_tags %}
                         <span class="d-flex text-black-50" style="height: 2rem;">
                             {% for tag in object.get_tags %}
                             <div class="single__tag single__tag--yellow" style="margin-right: -33px">
@@ -21,6 +22,7 @@
                             </div>
                             {% endfor %}
                         </span>
+                        {% endif %}
                         <h4 class="fs-4 m-0">{{ object.title }}</h4>
                     </div>
                     <div>

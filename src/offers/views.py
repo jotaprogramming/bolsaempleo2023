@@ -101,8 +101,9 @@ class OfferDetail(LoginRequiredMixin, generic.DetailView):
         context = super(OfferDetail, self).get_context_data(**kwargs)
         obj = self.get_object()
         offers = Offers.objects.exclude(id=obj.id).filter(
-            Q(tags__in=obj.get_tags())
-        )[:2]
+            Q(tags__in=obj.get_tags()),
+            deleted_at=None,
+        ).order_by("-created_at")[:2]
         pprint(offers)
         context["offer"] = True
         context["offers"] = offers

@@ -25,6 +25,7 @@
             <th>Salario</th>
             <th>Modalidad</th>
             <th>Estado</th>
+            <th>Detalle</th>
             <th>Editar</th>
             <th>Eliminar</th>
           </tr>
@@ -47,6 +48,15 @@
               {% endif %}
             </td>
             <td>
+              <a
+                href="{% url 'offer_app:offer_detail' row.id %}"
+                role="button"
+                class="btn btn-outline-secondary btn-center"
+              >
+                <i class="lni lni-eye"></i>
+              </a>
+            </td>
+            <td>
               {% if not row.deleted_at %}
               <button
                 type="button"
@@ -54,7 +64,7 @@
                 name="editButtons"
                 id="{% url 'offer_app:offer_edit' row.id %}"
               >
-              <i class="lni lni-pencil"></i>
+                <i class="lni lni-pencil"></i>
               </button>
               {% endif %}
             </td>
@@ -66,7 +76,7 @@
                 name="deleteButtons"
                 id="{% url 'offer_app:offer_delete' row.id %}"
               >
-              <i class="lni lni-trash-can"></i>
+                <i class="lni lni-trash-can"></i>
               </button>
               {% endif %}
             </td>

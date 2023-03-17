@@ -1,23 +1,64 @@
-<div class="aside__container d-none d-lg-block">
-    <div class="aside-content">
-         <div class="sub-nav">
-             <h5 class="m-0 sub-nav__title">Lorem Estudiante</h5>
-             <div class="sub-nav__items">
-                 <ul class="m-0 p-0">
-                     <li>
-                         <a href="">Perfil</a>
-                     </li>
-                    
-                     <li>
-                         <a href="">Postulaciones</a>
-                     </li>
-                    
-                     <li>
-                         <a href="/notifications">Notificaciones</a>
-                     </li>
-                   
-                 </ul>
-             </div>
-         </div>
+{% load format_numbers %}
+
+<aside
+  class="d-flex flex-column gap-4 position-fixed top-0 bg-white border-end"
+  style="width: 300px; height: 100vh; z-index: 2; padding: 150px 2rem 2rem 2rem"
+>
+  <div class="row">
+    <h6 class="fw-bold">Lorem</h6>
+    <hr />
+    <div class="list-group list-group--custom rounded-0">
+      <a 
+        href="{% url 'offer_app:offer_list' %}"
+        class="list-group-item list-group-item-action border-0 {% if offer %}active{% endif %}"
+      >
+        Ofertas
+        {% if offer %}
+        <br />
+        <small class="text-black-50">Detalle...</small>
+        {% endif %}
+      </a>
+      <a 
+        href="{% url 'users_app:userprofile' request.user.username %}"
+        class="list-group-item list-group-item-action border-0 {% if profile %}active{% endif %}"
+      >
+        Perfil
+      </a>
+      <a 
+        href="#"
+        class="list-group-item list-group-item-action border-0 {% if notification %}active{% endif %}"
+      >
+        Notificaciones
+      </a>
     </div>
- </div>
+  </div>
+  {% if offers %}
+  <div class="row">
+    <h6 class="fw-bold">Ofertas similares</h6>
+    <hr />
+    {% for offer in offers %}
+    <div class="card mb-3">
+      <div class="card-body">
+        <p class="m-0">
+          <strong>{{ offer.title }}</strong>
+          <br />
+          <small class="text-muted">{{ offer.city }}</small>
+          <br />
+          <span class="text-orange">
+            {{ offer.currency }}
+            {{ offer.salary|currency_format }}
+            {{ offer.payperiod }}
+          </span>
+          <a href="{% url 'offer_app:offer_detail' offer.id %}" class="stretched-link"></a>
+        </p>
+      </div>
+    </div>
+    {% endfor %}
+    <div>
+      <a href="{% url 'offer_app:offer_list' %}" class="text-orange">
+        Ver todas las ofertas
+      </a>
+    </div>
+  </div>
+  {% endif %}
+</aside>

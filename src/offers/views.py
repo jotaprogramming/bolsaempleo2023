@@ -43,6 +43,7 @@ from jobboard.utils import *
 app_title = _("Ofertas")
 offer_title = _("Ofertas")
 offer_desc = _("Ofertas")
+offer_detail_title = _("Detalle")
 
 
 # OFFERS
@@ -89,6 +90,26 @@ class OfferCreate(LoginRequiredMixin, generic.CreateView):
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
         return self.render_to_response(ctx)
+
+
+class OfferDetail(LoginRequiredMixin, generic.DetailView):
+    login_url = "/login"
+    model = Offers
+    template_name = "offers/offer_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(OfferDetail, self).get_context_data(**kwargs)
+        obj = self.get_object()
+        offers = Offers.objects.exclude(id=obj.id).filter(
+            Q(tags__in=obj.get_tags())
+        )[:2]
+        pprint(offers)
+        context["offer"] = True
+        context["offers"] = offers
+        context["app_title"] = app_title
+        context["title_view"] = offer_detail_title
+        context["description_view"] = offer_desc
+        return context
 
 
 class OfferModalCreate(LoginRequiredMixin, generic.CreateView):

@@ -112,3 +112,22 @@ input[type="color"]:-webkit-autofill,
     --bs-pagination-active-bg: var(--burnt-orange) !important;
     --bs-pagination-active-border-color: var(--burnt-orange) !important;
 }
+
+.list-group {
+    --bs-list-group-active-bg: var(--orange) !important;
+    --bs-list-group-active-border-color: var(--orange) !important;
+}
+
+.list-group--custom {
+    border-left: 4px solid var(--bs-list-group-active-border-color) !important;
+}
+
+.list-group--custom .list-group-item.active {
+    color: var(--orange) !important;
+    background-color: transparent !important;
+}
+
+.list-group--custom .list-group-item.active:hover {
+    color: var(--bs-list-group-action-hover-color) !important;
+    background-color: var(--bs-list-group-action-hover-bg) !important;
+}

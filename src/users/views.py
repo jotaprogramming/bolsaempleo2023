@@ -326,11 +326,11 @@ class AppList(LoginRequiredMixin, generic.ListView):
                 if name_cache:
                     name_cache.update(route=url["route"], updated_at=timezone.now())
                     continue
-                else:
-                    route_cache = objects.filter(route__exact=url["route"])
-                    if route_cache:
-                        route_cache.update(name=url["name"], updated_at=timezone.now())
-                        continue
+                route_cache = objects.filter(route__exact=url["route"])
+                if route_cache:
+                    route_cache.update(name=url["name"], updated_at=timezone.now())
+                    continue
+
                 app = Apps(name=url["name"], route=url["route"], description="App")
                 app.save()
 

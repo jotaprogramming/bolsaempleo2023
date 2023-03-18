@@ -12,21 +12,27 @@ def get_url_names():
     list_of_url_names = list()
     list_of_all_urls = list()
     for name, app in apps.app_configs.items():
+        # print("🐍 File: jobboard/utils.py | Line: 15 | get_url_names ~ app",app.name)
         mod_to_import = f"{name}.urls"
         try:
             urls = getattr(importlib.import_module(mod_to_import), "urlpatterns")
             # urls = importlib.import_module(mod_to_import)
             # pprint(urls)
-            list_of_all_urls.extend(urls)
+            list_of_all_urls.append({
+                "app": app.name,
+                "urls": urls
+            })
         except ImportError as ex:
             # is an app without urls
             pass
-    for url in list_of_all_urls:
-        list_of_url_names.append(
-            {
-                "name": url.name,
-                "route": url.pattern._route,
-            }
-        )
+    for row in list_of_all_urls:
+        for url in row["urls"]:
+            app = row["app"]
+            list_of_url_names.append(
+                {
+                    "name": f"{app}_app:{url.name}",
+                    "route": url.pattern._route,
+                }
+            )
 
     return list_of_url_names

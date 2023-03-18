@@ -18,6 +18,68 @@
 @import url('./moderator.css');
 
 
+.main_content__container{
+    width: 100%;
+    height: 100%;
+    background-color: lime;
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    grid-template-areas: "aside main";
+    position: relative;
+
+}
+.aside_{
+    grid-area: aside;
+    width: 250px;
+    height: 100%;
+    background-color: lightcoral;
+    padding-top: 64px;
+    
+}
+.conty_{
+    grid-area: main;
+    width: 100%;
+    height: 100%;
+    background-color: lightseagreen;
+}
+
+.container_grid{
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    /* background-color: yellow; */
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    grid-template-rows: 60px 1fr;
+    grid-template-areas: 
+    "header header"
+    "aside main";
+}
+.container_grid__header{
+    grid-area: header;
+    width: 100%;
+    height: 60px;
+    background-color: lightseagreen;
+    position: fixed;
+    top: 0;
+}
+.container_grid__aside{
+    grid-area: aside;
+    width: 250px;
+    height: 100%;
+    /* background-color: lightsalmon; */
+    
+    position: fixed;
+    top: 60px;
+    box-shadow: 4px 5px 3px #f6f3f3;
+
+}
+.container_grid__body{
+    grid-area: main;
+    width: 100%;
+    height: 100%;
+    /* background-color: lightgreen; */
+}
 .new_publish__content{
     width: 100%;
     height: 100%;
@@ -216,10 +278,9 @@
 }
 
 .container-grid{
-    display: grid;
-    grid-template-areas:
-     "header"
-     "main";
+   position: relative;
+   width: 100%;
+   height: 100%;
 }
 .header-container{
     grid-area: header;

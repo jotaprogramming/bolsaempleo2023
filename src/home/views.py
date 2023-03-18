@@ -73,6 +73,17 @@ class ProfileCompanyView(generic.TemplateView):
         return context
     
     
+class ProfileStudentView(generic.TemplateView):
+    profile_url = '/profile_student'
+    template_name='profile_student.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super(ProfileStudentView, self).get_context_data(**kwargs)
+        context["app_title"] = profile_title
+        context["title_view"] = profile_view
+        return context
+    
+    
 class NotificationsView(generic.TemplateView):
     profile_url = '/notifications'
     template_name='notifications.html'

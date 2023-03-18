@@ -1,4 +1,4 @@
-{% extends 'core/base.html' %} {% load static %} 
+{% extends 'core/base.html' %} {% load static %}
 {% block title %}
 <title>{{app_title}} | {{title_view}}</title>
 {% endblock title %}
@@ -11,7 +11,7 @@
             <div class="register_header">
                 <div class="header_link__back">
                     <i class="lni lni-arrow-left-circle"></i>
-                    <a href="{% url 'users_app:register_choices' %}"> 
+                    <a href="{% url 'users_app:register_choices' %}">
                         Volver
                     </a>
                 </div>
@@ -19,70 +19,72 @@
                     <h3 class="right_content__title text-uppercase text-center">{{desciption_view}}</h3>
                 </div>
             </div>
-                <div class="register_body">
-                    <div class="group_inputs ">
-                        <div class="set-input max-w">
-                            <input class="single-input" type="text" required>
-                            <span class="input-placeholder">Nombres</span>
-                            <span class="input-icon"><i class="lni lni-handshake"></i></span>
-                        </div>
-                        <div class="set-input max-w">
-                            <input class="single-input" type="text" required>
-                            <span class="input-placeholder">Apellidos</span>
-                            <span class="input-icon"><i class="lni lni-handshake"></i></span>
-                        </div>
-                        <div class="set-input max-w">
-                            <input class="single-input" type="text" required>
-                            <span class="input-placeholder">Numero Identificacion</span>
-                            <span class="input-icon"><i class="lni lni-license"></i></span>
-                        </div>
-                        <div class="set-input max-w">
-                            <input class="single-input" type="text" required>
-                            <span class="input-placeholder">Telefono Contacto</span>
-                            <span class="input-icon"><i class="lni lni-phone"></i></span>
-                        </div>
-                        <div class="register_icon">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-    
-                        </div>
+            <div class="register_body">
+                <div class="group_inputs ">
+                    <div class="set-input max-w">
+                        <input class="single-input" type="text" required>
+                        <span class="input-placeholder">Nombres</span>
+                        <span class="input-icon"><i class="lni lni-handshake"></i></span>
                     </div>
-                    <div class="group_inputs group_inputs__column ">
-                        <div class="set-input max-w">
-                            <input class="single-input" type="text" required>
-                            <span class="input-placeholder">Correo Institucional</span>
-                            <span class="input-icon"><i class="lni lni-envelope"></i></span>
-                        </div>
-                        <div class="set-input max-w">
-                            <input class="single-input" type="text" required>
-                            <span class="input-placeholder">Correo Personal</span>
-                            <span class="input-icon"><i class="lni lni-envelope"></i></span>
-                        </div>
-                        <div class="set-input max-w">
-                            <input class="single-input" type="password" required>
-                            <span class="input-placeholder">Contraseña</span>
-                            <span class="input-icon"><i class="lni lni-key"></i></span>
-                        </div>
-                        <div class="set-input max-w">
-                            <input class="single-input" type="password" required>
-                            <span class="input-placeholder">Repetir Contraseña</span>
-                           
-                            <span class="input-icon"><i class="lni lni-lock"></i></span>
-                        </div>
-                        
+                    <div class="set-input max-w">
+                        <input class="single-input" type="text" required>
+                        <span class="input-placeholder">Apellidos</span>
+                        <span class="input-icon"><i class="lni lni-handshake"></i></span>
+                    </div>
+                    <div class="set-input max-w">
+                        <input class="single-input" type="text" required>
+                        <span class="input-placeholder">Numero Identificacion</span>
+                        <span class="input-icon"><i class="lni lni-license"></i></span>
+                    </div>
+                    <div class="set-input max-w">
+                        <input class="single-input" type="text" required>
+                        <span class="input-placeholder">Telefono Contacto</span>
+                        <span class="input-icon"><i class="lni lni-phone"></i></span>
+                    </div>
+                    <div class="register_icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+
                     </div>
                 </div>
-                <button class="normal_btn my-3" type="submit" id="btn_save">Registrarse</button>
-            
-            <div class=" register_footer  text-center ">
-                
-                <span class="rigth_content__link--footer">Si ya tiene Usuario y Contraseña <br>ingrese <b><a class="text-dark fw-bold"
-                            href="{% url 'users_app:login' %}">AQUI</a></b></span>
+                <div class="group_inputs group_inputs__column ">
+                    <div class="set-input max-w">
+                        <input class="single-input" type="text" required>
+                        <span class="input-placeholder">Correo Institucional</span>
+                        <span class="input-icon"><i class="lni lni-envelope"></i></span>
+                    </div>
+                    <div class="set-input max-w">
+                        <input class="single-input" type="text" required>
+                        <span class="input-placeholder">Correo Personal</span>
+                        <span class="input-icon"><i class="lni lni-envelope"></i></span>
+                    </div>
+                    <div class="set-input max-w">
+                        <input class="single-input" type="password" required>
+                        <span class="input-placeholder">Contraseña</span>
+                        <span class="input-icon"><i class="lni lni-key"></i></span>
+                    </div>
+                    <div class="set-input max-w">
+                        <input class="single-input" type="password" required>
+                        <span class="input-placeholder">Repetir Contraseña</span>
+
+                        <span class="input-icon"><i class="lni lni-lock"></i></span>
+                    </div>
+
+                </div>
             </div>
-        </div> 
-      
+            <button class="normal_btn my-3" type="submit" id="btn_save">Registrarse</button>
+
+            <div class=" register_footer  text-center ">
+
+                <span class="rigth_content__link--footer">Si ya tiene Usuario y Contraseña <br>ingrese  <b><a class="text-dark fw-bold" href="{% url 'users_app:login' %}">
+                            AQUI
+                        </a></b>
+                </span>
+            </div>
+        </div>
+
     </section>
     {% comment %} {% include 'partials/_shape_divider.html' %} {% endcomment %}
-  </article>
+</article>
 {% endblock contentfluid %}

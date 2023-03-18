@@ -582,10 +582,10 @@ class RegisterCompany(RegisterForm):
     )
     address = forms.CharField(
         label=_("Dirección"),
-        required=False,
+        required=True,
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Dirección",
+                # "placeholder": "Dirección",
                 "class": "single-input",
             }
         ),

@@ -26,6 +26,7 @@ from django.db.models import (
     Max,
 )
 from django.utils.translation import gettext as _
+from django.core import signing
 
 # EXTRA MODULES
 import sweetify
@@ -33,8 +34,8 @@ import sweetify
 # PROJECT MODULES
 from offers.forms import *
 from offers.models import *
-from offers.utils import *
 from core.utils import *
+from users.models import *
 from users.forms import FormDelete
 from jobboard.utils import *
 
@@ -97,14 +98,34 @@ class OfferDetail(LoginRequiredMixin, generic.DetailView):
     model = Offers
     template_name = "offers/offer_detail.html"
 
+    def get_object(self):
+        slug = self.kwargs.get("slug", "")
+        slug_split = slug.split("-")
+        split_pk = slug_split[-1]
+        # str_pk = base64_to_string(f"{split_pk}")
+        str_pk = split_pk
+
+        return self.model.objects.get(pk=str_pk)
+
     def get_context_data(self, **kwargs):
         context = super(OfferDetail, self).get_context_data(**kwargs)
         obj = self.get_object()
-        offers = Offers.objects.exclude(id=obj.id).filter(
-            Q(tags__in=obj.get_tags()),
-            deleted_at=None,
-        ).order_by("-created_at")[:2]
-        pprint(offers)
+        offers = (
+            Offers.objects.exclude(id=obj.id)
+            .filter(
+                Q(tags__in=obj.get_tags()),
+                deleted_at=None,
+            )
+            .order_by("-created_at")[:2]
+        )
+
+        if not self.request.user.is_staff:
+            user = self.request.user
+            usergroups = Traits.objects.filter(
+                user=user, usergroup__code__icontains="COM"
+            )
+            context["usergroups"] = usergroups
+
         context["offer"] = True
         context["offers"] = offers
         context["app_title"] = app_title

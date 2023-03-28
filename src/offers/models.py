@@ -12,6 +12,8 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.template.defaultfilters import slugify
 
+from .utils import string_to_base64
+
 
 # Create your models here.
 class Tags(models.Model):
@@ -33,7 +35,7 @@ class Requirements(models.Model):
 
     def __str__(self):
         return "{}".format(self.name)
-    
+
     def slug(self):
         return slugify(self.name)
 
@@ -197,7 +199,10 @@ class Offers(models.Model):
         return "{}".format(self.title)
 
     def slug(self):
-        return slugify(self.title)
+        # _b = string_to_base64(str(self.pk))
+        _b = self.pk
+        _field = f"{self.title} {_b}"
+        return slugify(_field)
 
     def get_requirements(self):
         if self.requirements:

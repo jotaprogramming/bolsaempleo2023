@@ -73,7 +73,16 @@
                 <p>{{requirement}}: Sí</p>
                 {% endfor %}
                 {% endif %}
+                {% if request.user.is_staff %}
+                <a class="btn btn-primary rounded-pill px-4" role="button">Editar</a>
                 <a class="btn btn-primary rounded-pill px-4" role="button">Aplicar</a>
+                {% else %}
+                {% if usergroups %}
+                <a class="btn btn-primary rounded-pill px-4" role="button">Editar</a>
+                {% else %}
+                <a class="btn btn-primary rounded-pill px-4" role="button">Aplicar</a>
+                {% endif %}
+                {% endif %}
             </div>
         </div>
     </div>

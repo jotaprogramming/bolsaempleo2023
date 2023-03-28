@@ -11,7 +11,7 @@ urlpatterns = [
     # OFFERS
     path("list", OfferList.as_view(), name="offer_list"),
     path("create", OfferCreate.as_view(), name="offer_add"),
-    path("detail/<int:pk>", OfferDetail.as_view(), name="offer_detail"),
+    path("detail/<slug:slug>", OfferDetail.as_view(), name="offer_detail"),
     path("modal/create", OfferModalCreate.as_view(), name="offer_modal_add"),
     path("modal/edit/<int:pk>", OfferEditModal.as_view(), name="offer_edit"),
     path("modal/delete/<int:pk>", OfferDeleteModal.as_view(), name="offer_delete"),

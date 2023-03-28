@@ -1,6 +1,12 @@
-{% extends 'core/base.html' %} {% load static %} {% block title %}
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crypto_url %}
+
+{% block title %}
 <title>{{app_title}} | {{title_view}}</title>
-{% endblock title %} {% block content %}    
+{% endblock title %}
+
+{% block content %}    
 <section class="my-5">
   {% include 'partials/_display.html' %}
   <div class="row gy-3 mt-3">
@@ -49,7 +55,7 @@
             </td>
             <td>
               <a
-                href="{% url 'offer_app:offer_detail' row.id %}"
+                href="{% url 'offer_app:offer_detail' row.slug %}"
                 role="button"
                 class="btn btn-outline-secondary btn-center"
               >

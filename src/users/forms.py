@@ -552,7 +552,7 @@ class RegisterForm(forms.ModelForm):
             self.add_error("repeat_pass", _(f"Contraseña inválida"))
 
 
-class RegisterCompany(RegisterForm):
+class RegisterCompanyForm(RegisterForm):
     id_number = forms.CharField(
         label=_("Número de identidad"),
         required=True,
@@ -612,7 +612,7 @@ class RegisterCompany(RegisterForm):
     )
 
 
-class RegisterStudent(RegisterForm):
+class RegisterStudentForm(RegisterForm):
     document_type = forms.ModelChoiceField(
         queryset=DocumentType.objects.all(),
         label=_("Tipo de documento"),

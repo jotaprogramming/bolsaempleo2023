@@ -1129,7 +1129,7 @@ class RegisterView(UserLoggedMixin, generic.FormView):
 
 class RegisterStudentView(UserLoggedMixin, generic.FormView):
     model = User
-    form_class = RegisterStudent
+    form_class = RegisterStudentForm
     template_name = "users/register_student.html"
 
     def get_success_url(self):
@@ -1205,7 +1205,7 @@ class RegisterStudentView(UserLoggedMixin, generic.FormView):
 
 class RegisterCompanyView(UserLoggedMixin, generic.FormView):
     model = User
-    form_class = RegisterCompany
+    form_class = RegisterCompanyForm
     template_name = "users/register_company.html"
 
     def get_success_url(self):

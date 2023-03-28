@@ -1,14 +1,14 @@
 /* STYLES FOR PARTIALS */
 
-.burger-menu{
+.burger-menu {
     margin: .5rem;
 }
 
-.search-container{
+.search-container {
     max-width: 40rem;
 }
 
-.pop-up-position{
+.pop-up-position {
     position: fixed;
     top: 5rem;
     right: 0;
@@ -32,7 +32,7 @@
     min-height: 1rem;
 }
 
-.pop-up-position .alert > *{
+.pop-up-position .alert>* {
     font-size: 14px;
 }
 
@@ -52,9 +52,8 @@
 
 /* Style for TAGs */
 
-   
 
-.single__tag{
+.single__tag {
     width: 130px;
     min-width: 130px;
     height: 100%;
@@ -63,26 +62,37 @@
     justify-content: center;
     clip-path: polygon(75% 0%, 100% 50%, 75% 100%, 0% 100%, 25% 50%, 0% 0%);
 }
-.single__tag--yellow{
+
+.single__tag--yellow,
+.tag-group .single__tag:nth-child(1) {
     background-color: #E9C237;
 }
-.single__tag--blue{
+
+.single__tag--blue,
+.tag-group .single__tag:nth-child(2) {
     background-color: #34B9C1;
     margin-left: -33px;
 }
-.single__tag--green{
+
+.single__tag--green,
+.tag-group .single__tag:nth-child(3) {
     background-color: #5DB63D;
     margin-left: -33px;
 }
-.single__tag--darkblue{
+
+.single__tag--darkblue,
+.tag-group .single__tag:nth-child(4) {
     margin-left: -33px;
     background-color: #4853BA;
 }
-.single__tag--purple{
+
+.single__tag--purple,
+.tag-group .single__tag:nth-child(5) {
     margin-left: -33px;
     background-color: #943FC8;
 }
-.tag{
+
+.tag {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -97,7 +107,7 @@
 }
 
 @media (max-width:475px) {
-    .navbar-brand{
+    .navbar-brand {
         /* background-color: red !important; */
         display: none !important;
         /* opacity: 0; */

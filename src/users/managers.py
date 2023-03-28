@@ -10,3 +10,4 @@ class PolicyManager(models.Manager):
             num_restrictions=Count("restriction", distinct=True),
             num_apps=Count("app", distinct=True),
         ).order_by("id")
+        

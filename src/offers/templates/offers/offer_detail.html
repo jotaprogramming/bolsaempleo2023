@@ -15,12 +15,14 @@
                 <div class="d-flex justify-content-between mb-3">
                     <div class="d-flex flex-column gap-3">
                         {% if object.get_tags %}
-                        <span class="d-flex text-black-50" style="height: 2rem;">
-                            {% for tag in object.get_tags %}
-                            <div class="single__tag single__tag--yellow" style="margin-right: -33px">
-                                <p class="tag text-capitalize m-0">{{ tag }}</p>
-                            </div>
-                            {% endfor %}
+                        <span class="d-flex text-black-50 tag-group" style="height: 2rem">
+                        {% for tag in object.get_tags %}
+                        <div
+                            class="single__tag single__tag--yellow"
+                        >
+                            <p class="tag text-lowercase m-0">{{ tag }}</p>
+                        </div>
+                        {% endfor %}
                         </span>
                         {% endif %}
                         <h4 class="fs-4 m-0">{{ object.title }}</h4>
@@ -74,13 +76,13 @@
                 {% endfor %}
                 {% endif %}
                 {% if request.user.is_staff %}
-                <a class="btn btn-primary rounded-pill px-4" role="button">Editar</a>
-                <a class="btn btn-primary rounded-pill px-4" role="button">Aplicar</a>
+                <a href="{% url 'offer_app:offer_edit' object.slug %}" class="btn btn-primary rounded-pill px-4" role="button">Editar</a>
+                <a href="{% url 'offer_app:offer_detail' object.slug %}" class="btn btn-primary rounded-pill px-4" role="button">Aplicar</a>
                 {% else %}
                 {% if usergroups %}
-                <a class="btn btn-primary rounded-pill px-4" role="button">Editar</a>
+                <a href="{% url 'offer_app:offer_edit' object.slug %}" class="btn btn-primary rounded-pill px-4" role="button">Editar</a>
                 {% else %}
-                <a class="btn btn-primary rounded-pill px-4" role="button">Aplicar</a>
+                <a href="{% url 'offer_app:offer_detail' object.slug %}" class="btn btn-primary rounded-pill px-4" role="button">Aplicar</a>
                 {% endif %}
                 {% endif %}
             </div>

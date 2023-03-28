@@ -1,3 +1,9 @@
+.bid-letter{
+    /* border: 2px solid transparent !important; */
+    /* border-width: 2px !important; */
+    /* box-shadow: 1px 1px 5px 2px transparent; */
+    transition: all 100ms ease-in;
+}
 .card_offer{
     width: 100%;
     height: auto;
@@ -11,9 +17,10 @@
     flex-direction: column;
     justify-content: space-between;
 }
-.card_offer:hover{
-    border: 2px solid var(--orange);
-    box-shadow: 1px 1px 5px 2px var(--extralight-gray);
+.card_offer:hover,
+.bid-letter:hover{
+    border: 1px solid var(--orange);
+    /* box-shadow: 1px 1px 5px 2px var(--extralight-gray); */
 }
 .card_offer__top{
     width: 100%;
@@ -292,9 +299,6 @@
     height: 100%;
     align-items: center;
     justify-content: center;
-}
-.single__tag--yellow{
-    /* background-color: #E9C237; */
 }
 .salary_hoped{
     font-weight: 400;

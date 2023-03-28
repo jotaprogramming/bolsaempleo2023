@@ -65,11 +65,11 @@
   
   <body class="container-grid">
     {% include 'partials/_brand.html' %}
-    <header class="header-container">
+    <header class="header-container fixed-top">
       {% include 'partials/_navbar.html' %}
     </header>
     {% include 'partials/_popup_alert.html' %}
-    <main class="body-container">
+    <main class="body-container mt-5">
       <div class="container">
         {% block content %} {% endblock content %}
       </div>

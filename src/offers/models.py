@@ -13,6 +13,7 @@ from django.core.mail import send_mail
 from django.template.defaultfilters import slugify
 
 from .utils import string_to_base64
+from .managers import OffersManager
 
 
 # Create your models here.
@@ -194,6 +195,8 @@ class Offers(models.Model):
     deleted_at = models.DateTimeField(
         _("deleted at"), auto_now_add=False, editable=True, null=True
     )
+
+    objects = OffersManager()
 
     def __str__(self):
         return "{}".format(self.title)

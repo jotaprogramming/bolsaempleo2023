@@ -1,16 +1,23 @@
 {% load static %}
 
-<div class="d-flex align-items-center w-100 d-none">
+<div class="d-flex align-items-center w-100 ps-3">
     {% comment %} <label class="btn btn-light-orange h-center border-0 h-100" for="search_btn">
         <img class="w1-h-auto" src="{% static 'core/assets/icon/icon-search-small.svg' %}" alt="icon-search-small" />
     </label>
     <input class="d-none" type="checkbox" name="search_btn" id="search_btn"> {% endcomment %}
-    <button class="btn btn-light-orange h-center border-0 h-100" id="search" type="submit">
-        <img class="w1-h-auto" src="{% static 'core/assets/icon/icon-search-small.svg' %}" alt="icon-search-small" />
-    </button>
-    <input class="form-control border-0 bg-transparent" type="search"
-        placeholder="{% if search_placeholder %}{{search_placeholder}}{% else %}Buscar{% endif %}"
-        aria-label="Search" />
+    <div class="input-group">
+        <input 
+            class="form-control form-search border-bottom {% if search and search != 'true' %}{% endif %} "
+            type="search"
+            placeholder="{% if search_placeholder %}{{search_placeholder}}{% else %}Buscar{% endif %}"
+            aria-label="Search"
+            name="search"
+            value="{% if search and search != 'true' %}{{ search }}{% endif %}"
+        />
+        <button class="btn btn-light-orange" id="search" type="submit">
+            {% include 'partials/icon_element/_search_icon.html' %}
+        </button>
+    </div>
     {% comment %}
     <button class="btn btn-outline-success d-none" type="submit">Search</button>
     {% endcomment %}

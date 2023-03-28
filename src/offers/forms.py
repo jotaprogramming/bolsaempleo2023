@@ -16,35 +16,40 @@ from offers.models import *
 from offers.utils import *
 
 
-class OfferForm(forms.ModelForm):
+class OfferAdminForm(forms.ModelForm):
     requirements = forms.ModelMultipleChoiceField(
         queryset=Requirements.objects.all(),
         required=False,
-        label="Requisitos",
+        label="Requisitos *",
         widget=forms.SelectMultiple(attrs={"class": "form-select"}),
     )
 
     tags = forms.ModelMultipleChoiceField(
         queryset=Tags.objects.all(),
         required=False,
-        label="Etiquetas de búsqueda",
+        label="Etiquetas de búsqueda *",
         widget=forms.SelectMultiple(attrs={"class": "form-select"}),
     )
 
     def __init__(self, *args, **kwargs):
-        super(OfferForm, self).__init__(*args, **kwargs)
-        self.fields["user"].required = False
-        self.fields["title"].label = "Título"
-        self.fields["salary"].label = "Salario estimado"
-        self.fields["currency"].label = "Moneda de pago"
+        super(OfferAdminForm, self).__init__(*args, **kwargs)
+        self.fields["title"].label = "Título *"
+        self.fields["salary"].label = "Salario estimado *"
+        self.fields["currency"].label = "Moneda de pago *"
         self.fields["vacancies"].label = "Vacantes"
-        self.fields["modality"].label = "Modalidad"
-        self.fields["city"].label = "Ciudad"
+        self.fields["modality"].label = "Modalidad *"
+        self.fields["city"].label = "Ciudad *"
         self.fields["hiring_date"].label = "Fecha de contratación"
         self.fields["conttype"].label = "Tipo de contrato"
         self.fields["workday"].label = "Jornada"
         self.fields["payperiod"].label = "Tipo de pago"
-        self.fields["description"].label = "Descripción"
+        self.fields["hiring_date"].label = "Fecha de contratación"
+        self.fields["description"].label = "Descripción *"
+        self.fields["user"].required = False
+        self.fields["vacancies"].required = False
+        self.fields["workday"].required = False
+        self.fields["conttype"].required = False
+        self.fields["payperiod"].required = False
 
     class Meta:
         model = Offers
@@ -123,6 +128,112 @@ class OfferForm(forms.ModelForm):
             "description": forms.Textarea(
                 attrs={
                     "class": "form-control",
+                }
+            ),
+        }
+
+
+class OfferForm(OfferAdminForm):
+    country = forms.ModelChoiceField(
+        queryset=Countries.objects.all(),
+        required=True,
+        label="País *",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+
+    district = forms.ModelChoiceField(
+        queryset=Districts.objects.all(),
+        # queryset=Districts.objects.filter(country__iso="COL"),
+        required=True,
+        label="Departamento *",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+
+    city = forms.ModelChoiceField(
+        queryset=Cities.objects.all(),
+        # queryset=Cities.objects.filter(district__iso="SAN"),
+        required=True,
+        label="Ciudad *",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+
+    class Meta:
+        model = Offers
+
+        fields = [
+            "user",
+            "title",
+            "salary",
+            "currency",
+            "vacancies",
+            "modality",
+            "city",
+            "hiring_date",
+            "conttype",
+            "workday",
+            "payperiod",
+            "description",
+            "requirements",
+            "tags",
+        ]
+
+        widgets = {
+            "user": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+            "title": forms.TextInput(
+                attrs={
+                    "class": "single-input",
+                }
+            ),
+            "salary": forms.NumberInput(
+                attrs={
+                    "class": "single-input",
+                }
+            ),
+            "currency": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+            "vacancies": forms.NumberInput(
+                attrs={
+                    "class": "single-input",
+                }
+            ),
+            "modality": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+            "city": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+            "hiring_date": forms.DateInput(
+                format="%Y-%m-%d", attrs={"class": "single-input", "type": "date"}
+            ),
+            "conttype": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+            "workday": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+            "payperiod": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+            "description": forms.Textarea(
+                attrs={
+                    "class": "single-input",
                 }
             ),
         }

@@ -231,7 +231,8 @@
     flex-direction: column;
     justify-content: center;
     background-color: transparent;
-    position: relative;
+    /* position: relative; */
+    z-index: 1 !important;
 }
 .try-img{
     /* width: 270px; */

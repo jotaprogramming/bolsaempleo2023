@@ -82,14 +82,28 @@ input[type="color"]:-webkit-autofill,
     background-color: transparent !important;
 }
 
-.form-control,
+/* .form-control, */
 .input-group-text {
     /* border: 1px solid transparent; */
     border-radius: .65rem !important;
 }
 
+.form-search {
+    border: 1px solid transparent !important;
+}
+
+.form-search:hover ~ button,
+.form-search:focus ~ button {
+    color: var(--white) !important;
+    background-color: var(--orange) !important;
+}
+
+.form-search:hover ~ button img {
+    filter: var(--f-white) !important;
+}
+
 .form-control:hover {
-    border: 1px solid var(--orange);
+    border: 1px solid var(--orange) !important;
 }
 
 .page-item,

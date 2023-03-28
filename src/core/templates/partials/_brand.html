@@ -1,0 +1,10 @@
+{% load static %}
+
+<a class="brand-btn text-light text-capitalize" href="{% url 'home_app:home_page' %}" style="z-index: 3">
+  <span class="position-absolute" style="z-index: 1; font-size: 1.2rem;">
+    {% if brand_name %} {{brand_name}} {% else %} job {%endif %}
+  </span>
+  <div class="try-img">
+    <img src="{% static 'core/assets/img/boxy.png' %}" alt="" />
+  </div>
+</a>

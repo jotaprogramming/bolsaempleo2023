@@ -34,7 +34,7 @@ class Restrictions(models.Model):
 
 
 class Apps(models.Model):
-    name = models.CharField(_("name"), max_length=25, unique=True, null=False)
+    name = models.CharField(_("name"), max_length=100, unique=True, null=False)
     route = models.CharField(_("route"), max_length=100, unique=True, null=False)
     description = models.TextField(_("description"), null=False)
     created_at = models.DateTimeField(_("created at"), auto_now_add=True, null=False)

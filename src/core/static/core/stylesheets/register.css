@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @import url('./variables.css');
 
 .form_inputs{
@@ -8,6 +9,8 @@
     align-items: center;
 }
 
+=======
+>>>>>>> 36209d96a4995518d07b666ce790a8e299cab713
 /* Pre-Register --- Selection Buttons */
 .register_selection{
     width: 100%;

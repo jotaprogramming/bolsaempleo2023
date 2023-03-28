@@ -5,20 +5,24 @@
     {% if user.is_staff %}
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">
-            Configuración
-        </a>
-        <ul class="dropdown-menu dropdown-menu-lg-end">
-            <li><a class="dropdown-item" href="{% url 'users_app:app_list' %}">Aplicaciones</a></li>
-            <li><a class="dropdown-item" href="{% url 'users_app:restriction_list' %}">Restricciones</a></li>
+        aria-expanded="false">
+        Configuración
+    </a>
+    <ul class="dropdown-menu dropdown-menu-lg-end">
+        <li><a class="dropdown-item" href="{% url 'users_app:app_list' %}">Aplicaciones</a></li>
+        <li><a class="dropdown-item" href="{% url 'users_app:restriction_list' %}">Restricciones</a></li>
             <li><a class="dropdown-item" href="{% url 'users_app:usergroup_list' %}">Grupos de Usuarios</a></li>
             <li><a class="dropdown-item" href="{% url 'users_app:role_list' %}">Roles</a></li>
-            <li>
-                <hr class="dropdown-divider" />
-            </li>
             <li><a class="dropdown-item" href="{% url 'users_app:policy_list' %}">Regulaciones</a></li>
             <li><a class="dropdown-item" href="{% url 'users_app:user_list' %}">Usuarios</a></li>
             <li><a class="dropdown-item" href="{% url 'users_app:trait_list' %}">Rasgos</a></li>
+            <li>
+                <hr class="dropdown-divider" />
+            </li>
+            <li><a class="dropdown-item" href="{% url 'offer_app:offer_list' %}">Ofertas</a></li>
+            <li>
+                <hr class="dropdown-divider" />
+            </li>
             <li><a class="dropdown-item" href="/admin">Panel Administrativo de Django</a></li>
         </ul>
     </li>

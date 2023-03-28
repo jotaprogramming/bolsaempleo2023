@@ -1,0 +1,93 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load format_numbers %}
+
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+{% block contentfluid %}
+<section class="my-1 position-relative">
+    {% include 'partials/_aside.html' %}
+    <div class="p-5" style="margin-left: 300px;">
+        <div class="card p-4 rounded-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="d-flex flex-column gap-3">
+                        {% if object.get_tags %}
+                        <span class="d-flex text-black-50 tag-group" style="height: 2rem">
+                        {% for tag in object.get_tags %}
+                        <div
+                            class="single__tag single__tag--yellow"
+                        >
+                            <p class="tag text-lowercase m-0">{{ tag }}</p>
+                        </div>
+                        {% endfor %}
+                        </span>
+                        {% endif %}
+                        <h4 class="fs-4 m-0">{{ object.title }}</h4>
+                    </div>
+                    <div>
+                        <span class="text-black-50">{{ object.created_at }}</span>
+                    </div>
+                </div>
+                <div class="row gap-1">
+                    <div class="col-12 d-flex gap-2">
+                        {% include 'partials/icon_element/_location_icon.html' %}
+                        <span class="text-black-50">{{ object.city }}, {{ object.city.district }}</span>
+                    </div>
+                    <div class="col-12 d-flex gap-2">
+                        {% include 'partials/icon_element/_table_icon.html' %}
+                        <span class="text-black-50">Modalidad: {{ object.modality }}</span>
+                    </div>
+                    <div class="col-12 d-flex gap-2">
+                        {% include 'partials/icon_element/_people_icon.html' %}
+                        <span class="text-black-50">
+                            {% if object.vacancies == 1 %}
+                            Una vacante
+                            {% else %}
+                            {{ object.vacancies }} vacantes
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="col-12 d-flex gap-2">
+                        {% include 'partials/icon_element/_suitcase_icon.html' %}
+                        <span class="text-black-50">Contrato a {{ object.conttype }}</span>
+                    </div>
+                    <div class="col-12 d-flex gap-2">
+                        {% include 'partials/icon_element/_time_icon.html' %}
+                        <span class="text-black-50">{{ object.workday }}</span>
+                    </div>
+                    <div class="col-12 d-flex gap-2">
+                        {% include 'partials/icon_element/_calendar_icon.html' %}
+                        <span class="text-black-50">Fecha de contratación: {{ object.hiring_date }}</span>
+                    </div>
+                    <div class="col-12 d-flex gap-2">
+                        {% include 'partials/icon_element/_dolar_icon.html' %}
+                        <span class="text-black-50">{{ object.currency }} {{ object.salary|currency_format }} {{ object.payperiod }}</span>
+                    </div>
+                </div>
+                <h6 class="mt-4 fw-bold">Descripción</h6>
+                <p>{{ object.description }}</p>
+                {% if object.get_requirements %}
+                <h6 class="mt-4 fw-bold">Requisitos</h6>
+                {% for requirement in object.get_requirements %}
+                <p>{{requirement}}: Sí</p>
+                {% endfor %}
+                {% endif %}
+                {% if request.user.is_staff %}
+                <a href="{% url 'offer_app:offer_edit' object.slug %}" class="btn btn-primary rounded-pill px-4" role="button">Editar</a>
+                <a href="{% url 'offer_app:offer_detail' object.slug %}" class="btn btn-primary rounded-pill px-4" role="button">Aplicar</a>
+                {% else %}
+                {% if usergroups %}
+                <a href="{% url 'offer_app:offer_edit' object.slug %}" class="btn btn-primary rounded-pill px-4" role="button">Editar</a>
+                {% else %}
+                <a href="{% url 'offer_app:offer_detail' object.slug %}" class="btn btn-primary rounded-pill px-4" role="button">Aplicar</a>
+                {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock contentfluid %}

@@ -1,6 +1,3 @@
-@import url('./variables.css');
-
-
 .apply_btn{
     min-width: 100px;
     max-width: 200px;
@@ -16,14 +13,14 @@
     
     
 
-.ofert_detail__container{
+.offer_detail__container{
     width: 100%;
     height: 100%;
     /* background-color: yellow; */
     padding: 32px 64px;
 
 }
-.ofert_detail__content{
+.offer_detail__content{
     width: 100%;
     /* background-color: lightcoral; */
     display: flex;
@@ -72,18 +69,18 @@
     flex-direction: column;
     gap: 10px;
 }
-.detail_ofert__title{
+.detail_offer__title{
     font-weight: 600;
     font-size: 24px;
     line-height: 30px;    
 }
-.detail_ofert__datetime{
+.detail_offer__datetime{
     font-weight: 500;
     font-size: 14px;
     line-height: 18px;   
     color: #6F6F6F;
 }
-.ofert_icon__detail{
+.offer_icon__detail{
     color: #6F6F6F;
 
 }

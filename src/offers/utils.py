@@ -11,7 +11,7 @@ def string_to_base64(sample_string):
 
 
 def base64_to_string(base64_string):
-    if '===' in base64_string:
+    if "===" in base64_string:
         return ""
     try:
         base64_bytes = base64_string.encode("ascii")
@@ -20,4 +20,12 @@ def base64_to_string(base64_string):
         sample_string = sample_string_bytes.decode("ascii")
         return sample_string
     except:
-        base64_to_string(f'{base64_string}=')
+        base64_to_string(f"{base64_string}=")
+
+
+def get_pk_from_a_slug(self):
+    slug = self.kwargs.get("slug", "")
+    slug_split = slug.split("-")
+    split_pk = slug_split[-1]
+    # str_pk = base64_to_string(f"{split_pk}")
+    return split_pk

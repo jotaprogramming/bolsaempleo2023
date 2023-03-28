@@ -237,3 +237,39 @@ class OfferForm(OfferAdminForm):
                 }
             ),
         }
+
+
+class CandidatureSaveForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CandidatureSaveForm, self).__init__(*args, **kwargs)
+        self.fields["candidate"].label = "Candidato"
+        self.fields["candidate"].required = False
+
+    class Meta:
+        model = Candidatures
+
+        fields = [
+            "candidate",
+        ]
+
+
+class CandidatureUpdateForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(CandidatureUpdateForm, self).__init__(*args, **kwargs)
+        self.fields["status"].label = "Estado"
+        self.fields["status"].required = False
+
+    class Meta:
+        model = Candidatures
+
+        fields = [
+            "status",
+        ]
+
+        widgets = {
+            "status": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+        }

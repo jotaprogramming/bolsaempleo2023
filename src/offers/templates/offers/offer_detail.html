@@ -77,12 +77,31 @@
                 {% endif %}
                 {% if request.user.is_staff %}
                 <a href="{% url 'offer_app:offer_edit' object.slug %}" class="btn btn-primary rounded-pill px-4" role="button">Editar</a>
+                {% if not candidature %}
+                <button
+                    type="button"
+                    class="btn btn-primary rounded-pill px-4"
+                    name="createButtons"
+                    id="{% url 'offer_app:candidature_save' object.slug %}"
+                    >
+                    <span class="ms-2">Aplicar</span>
+                </button>
+                {% endif %}
+                {% comment %}
                 <a href="{% url 'offer_app:offer_detail' object.slug %}" class="btn btn-primary rounded-pill px-4" role="button">Aplicar</a>
+                {% endcomment %}
                 {% else %}
                 {% if usergroups %}
                 <a href="{% url 'offer_app:offer_edit' object.slug %}" class="btn btn-primary rounded-pill px-4" role="button">Editar</a>
-                {% else %}
-                <a href="{% url 'offer_app:offer_detail' object.slug %}" class="btn btn-primary rounded-pill px-4" role="button">Aplicar</a>
+                {% elif not candidature %}
+                <button
+                    type="button"
+                    class="btn btn-primary rounded-pill px-4"
+                    name="createButtons"
+                    id="{% url 'offer_app:candidature_save' object.slug %}"
+                >
+                    <span class="ms-2">Aplicar</span>
+                </button>
                 {% endif %}
                 {% endif %}
             </div>

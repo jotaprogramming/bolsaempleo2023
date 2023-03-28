@@ -17,4 +17,9 @@ urlpatterns = [
     path("modal/create", OfferModalCreate.as_view(), name="offer_modal_add"),
     path("modal/edit/<int:pk>", OfferEditModal.as_view(), name="offer_edit"),
     path("modal/delete/<int:pk>", OfferDeleteModal.as_view(), name="offer_delete"),
+    # CANDIDATURES
+    path("candidatures/list", CandidaturesList.as_view(), name="candidature_list"),
+    path("candidatures/save/<str:slug>", CandidatureSave.as_view(), name="candidature_save"),
+    path("candidatures/modal/edit/<int:pk>", CandidatureEditModal.as_view(), name="candidature_edit"),
+    path("candidatures/modal/delete/<int:pk>", CandidatureDeleteModal.as_view(), name="candidature_delete"),
 ]

@@ -1,0 +1,13 @@
+{% load static %}
+
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <form
+      method="POST"
+      action="{% url 'offer_app:candidature_edit' object.id %}"
+      id="form"
+    >
+      {% include 'partials/_form_update_modal.html' %}
+    </form>
+  </div>
+</div>

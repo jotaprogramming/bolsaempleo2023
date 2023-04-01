@@ -1,0 +1,212 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+{% block content %}
+<section class="base__size">
+    <div class="aside__container d-none d-lg-block">
+        <div class="aside-content">
+            <div class="sub-nav">
+                <h5 class="m-0 sub-nav__title">Lorem</h5>
+                <div class="sub-nav__items">
+                    <ul class="m-0 p-0">
+                        <li>
+                            <a href="/profile_company">Publicaciones</a>
+                            <p class="m-0 text-orange">Visualizando</p>
+                        </li>
+                        <li>
+                            <a href="/profile_company">Perfil</a>
+                        </li>
+
+                        <li>
+                            <a href="/notifications">Notificaciones</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <!-- <h3 class="m-0 filter-type__text">Filtrar Por</h3>
+            <div class="aside-filters">
+                {% include 'partials/_filters.html' %}
+            </div> -->
+        </div>
+    </div>
+    <div class="no-aside__container modal_content">
+        <div class="publish_info">
+            <a class="text-dark  publish_link__back"  href="/publicate">volver</a>
+            <p class="publish_info__ofert-number text-uppercase">publicacion n° 1</p>
+            <div class="publish_info__content">
+                <p class=" info_publish">Informacion de la Oferta</p>
+                <a href="/candidate">Ver Candidatos</a>
+            </div>
+            <div class="publish_info__header">
+                <div class="publish_info__top">
+                    <p class="m-0"><b>Titulo</b> <span class="text-uppercase">se busca desarrollador(a) web</span></p>
+                    <p class="m-0"><b>Fecha Publicacion</b> <span class="text-capitalize"> 2 de febrero,2023</span></p>
+                </div>
+                <div class="publish_info__middle">
+                    <p class="m-0"><b>Salario Mensual</b> <span>$ 3.000.000</span></p>
+                    <p class="m-0"><b>N° Vacantes</b> 10</p>
+                    <p class="m-0"><b>Ubicacion</b> <span class="text-capitalize">bucaramanga, santander</span></p>
+                </div>
+                <div class="publish_info__bottom">
+                    <p class="m-0"><b>Contrato</b> Termino Indefinido</p>
+                    <p class="m-0"><b>Jornada</b> Tiempo Completo</p>
+                    <p class="m-0"><b>Fecha contratacion</b> <span class="text-capitalize">01 de agosto,2023</span></p>
+                </div>
+            </div>
+            <div class="publish_info__body">
+                <p class=" m-0 detail_content__subtitle">Descripcion</p>
+                <p class="detail_content__description">Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+                    Dignissimos corporis sed corrupti quasi perferendis odit libero modi ratione accusamus? Optio id
+                    deserunt veniam molestias ex, quibusdam ducimus! Sed, optio reiciendis?
+                    Non tempora molestias vitae! Reprehenderit omnis tenetur nesciunt quas, eius minima perspiciatis
+                    consectetur obcaecati libero culpa, ipsum esse dignissimos laboriosam mollitia possimus nobis
+                    aliquam, cum repellendus nostrum vero odit quo?
+                    Reiciendis, aut corrupti qui similique natus recusandae porro nemo incidunt. Doloribus similique
+                    optio alias eum corporis! Quibusdam quia atque error voluptas pariatur voluptatem, nisi numquam
+                    voluptates? Perferendis nemo earum mollitia.</p>
+            </div>
+            <div class="publish_info__footer">
+                <div class="detail_content__requeriment">
+                    <p class="m-0 detail_content__subtitle">Requisitos</p>
+                    <p class="m-0"><b> Disponibilidad para viajar:</b> No</p>
+                    <p class="m-0"> <b>Disponibilidad de cambio de residencia:</b> No</p>
+                </div>
+                <a href=""></a>
+                <button class="apply_btn" type="submit" id="open_modal">Editar Publicacion</button>
+            </div>
+        </div>
+
+        <section class="modaly_container" id="modal-container">
+            <div class="modaly_container_content">
+                <div class="modal_header__content">
+                    <p class="m-0 modal_header__title text-uppercase">editar publicacion</p>
+                    <p class="m-0 modal_header__subtitle">
+                        Todos los campos son obligatorios
+                    </p>
+                </div>
+                <div class="modal_inputs__content">
+                    <div class="modal_inputs__row">
+                        <div class="set-input set-input__create input_title__publish">
+                            <input class="single-input " type="text" required>
+                            <span class="input-placeholder ">Titulo *</span>
+                        </div>
+                        <div class="set-input set-input__create input_salary__publish">
+                            <input class="single-input single-input__modify" type="text" required>
+                            <span class="input-placeholder ">Salario Mensual *</span>
+                        </div>
+                        <div class="set-input  input_coin__publish">
+                            <select class="form-select" aria-label="Default select example">
+                                <option value="1">Pesos</option>
+                                <option value="2">Dolar</option>
+                                <option value="3">Euro</option>
+                            </select>
+                        </div>
+                        <div class="set-input set-input__create input_cant__publish">
+                            <input class="single-input single-input__modify" type="number" required>
+                            <span class="input-placeholder">N° Vacantes</span>
+                        </div>
+                    </div>
+                    <div class="modal_inputs__row">
+                        <div class="set-input set-input__create input_modality__publish">
+                            <select class="form-select" aria-label="Default select example">
+                                <option value="1">Presencial</option>
+                                <option value="2">Remoto</option>
+                                <option value="3">Presencial & Remoto</option>
+                            </select>
+                        </div>
+                        <div class="set-input set-input__create input_place__publish">
+                            <select class="form-select" aria-label="Default select example">
+                                <option value="1">Pais</option>
+                                <option value="2">Colombia</option>
+                                <option value="3">Peru</option>
+                                <option value="3">Argentina</option>
+                            </select>
+                        </div>
+                        <div class="set-input set-input__create input_place__publish">
+                            <select class="form-select" aria-label="Default select example">
+                                <option value="1">Departamento</option>
+                                <option value="2">Santander</option>
+                                <option value="3">Meta</option>
+                                <option value="3">Antioquia</option>
+                            </select>
+                        </div>
+                        <div class="set-input set-input__create input_place__publish">
+                            <select class="form-select" aria-label="Default select example">
+                                <option value="1">Ciudad</option>
+                                <option value="2">Bucaramanga</option>
+                                <option value="3">Barrancabermeja</option>
+                                <option value="3">Bogota</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal_inputs__row">
+                        <div class="set-input set-input__create set-input__create--date input_date__publish">
+                            <input class="single-input " type="date" required>
+                            <span class="input-placeholder ">Fecha Contratacion</span>
+                        </div>
+                        <div class="set-input set-input__create input_typeof__publish">
+                            <select class="form-select" aria-label="Default select example">
+                                <option value="1">Tipo Contrato</option>
+                                <option value="2">Idenfinido</option>
+                                <option value="3">Definido</option>
+                            </select>
+                        </div>
+                        <div class="set-input set-input__create input_typeof__publish">
+                            <select class="form-select" aria-label="Default select example">
+                                <option value="1">Jornada</option>
+                                <option value="2">Tiempo Completo</option>
+                                <option value="3">Medio Tiempo</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal_inputs__row">
+                        <div class="set-input set-input__create input_description__publish">
+                            <input class="single-input " type="text" required>
+                            <span class="input-placeholder">Descripcion</span>
+                        </div>
+                    </div>
+                    <div class="modal_inputs__row">
+                        <div class="set-input set-input__create input_description__publish">
+                            <input class="single-input " type="text" required>
+                            <span class="input-placeholder">Requisitos</span>
+                        </div>
+                    </div>
+                    <div class="modal_inputs__row modal_inputs__row--alter">
+                        <div class="set-input set-input__create input_search__publish">
+                            <input class="single-input " type="search" required>
+                            <span class="input-placeholder ">Etiqueta de busqueda rapida</span>
+                        </div>
+                        <div class="ofert_header__tags">
+                            <div class="single__tag single__tag--yellow">
+                                <p class="tag text-capitalize m-0">Sin Etiquetas</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal_inputs__btn">
+                    <button id="close" class="modal__btn">Cerra</button>
+                    <button id="" type="submit" class="modal__btn modal__btn--edit">Editar</button>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+<script>
+    const btn_open = document.getElementById('open_modal');
+    const modal_container = document.getElementById('modal-container');
+    const close = document.getElementById('close');
+
+    btn_open.addEventListener('click', () => {
+        modal_container.classList.add('show');
+    });
+
+    close.addEventListener('click', () => {
+        modal_container.classList.remove('show');
+    });
+</script>
+{% endblock content %}

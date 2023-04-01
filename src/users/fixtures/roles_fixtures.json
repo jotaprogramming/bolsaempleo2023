@@ -1,0 +1,11 @@
+[
+  {
+    "model": "users.roles",
+    "pk": 1,
+    "fields": {
+      "role_name": "staff",
+      "description": "administrative actors",
+      "created_at": "2023-03-02 19:29:50.239305+00"
+    }
+  }
+]

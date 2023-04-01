@@ -1,0 +1,34 @@
+{% load static %}
+
+
+<nav class="navbar navbar-expand-lg  p-0 m-0 brandi ">
+    <div class="container-fluid p-0 brandi">
+        <a class="navbar-brand px-2 py-0 m-0 text-light brand-btn text-capitalize" href="/">
+            <span style="z-index: 1;">
+                {% if brand_name %}
+                {{brand_name}}
+                {% else %}
+                    job
+                {%endif %}
+            </span>
+            <div class="try-img">
+                <img src="{% static 'core/assets/img/boxy.png' %}" alt="">
+             </div>
+        </a>
+        <button class="navbar-toggler border-0 burger-menu" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            {% include 'partials/icon_element/_burger_icon.html' %}
+        </button>
+        <div class="collapse navbar-collapse py-2 px-4 justify-content-between me-3" id="navbarSupportedContent">
+            <div class="d-flex search-container">
+                <form class="" role="search">
+                    {% if search %}
+                    {% include 'partials/_search_input.html' %}
+                    {% endif %}
+                </form>
+            </div>
+            {% include 'partials/_navbar_items.html' %}
+        </div>
+    </div>
+</nav>

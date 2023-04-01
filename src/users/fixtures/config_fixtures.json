@@ -1,0 +1,41 @@
+[
+  {
+    "model": "config.countries",
+    "pk": 1,
+    "fields": {
+      "iso": "COL",
+      "name": "Colombia",
+      "created_at": "2023-03-02 19:29:50.239305+00"
+    }
+  },
+  {
+    "model": "config.districts",
+    "pk": 1,
+    "fields": {
+      "iso": "SAN",
+      "zipcode": "68XXXX",
+      "name": "Santander",
+      "country_id": 1,
+      "created_at": "2023-03-02 19:29:50.239305+00"
+    }
+  },
+  {
+    "model": "config.cities",
+    "pk": 1,
+    "fields": {
+      "zipcode": "680001",
+      "name": "Bucaramanga",
+      "district_id": 1,
+      "created_at": "2023-03-02 19:29:50.239305+00"
+    }
+  },
+  {
+    "model": "config.documenttype",
+    "pk": 1,
+    "fields": {
+      "acronym": "CC",
+      "name": "Cédula de ciudadanía",
+      "country": [1]
+    }
+  }
+]

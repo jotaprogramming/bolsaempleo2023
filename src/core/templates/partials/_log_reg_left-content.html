@@ -1,0 +1,15 @@
+{% load static %}
+
+<div class="image-content">
+    <img src="{% static image_url %}" class="image" alt="{{ image_alt}}">
+    <div class="image-text">
+        <div class="text-content">
+            <div class="graduate-text">
+                {{ graduate_text }}
+            </div>
+            <div class="company-text">
+                {{ company_text }}
+            </div>
+        </div>
+    </div>
+</div>

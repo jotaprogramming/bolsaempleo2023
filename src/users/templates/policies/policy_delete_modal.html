@@ -1,0 +1,46 @@
+{% load static %}
+
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <form method="POST" action="{% url 'users_app:policy_delete' object.id %}" id="form">
+      <div class="modal-header">
+        <h5 class="modal-title">Eliminar</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+        <h6>
+          Se eliminará el siguiente registro:
+        </h6>
+        <div class="row mb-2 text-secondary">
+          <small class="m-0 col-12">
+            <strong>Usuario:</strong>
+            {{object.user}}
+          </small>
+          <small class="m-0 col-12">
+            <strong>Grupo: </strong>
+            {{object.usergroup}}
+          </small>
+          <small class="m-0 col-12">
+            <strong>Rol: </strong>
+            {{object.role}}
+          </small>
+        </div>
+        <div class="alert alert-warning" role="alert">
+          ¿Está seguro que desea continuar?
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary">Eliminar</button>
+      </div>
+    </form>
+  </div>
+</div>

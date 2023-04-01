@@ -1,0 +1,10 @@
+[
+  {
+    "model": "users.curriculumvitae",
+    "pk": 1,
+    "fields": {
+      "userprofile": 1,
+      "cv_path": "/cv.png"
+    }
+  }
+]

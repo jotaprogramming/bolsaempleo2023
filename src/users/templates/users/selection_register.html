@@ -1,0 +1,41 @@
+{% extends 'core/base.html' %} {% load static %} 
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+{% block contentfluid %}
+<article class="content__center">
+  <section class="principal__container">
+    <div class="container_left">
+      {% include 'partials/_log_reg_left-content.html' %}
+    </div>
+    <div class="container_right">
+      <div class="container_right__content">
+        <div class="rigth_content right_content__header">
+          <p class="right_content__title m-0 text-uppercase">
+            {{description_view}}
+          </p>
+          <p class="right_content__subtitle m-0 text-center">Seleccione una opcion segun lo que este buscando</p>
+        </div>
+        <div class="rigth_content right_content__body">
+          <div class="register_selection">
+            <a class=" register_selection__btn" href="{% url 'users_app:register_student' %}">
+              <span class="selection_btn__icon"><i class="lni lni-graduation"></i></span>
+              <span class="selection_btn__text">Estoy buscando trabajo</span>
+            </a>
+            <a class="register_selection__btn" href="{% url 'users_app:register_company' %}">
+              <span class="selection_btn__icon"><i class="lni lni-apartment"></i></span>
+              <span class="selection_btn__text">Estoy buscando candidatos</span>
+            </a>
+          </div>
+        </div>
+        <div class="rigth_content right_content__footer text-center">
+          <span class="rigth_content__link--footer">Si ya tiene Usuario y Contraseña <br>ingrese <b><a class="text-dark fw-bold" href="{% url 'users_app:login' %}">AQUI</a></b></span>
+        </div>
+      </div>
+    </div>
+  </section>
+  {% comment %} {% include 'partials/_shape_divider.html' %} {% endcomment %}
+</article>
+
+{% endblock contentfluid %}

@@ -1,0 +1,100 @@
+{% extends 'core/base.html' %} {% load static %} 
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+
+{% block contentfluid %}
+<article class="content__center">
+    <section class="principal__container">
+        <form method="POST" class="register_content">
+            {% csrf_token %}
+            <div class="register_header">
+                <div class="header_link__back">
+                    <i class="lni lni-arrow-left-circle"></i>
+                    <a href="{% url 'users_app:register_choices' %}"> 
+                        Volver
+                    </a>
+                </div>
+                <div class="right_content__header">
+                    <h3 class="right_content__title text-uppercase text-center">{{desciption_view}}</h3>
+                </div>
+            </div>
+            <div class="register_body">
+                <div class="group_inputs ">
+                    <div class="set-input max-w">
+                        {{ form.first_name }}
+                        <span class="input-placeholder">{{ form.first_name.label }}</span>
+                        <span class="input-icon"><i class="lni lni-handshake"></i></span>
+                    </div>
+                    <div class="set-input max-w">
+                        {{ form.last_name }}
+                        <span class="input-placeholder">{{ form.last_name.label }}</span>
+                        <span class="input-icon"><i class="lni lni-handshake"></i></span>
+                    </div>
+                    <div class="set-input max-w">
+                        {{ form.document_type }}
+                        <span class="input-placeholder">{{ form.document_type.label }}</span>
+                        <span class="input-icon"><i class="lni lni-license"></i></span>
+                    </div>
+                    <div class="set-input max-w">
+                        {{ form.id_number }}
+                        <span class="input-placeholder">{{ form.id_number.label }}</span>
+                        <span class="input-icon"><i class="lni lni-license"></i></span>
+                    </div>
+                </div>
+                <div class="group_inputs group_inputs__column ">
+                    <div class="set-input max-w">
+                        {{ form.email }}
+                        <span class="input-placeholder">{{ form.email.label }}</span>
+                        <span class="input-icon"><i class="lni lni-envelope"></i></span>
+                    </div>
+                    <div class="set-input max-w">
+                        {{ form.contact_email }}
+                        <span class="input-placeholder">{{ form.contact_email.label }}</span>
+                        <span class="input-icon"><i class="lni lni-envelope"></i></span>
+                    </div>
+                    <div class="set-input max-w">
+                        {{ form.password }}
+                        <span class="input-placeholder">{{ form.password.label }}</span>
+                        <span class="input-icon"><i class="lni lni-key"></i></span>
+                    </div>
+                    <div class="set-input max-w">
+                        {{ form.repeat_pass }}
+                        <span class="input-placeholder">{{ form.repeat_pass.label }}</span>
+                        <span class="input-icon"><i class="lni lni-lock"></i></span>
+                    </div>
+                </div>
+                <div class="group_inputs group_inputs__column ">
+                    <div class="set-input max-w">
+                        {{ form.phone }}
+                        <span class="input-placeholder">{{ form.phone.label }}</span>
+                        <span class="input-icon"><i class="lni lni-phone"></i></span>
+                    </div>
+                    <div class="set-input max-w">
+                        {{ form.district }}
+                        <span class="input-placeholder">{{ form.district.label }}</span>
+                        <span class="input-icon"><i class="lni lni-home"></i></span>
+                    </div>
+                    <div class="set-input max-w">
+                        {{ form.city }}
+                        <span class="input-placeholder">{{ form.city.label }}</span>
+                        <span class="input-icon"><i class="lni lni-home"></i></span>
+                    </div>
+                    <div class="set-input max-w">
+                        {{ form.address }}
+                        <span class="input-placeholder">{{ form.address.label }}</span>
+                        <span class="input-icon"><i class="lni lni-phone"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class=" register_footer  text-center ">
+                <button class="normal_btn my-3" type="submit" id="btn_save">Registrarse</button>
+                <span class="rigth_content__link--footer">Si ya tiene Usuario y Contraseña <br>ingrese <b><a class="text-dark fw-bold"
+                            href="{% url 'users_app:login' %}">AQUI</a></b></span>
+            </div>
+        </form>
+    </section>
+    {% comment %} {% include 'partials/_shape_divider.html' %} {% endcomment %}
+  </article>
+{% endblock contentfluid %}

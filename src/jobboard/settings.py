@@ -34,7 +34,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 SECRET_KEY = env("SECRET_KEY", default="unsafe-secret-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "NO").lower() in ("on", "true", "y", "yes")
+DEBUG = False
 # DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ["*"]
@@ -89,7 +89,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "jobboard.wsgi.application"
 
-DB_OPT = env("DB_OPT")
+# DB_OPT = env("DB_OPT")
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -101,7 +101,7 @@ DATABASES = {
     # ImproperlyConfigured exception if not found
     #
     # The db() method is an alias for db_url().
-    "default": env.db("POSTGRES_URL" if DB_OPT == "docker" else "DATABASE_URL"),
+    "default": env.db("DATABASE_URL"),
     "settings": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "settings.sqlite3",

@@ -944,10 +944,12 @@ class UserProfileDetail(LoginRequiredMixin, generic.TemplateView):
         try:
             obj = UserProfile.objects.get(user__username=username_param)
             cv = CurriculumVitae.objects.filter(userprofile__id=obj.id).values()
+            traits = Traits.objects.filter(user__username=username_param)
             about_me = obj.about_me
             context["object"] = obj
             context["cv"] = cv
             context["description_view"] = about_me
+            context["traits"] = traits
         except Exception as ex:
             print(ex)
             pass

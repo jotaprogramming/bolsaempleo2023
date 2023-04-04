@@ -242,14 +242,14 @@ class OfferForm(OfferAdminForm):
 class CandidatureSaveForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(CandidatureSaveForm, self).__init__(*args, **kwargs)
-        self.fields["candidate"].label = "Candidato"
-        self.fields["candidate"].required = False
+        self.fields["status"].label = "Estado"
+        self.fields["status"].required = False
 
     class Meta:
         model = Candidatures
 
         fields = [
-            "candidate",
+            "status",
         ]
 
 

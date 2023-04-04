@@ -121,6 +121,12 @@ input[type="color"]:-webkit-autofill,
     align-items: center;
 }
 
+.btn-link {
+    --bs-btn-color: var(--bs-orange) !important;
+    --bs-btn-hover-color: var(--burnt-orange) !important;
+    --bs-btn-active-color: var(--burnt-orange) !important;
+}
+
 .pagination {
     --bs-pagination-color: var(--orange) !important;
     --bs-pagination-hover-color: var(--orange) !important;

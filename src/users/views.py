@@ -956,6 +956,7 @@ class UserProfileDetail(LoginRequiredMixin, generic.TemplateView):
         context["app_title"] = "Perfil"
         context["title_view"] = username_param
         context["username"] = username_param
+        context["profile"] = True
         return context
 
 
@@ -978,6 +979,7 @@ class UserProfileCreate(LoginRequiredMixin, generic.CreateView):
         context["title_view"] = "Perfil"
         context["description_view"] = f"@{slug}"
         context["username"] = slug
+        context["profile"] = True
         return context
 
     def form_valid(self, form):
@@ -1031,6 +1033,7 @@ class UserProfileEdit(LoginRequiredMixin, generic.UpdateView):
         context["fullname"] = User.objects.filter(username=slug).values()[0][
             "first_name"
         ]
+        context["profile"] = True
         return context
 
     def form_valid(self, form):

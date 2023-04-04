@@ -5,7 +5,8 @@
   style="width: 300px; height: 100vh; z-index: 2; padding: 150px 2rem 2rem 2rem"
 >
   <div class="row">
-    <h6 class="fw-bold">
+    <h6 class="fw-bold d-flex gap-1 align-items-center position-relative">
+      <i class="lni lni-user"></i>
       {% if request.user.user_profile_user.name %}
       {{ request.user.user_profile_user.name }}
       {% elif request.user.first_name %}
@@ -13,12 +14,22 @@
       {% else %}
       {{ request.user.username }}
       {% endif %}
+      <a 
+        href="{% url 'users_app:userprofile' request.user.username %}"
+        class="stretched-link"
+      ></a>
     </h6>
     <hr />
     <div class="list-group list-group--custom rounded-0">
       <a 
+        href="{% url 'users_app:userprofile' request.user.username %}"
+        class="list-group-item list-group-item-action border-0 {% if profile %}active{% endif %}"
+      >
+        Perfil
+      </a>
+      <a 
         href="{% url 'offer_app:bidding_panel' %}"
-        class="list-group-item list-group-item-action border-0 {% if offer %}active{% endif %}"
+        class="list-group-item list-group-item-action border-0 {% if offer or offers %}active{% endif %}"
       >
         Ofertas
         {% if offer %}
@@ -27,10 +38,10 @@
         {% endif %}
       </a>
       <a 
-        href="{% url 'users_app:userprofile' request.user.username %}"
-        class="list-group-item list-group-item-action border-0 {% if profile %}active{% endif %}"
+        href="{% url 'offer_app:mycandidacies' request.user.username %}"
+        class="list-group-item list-group-item-action border-0 {% if mycandidacies %}active{% endif %}"
       >
-        Perfil
+        Candidaturas
       </a>
       <a 
         href="#"

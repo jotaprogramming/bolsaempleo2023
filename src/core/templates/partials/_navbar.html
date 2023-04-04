@@ -3,19 +3,25 @@
 
 <nav class="navbar navbar-expand-lg p-0 m-0 bg-white border-bottom">
     <div class="container-fluid p-0">
-        
         <button class="navbar-toggler border-0 burger-menu" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
             {% include 'partials/icon_element/_burger_icon.html' %}
         </button>
         <div class="collapse navbar-collapse py-2 px-4 justify-content-between me-3" id="navbarSupportedContent" style="padding-left: 300px !important;">
-            <div class="d-flex search-container">
+            <div class="d-flex search-container ps-4">
+                {% if search %}
                 <form role="search" method="GET">
-                    {% if search %}
                     {% include 'partials/_search_input.html' %}
-                    {% endif %}
                 </form>
+                {% endif %}
+                <ul class="navbar-nav ms-4 mb-2 mb-lg-0">
+                    {% if request.user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{% url 'offer_app:bidding_panel' %}">Ofertas</a>
+                    </li>
+                    {% endif %}
+                </ul>
             </div>
             {% include 'partials/_navbar_items.html' %}
         </div>

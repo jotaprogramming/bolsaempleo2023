@@ -25,7 +25,16 @@
                         {% endfor %}
                         </span>
                         {% endif %}
-                        <h4 class="fs-4 m-0">{{ object.title }}</h4>
+                        <h4 class="fs-4 m-0">
+                            <span class="d-flex gap-1 align-items-center">
+                                {{ object.title }}
+                                {% if request.user.is_staff or usergroups %} 
+                                <a href="{% url 'offer_app:offer_edit' object.slug %}" class="btn btn-link btn-sm rounded-circle" role="button">
+                                    {% include 'partials/icon_element/_pencil_icon.html' %}
+                                </a>
+                                {% endif %}
+                            </span>
+                        </h4>
                     </div>
                     <div>
                         <span class="text-black-50">{{ object.created_at }}</span>
@@ -70,39 +79,45 @@
                 <h6 class="mt-4 fw-bold">Descripción</h6>
                 <p>{{ object.description }}</p>
                 {% if object.get_requirements %}
-                <h6 class="mt-4 fw-bold">Requisitos</h6>
-                {% for requirement in object.get_requirements %}
-                <p>{{requirement}}: Sí</p>
-                {% endfor %}
+                    <h6 class="mt-4 fw-bold">Requisitos</h6>
+                    {% for requirement in object.get_requirements %}
+                        <p>{{requirement}}: Sí</p>
+                    {% endfor %}
                 {% endif %}
-                {% if request.user.is_staff %}
-                <a href="{% url 'offer_app:offer_edit' object.slug %}" class="btn btn-primary rounded-pill px-4" role="button">Editar</a>
-                {% if not candidature %}
-                <button
-                    type="button"
-                    class="btn btn-primary rounded-pill px-4"
-                    name="createButtons"
-                    id="{% url 'offer_app:candidature_save' object.slug %}"
-                    >
-                    <span class="ms-2">Aplicar</span>
-                </button>
-                {% endif %}
-                {% comment %}
-                <a href="{% url 'offer_app:offer_detail' object.slug %}" class="btn btn-primary rounded-pill px-4" role="button">Aplicar</a>
-                {% endcomment %}
+                {% if request.user.is_staff or usergroups %}
+                <h6 class="mt-4 fw-bold">Candidatos</h6>
+                {% if candidatures %}
+                <p>
+                    {% if candidatures|length == 1 %}
+                    Un candidato ha 
+                    {% else %}
+                    {{ candidatures|length }} candidatos han
+                    {% endif %}
+                    aplicado a esta oferta
+                    <br>
+                    <a href="{% url 'offer_app:candidature_list' object.slug %}" class="link-orange" role="button">
+                        Ver todos los candidatos
+                    </a>
+                </p>
                 {% else %}
-                {% if usergroups %}
-                <a href="{% url 'offer_app:offer_edit' object.slug %}" class="btn btn-primary rounded-pill px-4" role="button">Editar</a>
-                {% elif not candidature %}
-                <button
-                    type="button"
-                    class="btn btn-primary rounded-pill px-4"
-                    name="createButtons"
-                    id="{% url 'offer_app:candidature_save' object.slug %}"
-                >
-                    <span class="ms-2">Aplicar</span>
-                </button>
+                <p class="text-muted fst-italic">Sin candidatos</p>
                 {% endif %}
+                {% endif %}
+                {% if object.deleted_at %}
+                <div class="alert alert-danger" role="alert">
+                    Oferta no disponible
+                </div>
+                {% else %}
+                    {% if not candidature %}
+                    <button
+                        type="button"
+                        class="btn btn-primary rounded-pill px-4"
+                        name="createButtons"
+                        id="{% url 'offer_app:candidature_save' object.slug request.user.username %}?path=mycandidacies"
+                    >
+                        <span class="">Aplicar</span>
+                    </button>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>

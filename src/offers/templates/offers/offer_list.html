@@ -39,12 +39,12 @@
         <tbody>
           {% for row in object_list %}
           <tr>
-            <td scope="row">{{row.id}}</td>
-            <td>{{row.title}}</td>
-            <td>{{row.user.first_name}}</td>
-            <td>{{row.currency}} {{row.salary}} {{row.payperiod}}</td>
-            <td>{{row.modality}}</td>
-            <td>
+            <td scope="row" {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>{{row.id}}</td>
+            <td {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>{{row.title}}</td>
+            <td {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>{{row.user.first_name}}</td>
+            <td {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>{{row.currency}} {{row.salary}} {{row.payperiod}}</td>
+            <td {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>{{row.modality}}</td>
+            <td {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>
               {% if row.deleted_at %} 
               Eliminado el {{row.deleted_at}}
               {% elif row.updated_at %} 

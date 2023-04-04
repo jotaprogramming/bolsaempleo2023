@@ -18,7 +18,13 @@
     background-color: var(--orange) !important;
 }
 
+.link-orange {
+    color: var(--orange) !important;
+}
 
+.link-orange:hover {
+    color: var(--burnt-orange) !important;
+}
 
 textarea:focus,
 input[type="text"]:focus,
@@ -113,6 +119,12 @@ input[type="color"]:-webkit-autofill,
     display: flex !important;
     justify-content: center;
     align-items: center;
+}
+
+.btn-link {
+    --bs-btn-color: var(--bs-orange) !important;
+    --bs-btn-hover-color: var(--burnt-orange) !important;
+    --bs-btn-active-color: var(--burnt-orange) !important;
 }
 
 .pagination {

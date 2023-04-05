@@ -27,11 +27,13 @@
           <tr>
             <td>{{row.offer.title}}</td>
             <td>
-              {% if row.candidate.first_name and row.candidate.last_name %}
-              {{row.candidate.first_name}} {{row.candidate.last_name}}
-              {% else %}
-              {{row.candidate.username}}
-              {% endif %}
+              <a class="link-orange" href="{% url 'users_app:userprofile' row.candidate.username %}">
+                {% if row.candidate.first_name and row.candidate.last_name %}
+                {{row.candidate.first_name}} {{row.candidate.last_name}}
+                {% else %}
+                {{row.candidate.username}}
+                {% endif %}
+              </a>
             </td>
             <td>
               {% if row.deleted_at %} 

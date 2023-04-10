@@ -65,7 +65,7 @@
     border-radius: 10px;
     border: 1px solid var(--extralight-gray);
     max-width: 1080px;
-    max-height: 600px;
+    /* max-height: 600px; */
     display: flex;
     justify-content: space-between;
     overflow: hidden;

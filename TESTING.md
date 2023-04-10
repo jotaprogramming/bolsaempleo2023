@@ -19,3 +19,5 @@ def clean_username_not_allowed(self):
 ```
 
 > Esta validación no debe ir en `users/forms.py`
+
+## Errores

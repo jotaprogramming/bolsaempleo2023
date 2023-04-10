@@ -5,8 +5,9 @@
   style="width: 300px; height: 100vh; z-index: 2; padding: 150px 2rem 2rem 2rem"
 >
   <div class="row">
-    <h6 class="fw-bold d-flex gap-1 align-items-center position-relative">
-      <i class="lni lni-user"></i>
+    <h6 class="fw-bold d-flex gap-2 align-items-center position-relative">
+      {% comment %} <i class="lni lni-user"></i> {% endcomment %}
+      {% include 'partials/_thumbnail.html' %}
       {% if request.user.user_profile_user.name %}
       {{ request.user.user_profile_user.name }}
       {% elif request.user.first_name %}

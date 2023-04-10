@@ -44,38 +44,39 @@
             /* ASSETS TO INPUTS */
 .set-input .single-input:valid ~ .input-placeholder,
 .set-input .single-input:focus ~ .input-placeholder{
-    color: #F4893C;
+    color: var(--orange);
     padding: 0 10px;
     background-color:#fff;
     font-size: 12px;
     transform: translateX(50px) translateY(-10px);
     letter-spacing: 1px;
-    border-left:1px solid #F4893C;
-    border-right:1px solid #F4893C;
+    border-left:1px solid var(--orange);
+    border-right:1px solid var(--orange);
     height: 20px;
 }
 .set-input .single-input__modify:valid ~ .input-placeholder,
 .set-input .single-input__modify:focus ~ .input-placeholder{
-    color: #F4893C;
+    color: var(--orange);
     padding: 0 -15px;
     background-color:#fff;
     font-size: 12px;
     transform: translateX(10px) translateY(-10px);
     letter-spacing: 1px;
-    border-left:1px solid #F4893C;
-    border-right:1px solid #F4893C;
+    border-left:1px solid var(--orange);
+    border-right:1px solid var(--orange);
     height: 1rem;
 }
 
 
 .set-input .single-input:valid,
-.set-input .single-input:focus{
-     border: 1px solid #F4893C;
+.set-input .single-input:focus,
+.form-control:valid{
+     border: 1px solid var(--orange);
 }
 .set-input .single-input:valid ~ .input-icon,
 .set-input .single-input:focus ~ .input-icon{
-    color: #F4893C;
-    border-right: 1px solid #F4893C;
+    color: var(--orange);
+    border-right: 1px solid var(--orange);
 }
 
 .input_title__publish{

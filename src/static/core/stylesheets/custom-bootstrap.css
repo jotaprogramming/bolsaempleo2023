@@ -157,3 +157,7 @@ input[type="color"]:-webkit-autofill,
     color: var(--bs-list-group-action-hover-color) !important;
     background-color: var(--bs-list-group-action-hover-bg) !important;
 }
+
+.bg-orange {
+    background-color: var(--bs-orange) !important;
+}

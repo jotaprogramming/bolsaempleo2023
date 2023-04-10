@@ -170,12 +170,14 @@ class OfferDetail(LoginRequiredMixin, generic.DetailView):
 
         user = self.request.user
         if not self.request.user.is_staff:
-            usergroups = Traits.objects.filter(
+            usergroups = UserRules.objects.filter(
                 user=user, usergroup__code__icontains="COM"
             )
             context["usergroups"] = usergroups
 
-        candidatures = Candidatures.objects.filter(offer=obj.id, deleted_at=None).exclude(status__name="cancelado")
+        candidatures = Candidatures.objects.filter(
+            offer=obj.id, deleted_at=None
+        ).exclude(status__name="cancelado")
 
         context["offer"] = True
         context["similar_offers"] = offers
@@ -317,7 +319,11 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         str_pk = get_pk_from_a_slug(self)
-        return self.model.objects.filter(offer__id=str_pk).exclude(status__name="cancelado").order_by("created_at")
+        return (
+            self.model.objects.filter(offer__id=str_pk)
+            .exclude(status__name="cancelado")
+            .order_by("created_at")
+        )
 
     def get_context_data(self, **kwargs):
         context = super(CandidaturesByOfferList, self).get_context_data(**kwargs)
@@ -372,7 +378,7 @@ class CandidatureSave(LoginRequiredMixin, generic.FormView):
         allowed = self.request.user.is_authenticated
 
         if not allowed:
-            allowed = Traits.objects.filter(
+            allowed = UserRules.objects.filter(
                 user__username=username, usergroup__name="COM"
             )
 
@@ -414,22 +420,22 @@ class CandidatureSave(LoginRequiredMixin, generic.FormView):
             candidate__username=username, offer_id=str_pk
         )
 
-        if p_status:
-            status_name = p_status
-        else:
-            status_name = "postulado"
+        # if p_status:
+        #     status_name = p_status
+        # else:
+        #     status_name = "postulado"
 
-        status = PostStatus.objects.get(name=status_name)
+        # status = POST_STATUS.objects.get(name=status_name)
 
         if cantidatures:
             cantidature_cache = cantidatures.filter(deleted_at=None)
             if cantidature_cache:
                 cantidatures.update(
-                    status=status, updated_at=timezone.now(), deleted_at=None
+                    status=p_status, updated_at=timezone.now(), deleted_at=None
                 )
         else:
             candidature = Candidatures(
-                offer_id=str_pk, status=status, candidate=username
+                offer_id=str_pk, status=p_status, candidate=username
             )
             candidature.save()
 
@@ -484,6 +490,6 @@ class CandidatureDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        form.instance.status = PostStatus.objects.get(name="rechazado")
+        form.instance.status = "3"
         form.instance.deleted_at = timezone.now()
         return super().form_valid(form)

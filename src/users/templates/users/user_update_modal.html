@@ -41,6 +41,20 @@
             </div>
           </div>
           <div class="">
+            <label for="id_usergroup" class="form-label">
+              {{form.usergroup.label}}
+            </label>
+            {{form.usergroup}}
+            <div id="usergroupHelp" class="form-text">{{form.usergroup.help_text}}</div>
+          </div>
+          <div class="">
+            <label for="id_role" class="form-label">
+              {{form.role.label}}
+            </label>
+            {{form.role}}
+            <div id="roleHelp" class="form-text">{{form.role.help_text}}</div>
+          </div>
+          <div class="">
             <div class="form-check form-switch">
               {{form.is_superuser}}
               <label for="id_is_superuser" class="form-check-label">

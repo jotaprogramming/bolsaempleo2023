@@ -47,6 +47,14 @@ input[type="color"]:focus,
     outline: 0 none;
 }
 
+.form-control:focus{
+    color: var(--bs-body-color) !important;
+    background-color: var(--bs-form-control-bg) !important;
+    border-color: var(--shaded-orange) !important;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(253, 129, 13, 0.25) !important;
+}
+
 textarea:-webkit-autofill,
 input[type="text"]:-webkit-autofill,
 input[type="password"]:-webkit-autofill,
@@ -156,4 +164,8 @@ input[type="color"]:-webkit-autofill,
 .list-group--custom .list-group-item.active:hover {
     color: var(--bs-list-group-action-hover-color) !important;
     background-color: var(--bs-list-group-action-hover-bg) !important;
+}
+
+.bg-orange {
+    background-color: var(--bs-orange) !important;
 }

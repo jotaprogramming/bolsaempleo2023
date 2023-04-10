@@ -62,14 +62,14 @@ class PolicyForm(forms.ModelForm):
     restriction = forms.ModelMultipleChoiceField(
         queryset=Restrictions.objects.filter(deleted_at=None),
         required=True,
-        label="Restricción",
+        label=_("Restricción"),
         widget=forms.SelectMultiple(attrs={"class": "form-select"}),
     )
 
     app = forms.ModelMultipleChoiceField(
         queryset=Apps.objects.filter(deleted_at=None),
         required=True,
-        label="Aplicaciones",
+        label=_("Aplicaciones"),
         widget=forms.SelectMultiple(attrs={"class": "form-select"}),
     )
 
@@ -80,7 +80,7 @@ class PolicyForm(forms.ModelForm):
         self.fields["restriction"].label = "Descripción(es)"
 
     class Meta:
-        model = Policies
+        model = UserGroupPolicies
 
         fields = [
             "usergroup",
@@ -189,7 +189,7 @@ class RoleForm(forms.ModelForm):
     restriction = forms.ModelMultipleChoiceField(
         queryset=Restrictions.objects.filter(deleted_at=None),
         required=False,
-        label="Restricción",
+        label=_("Restricción"),
         widget=forms.SelectMultiple(attrs={"class": "form-select"}),
     )
 
@@ -239,14 +239,14 @@ class PolicyForm(forms.ModelForm):
     app = forms.ModelMultipleChoiceField(
         queryset=Apps.objects.filter(deleted_at=None),
         required=False,
-        label="Aplicación",
+        label=_("Aplicación"),
         widget=forms.SelectMultiple(attrs={"class": "form-select"}),
     )
 
     restriction = forms.ModelMultipleChoiceField(
         queryset=Restrictions.objects.filter(deleted_at=None),
         required=True,
-        label="Restricción",
+        label=_("Restricción"),
         widget=forms.SelectMultiple(attrs={"class": "form-select"}),
     )
 
@@ -257,7 +257,7 @@ class PolicyForm(forms.ModelForm):
         self.fields["app"].label = "Aplicación(es) (opcional)"
 
     class Meta:
-        model = Policies
+        model = UserGroupPolicies
 
         fields = [
             "usergroup",
@@ -270,15 +270,15 @@ class PolicyForm(forms.ModelForm):
         }
 
 
-class TraitForm(forms.ModelForm):
+class UserRuleForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(TraitForm, self).__init__(*args, **kwargs)
+        super(UserRuleForm, self).__init__(*args, **kwargs)
         self.fields["user"].label = "Usuario"
         self.fields["usergroup"].label = "Grupo"
         self.fields["role"].label = "Rol"
 
     class Meta:
-        model = Traits
+        model = UserRules
 
         fields = [
             "user",
@@ -294,8 +294,77 @@ class TraitForm(forms.ModelForm):
 
 
 class UserForm(forms.ModelForm):
+    usergroup = forms.ModelChoiceField(
+        queryset=UserGroups.objects.all(),
+        label=_("Grupo"),
+        required=True,
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+    role = forms.ModelChoiceField(
+        queryset=Roles.objects.all(),
+        label=_("Rol"),
+        required=True,
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        self.fields["username"].label = "Usuario"
+        self.fields["email"].label = "Correo electrónico"
+        self.fields["is_superuser"].label = "¿Es superusuario?"
+        self.fields["is_superuser"].required = False
+        self.fields["is_staff"].label = "¿Es administrativo?"
+        self.fields["is_staff"].required = False
+        self.fields["is_active"].label = "¿Es activo?"
+        self.fields["is_active"].required = False
+
+    class Meta:
+        model = User
+
+        fields = [
+            "email",
+            "username",
+            "is_superuser",
+            "is_staff",
+            "is_active",
+        ]
+
+        widgets = {
+            "username": forms.TextInput(
+                attrs={
+                    "placeholder": "Nombre de usuario",
+                    "class": "form-control",
+                    "minlength": "3",
+                    "maxlength": "150",
+                }
+            ),
+            "email": forms.EmailInput(
+                attrs={
+                    # "placeholder": "Correo electrónico",
+                    "class": "form-control",
+                }
+            ),
+            "is_superuser": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
+                }
+            ),
+            "is_staff": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
+                }
+            ),
+            "is_active": forms.CheckboxInput(
+                attrs={
+                    "class": "form-check-input",
+                }
+            ),
+        }
+
+
+class UserPassForm(UserForm):
     repeat_pass = forms.CharField(
-        label="Repetir Contraseña",
+        label=_("Repetir Contraseña"),
         required=True,
         widget=forms.PasswordInput(
             attrs={
@@ -307,7 +376,7 @@ class UserForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
-        super(UserForm, self).__init__(*args, **kwargs)
+        super(UserPassForm, self).__init__(*args, **kwargs)
         self.fields["username"].label = "Usuario"
         self.fields["email"].label = "Correo electrónico"
         self.fields["password"].label = "Contraseña"
@@ -349,7 +418,7 @@ class UserForm(forms.ModelForm):
             ),
             "email": forms.EmailInput(
                 attrs={
-                    # "placeholder": "Correo electrónico",
+                    "placeholder": "Correo electrónico",
                     "class": "form-control",
                 }
             ),
@@ -373,62 +442,6 @@ class UserForm(forms.ModelForm):
     def clean_repeat_pass(self):
         if self.cleaned_data["password"] != self.cleaned_data["repeat_pass"]:
             self.add_error("repeat_pass", "Contraseña incorrecta")
-
-
-class UserFormUpdate(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(UserFormUpdate, self).__init__(*args, **kwargs)
-        self.fields["username"].label = "Usuario"
-        self.fields["email"].label = "Correo electrónico"
-        self.fields["is_superuser"].label = "¿Es superusuario?"
-        self.fields["is_superuser"].required = False
-        self.fields["is_staff"].label = "¿Es administrativo?"
-        self.fields["is_staff"].required = False
-        self.fields["is_active"].label = "¿Es activo?"
-        self.fields["is_active"].required = False
-
-    class Meta:
-        model = User
-
-        fields = [
-            "email",
-            "username",
-            "is_superuser",
-            "is_staff",
-            "is_active",
-        ]
-
-        widgets = {
-            "username": forms.TextInput(
-                attrs={
-                    "placeholder": "Nombre de usuario",
-                    "class": "form-control",
-                    "minlength": "3",
-                    "maxlength": "150",
-                }
-            ),
-            "email": forms.EmailInput(
-                attrs={
-                    # "placeholder": "Correo electrónico",
-                    "class": "form-control",
-                }
-            ),
-            "is_superuser": forms.CheckboxInput(
-                attrs={
-                    "class": "form-check-input",
-                }
-            ),
-            "is_staff": forms.CheckboxInput(
-                attrs={
-                    "class": "form-check-input",
-                }
-            ),
-            "is_active": forms.CheckboxInput(
-                attrs={
-                    "class": "form-check-input",
-                }
-            ),
-        }
 
 
 class LoginForm(AuthenticationForm):
@@ -456,32 +469,27 @@ class LoginForm(AuthenticationForm):
 
 class RegisterForm(forms.ModelForm):
     repeat_pass = forms.CharField(
-        label="Repetir Contraseña",
+        label=_("Repetir Contraseña"),
         required=True,
         widget=forms.PasswordInput(
             attrs={
                 # "placeholder": "Repita la contraseña",
                 "class": "single-input",
                 "minlength": "8",
-            }
-        ),
-    )
-    email = forms.CharField(
-        label=_("Email"),
-        required=True,
-        widget=forms.EmailInput(
-            attrs={
-                "class": "single-input",
+                "title": _("Repite la contraseña"),
             }
         ),
     )
 
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
-        self.fields["first_name"].required = True
-        self.fields["last_name"].required = True
+        self.fields["first_name"].label = "Usuario (opcional)"
+        self.fields["first_name"].required = False
+        self.fields["last_name"].label = "Apellidos (opcional)"
+        self.fields["last_name"].required = False
         self.fields["username"].label = "Usuario"
-        self.fields["email"].label = "Correo electrónico"
+        self.fields["email"].label = "Correo de registro"
+        self.fields["email"].required = True
         self.fields["password"].label = "Contraseña"
 
     class Meta:
@@ -502,14 +510,16 @@ class RegisterForm(forms.ModelForm):
                     "class": "single-input",
                     "minlength": "1",
                     "maxlength": "150",
-                }
+                    "title": _("Nombre del usuario"),
+                },
             ),
             "last_name": forms.TextInput(
                 attrs={
                     "class": "single-input",
                     "minlength": "1",
                     "maxlength": "150",
-                }
+                    "title": _("Apellidos del usuario"),
+                },
             ),
             "username": forms.TextInput(
                 attrs={
@@ -517,21 +527,24 @@ class RegisterForm(forms.ModelForm):
                     "class": "single-input",
                     "minlength": "3",
                     "maxlength": "150",
-                }
+                    "title": _("Usuario"),
+                },
             ),
             "password": forms.PasswordInput(
                 attrs={
                     # "placeholder": "Contraseña",
                     "class": "single-input",
                     "minlength": "8",
-                }
+                    "title": _("Contraseña"),
+                },
             ),
             "email": forms.EmailInput(
                 attrs={
                     # "placeholder": "Correo electrónico",
                     "class": "single-input",
                     "minlength": "3",
-                }
+                    "title": _("Correo electrónico de registro"),
+                },
             ),
         }
 
@@ -553,12 +566,24 @@ class RegisterForm(forms.ModelForm):
 
 
 class RegisterCompanyForm(RegisterForm):
-    id_number = forms.CharField(
-        label=_("Número de identidad"),
+    # ------ Company
+    name = forms.CharField(
+        label=_("Razón social"),
         required=True,
         widget=forms.TextInput(
             attrs={
                 "class": "single-input",
+                "title": _("Nombre / razón social de la compañía"),
+            }
+        ),
+    )
+    id_number = forms.CharField(
+        label=_("NIT"),
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "single-input",
+                "title": _("Número de identificación tributario"),
             }
         ),
     )
@@ -568,25 +593,27 @@ class RegisterCompanyForm(RegisterForm):
         widget=forms.TextInput(
             attrs={
                 "class": "single-input",
+                "title": _("Teléfono de contacto"),
             }
         ),
     )
     contact_email = forms.EmailField(
-        label=_("Correo electróncio de contacto"),
+        label=_("Correo de contacto"),
         required=True,
         widget=forms.EmailInput(
             attrs={
                 "class": "single-input",
+                "title": _("Correo electrónico de contacto"),
             }
         ),
     )
     address = forms.CharField(
         label=_("Dirección"),
-        required=False,
+        required=True,
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Dirección",
                 "class": "single-input",
+                "title": _("Dirección de la empresa"),
             }
         ),
     )
@@ -597,6 +624,7 @@ class RegisterCompanyForm(RegisterForm):
         widget=forms.Select(
             attrs={
                 "class": "form-select",
+                "title": _("Departamento donde se registró la empresa"),
             }
         ),
     )
@@ -607,12 +635,94 @@ class RegisterCompanyForm(RegisterForm):
         widget=forms.Select(
             attrs={
                 "class": "form-select",
+                "title": _("Ciudad donde se registró la empresa"),
+            }
+        ),
+    )
+    # ------ Personnel
+    # Legal representative
+    rep_name = forms.CharField(
+        max_length=100,
+        label=_("Representante legal"),
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "single-input",
+                "title": _("Nombre completo del representante legal"),
+            }
+        ),
+    )
+    rep_document_type = forms.ModelChoiceField(
+        queryset=DocumentType.objects.all(),
+        label=_("Tipo de documento"),
+        required=True,
+        widget=forms.Select(
+            attrs={
+                "class": "form-control rounded-end-0",
+                "title": _("Tipo de documento del representante legal"),
+                "style": "width: 40px !important; height: 40px !important; padding: .375rem 7px !important;",
+            },
+        ),
+    )
+    rep_id = forms.CharField(
+        max_length=15,
+        label=_("Número de identificación"),
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "single-input",
+                "title": _("Número de identificación del representante legal"),
+            }
+        ),
+    )
+    # Human Resources
+    humres_name = forms.CharField(
+        max_length=100,
+        label=_("Dir. Rec. Humanos"),
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "single-input",
+                "title": _("Nombre del director de recursos humanos"),
+            }
+        ),
+    )
+    humres_document_type = forms.ModelChoiceField(
+        queryset=DocumentType.objects.all(),
+        label=_("Tipo de documento"),
+        required=True,
+        widget=forms.Select(
+            attrs={
+                "class": "form-control rounded-end-0",
+                "title": _("Tipo de documento del director de recursos humanos"),
+                "style": "width: 40px !important; height: 40px !important; padding: .375rem 7px !important;",
+            }
+        ),
+    )
+    humres_id = forms.CharField(
+        max_length=15,
+        label=_("Número de identificación"),
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                "class": "single-input",
+                "title": _("Número de documento del director de recursos humanos"),
             }
         ),
     )
 
 
 class RegisterStudentForm(RegisterForm):
+    # avatar = forms.FileField(
+    #     label=_("Foto de perfil"),
+    #     allow_empty_file=False,
+    #     required=False,
+    #     widget=forms.FileInput(
+    #         attrs={
+    #             "class": "form-control",
+    #         }
+    #     ),
+    # )
     document_type = forms.ModelChoiceField(
         queryset=DocumentType.objects.all(),
         label=_("Tipo de documento"),
@@ -655,7 +765,6 @@ class RegisterStudentForm(RegisterForm):
         required=False,
         widget=forms.TextInput(
             attrs={
-                "placeholder": "Dirección",
                 "class": "single-input",
             }
         ),
@@ -688,86 +797,31 @@ class RegisterStudentForm(RegisterForm):
         self.fields["username"].required = False
         self.fields["username"].label = "Usuario"
         self.fields["email"].label = "Correo electrónico"
+        self.fields["email"].required = True
         self.fields["password"].label = "Contraseña"
 
 
-class UserProfileForm(forms.Form):
-    about_me = forms.CharField(
-        required=False,
-        widget=forms.Textarea(attrs={"class": "form-control", "minlength": "1"}),
-    )
-
-
 class UserProfileModelForm(forms.ModelForm):
-    fullname = forms.CharField(
-        label="Full name",
-        required=True,
-        widget=forms.TextInput(attrs={"class": "single-input", "minlength": "1"}),
-    )
-
     def __init__(self, *args, **kwargs):
         super(UserProfileModelForm, self).__init__(*args, **kwargs)
-        self.fields["name"].label = "Short name (optional)"
-        self.fields["email"].label = "Contact email"
-        self.fields["id_number"].label = "Identificaction number"
-        self.fields["address"].label = "Address"
+        self.fields["avatar"].label = "Avatar"
+        self.fields["about_me"].label = "Sobre mí"
+        self.fields["avatar"].require = False
         self.fields["about_me"].require = False
 
     class Meta:
         model = UserProfile
 
         fields = [
-            "document_type",
-            "id_number",
-            "name",
-            "phone",
-            "email",
-            "address",
-            "city",
+            "avatar",
             "about_me",
         ]
 
         widgets = {
-            "document_type": forms.Select(
+            "about_me": forms.FileInput(
                 attrs={
-                    "class": "form-select",
-                }
-            ),
-            "id_number": forms.TextInput(
-                attrs={
-                    "class": "single-input",
-                    "minlength": "1",
-                }
-            ),
-            "name": forms.TextInput(
-                attrs={
-                    "class": "single-input",
-                    "minlength": "1",
-                }
-            ),
-            "phone": forms.TextInput(
-                attrs={
-                    "class": "single-input",
-                    "minlength": "1",
-                }
-            ),
-            "email": forms.EmailInput(
-                attrs={
-                    # "placeholder": "Correo electrónico",
-                    "class": "single-input",
-                    "minlength": "3",
-                }
-            ),
-            "address": forms.TextInput(
-                attrs={
-                    "class": "single-input",
-                    "minlength": "1",
-                }
-            ),
-            "city": forms.Select(
-                attrs={
-                    "class": "form-select",
-                }
+                    "class": "form-control",
+                },
             ),
             "about_me": forms.Textarea(
                 attrs={

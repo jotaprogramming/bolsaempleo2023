@@ -10,7 +10,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 
-from users.models import Traits
+from users.models import UserRules
 from users.managers import TraitManager
 
 
@@ -21,18 +21,18 @@ from config.models import Cities, Countries, Districts, Cities, DocumentType
 from datetime import datetime, timezone
 
 
-class TraitsManagerTest(TestCase):
+class UserRulesManagerTest(TestCase):
     fixtures = [
         "users_fixtures.json",
         "apps_fixtures.json",
         "restrictions_fixtures.json",
         "roles_fixtures.json",
-        "traits_fixtures.json",
+        "rules_fixtures.json",
     ]
 
     @classmethod
     def setUpTestData(cls):
-        cls.traits = Traits.objects.order_by().values()
+        cls.rules = UserRules.objects.order_by().values()
 
     def test_get_nums(self):
         data_expected = [
@@ -50,4 +50,4 @@ class TraitsManagerTest(TestCase):
             }
         ]
 
-        self.assertQuerysetEqual(self.traits, data_expected)
+        self.assertQuerysetEqual(self.rules, data_expected)

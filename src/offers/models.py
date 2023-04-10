@@ -14,6 +14,15 @@ from django.template.defaultfilters import slugify
 
 from .utils import string_to_base64
 from .managers import OffersManager
+from config.models import *
+
+POST_STATUS = (
+    ("1", "postulado"),
+    ("2", "cancelado"),
+    ("3", "rechazado"),
+    ("4", "aceptado"),
+    ("5", "contratado"),
+)
 
 
 # Create your models here.
@@ -45,76 +54,6 @@ class Requirements(models.Model):
         verbose_name_plural = _("requirements")
 
 
-class Workdays(models.Model):
-    name = models.CharField(_("name"), max_length=50, null=False)
-
-    def __str__(self):
-        return "{}".format(self.name)
-
-    class Meta:
-        verbose_name = _("workday")
-        verbose_name_plural = _("workdays")
-
-
-class PayPeriods(models.Model):
-    name = models.CharField(_("name"), max_length=25, null=False)
-
-    def __str__(self):
-        return "{}".format(self.name)
-
-    class Meta:
-        verbose_name = _("pay period")
-        verbose_name_plural = _("pay periods")
-
-
-class PostStatus(models.Model):
-    name = models.CharField(_("name"), max_length=25, null=False)
-
-    def __str__(self):
-        return "{}".format(self.name)
-
-    class Meta:
-        verbose_name = _("postulation status")
-        verbose_name_plural = _("postulation statuses")
-
-
-class Modalities(models.Model):
-    name = models.CharField(_("name"), max_length=25, null=False)
-    description = models.TextField(_("description"), null=False)
-    country = models.ForeignKey(
-        Countries,
-        related_name="country_modality",
-        verbose_name=_("country"),
-        blank=False,
-        on_delete=models.PROTECT,
-    )
-
-    def __str__(self):
-        return "{}".format(self.name)
-
-    class Meta:
-        verbose_name = _("modality")
-        verbose_name_plural = _("modalities")
-
-
-class ContractTypes(models.Model):
-    name = models.CharField(_("name"), max_length=50, null=False)
-    country = models.ForeignKey(
-        Countries,
-        related_name="country_contract_type",
-        verbose_name=_("country"),
-        blank=False,
-        on_delete=models.PROTECT,
-    )
-
-    def __str__(self):
-        return "{}".format(self.name)
-
-    class Meta:
-        verbose_name = _("contract type")
-        verbose_name_plural = _("contract types")
-
-
 class Offers(models.Model):
     user = models.ForeignKey(
         User,
@@ -126,7 +65,7 @@ class Offers(models.Model):
     slug = models.SlugField(max_length=255, unique=True)
     title = models.CharField(_("title"), max_length=255, null=False)
     salary = models.DecimalField(
-        max_digits=10, decimal_places=2, blank=False, null=False
+        _("salary"), max_digits=10, decimal_places=2, blank=False, null=False
     )
     currency = models.ForeignKey(
         Currencies,
@@ -228,12 +167,15 @@ class Candidatures(models.Model):
         blank=False,
         on_delete=models.PROTECT,
     )
-    status = models.ForeignKey(
-        PostStatus,
-        related_name="candidature_status",
-        verbose_name=_("status"),
-        blank=False,
-        on_delete=models.PROTECT,
+    # status = models.ForeignKey(
+    #     POST_STATUS,
+    #     related_name="candidature_status",
+    #     verbose_name=_("status"),
+    #     blank=False,
+    #     on_delete=models.PROTECT,
+    # )
+    status = models.CharField(
+        _("candidature status"), max_length=2, null=False, choices=POST_STATUS
     )
     candidate = models.ForeignKey(
         User,

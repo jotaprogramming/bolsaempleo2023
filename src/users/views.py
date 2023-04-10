@@ -955,19 +955,7 @@ class UserProfileDetail(LoginRequiredMixin, generic.TemplateView):
             userprofile = UserProfile.objects.filter(user=obj)
             if not userprofile:
                 UserProfile.objects.create(user=obj)
-
-            try:
-                CurriculumVitae.objects.get(userprofile=obj)
-                context["cv"] = True
-            except Exception as ex:
-                # print('Error in <<get_context_data ~ UserProfileDetail>>: ', ex)
-                pass
-            try:
-                Companies.objects.get(userprofile=obj)
-                context["company"] = True
-            except Exception as ex:
-                # print('Error in <<get_context_data ~ UserProfileDetail>>: ', ex)
-                pass
+            context["userprofile"] = userprofile
 
             # rules = UserRules.objects.filter(user__username=username_param)
             # context["rules"] = rules
@@ -1006,17 +994,14 @@ class UserProfileCreate(LoginRequiredMixin, generic.CreateView):
         return context
 
     def form_valid(self, form):
-        slug = self.kwargs.get("slug", "")
         try:
-            user = User.objects.filter(username=slug)
-            fullname = form.cleaned_data["fullname"]
-            user.update(first_name=fullname)
+            slug = self.kwargs.get("slug", "")
+            form.instance.user = User.objects.get(username=slug)
             form.instance.email = normalize_email(form.instance.email)
-            form.instance.user_id = user.values()[0]["id"]
             return super().form_valid(form)
         except Exception as exception:
             message = getattr(exception, "message", str(exception))
-            error_message(self.request, msg=message)
+            error_message(self.request, msg=message, time=20000)
             return HttpResponseRedirect(
                 reverse_lazy("users_app:userprofile_add", args=[slug])
             )
@@ -1061,14 +1046,15 @@ class UserProfileEdit(LoginRequiredMixin, generic.UpdateView):
 
     def form_valid(self, form):
         slug = self.kwargs.get("slug", "")
-        user = User.objects.filter(username=slug)
-        fullname = form.cleaned_data["fullname"]
-        user.update(first_name=fullname)
+        # fullname = form.cleaned_data["avatar"]
+        # fullname = form.cleaned_data["fullname"]
+        # user.update(first_name=fullname)
         form.instance.updated_at = now()
         form.instance.email = normalize_email(form.instance.email)
         return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
+        slug = self.kwargs.get("slug", "")
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
@@ -1076,7 +1062,7 @@ class UserProfileEdit(LoginRequiredMixin, generic.UpdateView):
         warning_message(self.request, msg=msg_error)
         return HttpResponseRedirect(
             reverse_lazy(
-                "users_app:userprofile_edit", args=[self.request.user.username]
+                "users_app:userprofile_edit", args=[slug]
             )
         )
 
@@ -1195,7 +1181,7 @@ class RegisterStudentView(UserLoggedMixin, generic.FormView):
             cod_name = format_diacritics(cod_name)
             last_id = User.objects.filter(username__icontains=cod_name).order_by("-id")
             user_id = int(last_id[0].id) if last_id.count() > 0 else 0
-            print("🐍 File: users/views.py | Line: 1198 | form_valid ~ user_id",user_id)
+            print("🐍 File: users/views.py | Line: 1198 | form_valid ~ user_id", user_id)
             username = f"{cod_name}{user_id + 1}".lower()
 
             usergroup = UserGroups.objects.get(code__icontains="GRA")

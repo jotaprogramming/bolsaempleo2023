@@ -802,31 +802,130 @@ class RegisterStudentForm(RegisterForm):
 
 
 class UserProfileModelForm(forms.ModelForm):
+    first_name = forms.CharField(
+        label=_("Nombre"),
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "single-input",
+                "title": _("Nombre"),
+            }
+        ),
+    )
+    last_name = forms.CharField(
+        label=_("Nombre"),
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "class": "single-input",
+                "title": _("Apellidos"),
+            }
+        ),
+    )
+    district = forms.ModelChoiceField(
+        queryset=Districts.objects.all(),
+        label=_("Departamento"),
+        required=True,
+        widget=forms.Select(
+            attrs={
+                "class": "form-select",
+                "title": _("Departamento donde se registró la empresa"),
+            }
+        ),
+    )
+
     def __init__(self, *args, **kwargs):
         super(UserProfileModelForm, self).__init__(*args, **kwargs)
         self.fields["avatar"].label = "Avatar"
+        self.fields["web"].label = "Web"
+        self.fields["document_type"].label = "Tipo de documento"
+        self.fields["id_number"].label = "Número de identificación"
+        self.fields["phone"].label = "Teléfono"
+        self.fields["email"].label = "Correo electrónico"
+        self.fields["address"].label = "Dirección"
+        self.fields["city"].label = "Ciudad"
         self.fields["about_me"].label = "Sobre mí"
-        self.fields["avatar"].require = False
-        self.fields["about_me"].require = False
+        self.fields["avatar"].required = True
+        self.fields["web"].required = False
+        self.fields["document_type"].required = True
+        self.fields["id_number"].required = True
+        self.fields["phone"].required = True
+        self.fields["email"].required = True
+        self.fields["address"].required = True
+        self.fields["city"].required = True
+        self.fields["about_me"].required = False
 
     class Meta:
         model = UserProfile
 
         fields = [
             "avatar",
+            "web",
+            "document_type",
+            "id_number",
+            "phone",
+            "email",
+            "address",
+            "city",
             "about_me",
         ]
 
         widgets = {
-            "about_me": forms.FileInput(
+            "avatar": forms.FileInput(
                 attrs={
                     "class": "form-control",
+                    "title": _("Subir foto de perfil"),
+                },
+            ),
+            "web": forms.TextInput(
+                attrs={
+                    "class": "single-input",
+                    "minlength": "1",
+                    "title": _("Página web o red social"),
+                }
+            ),
+            "document_type": forms.Select(
+                attrs={
+                    "class": "form-control rounded-end-0",
+                    "title": _("Tipo de documento"),
+                    "style": "width: 40px !important; height: 40px !important; padding: .375rem 7px !important;",
+                },
+            ),
+            "id_number": forms.TextInput(
+                attrs={
+                    "class": "single-input",
+                    "title": _("Número de documento"),
+                },
+            ),
+            "phone": forms.TextInput(
+                attrs={
+                    "class": "single-input",
+                    "title": _("Número de teléfono (celular o fijo)"),
+                },
+            ),
+            "email": forms.EmailInput(
+                attrs={
+                    "class": "single-input",
+                    "title": _("Correo electrónico"),
+                },
+            ),
+            "address": forms.TextInput(
+                attrs={
+                    "class": "single-input",
+                    "title": _("Dirección"),
+                },
+            ),
+            "city": forms.Select(
+                attrs={
+                    "class": "single-input",
+                    "title": _("Ciudad"),
                 },
             ),
             "about_me": forms.Textarea(
                 attrs={
-                    "class": "single-input",
+                    "class": "form-control",
                     "minlength": "1",
+                    "title": _("Sobre mí"),
                 }
             ),
         }

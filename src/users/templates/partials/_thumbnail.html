@@ -1,6 +1,6 @@
-<picture class="rounded-circle fw-light" style="width: 2rem; height: 2rem;">
-    {% if userprofile %}
-    <img src="{{ userprofile.avatar.url }}" alt="{{ userprofile.user.username }}_pic"/>
+<picture class="rounded-circle fw-light img-thumbnail--custom" style="width: 2rem; height: 2rem;">
+    {% if request.user.userprofile and request.user.userprofile.avatar %}
+    <img src="{{ request.user.userprofile.avatar.url }}" alt="{{ request.user.userprofile.user.username }}_pic"/>
     {% else %}
     <span class="bg-orange text-white letterpic text-uppercase">
         {{ request.user.username.0 }}

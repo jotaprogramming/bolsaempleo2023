@@ -31,19 +31,21 @@ def validate_size(file):
 
 def validate_extension(file, fileext=docext):
     """
-    This function validates if a file has an allowed extension and raises a validation error if it
-    doesn't.
+    This function validates if a file has an allowed extension and raises a validation error if not.
     
-    :param file: The file object that needs to be validated for its extension
-    :param fileext: The file extensions that are allowed for the file
-    :return: the validated file if it has a valid extension.
+    :param file: The file that needs to be validated for its extension
+    :param fileext: The file extensions that are allowed for validation. It is a list of strings
+    :return: the `file` object if its extension matches any of the extensions in the `fileext` list. If
+    none of the extensions match, a `ValidationError` is raised with a message indicating the allowed
+    file extensions.
     """
 
     for ext in fileext:
-        if not file.name.endswith(ext):
-            error = "Archivos permitidos: " + "; ".join(fileext)
-            raise ValidationError(error)
-    return file
+        if file.name.endswith(ext):
+            return file
+            
+    error = "Archivos permitidos: " + "; ".join(fileext)
+    raise ValidationError(error)
 
 
 def validate_document(value):

@@ -54,7 +54,7 @@ def warning_message(request, msg=_("Warning")):
     )
 
 
-def error_message(request, msg=_("An unexpected error occurred")):
+def error_message(request, msg=_("An unexpected error occurred"), time=5000):
     """
     It takes a request object and a message, and then displays a sweetalert2 popup with the message
     
@@ -63,7 +63,7 @@ def error_message(request, msg=_("An unexpected error occurred")):
     """
     swal_title = _("Error")
     swal_msg = msg
-    swal_time = 5000
+    swal_time = time
     sweetify.error(
         request,
         title=swal_title,

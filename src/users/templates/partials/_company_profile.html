@@ -1,0 +1,62 @@
+<div class="row gap-4 col-md-6">
+    <div class="card col-12">
+      <div class="card-body">
+        <div class="row row-gap-2">
+          <h5 class="fw-bold m-0 col-12 mb-3">Información corporativa</h5>
+          <div class="col-md-6 mb-2">
+            <div class="row">
+              <p class="col-12 fw-semibold fst-italic mb-1">
+                RAZÓN SOCIAL
+              </p>
+              <p class="col-12 m-0">
+                {% if object.userprofile.company_profile.name %} 
+                {{ object.userprofile.company_profile.name }}
+                {% else %}
+                ------
+                {% endif %}
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 mb-2">
+            <div class="row">
+              <p class="col-12 fw-semibold fst-italic mb-1">
+                {{ object.userprofile.document_type.name }}
+              </p>
+              <p class="col-12 m-0">
+                {% if object.userprofile.id_number %} 
+                {{ object.userprofile.id_number }}
+                {% else %}
+                ------
+                {% endif %}
+              </p>
+            </div>
+          </div>
+          {% if object.userprofile.company_profile.personnel.all %} 
+          {% for personnel in object.userprofile.company_profile.personnel.all %}
+          <div class="col-md-6 mb-2">
+            <div class="row">
+              <p class="col-12 fw-semibold fst-italic mb-1">
+                {{ personnel.specialization.name }}
+              </p>
+              <p class="col-12 m-0">
+                {{ personnel.fullname }}
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 mb-2">
+            <div class="row">
+              <p class="col-12 fw-semibold fst-italic mb-1">
+                {{ personnel.document_type.name }}
+              </p>
+              <p class="col-12 m-0">
+                {{ personnel.id_number }}
+              </p>
+            </div>
+          </div>
+          {% endfor %}
+          {% endif %}
+          
+        </div>
+      </div>
+    </div>
+  </div>

@@ -15,9 +15,9 @@ from users.forms import (
     RestrictionForm,
     AppForm,
     RoleForm,
-    TraitForm,
+    UserRuleForm,
+    UserPassForm,
     UserForm,
-    UserFormUpdate,
     RegisterForm,
     UserProfileModelForm,
 )
@@ -73,9 +73,9 @@ class RoleFormTest(TestCase):
         )
 
 
-class TraitFormTest(TestCase):
+class UserRuleFormTest(TestCase):
     def test_label_field(self):
-        form = TraitForm()
+        form = UserRuleForm()
         self.assertTrue(
             form.fields["user"].label == "Usuario"
             and form.fields["usergroup"].label == "Grupo"
@@ -86,7 +86,7 @@ class TraitFormTest(TestCase):
 class UserFormTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.form = UserForm()
+        cls.form = UserPassForm()
 
     def test_label_field(self):
         self.assertTrue(
@@ -107,7 +107,7 @@ class UserFormTest(TestCase):
 
     def test_clean_repeat_pass(self):
         form_data = {"password": "pass", "repeat_pass": "pass1"}
-        self.form = UserForm(data=form_data)
+        self.form = UserPassForm(data=form_data)
 
         self.assertFalse(self.form.is_valid())
 
@@ -115,7 +115,7 @@ class UserFormTest(TestCase):
 class UserFormUpdateTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.form = UserFormUpdate()
+        cls.form = UserForm()
 
     def test_label_field(self):
         self.assertTrue(

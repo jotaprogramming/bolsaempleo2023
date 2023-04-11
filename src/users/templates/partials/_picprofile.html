@@ -1,0 +1,10 @@
+<picture class="img-content__info display-5" id="previewPic">
+    {% comment %} <img src="{% static 'core/assets/img/montains.jpg' %}" alt="" /> {% endcomment %}
+    {% if object.userprofile.avatar and object.userprofile.avatar.url %}
+    <img src="{{ object.userprofile.avatar.url }}" alt="{{ object.user.username }}_pic"/>
+    {% else %}
+    <span class="bg-orange text-white letterpic text-uppercase">
+        {{ username.0 }}
+    </span>
+    {% endif %} 
+</picture>

@@ -1,0 +1,100 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crypto_url %}
+
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+{% block content %}    
+<section class="my-5">
+  {% include 'partials/_display.html' %}
+  <div class="row gy-3 mt-3">
+    <div class="col-12">
+        <button
+        type="button"
+        class="btn btn-primary btn-center"
+        name="createButtons"
+        id="{% url 'offer_app:offer_modal_add' %}"
+      >
+        <i class="lni lni-plus"></i>
+        <span class="ms-2">Crear</span>
+      </button>
+    </div>
+    <div class="col-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th>Título</th>
+            <th>Empresa</th>
+            <th>Salario</th>
+            <th>Modalidad</th>
+            <th>Estado</th>
+            <th>Detalle</th>
+            <th>Editar</th>
+            <th>Eliminar</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in object_list %}
+          <tr>
+            <td scope="row" {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>{{row.id}}</td>
+            <td {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>{{row.title}}</td>
+            <td {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>{{row.user.first_name}}</td>
+            <td {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>{{row.currency}} {{row.salary}} {{row.payperiod}}</td>
+            <td {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>{{row.modality}}</td>
+            <td {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>
+              {% if row.deleted_at %} 
+              Eliminado el {{row.deleted_at}}
+              {% elif row.updated_at %} 
+              Actualizado el {{row.updated_at}}
+              {% else %}
+              Creado el {{row.created_at}}
+              {% endif %}
+            </td>
+            <td>
+              <a
+                href="{% url 'offer_app:offer_detail' row.slug %}"
+                role="button"
+                class="btn btn-outline-secondary btn-center"
+              >
+                <i class="lni lni-eye"></i>
+              </a>
+            </td>
+            <td>
+              {% if not row.deleted_at %}
+              <button
+                type="button"
+                class="btn btn-outline-primary btn-center"
+                name="editButtons"
+                id="{% url 'offer_app:offer_edit' row.id %}"
+              >
+                <i class="lni lni-pencil"></i>
+              </button>
+              {% endif %}
+            </td>
+            <td>
+              {% if not row.deleted_at %}
+              <button
+                type="button"
+                class="btn btn-outline-danger btn-center"
+                name="deleteButtons"
+                id="{% url 'offer_app:offer_delete' row.id %}"
+              >
+                <i class="lni lni-trash-can"></i>
+              </button>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if is_paginated %}
+    {% include 'partials/_pagination_sm.html' %}
+    {% endif %}
+  </div>
+</section>
+
+{% endblock content %}

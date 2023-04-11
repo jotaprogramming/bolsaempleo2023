@@ -1,0 +1,63 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crypto_url %}
+
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+{% block contentfluid %} 
+
+<section class="my-1 position-relative">
+  {% include 'partials/_aside.html' %}
+  <div class="p-5" style="margin-left: 300px;">
+    <div class="col-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Oferta</th>
+            <th>Estado</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in object_list %}
+          <tr>
+            <td>{{row.offer.title}}</td>
+            <td>
+              {% if row.deleted_at %} 
+              Eliminado el {{row.deleted_at}}
+              {% elif row.updated_at %} 
+              <strong class="text-orange">{{row.status}}</strong> el {{row.updated_at}}
+              {% else %}
+              <strong class="text-orange">{{row.status}}</strong> el {{row.created_at}}
+              {% endif %}
+            </td>
+            <td>
+              <div class="d-flex gap-1" style="min-width: 240px">
+                {% if not row.deleted_at and not row.status.name == 'contratado' and not row.status.name == 'rechazado' and not row.status.name == 'cancelado' %}
+                <button
+                  type="button"
+                  class="btn btn-outline-danger btn-center btn-slide"
+                  name="deleteButtons"
+                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=cancelado&path=mycandidacies"
+                  title="Cancelar postulación"
+                >
+                  <i class="lni lni-thumbs-down"></i>
+                  <span class="">Cancelar</span>
+                </button>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% if is_paginated %}
+    {% include 'partials/_pagination_sm.html' %}
+    {% endif %}
+  </div>
+</section>
+
+{% endblock contentfluid %}

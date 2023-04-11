@@ -51,9 +51,11 @@ app_view_desc = _("Módulos del sistema")
 role_title = _("Roles")
 role_desc = _("Función que un usuario desempeña dentro del sistema")
 policy_title = _("Regulaciones")
-policy_desc = _("Reglas de ejecución para grupos de usuarios")
-trait_title = _("Rasgos")
-trait_desc = _("Características distintivas de un usuario")
+policy_desc = _("Normativas de ejecución para grupos de usuarios")
+rule_title = _("Reglas")
+rule_desc = _(
+    "Directrices que categorizan usuarios y permiten y/o restringen sus movimientos dentro del sistema"
+)
 user_title = _("Usuarios")
 user_desc = _("Usuarios del sistema")
 userprofile_title = _("Perfiles de usuario")
@@ -494,12 +496,12 @@ class RoleDeleteModal(LoginRequiredMixin, generic.UpdateView):
 # POLICIES
 class PolicyList(LoginRequiredMixin, generic.ListView):
     login_url = "/login"
-    model = Policies
+    model = UserGroupPolicies
     template_name = "policies/policy_list.html"
     paginate_by = 10
 
     def get_queryset(self):
-        data = Policies.objects.get_nums()
+        data = UserGroupPolicies.objects.get_nums()
         return data
 
     def get_context_data(self, **kwargs):
@@ -512,7 +514,7 @@ class PolicyList(LoginRequiredMixin, generic.ListView):
 
 class PolicyCreate(LoginRequiredMixin, generic.CreateView):
     login_url = "/login"
-    model = Policies
+    model = UserGroupPolicies
     form_class = PolicyForm
     template_name = "policies/policy_create_modal.html"
 
@@ -541,7 +543,7 @@ class PolicyCreate(LoginRequiredMixin, generic.CreateView):
 
 class PolicyEditModal(LoginRequiredMixin, generic.UpdateView):
     login_url = "/login"
-    model = Policies
+    model = UserGroupPolicies
     form_class = PolicyForm
     template_name = "policies/policy_update_modal.html"
 
@@ -571,12 +573,12 @@ class PolicyEditModal(LoginRequiredMixin, generic.UpdateView):
 
 class PolicyDeleteModal(LoginRequiredMixin, generic.UpdateView):
     login_url = "/login"
-    model = Policies
+    model = UserGroupPolicies
     form_class = FormDelete
     template_name = "policies/policy_delete_modal.html"
 
     def get_queryset(self):
-        data = Policies.objects.order_by()
+        data = UserGroupPolicies.objects.order_by()
         return data
 
     def get_success_url(self):
@@ -595,47 +597,47 @@ class PolicyDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return super().form_valid(form)
 
 
-# TRAITs
-class TraitList(LoginRequiredMixin, generic.ListView):
+# USER RULES
+class UserRulesList(LoginRequiredMixin, generic.ListView):
     login_url = "/login"
-    model = Traits
-    template_name = "traits/trait_list.html"
+    model = UserRules
+    template_name = "rules/rule_list.html"
     paginate_by = 10
 
     def get_queryset(self):
-        data = Traits.objects.order_by()
+        data = UserRules.objects.order_by()
         return data
 
     def get_context_data(self, **kwargs):
-        context = super(TraitList, self).get_context_data(**kwargs)
+        context = super(UserRulesList, self).get_context_data(**kwargs)
         context["app_title"] = app_title
-        context["title_view"] = trait_title
-        context["description_view"] = trait_desc
+        context["title_view"] = rule_title
+        context["description_view"] = rule_desc
         return context
 
 
-class TraitCreate(LoginRequiredMixin, generic.CreateView):
+class UserRulesCreate(LoginRequiredMixin, generic.CreateView):
     login_url = "/login"
-    model = Traits
-    form_class = TraitForm
-    template_name = "traits/trait_create_modal.html"
+    model = UserRules
+    form_class = UserRuleForm
+    template_name = "rules/rule_create_modal.html"
 
     def get_success_url(self):
         success_message(self.request)
-        return reverse_lazy("users_app:trait_list")
+        return reverse_lazy("users_app:rule_list")
 
     def get_context_data(self, **kwargs):
-        context = super(TraitCreate, self).get_context_data(**kwargs)
+        context = super(UserRulesCreate, self).get_context_data(**kwargs)
         context["app_title"] = app_title
-        context["title_view"] = trait_title
-        context["description_view"] = trait_desc
+        context["title_view"] = rule_title
+        context["description_view"] = rule_desc
         return context
 
     def form_valid(self, form):
-        # objects = duplicate_traits(self, form)
+        # objects = duplicate_rules(self, form)
         # if objects > 0:
         #     duplicate_message(self.request)
-        #     return HttpResponseRedirect(reverse_lazy("users_app:trait_list"))
+        #     return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
         return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
@@ -644,31 +646,31 @@ class TraitCreate(LoginRequiredMixin, generic.CreateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return HttpResponseRedirect(reverse_lazy("users_app:trait_list"))
+        return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
 
 
-class TraitEditModal(LoginRequiredMixin, generic.UpdateView):
+class UserRulesEditModal(LoginRequiredMixin, generic.UpdateView):
     login_url = "/login"
-    model = Traits
-    form_class = TraitForm
-    template_name = "traits/trait_update_modal.html"
+    model = UserRules
+    form_class = UserRuleForm
+    template_name = "rules/rule_update_modal.html"
 
     def get_success_url(self):
         success_message(self.request, msg="Registro actualizado satisfactoriamente")
-        return reverse_lazy("users_app:trait_list")
+        return reverse_lazy("users_app:rule_list")
 
     def get_context_data(self, **kwargs):
-        context = super(TraitEditModal, self).get_context_data(**kwargs)
+        context = super(UserRulesEditModal, self).get_context_data(**kwargs)
         context["app_title"] = app_title
-        context["title_view"] = trait_title
-        context["description_view"] = trait_desc
+        context["title_view"] = rule_title
+        context["description_view"] = rule_desc
         return context
 
     def form_valid(self, form):
-        # objects = duplicate_traits(self, form)
+        # objects = duplicate_rules(self, form)
         # if objects > 0:
         #     duplicate_message(self.request)
-        #     return HttpResponseRedirect(reverse_lazy("users_app:trait_list"))
+        #     return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
         form.instance.updated_at = timezone.now()
         return super().form_valid(form)
 
@@ -678,28 +680,28 @@ class TraitEditModal(LoginRequiredMixin, generic.UpdateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return HttpResponseRedirect(reverse_lazy("users_app:trait_list"))
+        return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
 
 
-class TraitDeleteModal(LoginRequiredMixin, generic.UpdateView):
+class UserRulesDeleteModal(LoginRequiredMixin, generic.UpdateView):
     login_url = "/login"
-    model = Traits
+    model = UserRules
     form_class = FormDelete
-    template_name = "traits/trait_delete_modal.html"
+    template_name = "rules/rule_delete_modal.html"
 
     def get_queryset(self):
-        data = Traits.objects.order_by()
+        data = UserRules.objects.order_by()
         return data
 
     def get_success_url(self):
         success_message(self.request, msg="Registro eliminado satisfactoriamente")
-        return reverse_lazy("users_app:trait_list")
+        return reverse_lazy("users_app:rule_list")
 
     def get_context_data(self, **kwargs):
-        context = super(TraitDeleteModal, self).get_context_data(**kwargs)
+        context = super(UserRulesDeleteModal, self).get_context_data(**kwargs)
         context["app_title"] = app_title
-        context["title_view"] = trait_title
-        context["description_view"] = trait_desc
+        context["title_view"] = rule_title
+        context["description_view"] = rule_desc
         return context
 
     def form_valid(self, form):
@@ -729,7 +731,7 @@ class UserList(LoginRequiredMixin, generic.ListView):
 class UserCreate(LoginRequiredMixin, generic.FormView):
     login_url = "/login"
     model = User
-    form_class = UserForm
+    form_class = UserPassForm
     template_name = "users/user_create_modal.html"
 
     def get_success_url(self):
@@ -756,7 +758,9 @@ class UserCreate(LoginRequiredMixin, generic.FormView):
         is_superuser = form.cleaned_data["is_superuser"]
         is_staff = form.cleaned_data["is_staff"]
         is_active = form.cleaned_data["is_active"]
-        User.objects.create_user(
+        usergroup = form.cleaned_data["usergroup"]
+        role = form.cleaned_data["role"]
+        user = User.objects.create_user(
             username=username,
             email=email,
             password=password,
@@ -764,6 +768,7 @@ class UserCreate(LoginRequiredMixin, generic.FormView):
             is_staff=is_staff,
             is_active=is_active,
         )
+        UserRules.objects.create(user=user, usergroup=usergroup, role=role)
         return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
@@ -778,7 +783,7 @@ class UserCreate(LoginRequiredMixin, generic.FormView):
 class UserEditModal(LoginRequiredMixin, generic.UpdateView):
     login_url = "/login"
     model = User
-    form_class = UserFormUpdate
+    form_class = UserForm
     template_name = "users/user_update_modal.html"
 
     def get_success_url(self):
@@ -935,25 +940,34 @@ class RegisterView(UserLoggedMixin, generic.FormView):
 # USER PROFILE
 class UserProfileDetail(LoginRequiredMixin, generic.TemplateView):
     login_url = "/login"
-    model = UserProfile
+    # model = UserProfile
     template_name = "userprofile/userprofile_detail.html"
 
     def get_context_data(self, **kwargs):
         context = super(UserProfileDetail, self).get_context_data(**kwargs)
         username_param = self.kwargs.get("slug", "")
+
         try:
-            obj = UserProfile.objects.get(user__username=username_param)
-            cv = CurriculumVitae.objects.filter(userprofile__id=obj.id).values()
-            about_me = obj.about_me
+            # userprofile = UserProfile.objects.filter(user__username=username_param)
+            obj = User.objects.get(username=username_param)
             context["object"] = obj
-            context["cv"] = cv
-            context["description_view"] = about_me
+
+            userprofile = UserProfile.objects.filter(user=obj)
+            if not userprofile:
+                UserProfile.objects.create(user=obj)
+            context["userprofile"] = userprofile
+
+            # rules = UserRules.objects.filter(user__username=username_param)
+            # context["rules"] = rules
         except Exception as ex:
-            print(ex)
+            print("Error in <<get_context_data ~ UserProfileDetail>>: ", ex)
             pass
+
         context["app_title"] = "Perfil"
-        context["title_view"] = username_param
+        context["title_view"] = "Detalle"
+        context["initial"] = username_param[0]
         context["username"] = username_param
+        context["profile"] = True
         return context
 
 
@@ -976,20 +990,18 @@ class UserProfileCreate(LoginRequiredMixin, generic.CreateView):
         context["title_view"] = "Perfil"
         context["description_view"] = f"@{slug}"
         context["username"] = slug
+        context["profile"] = True
         return context
 
     def form_valid(self, form):
-        slug = self.kwargs.get("slug", "")
         try:
-            user = User.objects.filter(username=slug)
-            fullname = form.cleaned_data["fullname"]
-            user.update(first_name=fullname)
+            slug = self.kwargs.get("slug", "")
+            form.instance.user = User.objects.get(username=slug)
             form.instance.email = normalize_email(form.instance.email)
-            form.instance.user_id = user.values()[0]["id"]
             return super().form_valid(form)
         except Exception as exception:
             message = getattr(exception, "message", str(exception))
-            error_message(self.request, msg=message)
+            error_message(self.request, msg=message, time=20000)
             return HttpResponseRedirect(
                 reverse_lazy("users_app:userprofile_add", args=[slug])
             )
@@ -1029,18 +1041,20 @@ class UserProfileEdit(LoginRequiredMixin, generic.UpdateView):
         context["fullname"] = User.objects.filter(username=slug).values()[0][
             "first_name"
         ]
+        context["profile"] = True
         return context
 
     def form_valid(self, form):
         slug = self.kwargs.get("slug", "")
-        user = User.objects.filter(username=slug)
-        fullname = form.cleaned_data["fullname"]
-        user.update(first_name=fullname)
+        # fullname = form.cleaned_data["avatar"]
+        # fullname = form.cleaned_data["fullname"]
+        # user.update(first_name=fullname)
         form.instance.updated_at = now()
         form.instance.email = normalize_email(form.instance.email)
         return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
+        slug = self.kwargs.get("slug", "")
         ctx = self.get_context_data(**kwargs)
         ctx["form"] = form
 
@@ -1048,7 +1062,7 @@ class UserProfileEdit(LoginRequiredMixin, generic.UpdateView):
         warning_message(self.request, msg=msg_error)
         return HttpResponseRedirect(
             reverse_lazy(
-                "users_app:userprofile_edit", args=[self.request.user.username]
+                "users_app:userprofile_edit", args=[slug]
             )
         )
 
@@ -1129,7 +1143,7 @@ class RegisterView(UserLoggedMixin, generic.FormView):
 
 class RegisterStudentView(UserLoggedMixin, generic.FormView):
     model = User
-    form_class = RegisterStudent
+    form_class = RegisterStudentForm
     template_name = "users/register_student.html"
 
     def get_success_url(self):
@@ -1164,8 +1178,10 @@ class RegisterStudentView(UserLoggedMixin, generic.FormView):
         try:
             last_name_split = last_name.split(" ")
             cod_name = f"{first_name[0]}{last_name_split[0]}"
+            cod_name = format_diacritics(cod_name)
             last_id = User.objects.filter(username__icontains=cod_name).order_by("-id")
             user_id = int(last_id[0].id) if last_id.count() > 0 else 0
+            print("🐍 File: users/views.py | Line: 1198 | form_valid ~ user_id", user_id)
             username = f"{cod_name}{user_id + 1}".lower()
 
             usergroup = UserGroups.objects.get(code__icontains="GRA")
@@ -1189,7 +1205,7 @@ class RegisterStudentView(UserLoggedMixin, generic.FormView):
                 city=city,
                 about_me="",
             )
-            Traits.objects.create(
+            UserRules.objects.create(
                 user=user,
                 usergroup=usergroup,
                 role=role,
@@ -1205,7 +1221,7 @@ class RegisterStudentView(UserLoggedMixin, generic.FormView):
 
 class RegisterCompanyView(UserLoggedMixin, generic.FormView):
     model = User
-    form_class = RegisterCompany
+    form_class = RegisterCompanyForm
     template_name = "users/register_company.html"
 
     def get_success_url(self):
@@ -1226,8 +1242,8 @@ class RegisterCompanyView(UserLoggedMixin, generic.FormView):
 
     def form_valid(self, form):
         try:
-            first_name = str(form.cleaned_data["first_name"]).upper()
-            last_name = str(form.cleaned_data["last_name"]).upper()
+            # COMPANY
+            name = form.cleaned_data["name"].upper()
             document_type = DocumentType.objects.get(acronym__icontains="NIT")
             id_number = form.cleaned_data["id_number"]
             phone = form.cleaned_data["phone"]
@@ -1235,7 +1251,38 @@ class RegisterCompanyView(UserLoggedMixin, generic.FormView):
             address = form.cleaned_data["address"]
             district = form.cleaned_data["district"]
             city = form.cleaned_data["city"]
-            username = str(form.instance.username).lower()
+            # LEGAL REPRESENTATIVE
+            rep_name = form.cleaned_data["rep_name"].upper()
+            rep_document_type = form.cleaned_data["rep_document_type"]
+            rep_id = form.cleaned_data["rep_id"]
+            president = Specializations.objects.filter(
+                name__icontains="REPRESENTANTE LEGAL"
+            ).count()
+            if president:
+                rep_specialization = Specializations.objects.get(
+                    name__icontains="REPRESENTANTE LEGAL"
+                )
+            else:
+                rep_specialization = Specializations.objects.create(
+                    name="REPRESENTANTE LEGAL"
+                )
+            # HUMAN RESOURCES
+            humres_name = form.cleaned_data["humres_name"].upper()
+            humres_document_type = form.cleaned_data["humres_document_type"]
+            humres_id = form.cleaned_data["humres_id"]
+            manager = Specializations.objects.filter(
+                name__icontains="DIRECTOR DE RECURSOS HUMANOS"
+            ).count()
+            if manager:
+                humres_specialization = Specializations.objects.get(
+                    name__icontains="DIRECTOR DE RECURSOS HUMANOS"
+                )
+            else:
+                humres_specialization = Specializations.objects.create(
+                    name="DIRECTOR DE RECURSOS HUMANOS"
+                )
+            # USER
+            username = form.instance.username.lower()
             email = form.cleaned_data["email"]
             password = form.cleaned_data["password"]
 
@@ -1246,11 +1293,21 @@ class RegisterCompanyView(UserLoggedMixin, generic.FormView):
                 username=username,
                 email=email,
                 password=password,
-                first_name=first_name,
-                last_name=last_name,
                 is_active=False,
             )
-            UserProfile.objects.create(
+            rep = Personnel(
+                document_type=rep_document_type,
+                id_number=rep_id,
+                fullname=rep_name,
+                specialization=rep_specialization,
+            )
+            humres = Personnel(
+                document_type=humres_document_type,
+                id_number=humres_id,
+                fullname=humres_name,
+                specialization=humres_specialization,
+            )
+            userprofile = UserProfile(
                 user_id=user.id,
                 document_type=document_type,
                 id_number=id_number,
@@ -1260,15 +1317,25 @@ class RegisterCompanyView(UserLoggedMixin, generic.FormView):
                 city=city,
                 about_me="",
             )
-            Traits.objects.create(
+            rule = UserRules(
                 user=user,
                 usergroup=usergroup,
                 role=role,
             )
+            company = Companies(
+                name=name,
+                userprofile=userprofile,
+            )
+            rep.save()
+            humres.save()
+            userprofile.save()
+            rule.save()
+            company.save()
+            company.personnel.set([rep, humres])
         except Exception as exception:
             message = "¡Oh no! Algo ocurrió. Por favor comuníquese con soporte para encontrar una solución"
             # message = getattr(exception, "message", str(exception))
-            print(f"Error when registering the student: {exception}")
+            print(f"Error when registering the company: {exception}")
             error_message(self.request, msg=message)
             return HttpResponseRedirect(reverse_lazy("users_app:register_company"))
 

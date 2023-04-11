@@ -67,14 +67,14 @@ urlpatterns = [
         PolicyDeleteModal.as_view(),
         name="policy_delete",
     ),
-    # TRAIT
-    path("user/trait/list", TraitList.as_view(), name="trait_list"),
-    path("user/trait/add", TraitCreate.as_view(), name="trait_add"),
-    path("user/trait/edit/<int:pk>", TraitEditModal.as_view(), name="trait_edit"),
+    # USER RULES
+    path("user/rule/list", UserRulesList.as_view(), name="rule_list"),
+    path("user/rule/add", UserRulesCreate.as_view(), name="rule_add"),
+    path("user/rule/edit/<int:pk>", UserRulesEditModal.as_view(), name="rule_edit"),
     path(
-        "user/trait/delete/<int:pk>",
-        TraitDeleteModal.as_view(),
-        name="trait_delete",
+        "user/rule/delete/<int:pk>",
+        UserRulesDeleteModal.as_view(),
+        name="rule_delete",
     ),
     # USERS
     path("user/list", UserList.as_view(), name="user_list"),

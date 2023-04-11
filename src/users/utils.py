@@ -1,9 +1,29 @@
 # PROJECT MODULES
+import re
 from users.models import *
 from core.utils import *
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.decorators.debug import sensitive_variables
+from unicodedata import normalize
+
+
+def format_diacritics(text):
+    """
+    The function removes diacritics from a given text string in Python.
+    
+    :param text: a string of text that may contain diacritics (accent marks, etc.)
+    :return: The function `format_diacritics` returns a string with diacritics (accent marks) normalized
+    to their base characters.
+    """
+    text = re.sub(
+        r"([^n\u0300-\u036f]|n(?!\u0303(?![\u0300-\u036f])))[\u0300-\u036f]+",
+        r"\1",
+        normalize("NFD", text),
+        0,
+        re.I,
+    )
+    return normalize("NFC", text)
 
 
 def duplicate_usergroups(self, form):
@@ -86,12 +106,12 @@ def duplicate_roles(self, form):
     return count
 
 
-# def duplicate_traits(self, form):
+# def duplicate_rule(self, form):
 #     _id = self.kwargs.get("pk", None)
-#     traits = Traits.objects.all()
+#     rule = UserRules.objects.all()
 
 #     if _id:
-#         traits = traits.exclude(id=_id)
+#         rule = rule.exclude(id=_id)
 
 #     user = form.instance.user
 #     print("user: ", user)
@@ -100,7 +120,7 @@ def duplicate_roles(self, form):
 #     restriction = form.instance.restriction
 #     role = form.instance.role
 #     print(app, restriction, role)
-#     count = traits.filter(
+#     count = rule.filter(
 #         user__exact=user,
 #         app__in=[app],
 #         restriction__in=[restriction],

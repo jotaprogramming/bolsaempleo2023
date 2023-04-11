@@ -1,0 +1,156 @@
+<h5 class="fw-bold m-0 col-12 mb-3">Información personal</h5>
+<div class="col-md-6 mb-2">
+    <div class="row">
+    <p class="col-12 fw-bold mb-1">
+        Tipo de documento
+    </p>
+    <p class="col-12 m-0">
+        {% if object.user_cv.document_type.name %}
+        {{ object.user_cv.document_type.name }}
+        {% else %}
+        ------
+        {% endif %}
+    </p>
+    </div>
+</div>
+<div class="col-md-6 mb-2">
+    <div class="row">
+    <p class="col-12 fw-bold mb-1">
+        Identificación
+    </p>
+    <p class="col-12 m-0">
+        {% if object.user_cv.id_number %}
+        {{ object.user_cv.id_number }}
+        {% else %}
+        ------
+        {% endif %}
+    </p>
+    </div>
+</div>
+<div class="col-md-6 mb-2">
+    <div class="row">
+    <p class="col-12 fw-bold mb-1">
+        Nombre completo
+    </p>
+    <p class="col-12 m-0">
+        {% if object.user_cv.user.first_name or object.user_cv.user.last_name %}
+        {{ object.user_cv.user.first_name }}
+        {{ object.user_cv.user.last_name }}
+        {% else %}
+        ------
+        {% endif %}
+    </p>
+    </div>
+</div>
+<div class="col-md-6 mb-2">
+    <div class="row">
+    <p class="col-12 fw-bold mb-1">
+        Alias
+    </p>
+    <p class="col-12 m-0">
+        {% if object.user_cv.name %}
+        {{ object.user_cv.name }}
+        {% else %}
+        ------
+        {% endif %}
+    </p>
+    </div>
+</div>
+<div class="col-md-6 mb-2">
+    <div class="row">
+    <p class="col-12 fw-bold mb-1">
+        Correo electrónico de contacto
+    </p>
+    <p class="col-12 m-0">
+        {% if object.user_cv.email %}
+        {{ object.user_cv.email }}
+        {% else %}
+        ------
+        {% endif %}
+    </p>
+    </div>
+</div>
+<div class="col-md-6 mb-2">
+    <div class="row">
+    <p class="col-12 fw-bold mb-1">
+        Teléfono
+    </p>
+    <p class="col-12 m-0">
+        {% if object.user_cv.phone %}
+        {{ object.user_cv.phone }}
+        {% else %}
+        ------
+        {% endif %}
+    </p>
+    </div>
+</div>
+<div class="col-md-6 mb-2">
+    <div class="row">
+    <p class="col-12 fw-bold mb-1">
+        País
+    </p>
+    <p class="col-12 m-0">
+        {% if object.user_cv.city.district.country %}
+        {{ object.user_cv.city.district.country }}
+        {% else %}
+        ------
+        {% endif %}
+    </p>
+    </div>
+</div>
+<div class="col-md-6 mb-2">
+    <div class="row">
+    <p class="col-12 fw-bold mb-1">
+        Departamento
+    </p>
+    <p class="col-12 m-0">
+        {% if object.user_cv.city.district %}
+        {{ object.user_cv.city.district }}
+        {% else %}
+        ------
+        {% endif %}
+    </p>
+    </div>
+</div>
+<div class="col-md-6 mb-2">
+    <div class="row">
+    <p class="col-12 fw-bold mb-1">
+        Ciudad
+    </p>
+    <p class="col-12 m-0">
+        {% if object.user_cv.city %}
+        {{ object.user_cv.city }}
+        {% else %}
+        ------
+        {% endif %}
+    </p>
+    </div>
+</div>
+<div class="col-md-6 mb-2">
+    <div class="row">
+    <p class="col-12 fw-bold mb-1">
+        Dirección
+    </p>
+    <p class="col-12 m-0">
+        {% if object.user_cv.address %}
+        {{ object.user_cv.address }}
+        {% else %}
+        ------
+        {% endif %}
+    </p>
+    </div>
+</div>
+<div class="col-md-6 mb-2">
+    <div class="row">
+    <p class="col-12 fw-bold mb-1">
+        Hoja de vida
+    </p>
+    <p class="col-12 m-0">
+        {% if object.user_cv.attached %}
+        {{ object.user_cv.attached }}
+        {% else %}
+        ------
+        {% endif %}
+    </p>
+    </div>
+</div>

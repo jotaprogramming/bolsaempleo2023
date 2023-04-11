@@ -14,14 +14,13 @@ urlpatterns = [
     path("profile_company", ProfileCompanyView.as_view(), name="profile_company"),
     path("notifications", NotificationsView.as_view(), name="notifications"),
     path("publicate", PublicateView.as_view(), name="publish"),
-    path("oferts", OfertsView.as_view(), name="oferts"),
+    path("offers", OffersView.as_view(), name="offers"),
     path("postulations", PostulationView.as_view(), name="postulate"),
     path("new_publicate", NewPublicateView.as_view(), name="new_publish"),
     path("edit_profile", EditProfileView.as_view(), name="edit_profile"),
-    path("ofert_detail", OfertDetailView.as_view(), name="ofert_detail"),
+    path("offer_detail", OfferDetailView.as_view(), name="offer_detail"),
     path("edit_publish", PreEditView.as_view(), name="pre_edit_publish"),
     path("candidate", CandidateView.as_view(), name="candidates"),
     path("moderate_est", ModeratorEstView.as_view(), name="moderator_est"),
     path("moderate_comp", ModeratorCompView.as_view(), name="moderator_comp"),
-    
 ]

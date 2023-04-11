@@ -113,15 +113,21 @@
 .img-content__info{
     max-width: 100px;
     height: 100px;
-    min-width: 50px;
+    min-width: 100px;
     border-radius: 50%;
     /* background-color: yellow; */
 }
-.img-content__info img{
+.img-content__info img,
+.letterpic{
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 50%;
+}
+.letterpic{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .no-aside__container{
     width: 100%;

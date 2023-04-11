@@ -2,7 +2,7 @@
 
 <div class="modal-dialog modal-dialog-centered">
   <div class="modal-content">
-    <form method="POST" action="{% url 'users_app:trait_delete' object.id %}" id="form">
+    <form method="POST" action="{% url 'offer_app:candidature_delete' object.id %}" id="form">
       <div class="modal-header">
         <h5 class="modal-title">Eliminar</h5>
         <button
@@ -15,21 +15,23 @@
       <div class="modal-body">
         {% csrf_token %}
         <h6>
-          Se eliminará el siguiente registro:
+          Se eliminará la siguiente postulación:
         </h6>
         <div class="row mb-2 text-secondary">
           <small class="m-0 col-12">
-            <strong>Usuario:</strong>
-            {{object.user}}
+            <strong>Título:</strong>
+            {{object.offer.title}}
           </small>
           <small class="m-0 col-12">
-            <strong>Grupo: </strong>
-            {{object.usergroup}}
+            <strong>Creada por</strong>
+            @{{object.candidate}} el {{object.created_at}}
           </small>
+          {% if object.updated_at %}
           <small class="m-0 col-12">
-            <strong>Rol: </strong>
-            {{object.role}}
+            <strong>Y actualizada el </strong>
+            {{object.updated_at}}
           </small>
+          {% endif %}
         </div>
         <div class="alert alert-warning" role="alert">
           ¿Está seguro que desea continuar?

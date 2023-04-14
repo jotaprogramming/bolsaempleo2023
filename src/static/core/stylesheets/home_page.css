@@ -126,7 +126,7 @@
     gap: 32px;
 }
 
-.card-body{
+.card-body--custom{
     width: 100%;
     /* background-color: yellow; */
     display: flex;
@@ -134,9 +134,9 @@
     align-items: center;
     gap: 10px;
 }
-.card-body p{
+
+.card-body--custom p{
     margin: 0;
-    
 }
 .card-head{
     display: flex;

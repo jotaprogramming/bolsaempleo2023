@@ -12,17 +12,9 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.template.defaultfilters import slugify
 
-from .utils import string_to_base64
+from .utils import string_to_base64, POST_STATUS
 from .managers import OffersManager
 from config.models import *
-
-POST_STATUS = (
-    ("1", "postulado"),
-    ("2", "cancelado"),
-    ("3", "rechazado"),
-    ("4", "aceptado"),
-    ("5", "contratado"),
-)
 
 
 # Create your models here.

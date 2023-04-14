@@ -689,6 +689,11 @@
     border-bottom: 1px solid var(--extralight-gray);
 
 }
+
+
+.btn-compact{
+    width: fit-content !important;
+}
 @media screen and (min-width:1000px) {
     /* .aside__container{
         display: block;

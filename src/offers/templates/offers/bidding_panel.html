@@ -36,7 +36,7 @@
             <div class="col-12 d-flex gap-3 mb-4">
               <div class="d-flex gap-1 align-items-center">
                 {% include 'partials/icon_element/_build_icon.html' %}
-                <span class="text-muted">{{object.user.first_name}}</span>
+                <span class="text-muted">{{object.user.userprofile.company_profile.name}}</span>
               </div>
               <div class="d-flex gap-1 align-items-center">
                 {% include 'partials/icon_element/_suitcase_icon.html' %}

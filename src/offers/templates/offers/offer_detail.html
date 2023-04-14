@@ -28,7 +28,7 @@
                         <h4 class="fs-4 m-0">
                             <span class="d-flex gap-1 align-items-center">
                                 {{ object.title }}
-                                {% if request.user.is_staff or usergroups %} 
+                                {% if request.user.is_staff or usergroups and allowed  %} 
                                 <a href="{% url 'offer_app:offer_edit' object.slug %}" class="btn btn-link btn-sm rounded-circle" role="button">
                                     {% include 'partials/icon_element/_pencil_icon.html' %}
                                 </a>
@@ -78,45 +78,83 @@
                 </div>
                 <h6 class="mt-4 fw-bold">Descripción</h6>
                 <p>{{ object.description }}</p>
+                <h6 class="mt-4 fw-bold">Requisitos</h6>
                 {% if object.get_requirements %}
-                    <h6 class="mt-4 fw-bold">Requisitos</h6>
                     {% for requirement in object.get_requirements %}
                         <p>{{requirement}}: Sí</p>
                     {% endfor %}
-                {% endif %}
-                {% if request.user.is_staff or usergroups %}
-                <h6 class="mt-4 fw-bold">Candidatos</h6>
-                {% if candidatures %}
-                <p>
-                    {% if candidatures|length == 1 %}
-                    Un candidato ha 
-                    {% else %}
-                    {{ candidatures|length }} candidatos han
-                    {% endif %}
-                    aplicado a esta oferta
-                    <br>
-                    <a href="{% url 'offer_app:candidature_list' object.slug %}" class="link-orange" role="button">
-                        Ver todos los candidatos
-                    </a>
-                </p>
                 {% else %}
-                <p class="text-muted fst-italic">Sin candidatos</p>
+                    <p>No especifica</p>
                 {% endif %}
+                {% if request.user.is_staff or usergroups and allowed  %}
+                <h6 class="mt-4 fw-bold">Candidatos</h6>
+                    {% if candidatures %}
+                    <p>
+                        {% if candidatures|length == 1 %}
+                        Un candidato ha 
+                        {% else %}
+                        {{ candidatures|length }} candidatos han
+                        {% endif %}
+                        aplicado a esta oferta
+                        <br>
+                        <a href="{% url 'offer_app:candidature_list' object.slug %}" class="link-orange" role="button">
+                            Ver todos los candidatos
+                        </a>
+                    </p>
+                    {% else %}
+                    <p class="text-muted fst-italic">Sin candidatos</p>
+                    {% endif %}
                 {% endif %}
                 {% if object.deleted_at %}
                 <div class="alert alert-danger" role="alert">
                     Oferta no disponible
                 </div>
-                {% else %}
-                    {% if not candidature %}
+                {% elif not usergroups and not candidature %}
                     <button
                         type="button"
                         class="btn btn-primary rounded-pill px-4"
                         name="createButtons"
-                        id="{% url 'offer_app:candidature_save' object.slug request.user.username %}?path=mycandidacies"
+                        id="{% url 'offer_app:candidature_save' object.slug request.user.username %}?path=mycandidacies&status=1"
                     >
                         <span class="">Aplicar</span>
                     </button>
+                {% elif candidature %}
+                    {% if candidature.status == '1' %}
+                    <div class="alert alert-warning" role="alert">
+                        Has {{ candidature.get_status_display }} a esta oferta
+                    </div>
+                    {% elif candidature.status == '2' %}
+                    <div class="alert alert-warning" role="alert">
+                        Has {{ candidature.get_status_display }} la postulación a esta oferta
+                    </div>
+                    {% elif candidature.status == '3' %}
+                    <div class="alert alert-danger" role="alert">
+                        ¡Oh, lo sentimos!
+                        <br>
+                        Desafortunadamente ha sido {{ candidature.get_status_display }} en esta oferta y ya no podrá aplicar de nuevo
+                        <br>
+                    </div>
+                    <button class="btn btn-link link-orange" id="goToSimilarOffers">
+                        ¡Pero esto no acaba aquí. Revisa las "ofertas similares" y aplica a más ofertas!
+                    </button>
+                    {% elif candidature.status == '4' %}
+                    <div class="alert alert-success" role="alert">
+                        ¡Bien hecho, estamos en la siguiente fase!
+                        <br>
+                        Usted ha sido {{ candidature.get_status_display }} en esta oferta y falta poco para que sea contratado
+                    </div>
+                    {% elif candidature.status == '5' %}
+                    <div class="alert alert-success" role="alert">
+                        ¡Enhorabuena, usted ha sido {{ candidature.get_status_display }}!
+                    </div>
+                    {% endif %}
+                    {% if candidature.status == '1' or candidature.status == '4' %}
+                    <a 
+                        href="{% url 'offer_app:mycandidacies' request.user.username %}"
+                        class="link-orange"
+                    >
+                        Ver postulaciones
+                    </a>
                     {% endif %}
                 {% endif %}
             </div>

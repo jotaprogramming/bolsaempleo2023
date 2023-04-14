@@ -23,24 +23,33 @@
         <tbody>
           {% for row in object_list %}
           <tr>
-            <td>{{row.offer.title}}</td>
+            <td>
+              
+              <a
+                href="{% url 'offer_app:offer_detail' row.offer.slug %}"
+                role="button"
+                class="link-orange"
+              >
+                {{row.offer.title}}
+              </a>
+            </td>
             <td>
               {% if row.deleted_at %} 
               Eliminado el {{row.deleted_at}}
               {% elif row.updated_at %} 
-              <strong class="text-orange">{{row.status}}</strong> el {{row.updated_at}}
+              <strong class="text-orange">{{row.get_status_display}}</strong> el {{row.updated_at}}
               {% else %}
-              <strong class="text-orange">{{row.status}}</strong> el {{row.created_at}}
+              <strong class="text-orange">{{row.get_status_display}}</strong> el {{row.created_at}}
               {% endif %}
             </td>
             <td>
               <div class="d-flex gap-1" style="min-width: 240px">
-                {% if not row.deleted_at and not row.status.name == 'contratado' and not row.status.name == 'rechazado' and not row.status.name == 'cancelado' %}
+                {% if not row.deleted_at and not row.status == '5' and not row.status == '3' and not row.status == '2' %}
                 <button
                   type="button"
                   class="btn btn-outline-danger btn-center btn-slide"
                   name="deleteButtons"
-                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=cancelado&path=mycandidacies"
+                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=2&path=mycandidacies"
                   title="Cancelar postulación"
                 >
                   <i class="lni lni-thumbs-down"></i>

@@ -51,6 +51,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+    gap: 1rem;
     /* background-color: yellow; */
 }
 .register_body{
@@ -61,10 +62,11 @@
     height: auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: start;
     gap: 20px;
     overflow-y: scroll;
-    max-height: 260px;
+    margin-top: 1rem;
+    /* max-height: 260px; */
     
     
 }
@@ -112,6 +114,9 @@
     width: 300px;
     max-width: 300px;
     margin-top: 5px;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
 }
 .register_header{
     width: 100%;

@@ -1,4 +1,5 @@
 /* HERE ONLY THE GENERAL STYLE SHEETS WILL GO */
+/* @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css"); */
 @import url('./variables.css');
 @import url('./custom-bootstrap.css');
 @import url('./partials.css');
@@ -65,7 +66,7 @@
     border-radius: 10px;
     border: 1px solid var(--extralight-gray);
     max-width: 1080px;
-    max-height: 600px;
+    /* max-height: 600px; */
     display: flex;
     justify-content: space-between;
     overflow: hidden;
@@ -687,6 +688,11 @@
     padding: 6px 12px;
     border-bottom: 1px solid var(--extralight-gray);
 
+}
+
+
+.btn-compact{
+    width: fit-content !important;
 }
 @media screen and (min-width:1000px) {
     /* .aside__container{

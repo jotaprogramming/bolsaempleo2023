@@ -25,7 +25,15 @@
         <tbody>
           {% for row in object_list %}
           <tr>
-            <td>{{row.offer.title}}</td>
+            <td>
+              <a
+                href="{% url 'offer_app:offer_detail' row.offer.slug %}"
+                role="button"
+                class="link-orange"
+              >
+                {{row.offer.title}}
+              </a>
+            </td>
             <td>
               <a class="link-orange" href="{% url 'users_app:userprofile' row.candidate.username %}">
                 {% if row.candidate.first_name and row.candidate.last_name %}
@@ -39,9 +47,9 @@
               {% if row.deleted_at %} 
               Eliminado el {{row.deleted_at}}
               {% elif row.updated_at %} 
-              <strong class="text-orange">{{row.status}}</strong> el {{row.updated_at}}
+              <strong class="text-orange">{{ row.get_status_display }}</strong> el {{row.updated_at}}
               {% else %}
-              <strong class="text-orange">{{row.status}}</strong> el {{row.created_at}}
+              <strong class="text-orange">{{ row.get_status_display }}</strong> el {{row.created_at}}
               {% endif %}
             </td>
             <td>
@@ -56,13 +64,13 @@
             </td>
             <td>
               <div class="d-flex gap-1" style="min-width: 240px">
-                {% if not row.deleted_at and not row.status.name == 'contratado' and not row.status.name == 'rechazado' and not row.status.name == 'cancelado' %}
-                {% if row.status.name == 'aceptado' %}
+                {% if not row.deleted_at and not row.status == '5' and not row.status == '3' and not row.status == '2' %}
+                {% if row.status == '4' %}
                 <button
                   type="button"
                   class="btn btn-outline-success btn-center btn-slide"
                   name="editButtons"
-                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=contratado"
+                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=5"
                   title="Contratar"
                 >
                   <i class="lni lni-checkmark"></i>
@@ -73,7 +81,7 @@
                   type="button"
                   class="btn btn-outline-success btn-center btn-slide"
                   name="editButtons"
-                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=aceptado"
+                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=4"
                   title="Aceptar"
                   >
                   {% comment %} <i class="lni lni-checkmark"></i> {% endcomment %}
@@ -81,12 +89,12 @@
                   <span class="">Aceptar</span>
                 </button>
                 {% endif %}
-                {% if row.status.name != 'postulado' %}
+                {% if row.status != '1' %}
                 <button
                   type="button"
                   class="btn btn-outline-secondary btn-center btn-slide"
                   name="editButtons"
-                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=postulado"
+                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=1"
                   title="Cancelar"
                 >
                   {% comment %} <i class="lni lni-checkmark"></i> {% endcomment %}
@@ -94,12 +102,12 @@
                   <span class="">Cancelar</span>
                 </button>
                 {% endif %}
-                {% if row.status != 'rechazado' %}
+                {% if row.status != '3' %}
                 <button
                   type="button"
                   class="btn btn-outline-danger btn-center btn-slide"
                   name="deleteButtons"
-                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=rechazado"
+                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=3"
                   title="Rechazar"
                 >
                   <i class="lni lni-thumbs-down"></i>

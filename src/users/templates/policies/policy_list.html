@@ -7,7 +7,7 @@
     <div class="col-12">
       <button
         type="button"
-        class="btn btn-primary btn-center"
+        class="btn btn-primary btn-center btn-compact"
         name="createButtons"
         id="{% url 'users_app:policy_add' %}"
       >
@@ -64,7 +64,7 @@
               {% if not row.deleted_at %}
               <button
                 type="button"
-                class="btn btn-outline-primary btn-center"
+                class="btn btn-outline-primary btn-center btn-compact"
                 name="editButtons"
                 id="{% url 'users_app:policy_edit' row.id %}"
               >
@@ -76,7 +76,7 @@
               {% if not row.deleted_at %}
               <button
                 type="button"
-                class="btn btn-outline-danger btn-center"
+                class="btn btn-outline-danger btn-center btn-compact"
                 name="deleteButtons"
                 id="{% url 'users_app:policy_delete' row.id %}"
               >

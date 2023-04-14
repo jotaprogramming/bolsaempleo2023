@@ -126,8 +126,8 @@
                   Sobre mí
                 </p>
                 <p class="col-12 m-0">
-                  {% if object.about_me %}
-                  {{ object.about_me }}
+                  {% if object.userprofile.about_me %}
+                  {{ object.userprofile.about_me }}
                   {% else %}
                   ------
                   {% endif %}

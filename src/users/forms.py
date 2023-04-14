@@ -762,7 +762,7 @@ class RegisterStudentForm(RegisterForm):
     )
     address = forms.CharField(
         label=_("Dirección"),
-        required=False,
+        required=True,
         widget=forms.TextInput(
             attrs={
                 "class": "single-input",

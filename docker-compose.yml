@@ -18,7 +18,7 @@ services:
     image: postgres:15.1
     restart: always
     ports:
-      - "5435:5432"
+      - "5432:5432"
     environment:
       - DATABASE_HOST=127.0.0.1
       - POSTGRES_DB=db_job

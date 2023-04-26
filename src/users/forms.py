@@ -623,7 +623,7 @@ class RegisterCompanyForm(RegisterForm):
         required=True,
         widget=forms.Select(
             attrs={
-                "class": "form-select",
+                "class": "single-input",
                 "title": _("Departamento donde se registró la empresa"),
             }
         ),
@@ -634,7 +634,7 @@ class RegisterCompanyForm(RegisterForm):
         required=True,
         widget=forms.Select(
             attrs={
-                "class": "form-select",
+                "class": "single-input  ",
                 "title": _("Ciudad donde se registró la empresa"),
             }
         ),
@@ -775,7 +775,7 @@ class RegisterStudentForm(RegisterForm):
         required=True,
         widget=forms.Select(
             attrs={
-                "class": "form-select",
+                "class": "single-input",
             }
         ),
     )
@@ -785,7 +785,7 @@ class RegisterStudentForm(RegisterForm):
         required=True,
         widget=forms.Select(
             attrs={
-                "class": "form-select",
+                "class": "single-input",
             }
         ),
     )
@@ -828,7 +828,7 @@ class UserProfileModelForm(forms.ModelForm):
         required=True,
         widget=forms.Select(
             attrs={
-                "class": "form-select",
+                "class": "single-input",
                 "title": _("Departamento donde se registró la empresa"),
             }
         ),
@@ -923,7 +923,7 @@ class UserProfileModelForm(forms.ModelForm):
             ),
             "about_me": forms.Textarea(
                 attrs={
-                    "class": "form-control",
+                    "class": "form-control resize-n",
                     "minlength": "1",
                     "title": _("Sobre mí"),
                 }

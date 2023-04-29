@@ -40,7 +40,7 @@
               {{form.username.help_text}}
             </div>
           </div>
-          <div class="">
+          {% comment %} <div class="">
             <label for="id_usergroup" class="form-label">
               {{form.usergroup.label}}
             </label>
@@ -53,7 +53,7 @@
             </label>
             {{form.role}}
             <div id="roleHelp" class="form-text">{{form.role.help_text}}</div>
-          </div>
+          </div> {% endcomment %}
           <div class="">
             <div class="form-check form-switch">
               {{form.is_superuser}}

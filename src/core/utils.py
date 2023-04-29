@@ -14,7 +14,7 @@ from pprint import pprint
 def success_message(request, msg=_("Successfully created"), time=5000):
     """
     It creates a success message with a title, message, icon, timer, and button.
-    
+
     :param request: The request object
     :param msg: The message to be displayed
     """
@@ -36,7 +36,7 @@ def warning_message(request, msg=_("Warning")):
     """
     It's a function that takes a request and a message as parameters and displays a warning message
     using sweetify.
-    
+
     :param request: The request object
     :param msg: The message to be displayed
     """
@@ -57,7 +57,7 @@ def warning_message(request, msg=_("Warning")):
 def error_message(request, msg=_("An unexpected error occurred"), time=5000):
     """
     It takes a request object and a message, and then displays a sweetalert2 popup with the message
-    
+
     :param request: The request object
     :param msg: The message to display
     """
@@ -102,7 +102,7 @@ def get_form_errors(form):
 def normalize_email(email):
     """
     It normalizes the email address.
-    
+
     :param email: The email address to be normalized
     :return: A string
     """
@@ -110,3 +110,25 @@ def normalize_email(email):
     verify_email = forms.EmailField()
     verify_email.clean(_email)
     return _email
+
+
+def get_request_body(request):
+    body_unicode = request.body.decode("utf-8")
+    body_data = json.loads(body_unicode)
+
+    return body_data
+
+
+def set_data_status(data=[], status="204"):
+    _type = "warning"
+    msg = "No se encontraron registros"
+    if int(status) >= 400:
+        _type = "error"
+        msg = _(
+            "Ha ocurrido un error. Por favor inténtelo de nuevo o comuníquese con nuestro equipo de soporte"
+        )
+    elif data:
+        status = "200"
+        _type = "success"
+        msg = ""
+    return {"status": status, "type": _type, "msg": msg, "data": data}

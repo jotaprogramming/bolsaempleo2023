@@ -2,6 +2,15 @@ import base64
 import sys, codecs
 
 
+POST_STATUS = (
+    ("1", "aplicado"),
+    ("2", "cancelado"),
+    ("3", "rechazado"),
+    ("4", "aceptado"),
+    ("5", "contratado"),
+)
+
+
 def string_to_base64(sample_string):
     sample_string_bytes = sample_string.encode("ascii")
 
@@ -29,3 +38,10 @@ def get_pk_from_a_slug(self):
     split_pk = slug_split[-1]
     # str_pk = base64_to_string(f"{split_pk}")
     return split_pk
+
+
+def get_status_name(p_stauts):
+    for status in POST_STATUS:
+        _id = status[0]
+        if _id == p_stauts:
+            return status[1]

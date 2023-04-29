@@ -1,10 +1,13 @@
 <picture class="img-content__info display-5" id="previewPic">
-    {% comment %} <img src="{% static 'core/assets/img/montains.jpg' %}" alt="" /> {% endcomment %}
-    {% if object.userprofile.avatar and object.userprofile.avatar.url %}
-    <img src="{{ object.userprofile.avatar.url }}" alt="{{ object.user.username }}_pic"/>
-    {% else %}
-    <span class="bg-orange text-white letterpic text-uppercase">
-        {{ username.0 }}
-    </span>
-    {% endif %} 
+  {% if object.userprofile.avatar and object.userprofile.avatar.url %}
+  <img
+    src="{{ object.userprofile.avatar.url }}"
+    alt="{{ object.user.username }}_pic"
+    onerror="this.src = 'https://img.freepik.com/vector-gratis/plantilla-web-error-404-monstruo-divertido_23-2147788958.jpg?w=826&t=st=1682694445~exp=1682695045~hmac=6a60f264a5445d00221f109af77952c9c1e8f0b5b78544b5b6d868272f76ba8f';"
+  />
+  {% else %}
+  <span class="bg-orange text-white letterpic text-uppercase">
+    {{ username.0 }}
+  </span>
+  {% endif %}
 </picture>

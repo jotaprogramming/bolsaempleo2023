@@ -1,10 +1,11 @@
-.bid-letter{
+.bid-letter {
     /* border: 2px solid transparent !important; */
     /* border-width: 2px !important; */
     /* box-shadow: 1px 1px 5px 2px transparent; */
     transition: all 100ms ease-in;
 }
-.card_offer{
+
+.card_offer {
     width: 100%;
     height: auto;
     min-height: 300px;
@@ -17,19 +18,22 @@
     flex-direction: column;
     justify-content: space-between;
 }
+
 .card_offer:hover,
-.bid-letter:hover{
+.bid-letter:hover {
     border: 1px solid var(--orange);
     /* box-shadow: 1px 1px 5px 2px var(--extralight-gray); */
 }
-.card_offer__top{
+
+.card_offer__top {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-  
+
 }
-.card_offer__middle{
+
+.card_offer__middle {
     width: 100%;
     /* background-color: yellow; */
     font-weight: 300;
@@ -37,14 +41,16 @@
     line-height: 18px;
     text-align: justify;
 }
-.card_offer__bottom{
+
+.card_offer__bottom {
     width: 100%;
     /* background-color: #D84B4B; */
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
-.offer_container{
+
+.offer_container {
     width: 100%;
     height: 100%;
     /* background-color: yellow; */
@@ -57,18 +63,19 @@
     gap: 1rem;
     padding: 0 32px;
 }
+
 .offer_container::-webkit-scrollbar {
     -webkit-appearance: inherit;
 }
 
 .offer_container::-webkit-scrollbar:vertical {
-    width:2px;
+    width: 2px;
 }
 
 .offer_container::-webkit-scrollbar-button:increment,
 .offer_container::-webkit-scrollbar-button {
     display: none;
-} 
+}
 
 
 .offer_container::-webkit-scrollbar-thumb {
@@ -78,20 +85,23 @@
 }
 
 .offer_container::-webkit-scrollbar-track {
-    border-radius: 5px;  
+    border-radius: 5px;
 }
-.offer_header{
+
+.offer_header {
     display: flex;
     align-items: center;
     gap: 10px;
-    
+
 }
-.offer_header__title{
+
+.offer_header__title {
     font-weight: 700;
     font-size: 16px;
     line-height: 20px;
 }
-.offer_header__tags{
+
+.offer_header__tags {
     max-width: 550px;
     width: auto;
     height: 40px;
@@ -100,25 +110,28 @@
     overflow-x: auto;
 }
 
-.offer_header__priority{
+.offer_header__priority {
     width: auto;
     display: flex;
     justify-content: center;
     padding: 4px 16px;
-    background-color:#D84B4B;
+    background-color: #D84B4B;
     color: #fff;
 }
-.offer_top__header{
+
+.offer_top__header {
     display: flex;
     justify-content: space-between;
 }
-.offer_top__bottom{
+
+.offer_top__bottom {
     width: 100%;
     display: flex;
     gap: 1.5rem;
 
 }
-.offer_icons{
+
+.offer_icons {
     width: auto;
     /* background-color: yellow; */
     display: flex;
@@ -127,12 +140,14 @@
     font-size: 14px;
     line-height: 18px;
 }
-.offer_icons__icon{
+
+.offer_icons__icon {
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.bottom-icons{
+
+.bottom-icons {
     font-weight: 400;
     font-size: 12px;
     line-height: 15px;
@@ -142,12 +157,14 @@
 
     gap: 10px;
 }
-.divisor{
+
+.divisor {
     width: 90%;
     border: 1px solid var(--extralight-gray);
     margin-left: 5%;
 }
-.offer{
+
+.offer {
     width: 100%;
     height: auto;
     border: none;
@@ -160,25 +177,27 @@
     gap: 10px;
 }
 
-.offer-header__top{
+.offer-header__top {
     /* background-color: yellow; */
     display: flex;
     justify-content: space-between;
 }
-.offer-header__title{
+
+.offer-header__title {
     font-weight: 700;
     font-size: 16px;
     line-height: 20px;
 }
-.offer-header__icon{
+
+.offer-header__icon {
     display: flex;
     justify-content: center;
     align-items: center;
-    
+
     rotate: 90deg;
 }
 
-.offer-header__middle{
+.offer-header__middle {
     width: 300px;
     height: 40px;
     /* background-color: rgb(125, 226, 157); */
@@ -186,12 +205,14 @@
     overflow-x: scroll;
     display: flex;
 }
-.offer-header__bottom{
+
+.offer-header__bottom {
     display: flex;
     justify-content: space-around;
     gap: 10px;
 }
-.group-offer__container{
+
+.group-offer__container {
     width: 100%;
     height: 100%;
     max-width: 1000px;
@@ -200,7 +221,8 @@
     gap: 1rem;
     /* background-color: green; */
 }
-.offer-orderby{
+
+.offer-orderby {
     width: 100%;
     min-width: 300px;
     max-width: 500px;
@@ -209,33 +231,37 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-  
-   
+
+
     /* background-color: burlywood; */
 }
-.offer-orderby__btn{
+
+.offer-orderby__btn {
     width: 100%;
     display: flex;
     gap: 1rem;
-    
-    
+
+
 }
-.orderby__btn{
+
+.orderby__btn {
     background-color: transparent;
     border: none;
     padding: 3px 10px;
 }
-.orderby__btn:hover{
+
+.orderby__btn:hover {
     color: var(--orange);
 }
 
-.orderby__btn--bl{
+.orderby__btn--bl {
     background-color: transparent;
     border: none;
     border-left: 2px solid var(--extralight-gray);
     padding: 3px 10px;
 }
-.orderby__btn--br{
+
+.orderby__btn--br {
     background-color: transparent;
     border: none;
     border-right: 2px solid var(--extralight-gray);
@@ -245,7 +271,7 @@
     justify-content: center;
 }
 
-.offers-container{
+.offers-container {
     width: 100%;
     height: 100%;
     /* background-color: #4853BA; */
@@ -253,7 +279,8 @@
     overflow-y: scroll;
 
 }
-.offers-container__content{
+
+.offers-container__content {
     width: 100%;
     height: 100%;
     display: flex;
@@ -263,92 +290,106 @@
     /* background-color: yellow; */
 
 }
-.order-by__text{
+
+.order-by__text {
     font-weight: 400;
     font-size: 14px;
     line-height: 18px;
     text-transform: capitalize;
     padding-left: 10px;
 }
-.salary-hoped{
+
+.salary-hoped {
     font-weight: 400;
     font-size: 14px;
-    line-height: 18px;   
-    width: 100%; 
+    line-height: 18px;
+    width: 100%;
     text-align: left;
 }
-.watch-offer{
+
+.watch-offer {
     width: 300px;
     background-color: var(--orange);
     height: 40px;
-    padding:6px 12px;
+    padding: 6px 12px;
     border-radius: 20px;
     text-decoration: none;
     color: #fff;
 }
-.watch_offer{
+
+.watch_offer {
     max-width: 200px;
     text-decoration: none;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.single__tag{
+
+.single__tag {
     display: flex;
     width: 120px;
     height: 100%;
     align-items: center;
     justify-content: center;
 }
-.salary_hoped{
+
+.salary_hoped {
     font-weight: 400;
     font-size: 14px;
     line-height: 18px;
     text-align: left;
 }
-.orderby_btn{
+
+.orderby_btn {
     display: flex;
     gap: 1rem;
     align-items: center;
 }
-.orderby_btn__text{
+
+.orderby_btn__text {
     font-weight: 400;
     font-size: 14px;
     line-height: 18px;
 }
-.orderby_btn__filters{
+
+.orderby_btn__filters {
     display: flex;
 }
-.filter_btn{
+
+.filter_btn {
     background-color: transparent;
     padding: 0 12px;
     display: flex;
     align-items: center;
     border: none;
 }
-.filter_btn--bordR{
-    border-right:2px solid var(--extralight-gray) ;
+
+.filter_btn--bordR {
+    border-right: 2px solid var(--extralight-gray);
 }
-.filter_btn--bordL{
-    border-left:2px solid var(--extralight-gray) ;
+
+.filter_btn--bordL {
+    border-left: 2px solid var(--extralight-gray);
 }
-.filter_btn:hover{
+
+.filter_btn:hover {
     color: var(--orange);
 }
 
-.no_txt__deco{
+.no_txt__deco {
     text-decoration: none;
     color: var(--black);
 }
 
-.similar_offers{
+.similar_offers {
     width: 100%;
     height: auto;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-.similar_offers__offer{
+
+.similar_offers__offer {
     width: 100%;
     height: auto;
     border: 1px solid var(--extralight-gray);
@@ -359,19 +400,38 @@
     gap: 8px;
     background-color: transparent;
 }
-.similar_offers__offer:hover{
+
+.similar_offers__offer:hover {
     border: 1px solid var(--orange);
 }
-.similar_offer__title{
+
+.similar_offer__title {
     font-weight: 600;
     font-size: 14px;
     line-height: 18px;
 }
-.similar_offer__title--salary{
-   color: var(--orange);
-}   
-.similar_offer__location{
+
+.similar_offer__title--salary {
+    color: var(--orange);
+}
+
+.similar_offer__location {
     font-weight: 400;
     font-size: 12px;
     line-height: 15px;
+}
+
+/*CLICK*/
+.click-effect {
+    animation: click 0.5s 1;
+}
+
+@keyframes click {
+    25%, 75% {
+        transform: scale(0.8)
+    }
+
+    50% {
+        transform: scale(1.1)
+    }
 }

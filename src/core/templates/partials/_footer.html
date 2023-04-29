@@ -21,35 +21,41 @@
         <h4 class=" text-uppercase text-light">conocenos</h4>
         <div class="info">
             <div class="single-info text-light">
-               
-                <p class="m-0 info-text">Universidad de......</p>
+                <p class="m-0 info-text">Universidad de XXXXXXXX</p>
+            </div>
+            <div class="single-info text-light">
+                <span class="info-icon"><i class="lni lni-popup"></i></span>
+                <p class="m-0 info-text">Fax: 666-66 </p>
             </div>
             <div class="single-info text-light">
                 <span class="info-icon"><i class="lni lni-money-location"></i></span>
                 <p class="m-0 info-text">Direccion: Calle X No. XX-XX</p>
             </div>
             <div class="single-info text-light">
-                <span class="info-icon"><i class="lni lni-popup"></i></span>
-                <p class="m-0 info-text">Fax:666-66 </p>
-            </div>
-            <div class="single-info text-light">
-               
-                <p class="m-0 info-text">Bucaramanga,Santander</p>
+                <span class="info-icon">
+                    <i class="lni lni-direction"></i>
+                </span>
+                <p class="m-0 info-text">Bucaramanga, Santander</p>
             </div>
         </div>
     </div>
     <div class="contact">
-        <h4 class=" text-uppercase text-light">redes sociales</h4>
+        <h4 class=" text-uppercase text-light">Redes sociales</h4>
         <div class="info">
             <div class="single-info text-light">
                 <span class="info-icon"><i class="lni lni-website"></i></span>
                 <p class="m-0 info-text">https://www.myweb/site/bolsaempleo</p>
             </div>
-            <div class="single-info text-light">
-                <span class="info-icon"><i class="lni lni-instagram-fill"></i></span>
-                <span class="info-icon"><i class="lni lni-linkedin-original"></i></span>
-                <span class="info-icon"><i class="lni lni-facebook-fill"></i></span>
-
+            <div class="d-flex gap-2">
+                {% for sn in social_networks %}
+                <a class="ft-icon ft-icon--orange" href="{{sn.url}}" target="_blank">
+                {% if sn.custom %}
+                {% include 'partials/icon_element/_sn_icon.html' %}
+                {% else %}
+                <i class="{{sn.icon}}"></i>
+                {% endif %}
+                </a>
+                {% endfor %}
             </div>
         </div>
     </div>

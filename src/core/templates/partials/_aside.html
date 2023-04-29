@@ -1,15 +1,15 @@
 {% load format_numbers %}
 
 <aside
-  class="d-flex flex-column gap-4 position-fixed top-0 bg-white border-end"
-  style="width: 300px; height: 100vh; z-index: 2; padding: 150px 2rem 2rem 2rem"
+  class="d-flex flex-column gap-4 position-absolute top-0 bg-white border-end"
+  style="width: 300px; height: 100vh; z-index: 2; padding: 6rem 2rem 2rem 2rem"
 >
   <div class="row">
     <h6 class="fw-bold d-flex gap-2 align-items-center position-relative">
       {% comment %} <i class="lni lni-user"></i> {% endcomment %}
       {% include 'partials/_thumbnail.html' %}
-      {% if request.user.user_profile_user.name %}
-      {{ request.user.user_profile_user.name }}
+      {% if request.user.userprofile.name %}
+      {{ request.user.userprofile.name }}
       {% elif request.user.first_name %}
       {{ request.user.first_name }}
       {% else %}
@@ -30,20 +30,56 @@
       </a>
       <a 
         href="{% url 'offer_app:bidding_panel' %}"
-        class="list-group-item list-group-item-action border-0 {% if offer or offers %}active{% endif %}"
+        class="list-group-item list-group-item-action border-0 {% if in_offer %}active{% endif %}"
       >
         Ofertas
-        {% if offer %}
+        {% if in_offer_detail %}
         <br />
         <small class="text-black-50">Detalle...</small>
         {% endif %}
       </a>
-      <a 
-        href="{% url 'offer_app:mycandidacies' request.user.username %}"
-        class="list-group-item list-group-item-action border-0 {% if mycandidacies %}active{% endif %}"
-      >
-        Candidaturas
-      </a>
+      {% for rule in request.user.rule_user.all %}
+        {% if request.user.is_staff or rule.usergroup.code == 'COM' %}
+          <a 
+            href="{% url 'offer_app:mypublications' request.user.username %}"
+            class="list-group-item list-group-item-action border-0 {% if in_mypublications %}active{% endif %}"
+          >
+            Mis publicaciones
+            {% if in_mypublications_add %}
+            <br />
+            <small class="text-black-50">Creando...</small>
+            {% elif in_mypublications_edit %}
+            <br />
+            <small class="text-black-50">Editando...</small>
+            {% elif in_mypublications_detail %}
+            <br />
+            <small class="text-black-50">Detalle...</small>
+            {% endif %}
+          </a>
+        {% elif rule.usergroup.code == 'GRA' %}
+          <a 
+            href="{% url 'offer_app:mycandidacies' request.user.username %}"
+            class="list-group-item list-group-item-action border-0 {% if mycandidacies %}active{% endif %}"
+          >
+            Mis postulaciones
+          </a>
+        {% endif %}
+      {% empty %}
+        {% if request.user.is_staff %}
+          <a 
+            href="{% url 'offer_app:mypublications' request.user.username %}"
+            class="list-group-item list-group-item-action border-0 {% if in_mypublications %}active{% endif %}"
+          >
+            Publicaciones
+          </a>
+          <a 
+            href="{% url 'offer_app:mycandidacies' request.user.username %}"
+            class="list-group-item list-group-item-action border-0 {% if mycandidacies %}active{% endif %}"
+          >
+            Candidaturas
+          </a>
+        {% endif %}
+      {% endfor %}
       <a 
         href="#"
         class="list-group-item list-group-item-action border-0 {% if notification %}active{% endif %}"
@@ -53,7 +89,7 @@
     </div>
   </div>
   {% if similar_offers %}
-  <div class="row">
+  <div class="row" id="similarOffers">
     <h6 class="fw-bold">Ofertas similares</h6>
     <hr />
     {% for offer in similar_offers %}
@@ -73,11 +109,11 @@
       </div>
     </div>
     {% endfor %}
-    <div>
+    <p>
       <a href="{% url 'offer_app:offer_list' %}" class="link-orange">
         Ver todas las ofertas
       </a>
-    </div>
+    </p>
   </div>
   {% endif %}
 </aside>

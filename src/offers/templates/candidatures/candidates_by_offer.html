@@ -8,116 +8,129 @@
 
 {% block contentfluid %} 
 
-<section class="my-1 position-relative">
+<section class="my-1 position-relative overflow-hidden" style="min-height: calc(100vh - 56px);">
   {% include 'partials/_aside.html' %}
   <div class="p-5" style="margin-left: 300px;">
-    <div class="col-12">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Oferta</th>
-            <th>Candidato</th>
-            <th>Estado</th>
-            <th>Perfil</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in object_list %}
-          <tr>
-            <td>{{row.offer.title}}</td>
-            <td>
-              <a class="link-orange" href="{% url 'users_app:userprofile' row.candidate.username %}">
-                {% if row.candidate.first_name and row.candidate.last_name %}
-                {{row.candidate.first_name}} {{row.candidate.last_name}}
-                {% else %}
-                {{row.candidate.username}}
-                {% endif %}
-              </a>
-            </td>
-            <td>
-              {% if row.deleted_at %} 
-              Eliminado el {{row.deleted_at}}
-              {% elif row.updated_at %} 
-              <strong class="text-orange">{{row.status}}</strong> el {{row.updated_at}}
-              {% else %}
-              <strong class="text-orange">{{row.status}}</strong> el {{row.created_at}}
-              {% endif %}
-            </td>
-            <td>
-              {% if row.user_profile_user %}
+    <div class="container">
+      <div class="col-12">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Oferta</th>
+              <th>Candidato</th>
+              <th>Estado</th>
+              {% comment %} <th>Perfil</th> {% endcomment %}
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in object_list %}
+            <tr>
+              <td>
                 <a
-                  href="{% url 'users_app:userprofile' row.candidate.username %}"
-                  class="btn btn-outline-secondary btn-center"
-                  >
-                  <i class="lni lni-user"></i>
+                  href="{% url 'offer_app:offer_detail' row.offer.slug %}"
+                  role="button"
+                  class="link-orange"
+                >
+                  {{row.offer.title}}
                 </a>
-              {% endif %}
-            </td>
-            <td>
-              <div class="d-flex gap-1" style="min-width: 240px">
-                {% if not row.deleted_at and not row.status.name == 'contratado' and not row.status.name == 'rechazado' and not row.status.name == 'cancelado' %}
-                {% if row.status.name == 'aceptado' %}
-                <button
-                  type="button"
-                  class="btn btn-outline-success btn-center btn-slide"
-                  name="editButtons"
-                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=contratado"
-                  title="Contratar"
-                >
-                  <i class="lni lni-checkmark"></i>
-                  <span class="">Contratar</span>
-                </button>
+              </td>
+              <td>
+                <a class="link-orange" href="{% url 'users_app:userprofile' row.candidate.username %}">
+                  {% if row.candidate.first_name and row.candidate.last_name %}
+                  {{row.candidate.first_name}} {{row.candidate.last_name}}
+                  {% else %}
+                  {{row.candidate.username}}
+                  {% endif %}
+                </a>
+              </td>
+              <td>
+                {% if row.deleted_at %} 
+                Eliminado el {{row.deleted_at}}
+                {% elif row.updated_at %} 
+                <strong class="text-orange">{{ row.get_status_display }}</strong> el {{row.updated_at}}
                 {% else %}
-                <button
-                  type="button"
-                  class="btn btn-outline-success btn-center btn-slide"
-                  name="editButtons"
-                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=aceptado"
-                  title="Aceptar"
+                <strong class="text-orange">{{ row.get_status_display }}</strong> el {{row.created_at}}
+                {% endif %}
+              </td>
+              {% comment %} <td>
+                {% if row.candidate.userprofile %}
+                  <a
+                    href="{% url 'users_app:userprofile' row.candidate.username %}"
+                    class="btn btn-outline-secondary btn-center"
+                    >
+                    <i class="lni lni-user"></i>
+                  </a>
+                {% endif %}
+              </td> {% endcomment %}
+              <td>
+                <div class="d-flex gap-1" style="min-width: 240px">
+                  {% if not row.deleted_at and not row.status == '5' and not row.status == '3' and not row.status == '2' %}
+                  {% if row.status == '4' %}
+                  <button
+                    type="button"
+                    class="btn btn-outline-success btn-center btn-slide"
+                    name="editButtons"
+                    id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=5"
+                    title="Contratar"
                   >
-                  {% comment %} <i class="lni lni-checkmark"></i> {% endcomment %}
-                  <i class="lni lni-thumbs-up"></i>
-                  <span class="">Aceptar</span>
-                </button>
-                {% endif %}
-                {% if row.status.name != 'postulado' %}
-                <button
-                  type="button"
-                  class="btn btn-outline-secondary btn-center btn-slide"
-                  name="editButtons"
-                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=postulado"
-                  title="Cancelar"
-                >
-                  {% comment %} <i class="lni lni-checkmark"></i> {% endcomment %}
-                  <i class="lni lni-speechless"></i>
-                  <span class="">Cancelar</span>
-                </button>
-                {% endif %}
-                {% if row.status != 'rechazado' %}
-                <button
-                  type="button"
-                  class="btn btn-outline-danger btn-center btn-slide"
-                  name="deleteButtons"
-                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=rechazado"
-                  title="Rechazar"
-                >
-                  <i class="lni lni-thumbs-down"></i>
-                  <span class="">Rechazar</span>
-                </button>
-                {% endif %}
-                {% endif %}
-              </div>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+                    <i class="lni lni-checkmark"></i>
+                    <span class="">Contratar</span>
+                  </button>
+                  {% else %}
+                  <button
+                    type="button"
+                    class="btn btn-outline-success btn-center btn-slide"
+                    name="editButtons"
+                    id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=4"
+                    title="Aceptar"
+                    >
+                    {% comment %} <i class="lni lni-checkmark"></i> {% endcomment %}
+                    <i class="lni lni-thumbs-up"></i>
+                    <span class="">Aceptar</span>
+                  </button>
+                  {% endif %}
+                  {% if row.status != '1' %}
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-center btn-slide"
+                    name="editButtons"
+                    id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=1"
+                    title="Cancelar"
+                  >
+                    {% comment %} <i class="lni lni-checkmark"></i> {% endcomment %}
+                    <i class="lni lni-speechless"></i>
+                    <span class="">Cancelar</span>
+                  </button>
+                  {% endif %}
+                  {% if row.status != '3' %}
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger btn-center btn-slide"
+                    name="deleteButtons"
+                    id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=3"
+                    title="Rechazar"
+                  >
+                    <i class="lni lni-thumbs-down"></i>
+                    <span class="">Rechazar</span>
+                  </button>
+                  {% endif %}
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% if is_paginated %}
+      {% include 'partials/_pagination_sm.html' %}
+      {% endif %}
     </div>
-    {% if is_paginated %}
-    {% include 'partials/_pagination_sm.html' %}
-    {% endif %}
   </div>
 </section>
+{% comment %} <article class="footer position-relative" style="z-index: 2;">
+  {% include 'partials/_footer.html' %}
+</article> {% endcomment %}
 
 {% endblock contentfluid %}

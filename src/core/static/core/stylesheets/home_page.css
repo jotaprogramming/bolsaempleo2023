@@ -200,8 +200,8 @@
     gap: 32px;
     display: flex;
     justify-content: center;
-    flex-direction: column;
-    align-items: center;
+    /* flex-direction: column; */
+    align-items: start;
     /* background-color: yellow; */
 
 }
@@ -244,7 +244,9 @@
     display: flex;
     align-items: center;
     color: #F4893C;
-  
+}
+.info-icon:hover{
+    color: #F4893C;
 }
 .info-text{
     font-size: 16px;

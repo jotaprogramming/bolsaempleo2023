@@ -294,18 +294,18 @@ class UserRuleForm(forms.ModelForm):
 
 
 class UserForm(forms.ModelForm):
-    usergroup = forms.ModelChoiceField(
-        queryset=UserGroups.objects.all(),
-        label=_("Grupo"),
-        required=True,
-        widget=forms.Select(attrs={"class": "form-select"}),
-    )
-    role = forms.ModelChoiceField(
-        queryset=Roles.objects.all(),
-        label=_("Rol"),
-        required=True,
-        widget=forms.Select(attrs={"class": "form-select"}),
-    )
+    # usergroup = forms.ModelChoiceField(
+    #     queryset=UserGroups.objects.all(),
+    #     label=_("Grupo"),
+    #     required=True,
+    #     widget=forms.Select(attrs={"class": "form-select"}),
+    # )
+    # role = forms.ModelChoiceField(
+    #     queryset=Roles.objects.all(),
+    #     label=_("Rol"),
+    #     required=True,
+    #     widget=forms.Select(attrs={"class": "form-select"}),
+    # )
 
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)

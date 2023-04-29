@@ -19,12 +19,10 @@
         </h6>
         <div class="row mb-2 text-secondary">
           <small class="m-0 col-12">
-            <strong>Título:</strong>
             {{object.title}}
           </small>
           <small class="m-0 col-12">
-            <strong>Creada por</strong>
-            {{object.user.first_name}} el {{object.created_at}}
+            Creada el {{object.created_at}}
           </small>
           {% if object.updated_at %}
           <small class="m-0 col-12">
@@ -41,7 +39,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Cancelar
         </button>
-        <button type="submit" class="btn btn-primary">Eliminar</button>
+        <button type="submit" class="btn btn-primary"></button>
       </div>
     </form>
   </div>

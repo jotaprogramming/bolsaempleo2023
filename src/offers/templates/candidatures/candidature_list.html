@@ -30,7 +30,7 @@
             <th>Candidato</th>
             <th>Estado</th>
             <th>Estado del registro</th>
-            <th>Detalle</th>
+            <th>Ver</th>
             <th>Editar</th>
             <th>Eliminar</th>
           </tr>
@@ -70,7 +70,7 @@
               {% if not row.deleted_at %}
               <button
                 type="button"
-                class="btn btn-outline-primary btn-center"
+                class="btn btn-outline-primary btn-center btn-compact"
                 name="editButtons"
                 id="{% url 'offer_app:candidature_edit' row.id %}"
               >
@@ -82,7 +82,7 @@
               {% if not row.deleted_at %}
               <button
                 type="button"
-                class="btn btn-outline-danger btn-center"
+                class="btn btn-outline-danger btn-center btn-compact"
                 name="deleteButtons"
                 id="{% url 'offer_app:candidature_delete' row.id %}"
               >

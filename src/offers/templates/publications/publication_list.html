@@ -9,128 +9,130 @@
 {% block contentfluid %}
 <section class="my-1 position-relative overflow-hidden" style="min-height: calc(100vh - 56px);">
   {% include 'partials/_aside.html' %}
-  <div class="row gy-3 p-5" style="margin-left: 300px">
-    <div class="col-12">
-      <a
-        type="button"
-        class="btn btn-primary btn-center"
-        href="{% url 'offer_app:offer_add' %}"
-        style="width: fit-content;"
-      >
-        <i class="lni lni-plus"></i>
-        <span class="ms-2">Publicar</span>
-      </a>
-    </div>
-    {% if object_list %}
-    <div class="col-12">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Oferta</th>
-            <th>Vacantes</th>
-            <th>Candidatos</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-            {% comment %} <th>Editar</th>
-            <th>Remover</th> {% endcomment %}
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in object_list %}
-          <tr>
-            <td>
-              <a
-                href="{% url 'offer_app:offer_detail' row.slug %}"
-                role="button"
-                class="link-orange"
-              >
-                {{row.title}}
-              </a>
-            </td>
-            <td>
-              {% if row.vacancies == 1 %}
-              Una vacante
-              {% else %}
-              {{row.vacancies}} vacantes
-              {% endif %}
-            </td>
-            <td>
-              <a href="{% url 'offer_app:candidature_list' row.slug %}" class="link-orange" role="button">
-                {% if row.candidature_offer.count == 1 %}
-                Un candidato
-                {% else %}
-                {{ row.candidature_offer.count }} candidatos
-                {% endif %}
-              </a>
-            </td>
-            <td>
-              {% if row.deleted_at and row.candidature_offer.all %} 
-              Finalizada el {{row.deleted_at}}
-              {% elif row.deleted_at %} 
-              Eliminado el {{row.deleted_at}}
-              {% elif row.updated_at %} 
-              Actualizado el {{row.updated_at}}
-              {% else %}
-              Publicado el {{row.created_at}}
-              {% endif %}
-            </td>
-            <td>
-              <div class="d-flex gap-1" style="width: 205px;">
+  <div class="gy-3 p-5" style="margin-left: 300px">
+    <div class="container">
+      <div class="col-12 mb-3">
+        <a
+          type="button"
+          class="btn btn-primary btn-center"
+          href="{% url 'offer_app:offer_add' %}"
+          style="width: fit-content;"
+        >
+          <i class="lni lni-plus"></i>
+          <span class="ms-2">Publicar</span>
+        </a>
+      </div>
+      {% if object_list %}
+      <div class="col-12">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Oferta</th>
+              <th>Vacantes</th>
+              <th>Candidatos</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+              {% comment %} <th>Editar</th>
+              <th>Remover</th> {% endcomment %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in object_list %}
+            <tr>
+              <td>
                 <a
                   href="{% url 'offer_app:offer_detail' row.slug %}"
                   role="button"
-                  class="btn btn-outline-secondary btn-center btn-slide"
+                  class="link-orange"
                 >
-                  <i class="lni lni-eye"></i>
-                  <span class="">Detalle</span>
+                  {{row.title}}
                 </a>
-                {% if not row.deleted_at %}
-                <a
-                  href="{% url 'offer_app:offer_edit' row.slug %}"
-                  role="button"
-                  class="btn btn-outline-primary btn-center btn-slide"
-                >
-                  <i class="lni lni-pencil"></i>
-                  <span class="">Editar</span>
-                </a>
-                {% endif %}
-                {% if not row.deleted_at %}
-                {% if row.candidature_offer.all %}
-                <button
-                  type="button"
-                  class="btn btn-outline-success btn-center btn-slide"
-                  name="deleteButtons"
-                  id="{% url 'offer_app:offer_delete' row.id %}"
-                >
-                  <i class="lni lni-close"></i>
-                  <span class="">Finalizar</span>
-                </button>
+              </td>
+              <td>
+                {% if row.vacancies == 1 %}
+                Una vacante
                 {% else %}
-                <button
-                  type="button"
-                  class="btn btn-outline-danger btn-center btn-slide"
-                  name="deleteButtons"
-                  id="{% url 'offer_app:offer_delete' row.id %}"
-                >
-                  <i class="lni lni-trash-can"></i>
-                  <span class="">Eliminar</span>  
-                </button>
+                {{row.vacancies}} vacantes
                 {% endif %}
+              </td>
+              <td>
+                <a href="{% url 'offer_app:candidature_list' row.slug %}" class="link-orange" role="button">
+                  {% if row.candidature_offer.count == 1 %}
+                  Un candidato
+                  {% else %}
+                  {{ row.candidature_offer.count }} candidatos
+                  {% endif %}
+                </a>
+              </td>
+              <td>
+                {% if row.deleted_at and row.candidature_offer.all %} 
+                Finalizada el {{row.deleted_at}}
+                {% elif row.deleted_at %} 
+                Eliminado el {{row.deleted_at}}
+                {% elif row.updated_at %} 
+                Actualizado el {{row.updated_at}}
+                {% else %}
+                Publicado el {{row.created_at}}
                 {% endif %}
-              </div>
-            </td>
-            {% comment %} <td>
-            </td>
-            <td>
-            </td> {% endcomment %}
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+              </td>
+              <td>
+                <div class="d-flex gap-1" style="width: 205px;">
+                  <a
+                    href="{% url 'offer_app:offer_detail' row.slug %}"
+                    role="button"
+                    class="btn btn-outline-secondary btn-center btn-slide"
+                  >
+                    <i class="lni lni-eye"></i>
+                    <span class="">Detalle</span>
+                  </a>
+                  {% if not row.deleted_at %}
+                  <a
+                    href="{% url 'offer_app:offer_edit' row.slug %}"
+                    role="button"
+                    class="btn btn-outline-primary btn-center btn-slide"
+                  >
+                    <i class="lni lni-pencil"></i>
+                    <span class="">Editar</span>
+                  </a>
+                  {% endif %}
+                  {% if not row.deleted_at %}
+                  {% if row.candidature_offer.all %}
+                  <button
+                    type="button"
+                    class="btn btn-outline-success btn-center btn-slide"
+                    name="deleteButtons"
+                    id="{% url 'offer_app:offer_delete' row.id %}"
+                  >
+                    <i class="lni lni-close"></i>
+                    <span class="">Finalizar</span>
+                  </button>
+                  {% else %}
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger btn-center btn-slide"
+                    name="deleteButtons"
+                    id="{% url 'offer_app:offer_delete' row.id %}"
+                  >
+                    <i class="lni lni-trash-can"></i>
+                    <span class="">Eliminar</span>  
+                  </button>
+                  {% endif %}
+                  {% endif %}
+                </div>
+              </td>
+              {% comment %} <td>
+              </td>
+              <td>
+              </td> {% endcomment %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      Sin registros
+      {% endif %}
     </div>
-    {% else %}
-    Sin registros
-    {% endif %}
   </div>
 </section>
 {% comment %} <article class="footer position-relative" style="z-index: 2;">

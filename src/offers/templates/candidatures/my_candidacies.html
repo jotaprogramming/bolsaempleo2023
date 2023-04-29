@@ -11,61 +11,63 @@
 <section class="my-1 position-relative overflow-hidden" style="min-height: calc(100vh - 56px);">
   {% include 'partials/_aside.html' %}
   <div class="p-5" style="margin-left: 300px;">
-    <div class="col-12">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Oferta</th>
-            <th>Estado</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in object_list %}
-          <tr>
-            <td>
-              
-              <a
-                href="{% url 'offer_app:offer_detail' row.offer.slug %}"
-                role="button"
-                class="link-orange"
-              >
-                {{row.offer.title}}
-              </a>
-            </td>
-            <td>
-              {% if row.deleted_at %} 
-              Eliminado el {{row.deleted_at}}
-              {% elif row.updated_at %} 
-              <strong class="text-orange">{{row.get_status_display}}</strong> el {{row.updated_at}}
-              {% else %}
-              <strong class="text-orange">{{row.get_status_display}}</strong> el {{row.created_at}}
-              {% endif %}
-            </td>
-            <td>
-              <div class="d-flex gap-1" style="width: 205px;">
-                {% if not row.deleted_at and not row.status == '5' and not row.status == '3' and not row.status == '2' %}
-                <button
-                  type="button"
-                  class="btn btn-outline-danger btn-center btn-slide"
-                  name="deleteButtons"
-                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=2&path=mycandidacies"
-                  title="Cancelar postulación"
+    <div class="container">
+      <div class="col-12">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Oferta</th>
+              <th>Estado</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in object_list %}
+            <tr>
+              <td>
+                
+                <a
+                  href="{% url 'offer_app:offer_detail' row.offer.slug %}"
+                  role="button"
+                  class="link-orange"
                 >
-                  <i class="lni lni-thumbs-down"></i>
-                  <span class="">Cancelar</span>
-                </button>
+                  {{row.offer.title}}
+                </a>
+              </td>
+              <td>
+                {% if row.deleted_at %} 
+                Eliminado el {{row.deleted_at}}
+                {% elif row.updated_at %} 
+                <strong class="text-orange">{{row.get_status_display}}</strong> el {{row.updated_at}}
+                {% else %}
+                <strong class="text-orange">{{row.get_status_display}}</strong> el {{row.created_at}}
                 {% endif %}
-              </div>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+              </td>
+              <td>
+                <div class="d-flex gap-1" style="width: 205px;">
+                  {% if not row.deleted_at and not row.status == '5' and not row.status == '3' and not row.status == '2' %}
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger btn-center btn-slide"
+                    name="deleteButtons"
+                    id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=2&path=mycandidacies"
+                    title="Cancelar postulación"
+                  >
+                    <i class="lni lni-thumbs-down"></i>
+                    <span class="">Cancelar</span>
+                  </button>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% if is_paginated %}
+      {% include 'partials/_pagination_sm.html' %}
+      {% endif %}
     </div>
-    {% if is_paginated %}
-    {% include 'partials/_pagination_sm.html' %}
-    {% endif %}
   </div>
 </section>
 {% comment %} <article class="footer position-relative" style="z-index: 2;">

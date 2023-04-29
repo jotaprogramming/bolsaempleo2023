@@ -8,8 +8,8 @@
     <h6 class="fw-bold d-flex gap-2 align-items-center position-relative">
       {% comment %} <i class="lni lni-user"></i> {% endcomment %}
       {% include 'partials/_thumbnail.html' %}
-      {% if request.user.user_profile_user.name %}
-      {{ request.user.user_profile_user.name }}
+      {% if request.user.userprofile.name %}
+      {{ request.user.userprofile.name }}
       {% elif request.user.first_name %}
       {{ request.user.first_name }}
       {% else %}
@@ -39,7 +39,7 @@
         {% endif %}
       </a>
       {% for rule in request.user.rule_user.all %}
-        {% if rule.usergroup.code == 'COM' %}
+        {% if request.user.is_staff or rule.usergroup.code == 'COM' %}
           <a 
             href="{% url 'offer_app:mypublications' request.user.username %}"
             class="list-group-item list-group-item-action border-0 {% if in_mypublications %}active{% endif %}"
@@ -68,7 +68,7 @@
         {% if request.user.is_staff %}
           <a 
             href="{% url 'offer_app:mypublications' request.user.username %}"
-            class="list-group-item list-group-item-action border-0 {% if mypublications %}active{% endif %}"
+            class="list-group-item list-group-item-action border-0 {% if in_mypublications %}active{% endif %}"
           >
             Publicaciones
           </a>

@@ -384,6 +384,7 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
         context["app_title"] = app_title
         context["title_view"] = candidature_title
         context["description_view"] = candidature_desc
+        context["mycandidacies"] = True
         return context
 
 

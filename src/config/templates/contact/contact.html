@@ -1,0 +1,111 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+{% block contentfluid %}
+
+<article class="content__center">
+  <section class="principal__container">
+    <input type="hidden" id="formUrl" value="{% url 'config_app:get_contact' %}">
+    {% csrf_token %}
+    <div class="container_left">
+      {% include 'partials/_log_reg_left-content.html' %}
+    </div>
+    <div class="container_right">
+      <div class="container_right__content">
+        <div class="rigth_content right_content__header">
+          <p class="right_content__title m-0 text-uppercase">
+            {{title_view}}
+          </p>
+          <p class="right_content__subtitle m-0 text-center">
+            {{ description_view }}
+          </p>
+        </div>
+        <div class="rigth_content right_content__body">
+          {% if object_list %}
+          <select class="form-select my-4" aria-label="" id="contactCity">
+            {% for contact in object_list %}
+            <option class="btn-options" value="{{ contact.city.name }}" {% if defaultContact and defaultContact.id == contact.id %} selected {% endif %}>
+              {{ contact.city.name }}
+            </option>
+            {% endfor %}
+          </select>
+          {% endif %}
+          <div class="group-inputs-readonly">
+            <div class="input-readonly">
+              <input class="input-read" type="text" readonly />
+              <span class="placeholder-read" id="contactEmail">
+                {% if defaultContact %}
+                {{ defaultContact.email }}
+                {% else %}
+                -----
+                {% endif %}
+              </span>
+              <span class="icon-readonly">
+                <i class="lni lni-envelope"></i>
+              </span>
+            </div>
+            <div class="input-readonly">
+              <input class="input-read" type="text" readonly />
+              <span class="placeholder-read" id="contactPhone">
+                {% if defaultContact %}
+                {{ defaultContact.phone }}
+                {% else %}
+                -----
+                {% endif %}
+              </span>
+              <span class="icon-readonly">
+                <i class="lni lni-phone"></i>
+              </span>
+            </div>
+            <div class="input-readonly">
+              <input class="input-read" type="text" readonly />
+              <span class="placeholder-read" id="contactMsg">
+                {% if defaultContact %}
+                {{ defaultContact.msg_app_number }}
+                {% else %}
+                -----
+                {% endif %}
+              </span>
+              <span class="icon-readonly">
+                <i class="lni lni-whatsapp"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+        {% if social_networks %}
+        <div class="rigth_content right_content__footer text-center">
+          <span class="rigth_content__link--footer">
+            {{ exception_view }}
+          </span>
+          <div class="footer_icons">
+            {% for sn in social_networks %}
+            <a class="text-dark ft-icon" href="{{sn.url}}" target="_blank">
+              {% if sn.custom %}
+              {% include 'partials/icon_element/_sn_icon.html' %}
+              {% else %}
+              <i class="{{sn.icon}}"></i>
+              {% endif %}
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+  {% comment %} {% include 'partials/_shape_divider.html' %} {% endcomment %}
+</article>
+
+{% endblock contentfluid %}
+
+{% block extrajs %}
+
+<script src="{% static 'config/scripts/contact.js' %}"></script>
+
+{% endblock extrajs %}
+

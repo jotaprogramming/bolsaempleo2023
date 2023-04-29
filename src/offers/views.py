@@ -188,7 +188,9 @@ class OfferDeleteModal(LoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         success_message(self.request, msg="Oferta eliminada satisfactoriamente")
-        return reverse_lazy("offer_app:offer_list")
+        if self.request.user.is_staff:
+            return reverse_lazy("offer_app:offer_list")
+        return reverse_lazy("offer_app:mypublications")
 
     def get_context_data(self, **kwargs):
         context = super(OfferDeleteModal, self).get_context_data(**kwargs)
@@ -198,6 +200,10 @@ class OfferDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
+        # offer = self.get_object()
+        # validate = Candidatures.objects.filter(offer=offer)
+        # if validate:
+        #     warning_message(self.request, msg="No se puede ")
         form.instance.deleted_at = timezone.now()
         return super().form_valid(form)
 
@@ -226,6 +232,7 @@ class BiddingPanel(LoginRequiredMixin, generic.ListView):
             user=self.request.user, usergroup__code__icontains="COM"
         ).count()
         context["in_offer"] = True
+        context["search_results"] = self.get_queryset()
         return context
 
 
@@ -240,7 +247,15 @@ class PublicationList(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         username = self.kwargs.get("username", "")
-        return self.model.objects.all().filter(user__username=username).order_by("id")
+        objects = (
+            self.model.objects.all()
+            .filter(user__username=username)
+            .annotate(candidatures=Count(F("candidature_offer")))
+            .order_by("id")
+        )
+        pprint(list(objects.values()))
+
+        return objects.exclude(Q(candidatures=0) & ~Q(deleted_at=None))
 
     def get_context_data(self, **kwargs):
         context = super(PublicationList, self).get_context_data(**kwargs)

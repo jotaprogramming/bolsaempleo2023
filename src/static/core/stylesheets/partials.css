@@ -7,6 +7,9 @@
 .search-container {
     max-width: 40rem;
 }
+.search-container form {
+    min-width: 20rem;
+}
 
 .pop-up-position {
     position: fixed;

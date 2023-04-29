@@ -6,7 +6,7 @@
 
 {% block contentfluid %}
 
-<section class="my-1 position-relative">
+<section class="my-1 position-relative overflow-hidden" style="min-height: calc(100vh - 56px);">
   {% include 'partials/_aside.html' %}
   <div class="row justify-content-start p-5 gap-3" style="width: calc(100% - 300px); margin-left: 300px;">
     <form method="POST" enctype="multipart/form-data" action="{% url 'users_app:userprofile_edit' username %}" id="form">
@@ -14,8 +14,9 @@
       {% include 'partials/_userprofile_form.html' %}
     </form>
   </div>
-  
-  </form>
 </section>
+{% comment %} <article class="footer position-relative" style="z-index: 2;">
+  {% include 'partials/_footer.html' %}
+</article>  {% endcomment %}
 
 {% endblock contentfluid %}

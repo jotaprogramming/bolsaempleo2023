@@ -3,6 +3,8 @@ from django.shortcuts import render
 from django.views import generic
 from django.utils.translation import gettext_lazy as _
 
+from config.models import SocialNetwork
+
 # GLOBAL VARIABLES
 app_title = _("Home")
 home_title = _("Bolsa de Empleo")
@@ -35,6 +37,7 @@ class HomeView(generic.TemplateView):
         context["app_title"] = app_title
         context["title_view"] = home_title
         context["description_view"] = home_desc
+        context["social_networks"] = SocialNetwork.objects.all()
         return context
 
 

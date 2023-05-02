@@ -167,5 +167,9 @@ input[type="color"]:-webkit-autofill,
 }
 
 .bg-orange {
-    background-color: var(--bs-orange) !important;
+    background-color: var(--orange) !important;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: var(--orange) !important;
 }

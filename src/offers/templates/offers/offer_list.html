@@ -41,7 +41,7 @@
           <tr>
             <td scope="row" {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>{{row.id}}</td>
             <td {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>{{row.title}}</td>
-            <td {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>{{row.user.first_name}}</td>
+            <td {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>{{row.user.userprofile.company_profile}}</td>
             <td {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>{{row.currency}} {{row.salary}} {{row.payperiod}}</td>
             <td {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>{{row.modality}}</td>
             <td {% if row.deleted_at %}class="text-decoration-line-through"{% endif %}>

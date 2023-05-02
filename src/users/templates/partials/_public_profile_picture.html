@@ -1,0 +1,75 @@
+<div 
+  class="d-flex flex-column gap-1 align-items-center"
+>
+  {% comment %} {% if row.status == '5' %}bg-orange pb-3 rounded-top-circle{% endif %} {% endcomment %}
+  <div 
+    class="d-flex flex-column gap-1 align-items-center position-relative"
+    style="border-radius: 0% 0% 20% 20%;"
+  >
+    <picture class="img-content__info display-5 position-relative bg-white" id="previewPic" style="z-index: 2;">
+      {% if row.candidate.userprofile.avatar and row.candidate.userprofile.avatar.url %}
+      <img
+        src="{{ row.candidate.userprofile.avatar.url }}"
+        alt="{{ row.candidate.user.username }}_pic"
+        onerror="this.src = 'https://img.freepik.com/vector-gratis/plantilla-web-error-404-monstruo-divertido_23-2147788958.jpg?w=826&t=st=1682694445~exp=1682695045~hmac=6a60f264a5445d00221f109af77952c9c1e8f0b5b78544b5b6d868272f76ba8f';"
+      />
+      {% else %}
+      <span class="bg-orange text-white letterpic text-uppercase">
+        {{ row.candidate.username.0 }}
+      </span>
+      {% endif %}
+      <a href="{% url 'users_app:userprofile' row.candidate.username %}" class="stretched-link hoverimage"></a>
+    </picture>
+    {% comment %} {% if row.status == '3' %}
+    <div class="rounded-pill bg-secondary blind">
+      <span>
+        {{ row.get_status_display }}
+      </span>
+      <span style="font-size: 12px !important;">
+        {{ row.updated_at.date|date:"d-M-Y" }}
+      </span>
+      <div>
+        <i class="lni lni-warning"></i>
+      </div>
+    </div>
+    {% endif %} {% endcomment %}
+    {% comment %} {% if row.status == '5' %}
+    <div class="rounded-pill bg-orange blind">
+      <span>
+        {{ row.get_status_display }}
+      </span>
+      <span style="font-size: 12px !important;">
+        {{ row.updated_at.date|date:"d-M-Y" }}
+      </span>
+      <div>
+        <i class="lni lni-briefcase"></i>
+      </div>
+    </div>
+    {% endif %} {% endcomment %}
+  </div>
+  {% if row.status == '3' %}
+  <div class="mt-2 d-flex flex-column gap-1 align-items-center">
+    <i class="lni lni-sad"></i>
+    <span>
+      {{ row.get_status_display }}
+    </span>
+  </div>
+  {% endif %}
+  {% if row.status == '4' %}
+  <div class="mt-2 d-flex flex-column gap-1 align-items-center">
+    <i class="lni lni-checkmark"></i>
+    <span>
+      {{ row.get_status_display }}
+    </span>
+  </div>
+  {% endif %}
+  {% if row.status == '5' %}
+  <div class="mt-2 d-flex flex-column gap-1 align-items-center">
+    <i class="lni lni-briefcase"></i>
+    <span>
+      {{ row.get_status_display }}
+    </span>
+  </div>
+  {% endif %}
+</div>
+

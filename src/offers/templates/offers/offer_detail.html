@@ -122,21 +122,21 @@
                         <div class="alert alert-danger" role="alert">
                             ¡Oh, lo sentimos!
                             <br>
-                            Desafortunadamente usted ha sido {{ candidature.get_status_display }} en esta oferta y ya no podrá aplicar de nuevo
+                            Desafortunadamente has sido {{ candidature.get_status_display }} en esta oferta y ya no podrás aplicar de nuevo
                             <br>
                             <span class="text-decoration-underline" id="goToSimilarOffers" type="button" role="button">
-                                ¡Pero esto no acaba aquí. Revisa las "ofertas similares" y aplica a la que más te convenga!
+                                ¡Pero esto no acaba aquí. Revisa las "ofertas similares" y aplica a las que más te gusten!
                             </span>
                         </div>
                         {% elif candidature.status == '4' %}
                         <div class="alert alert-success" role="alert">
                             ¡Bien hecho, estamos en la siguiente fase!
                             <br>
-                            Usted ha sido {{ candidature.get_status_display }} en esta oferta y falta poco para que sea contratado
+                            Has sido {{ candidature.get_status_display }} en esta oferta y falta poco para que seas contratado
                         </div>
                         {% elif candidature.status == '5' %}
                         <div class="alert alert-success" role="alert">
-                            ¡Enhorabuena, usted ha sido {{ candidature.get_status_display }}!
+                            ¡Enhorabuena, has sido {{ candidature.get_status_display }}!
                         </div>
                         {% endif %}
                         {% if candidature.status == '1' or candidature.status == '4' %}

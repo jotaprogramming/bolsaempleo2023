@@ -12,125 +12,239 @@
   {% include 'partials/_aside.html' %}
   <div class="p-5" style="margin-left: 300px;">
     <div class="container">
+      {% include 'partials/_display.html' %}
       <div class="col-12">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Oferta</th>
-              <th>Candidato</th>
-              <th>Estado</th>
-              {% comment %} <th>Perfil</th> {% endcomment %}
-              <th>Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for row in object_list %}
-            <tr>
-              <td>
+        <div class="row mb-3">
+          <form class="col-md-3 form-search" method="GET">
+            {% comment %} <button class="btn btn-outline-primary d-flex justify-content-center align-items-center slider-search" type="button">
+            </button> {% endcomment %}
+            <label for="sliderSearch" class="btn btn-primary d-flex justify-content-center align-items-center slider-search">
+              <i class="lni lni-search-alt"></i>
+            </label>
+            <input type="checkbox" id="sliderSearch" class="d-none">
+            <div class="input-group sliding-input">
+              <input
+                type="search"
+                class="form-control"
+                placeholder="Buscar"
+                aria-label="Search"
+              />
+              <button class="btn btn-outline-primary d-flex justify-content-center align-items-center" type="submit">
+                <i class="lni lni-search-alt"></i>
+              </button>
+            </div>
+          </form>
+          <div class="btn-group col-md-1">
+            <button type="button" class="border-0 bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              Estados
+            </button>
+            <ul class="dropdown-menu">
+              {% for status in statuses %}
+              <li>
+                <a class="dropdown-item {% if pstatus == status.0 %}active{% endif %}" href="?status={{status.0}}">
+                  Solo {{ status.1 }}s
+                </a>
+              </li>
+              {% endfor %}
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              {% for status in statuses %}
+              <li>
+                <a class="dropdown-item {% if pstatus == "!"|add:status.0 %}active{% endif %}" href="?status=!{{status.0}}">
+                  Sin {{ status.1 }}s
+                </a>
+              </li>
+              {% endfor %}
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item" href="?status=">
+                  Todo
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        {% for row in object_list %}
+        <div class="card mb-3 {% if row.status == '3' %}border-danger{% elif row.status == '4' %}border-warning{% elif row.status == '5' %}border-success{% endif %}">
+          <div class="card-body">
+            <div class="d-flex gap-4 justify-content-start align-items-start flex-wrap mb-3">
+              {% include 'partials/_public_profile_picture.html' %}
+              
+              <div class="col d-flex flex-column gap-1 justify-content-center align-items-start">
+                <div class="w-100 d-flex justify-content-between">
+                  <div>
+                    <h5 class="fw-bold m-0">
+                      {% if row.candidate.userprofile.company_profile.name %}
+                      {{ row.candidate.userprofile.company_profile.name }}
+                      {% elif row.candidate.first_name or row.candidate.last_name %}
+                      {{row.candidate.first_name}} {{row.candidate.last_name}}
+                      {% else %}
+                      @{{ row.candidate.username }}
+                      {% endif %}
+                    </h5>
+                    <p class="text-muted m-0 fw-light fs-6">
+                      Aplicó el {{ row.created_at }}
+                    </p>
+                  </div>
+                  <div class="d-flex align-items-center gap-1">
+                    {% comment %} <div class="d-flex gap-1" style="min-width: 240px"> {% endcomment %}
+                    {% if not row.deleted_at and not row.status == '1' %}
+                    <small class="text-muted fw-normal me-2">
+                      {{row.get_status_display }} el {{ row.updated_at }}
+                    </small>
+                    {% endif %}
+                    {% if not row.deleted_at and not row.status == '5' and not row.status == '3' and not row.status == '2' %}
+                    {% if row.status == '4' %}
+                    <button
+                      type="button"
+                      class="btn btn-outline-success btn-center"
+                      name="editButtons"
+                      id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=5"
+                      title="Contratar"
+                    >
+                      <i class="lni lni-briefcase"></i>
+                      {% comment %} <span class="">Contratar</span> {% endcomment %}
+                    </button>
+                    {% else %}
+                    <button
+                      type="button"
+                      class="btn btn-outline-success btn-center"
+                      name="editButtons"
+                      id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=4"
+                      title="Aceptar"
+                    >
+                      <i class="lni lni-thumbs-up"></i>
+                      {% comment %} <span class="">Aceptar</span> {% endcomment %}
+                    </button>
+                    {% endif %}
+                    {% comment %}
+                    {% if row.status != '1' %}
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary btn-center"
+                      name="editButtons"
+                      id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=1"
+                      title="Cancelar"
+                    >
+                      <i class="lni lni-speechless"></i>
+                      <span class="">Cancelar</span>
+                    </button> 
+                    {% endif %}
+                    {% endcomment %}
+                    {% if row.status != '3' %}
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger btn-center"
+                      name="deleteButtons"
+                      id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=3"
+                      title="Rechazar"
+                    >
+                      <i class="lni lni-thumbs-down"></i>
+                      {% comment %} <span class="">Rechazar</span> {% endcomment %}
+                    </button>
+                    {% endif %}
+                    {% endif %}
+                  </div>
+                </div>
+                <p class="m-0 fw-light mt-2">
+                  {% if row.candidate.userprofile.about_me %}
+                  {{ row.candidate.userprofile.about_me }}
+                  {% elif row.candidate.is_superuser %}
+                  Superusuario
+                  {% elif row.candidate.is_staff %}
+                  Staff
+                  {% elif row.candidate.userprofile.user_cv %}
+                  {{ row.candidate.userprofile.user_cv.specialization }}
+                  {% else %}
+                  {% for rule in row.candidate.rule_user.all %}
+                  {{ rule.usergroup.group_name }}
+                  {% endfor %}
+                  {% endif %}
+                  {% comment %} {% for rule in rules %}
+                  {{ rule.usergroup.group_name }}
+                  {% endfor %} {% endcomment %}
+                </p>
+                <p class="m-0 fw-light">
+                  Vive en {{ row.candidate.userprofile.city }}, {{ row.candidate.userprofile.city.district }}
+                </p>
+                {% if row.candidate.userprofile.user_row.candidate.userprofile.user_cv %}
                 <a
-                  href="{% url 'offer_app:offer_detail' row.offer.slug %}"
+                  href="{{ user_cv.url }}"
                   role="button"
                   class="link-orange"
                 >
-                  {{row.offer.title}}
+                  Ver hoja de vida
                 </a>
-              </td>
+                {% endif %}
+              </div>
+            </div>
+            {% comment %} <h5 class="card-title">
+              {% if row.candidate.first_name and row.candidate.last_name %}
+              {{row.candidate.first_name}} {{row.candidate.last_name}}
+              {% else %}
+              {{row.candidate.username}}
+              {% endif %}
+            </h5> {% endcomment %}
+            {% comment %} <p class="card-text">
+              {{ row.candidate.userprofile.about_me }}
+            </p> {% endcomment %}
+          </div>
+        </div>
+        {% empty %}
+        <small class="text-muted">
+          Sin registros
+        </small>
+        {% endfor %}
+      </div>
+      {% comment %}
+      {% if rejected_candidates %}
+      <hr>
+      <div class="col-12">
+        <h5 class="">Rechazados</h5>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Candidato</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for rejected in rejected_candidates %}
+            <tr>
               <td>
-                <a class="link-orange" href="{% url 'users_app:userprofile' row.candidate.username %}">
-                  {% if row.candidate.first_name and row.candidate.last_name %}
-                  {{row.candidate.first_name}} {{row.candidate.last_name}}
+                <a class="link-orange" href="{% url 'users_app:userprofile' rejected.candidate.username %}">
+                  {% if rejected.candidate.first_name and rejected.candidate.last_name %}
+                  {{rejected.candidate.first_name}} {{rejected.candidate.last_name}}
                   {% else %}
-                  {{row.candidate.username}}
+                  {{rejected.candidate.username}}
                   {% endif %}
                 </a>
               </td>
               <td>
-                {% if row.deleted_at %} 
-                Eliminado el {{row.deleted_at}}
-                {% elif row.updated_at %} 
-                <strong class="text-orange">{{ row.get_status_display }}</strong> el {{row.updated_at}}
+                {% if rejected.deleted_at %} 
+                Eliminado el {{rejected.deleted_at}}
+                {% elif rejected.updated_at %} 
+                <strong class="text-orange">{{ rejected.get_status_display }}</strong> el {{rejected.updated_at}}
                 {% else %}
-                <strong class="text-orange">{{ row.get_status_display }}</strong> el {{row.created_at}}
+                <strong class="text-orange">{{ rejected.get_status_display }}</strong> el {{rejected.created_at}}
                 {% endif %}
-              </td>
-              {% comment %} <td>
-                {% if row.candidate.userprofile %}
-                  <a
-                    href="{% url 'users_app:userprofile' row.candidate.username %}"
-                    class="btn btn-outline-secondary btn-center"
-                    >
-                    <i class="lni lni-user"></i>
-                  </a>
-                {% endif %}
-              </td> {% endcomment %}
-              <td>
-                <div class="d-flex gap-1" style="min-width: 240px">
-                  {% if not row.deleted_at and not row.status == '5' and not row.status == '3' and not row.status == '2' %}
-                  {% if row.status == '4' %}
-                  <button
-                    type="button"
-                    class="btn btn-outline-success btn-center btn-slide"
-                    name="editButtons"
-                    id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=5"
-                    title="Contratar"
-                  >
-                    <i class="lni lni-checkmark"></i>
-                    <span class="">Contratar</span>
-                  </button>
-                  {% else %}
-                  <button
-                    type="button"
-                    class="btn btn-outline-success btn-center btn-slide"
-                    name="editButtons"
-                    id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=4"
-                    title="Aceptar"
-                    >
-                    {% comment %} <i class="lni lni-checkmark"></i> {% endcomment %}
-                    <i class="lni lni-thumbs-up"></i>
-                    <span class="">Aceptar</span>
-                  </button>
-                  {% endif %}
-                  {% if row.status != '1' %}
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary btn-center btn-slide"
-                    name="editButtons"
-                    id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=1"
-                    title="Cancelar"
-                  >
-                    {% comment %} <i class="lni lni-checkmark"></i> {% endcomment %}
-                    <i class="lni lni-speechless"></i>
-                    <span class="">Cancelar</span>
-                  </button>
-                  {% endif %}
-                  {% if row.status != '3' %}
-                  <button
-                    type="button"
-                    class="btn btn-outline-danger btn-center btn-slide"
-                    name="deleteButtons"
-                    id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=3"
-                    title="Rechazar"
-                  >
-                    <i class="lni lni-thumbs-down"></i>
-                    <span class="">Rechazar</span>
-                  </button>
-                  {% endif %}
-                  {% endif %}
-                </div>
               </td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
+      {% endif %} 
+      {% endcomment %}
       {% if is_paginated %}
       {% include 'partials/_pagination_sm.html' %}
       {% endif %}
     </div>
   </div>
 </section>
-{% comment %} <article class="footer position-relative" style="z-index: 2;">
-  {% include 'partials/_footer.html' %}
-</article> {% endcomment %}
+
 
 {% endblock contentfluid %}

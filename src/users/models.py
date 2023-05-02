@@ -1,7 +1,7 @@
+from PIL import Image
+
 from django.db import models
-
 from django.utils.translation import gettext_lazy as _
-
 from django.contrib.auth.models import AbstractUser, User
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
@@ -206,12 +206,12 @@ class UserRules(models.Model):
 
 
 class UserProfile(models.Model):
-    avatar = models.FileField(
+    avatar = models.ImageField(
         verbose_name=_("avatar"),
         upload_to="profile/",
         blank=True,
         null=True,
-        validators=[validate_image],
+        # validators=[validate_image],
     )
     user = models.OneToOneField(
         User,
@@ -256,6 +256,25 @@ class UserProfile(models.Model):
 
     def slug(self):
         return slugify(self.user.username)
+
+    def save(self, *args, **kwargs):
+        super(UserProfile, self).save(*args, **kwargs)
+        if self.avatar:
+            image = Image.open(self.avatar.path)
+            # image.save(self.avatar.path, quality=20, optimize=True)
+            # image = Image.open(self.post_image.path)
+            maxsize = 500
+            dim = image.width if image.width < image.height else image.height
+            if dim > maxsize:
+                per = maxsize / dim
+                re_width = per * image.width
+                re_height = per * image.height
+                output_size = (re_width, re_height)
+                image.thumbnail(output_size)
+
+            # image.save(self.avatar.path)
+            image.save(self.avatar.path, quality=20, optimize=True)
+            return image
 
     class Meta:
         verbose_name = _("user profile")
@@ -330,7 +349,7 @@ class Companies(models.Model):
         blank=True,
     )
     name = models.CharField(_("company name"), max_length=100, null=False)
-    
+
     created_at = models.DateTimeField(_("created at"), auto_now_add=True, null=False)
     updated_at = models.DateTimeField(
         _("updated at"), auto_now_add=False, editable=True, null=True

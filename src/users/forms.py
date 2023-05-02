@@ -845,13 +845,13 @@ class UserProfileModelForm(forms.ModelForm):
         self.fields["address"].label = "Dirección"
         self.fields["city"].label = "Ciudad"
         self.fields["about_me"].label = "Sobre mí"
-        self.fields["avatar"].required = True
+        self.fields["avatar"].required = False
         self.fields["web"].required = False
         self.fields["document_type"].required = True
         self.fields["id_number"].required = True
         self.fields["phone"].required = True
         self.fields["email"].required = True
-        self.fields["address"].required = True
+        self.fields["address"].required = False
         self.fields["city"].required = True
         self.fields["about_me"].required = False
 

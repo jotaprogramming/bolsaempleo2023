@@ -47,8 +47,12 @@ offer_desc = _("Ofertas")
 offer_create_title = _("Publicar")
 offer_update_title = _("Editar")
 offer_detail_title = _("Detalle")
-candidature_title = _("Postulaciones")
-candidature_desc = _("Postulaciones")
+publication_title = _("Publicaciones")
+publication_desc = _("Listado de mis publicaciones")
+candidature_title = _("Candidaturas")
+candidature_desc = _("Postulaciones a ofertas laborales")
+candidature_offer_title = _("Candidaturas")
+candidature_offer_desc = _("Postulaciones de la oferta")
 
 
 # OFFERS
@@ -260,8 +264,8 @@ class PublicationList(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super(PublicationList, self).get_context_data(**kwargs)
         context["app_title"] = app_title
-        context["title_view"] = candidature_title
-        context["description_view"] = candidature_desc
+        context["title_view"] = publication_title
+        context["description_view"] = publication_desc
         context["in_mypublications"] = True
         return context
 
@@ -372,19 +376,59 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
+        p_status = self.request.GET.get("status", "")
+        # status_name = get_status_name(p_status)
+
         str_pk = get_pk_from_a_slug(self)
-        return (
+        obj = (
             self.model.objects.filter(offer__id=str_pk)
-            .exclude(status="2")
-            .order_by("created_at")
+            .exclude(status__in=["2"])
+            .order_by("-updated_at")
         )
 
+        if p_status:
+            if "!" in p_status:
+                status = p_status.replace("!", "")
+                obj = obj.exclude(status=status)
+            else:
+                obj = obj.filter(status=p_status)
+
+        return obj
+
     def get_context_data(self, **kwargs):
+        p_status = self.request.GET.get("status", "")
+        str_pk = get_pk_from_a_slug(self)
         context = super(CandidaturesByOfferList, self).get_context_data(**kwargs)
+
+        objects = self.get_queryset()
+        count = objects.count()
+
         context["app_title"] = app_title
-        context["title_view"] = candidature_title
-        context["description_view"] = candidature_desc
+        context["title_view"] = (
+            objects.first().offer.title.capitalize()
+            if count
+            else self.model.objects.filter(offer__id=str_pk)
+            .first()
+            .offer.title.capitalize()
+        )
+        if count == 1:
+            desc = "Un candidato ha aplicado a esta oferta"
+        elif count > 0:
+            desc = f"{count} candidatos han aplicado a esta oferta"
+        else:
+            desc = "Sin candidatos"
+        context["description_view"] = desc
         context["mycandidacies"] = True
+        statuses = POST_STATUS[:1] + POST_STATUS[2:]
+        context["statuses"] = statuses
+        context["pstatus"] = p_status
+
+        # offer_id = objects.first().offer.id
+        # context["rejected_candidates"] = (
+        #     self.model.objects.filter(offer__id=offer_id)
+        #     .filter(status__in=["2", "3"])
+        #     .order_by("updated_at")
+        # )
         return context
 
 
@@ -466,11 +510,12 @@ class CandidatureSave(LoginRequiredMixin, generic.FormView):
         context["status"] = p_status
         context["path"] = p_path
         context["app_title"] = app_title
-        context["title_view"] = candidature_title
-        context["description_view"] = candidature_desc
+        context["title_view"] = publication_title
+        context["description_view"] = publication_desc
         return context
 
     def form_valid(self, form):
+        slug = self.kwargs.get("slug", "")
         username = self.kwargs.get("username", "")
         p_status = self.request.GET.get("status", "")
 
@@ -489,10 +534,13 @@ class CandidatureSave(LoginRequiredMixin, generic.FormView):
 
         if cantidatures:
             cantidature_cache = cantidatures.filter(deleted_at=None)
-            if cantidature_cache:
-                cantidatures.update(
-                    status=p_status, updated_at=timezone.now(), deleted_at=None
+            if not cantidature_cache:
+                return HttpResponseRedirect(
+                    reverse_lazy("offer_app:offer_detail", args=[slug])
                 )
+            cantidatures.update(
+                status=p_status, updated_at=timezone.now(), deleted_at=None
+            )
         else:
             user = User.objects.get(username=username)
             candidature = Candidatures(offer_id=str_pk, status=p_status, candidate=user)
@@ -514,8 +562,8 @@ class CandidatureEditModal(LoginRequiredMixin, generic.UpdateView):
     def get_context_data(self, **kwargs):
         context = super(CandidatureEditModal, self).get_context_data(**kwargs)
         context["app_title"] = app_title
-        context["title_view"] = candidature_title
-        context["description_view"] = candidature_desc
+        context["title_view"] = publication_title
+        context["description_view"] = publication_desc
         return context
 
     def form_valid(self, form):
@@ -544,8 +592,8 @@ class CandidatureDeleteModal(LoginRequiredMixin, generic.UpdateView):
     def get_context_data(self, **kwargs):
         context = super(CandidatureDeleteModal, self).get_context_data(**kwargs)
         context["app_title"] = app_title
-        context["title_view"] = candidature_title
-        context["description_view"] = candidature_desc
+        context["title_view"] = publication_title
+        context["description_view"] = publication_desc
         return context
 
     def form_valid(self, form):

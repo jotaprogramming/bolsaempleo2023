@@ -11,6 +11,7 @@
   {% include 'partials/_aside.html' %}
   <div class="gy-3 p-5" style="margin-left: 300px">
     <div class="container">
+      {% include 'partials/_display.html' %}
       <div class="col-12 mb-3">
         <a
           type="button"
@@ -23,7 +24,7 @@
         </a>
       </div>
       {% if object_list %}
-      <div class="col-12">
+      <div class="col-12 mb-3">
         <table class="table">
           <thead>
             <tr>
@@ -129,14 +130,15 @@
           </tbody>
         </table>
       </div>
+      {% if is_paginated %}
+      {% include 'partials/_pagination_sm.html' %}
+      {% endif %}
       {% else %}
       Sin registros
       {% endif %}
     </div>
   </div>
 </section>
-{% comment %} <article class="footer position-relative" style="z-index: 2;">
-  {% include 'partials/_footer.html' %}
-</article> {% endcomment %}
+
 
 {% endblock contentfluid %}

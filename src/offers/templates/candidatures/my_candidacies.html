@@ -12,11 +12,13 @@
   {% include 'partials/_aside.html' %}
   <div class="p-5" style="margin-left: 300px;">
     <div class="container">
+      {% include 'partials/_display.html' %}
       <div class="col-12">
         <table class="table">
           <thead>
             <tr>
               <th>Oferta</th>
+              <th>Empresa</th>
               <th>Estado</th>
               <th>Acción</th>
             </tr>
@@ -25,7 +27,6 @@
             {% for row in object_list %}
             <tr>
               <td>
-                
                 <a
                   href="{% url 'offer_app:offer_detail' row.offer.slug %}"
                   role="button"
@@ -33,6 +34,9 @@
                 >
                   {{row.offer.title}}
                 </a>
+              </td>
+              <td>
+                {{ row.offer.user.userprofile.company_profile }}
               </td>
               <td>
                 {% if row.deleted_at %} 
@@ -44,7 +48,7 @@
                 {% endif %}
               </td>
               <td>
-                <div class="d-flex gap-1" style="width: 205px;">
+                <div class="d-flex gap-1" style="width: 118px;">
                   {% if not row.deleted_at and not row.status == '5' and not row.status == '3' and not row.status == '2' %}
                   <button
                     type="button"

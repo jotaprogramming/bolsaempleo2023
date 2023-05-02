@@ -7,6 +7,7 @@
 .search-container {
     max-width: 40rem;
 }
+
 .search-container form {
     min-width: 20rem;
 }
@@ -109,28 +110,67 @@
     line-height: 15px;
 }
 
-.btn-slide{
+.btn-slide {
     width: 42px;
     justify-content: start !important;
 }
 
 .btn-slide,
-.btn-slide span{
-    transition: all 300ms ease;
+.btn-slide span {
+    transition: width 500ms ease-out 100ms;
 }
 
-.btn-slide span{
+.btn-slide span {
     width: 0%;
     overflow: hidden;
 }
 
-.btn-slide:hover{
+.btn-slide:hover {
     width: fit-content;
 }
 
-.btn-slide:hover span{
+.btn-slide:hover span {
     width: 100%;
     padding-left: .5rem;
+}
+
+.blind {
+    z-index: 1;
+    width: 100px;
+    height: 132px;
+}
+
+.blind>* {
+    font-size: 14px;
+    color: white;
+}
+
+.blind {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+    z-index: 1;
+    width: 100px;
+    height: 132px;
+    padding-bottom: 5px;
+    transition: height .2s ease-in;
+}
+
+.blind span {
+    transform: translateY(-1rem);
+    transition: transform .3s ease-in;
+    padding: 0 .5rem;
+}
+
+.blind:hover {
+    height: 180px;
+}
+
+.blind:hover span {
+    transform: translateY(0);
+    padding-bottom: .2rem;
 }
 
 @media (max-width:475px) {

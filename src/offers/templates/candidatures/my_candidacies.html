@@ -27,7 +27,7 @@
               <td>
                 
                 <a
-                  href="{% url 'offer_app:offer_detail' row.offer.slug %}"
+                  href="{% url 'offers_app:offer_detail' row.offer.slug %}"
                   role="button"
                   class="link-orange"
                 >
@@ -50,7 +50,7 @@
                     type="button"
                     class="btn btn-outline-danger btn-center btn-slide"
                     name="deleteButtons"
-                    id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=2&path=mycandidacies"
+                    id="{% url 'offers_app:candidature_save' row.offer.slug row.candidate.username %}?status=2&path=mycandidacies"
                     title="Cancelar postulación"
                   >
                     <i class="lni lni-thumbs-down"></i>

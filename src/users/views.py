@@ -323,6 +323,7 @@ class AppList(LoginRequiredMixin, generic.ListView):
             f_objects = objects.filter(
                 name__exact=url["name"], route__exact=url["route"]
             )
+            pprint(url)
             if not f_objects:
                 name_cache = objects.filter(name__exact=url["name"])
                 if name_cache:
@@ -871,7 +872,7 @@ class UserLogin(UserLoggedMixin, generic.FormView):
 
     def form_valid(self, form):
         username = form.cleaned_data["username"]
-        password = form.cleaned_data["password"]
+        password = form.cleaned_data["password"]    
         user = authenticate(
             username=username,
             password=password,

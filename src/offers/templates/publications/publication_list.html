@@ -15,7 +15,7 @@
         <a
           type="button"
           class="btn btn-primary btn-center"
-          href="{% url 'offer_app:offer_add' %}"
+          href="{% url 'offers_app:offer_add' %}"
           style="width: fit-content;"
         >
           <i class="lni lni-plus"></i>
@@ -41,7 +41,7 @@
             <tr>
               <td>
                 <a
-                  href="{% url 'offer_app:offer_detail' row.slug %}"
+                  href="{% url 'offers_app:offer_detail' row.slug %}"
                   role="button"
                   class="link-orange"
                 >
@@ -56,7 +56,7 @@
                 {% endif %}
               </td>
               <td>
-                <a href="{% url 'offer_app:candidature_list' row.slug %}" class="link-orange" role="button">
+                <a href="{% url 'offers_app:candidature_list' row.slug %}" class="link-orange" role="button">
                   {% if row.candidature_offer.count == 1 %}
                   Un candidato
                   {% else %}
@@ -78,7 +78,7 @@
               <td>
                 <div class="d-flex gap-1" style="width: 205px;">
                   <a
-                    href="{% url 'offer_app:offer_detail' row.slug %}"
+                    href="{% url 'offers_app:offer_detail' row.slug %}"
                     role="button"
                     class="btn btn-outline-secondary btn-center btn-slide"
                   >
@@ -87,7 +87,7 @@
                   </a>
                   {% if not row.deleted_at %}
                   <a
-                    href="{% url 'offer_app:offer_edit' row.slug %}"
+                    href="{% url 'offers_app:offer_edit' row.slug %}"
                     role="button"
                     class="btn btn-outline-primary btn-center btn-slide"
                   >
@@ -101,7 +101,7 @@
                     type="button"
                     class="btn btn-outline-success btn-center btn-slide"
                     name="deleteButtons"
-                    id="{% url 'offer_app:offer_delete' row.id %}"
+                    id="{% url 'offers_app:offer_delete' row.id %}"
                   >
                     <i class="lni lni-close"></i>
                     <span class="">Finalizar</span>
@@ -111,7 +111,7 @@
                     type="button"
                     class="btn btn-outline-danger btn-center btn-slide"
                     name="deleteButtons"
-                    id="{% url 'offer_app:offer_delete' row.id %}"
+                    id="{% url 'offers_app:offer_delete' row.id %}"
                   >
                     <i class="lni lni-trash-can"></i>
                     <span class="">Eliminar</span>  

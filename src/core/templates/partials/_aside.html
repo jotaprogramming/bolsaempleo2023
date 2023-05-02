@@ -29,7 +29,7 @@
         Perfil
       </a>
       <a 
-        href="{% url 'offer_app:bidding_panel' %}"
+        href="{% url 'offers_app:bidding_panel' %}"
         class="list-group-item list-group-item-action border-0 {% if in_offer %}active{% endif %}"
       >
         Ofertas
@@ -41,7 +41,7 @@
       {% for rule in request.user.rule_user.all %}
         {% if request.user.is_staff or rule.usergroup.code == 'COM' %}
           <a 
-            href="{% url 'offer_app:mypublications' request.user.username %}"
+            href="{% url 'offers_app:mypublications' request.user.username %}"
             class="list-group-item list-group-item-action border-0 {% if in_mypublications %}active{% endif %}"
           >
             Mis publicaciones
@@ -58,7 +58,7 @@
           </a>
         {% elif rule.usergroup.code == 'GRA' %}
           <a 
-            href="{% url 'offer_app:mycandidacies' request.user.username %}"
+            href="{% url 'offers_app:mycandidacies' request.user.username %}"
             class="list-group-item list-group-item-action border-0 {% if mycandidacies %}active{% endif %}"
           >
             Mis postulaciones
@@ -67,13 +67,13 @@
       {% empty %}
         {% if request.user.is_staff %}
           <a 
-            href="{% url 'offer_app:mypublications' request.user.username %}"
+            href="{% url 'offers_app:mypublications' request.user.username %}"
             class="list-group-item list-group-item-action border-0 {% if in_mypublications %}active{% endif %}"
           >
             Publicaciones
           </a>
           <a 
-            href="{% url 'offer_app:mycandidacies' request.user.username %}"
+            href="{% url 'offers_app:mycandidacies' request.user.username %}"
             class="list-group-item list-group-item-action border-0 {% if mycandidacies %}active{% endif %}"
           >
             Candidaturas
@@ -100,7 +100,7 @@
           <br />
           <small class="text-muted">{{ offer.city }}</small>
           <br />
-          <a href="{% url 'offer_app:offer_detail' offer.id %}" class="stretched-link link-orange">
+          <a href="{% url 'offers_app:offer_detail' offer.id %}" class="stretched-link link-orange">
             {{ offer.currency }}
             {{ offer.salary|currency_format }}
             {{ offer.payperiod }}
@@ -110,7 +110,7 @@
     </div>
     {% endfor %}
     <p>
-      <a href="{% url 'offer_app:offer_list' %}" class="link-orange">
+      <a href="{% url 'offers_app:offer_list' %}" class="link-orange">
         Ver todas las ofertas
       </a>
     </p>

@@ -28,7 +28,7 @@
             <tr>
               <td>
                 <a
-                  href="{% url 'offer_app:offer_detail' row.offer.slug %}"
+                  href="{% url 'offers_app:offer_detail' row.offer.slug %}"
                   role="button"
                   class="link-orange"
                 >
@@ -71,7 +71,7 @@
                     type="button"
                     class="btn btn-outline-success btn-center btn-slide"
                     name="editButtons"
-                    id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=5"
+                    id="{% url 'offers_app:candidature_save' row.offer.slug row.candidate.username %}?status=5"
                     title="Contratar"
                   >
                     <i class="lni lni-checkmark"></i>
@@ -82,7 +82,7 @@
                     type="button"
                     class="btn btn-outline-success btn-center btn-slide"
                     name="editButtons"
-                    id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=4"
+                    id="{% url 'offers_app:candidature_save' row.offer.slug row.candidate.username %}?status=4"
                     title="Aceptar"
                     >
                     {% comment %} <i class="lni lni-checkmark"></i> {% endcomment %}
@@ -95,7 +95,7 @@
                     type="button"
                     class="btn btn-outline-secondary btn-center btn-slide"
                     name="editButtons"
-                    id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=1"
+                    id="{% url 'offers_app:candidature_save' row.offer.slug row.candidate.username %}?status=1"
                     title="Cancelar"
                   >
                     {% comment %} <i class="lni lni-checkmark"></i> {% endcomment %}
@@ -108,7 +108,7 @@
                     type="button"
                     class="btn btn-outline-danger btn-center btn-slide"
                     name="deleteButtons"
-                    id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=3"
+                    id="{% url 'offers_app:candidature_save' row.offer.slug row.candidate.username %}?status=3"
                     title="Rechazar"
                   >
                     <i class="lni lni-thumbs-down"></i>

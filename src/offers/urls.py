@@ -5,7 +5,7 @@ from django.urls import path
 # PROJECT MODULES
 from .views import *
 
-app_name = "offer_app"
+app_name = "offers_app"
 
 urlpatterns = [
     # OFFERS

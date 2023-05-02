@@ -130,7 +130,7 @@ class OfferModalCreate(LoginRequiredMixin, generic.CreateView):
 
     def get_success_url(self):
         success_message(self.request)
-        return reverse_lazy("offer_app:offer_list")
+        return reverse_lazy("offers_app:offer_list")
 
     def get_context_data(self, **kwargs):
         context = super(OfferModalCreate, self).get_context_data(**kwargs)
@@ -146,7 +146,7 @@ class OfferModalCreate(LoginRequiredMixin, generic.CreateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return HttpResponseRedirect(reverse_lazy("offer_app:offer_list"))
+        return HttpResponseRedirect(reverse_lazy("offers_app:offer_list"))
 
 
 class OfferEditModal(LoginRequiredMixin, generic.UpdateView):
@@ -157,7 +157,7 @@ class OfferEditModal(LoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         success_message(self.request, msg="Oferta actualizada satisfactoriamente")
-        return reverse_lazy("offer_app:offer_list")
+        return reverse_lazy("offers_app:offer_list")
 
     def get_context_data(self, **kwargs):
         context = super(OfferEditModal, self).get_context_data(**kwargs)
@@ -177,7 +177,7 @@ class OfferEditModal(LoginRequiredMixin, generic.UpdateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return HttpResponseRedirect(reverse_lazy("offer_app:offer_list"))
+        return HttpResponseRedirect(reverse_lazy("offers_app:offer_list"))
 
 
 class OfferDeleteModal(LoginRequiredMixin, generic.UpdateView):
@@ -189,8 +189,8 @@ class OfferDeleteModal(LoginRequiredMixin, generic.UpdateView):
     def get_success_url(self):
         success_message(self.request, msg="Oferta eliminada satisfactoriamente")
         if self.request.user.is_staff:
-            return reverse_lazy("offer_app:offer_list")
-        return reverse_lazy("offer_app:mypublications")
+            return reverse_lazy("offers_app:offer_list")
+        return reverse_lazy("offers_app:mypublications")
 
     def get_context_data(self, **kwargs):
         context = super(OfferDeleteModal, self).get_context_data(**kwargs)
@@ -274,7 +274,7 @@ class PublicationCreate(LoginRequiredMixin, generic.CreateView):
 
     def get_success_url(self):
         success_message(self.request)
-        return reverse_lazy("offer_app:bidding_panel")
+        return reverse_lazy("offers_app:bidding_panel")
 
     def get_context_data(self, **kwargs):
         context = super(PublicationCreate, self).get_context_data(**kwargs)
@@ -318,7 +318,7 @@ class PublicationEdit(LoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         success_message(self.request, msg="Oferta actualizada satisfactoriamente")
-        return reverse_lazy("offer_app:offer_detail", args=[self.slug])
+        return reverse_lazy("offers_app:offer_detail", args=[self.slug])
 
     def get_context_data(self, **kwargs):
         self.slug = self.kwargs.get("slug", "")
@@ -343,7 +343,7 @@ class PublicationEdit(LoginRequiredMixin, generic.UpdateView):
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
         return HttpResponseRedirect(
-            reverse_lazy("offer_app:offer_edit", args=[self.slug])
+            reverse_lazy("offers_app:offer_edit", args=[self.slug])
         )
 
 
@@ -430,7 +430,7 @@ class CandidatureSave(LoginRequiredMixin, generic.FormView):
                 msg=f"Has {status_name} esta candidatura satisfactoriamente",
             )
             return reverse_lazy(
-                f"offer_app:{p_path}", args=[self.request.user.username]
+                f"offers_app:{p_path}", args=[self.request.user.username]
             )
 
         allowed = self.request.user.is_authenticated
@@ -445,10 +445,10 @@ class CandidatureSave(LoginRequiredMixin, generic.FormView):
                 self.request,
                 msg=f"El candidato ha sido {status_name} satisfactoriamente",
             )
-            return reverse_lazy("offer_app:candidature_list", args=[slug])
+            return reverse_lazy("offers_app:candidature_list", args=[slug])
 
         success_message(self.request, msg="Acción realizada satisfactoriamente")
-        return reverse_lazy("offer_app:offer_detail", args=[slug])
+        return reverse_lazy("offers_app:offer_detail", args=[slug])
 
     def get_context_data(self, **kwargs):
         p_status = self.request.GET.get("status", "")
@@ -509,7 +509,7 @@ class CandidatureEditModal(LoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         success_message(self.request, msg="Postulación actualizada satisfactoriamente")
-        return reverse_lazy("offer_app:candidature_list")
+        return reverse_lazy("offers_app:candidature_list")
 
     def get_context_data(self, **kwargs):
         context = super(CandidatureEditModal, self).get_context_data(**kwargs)
@@ -528,7 +528,7 @@ class CandidatureEditModal(LoginRequiredMixin, generic.UpdateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return HttpResponseRedirect(reverse_lazy("offer_app:candidature_list"))
+        return HttpResponseRedirect(reverse_lazy("offers_app:candidature_list"))
 
 
 class CandidatureDeleteModal(LoginRequiredMixin, generic.UpdateView):
@@ -539,7 +539,7 @@ class CandidatureDeleteModal(LoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         success_message(self.request, msg="Postulación eliminada satisfactoriamente")
-        return reverse_lazy("offer_app:candidature_list")
+        return reverse_lazy("offers_app:candidature_list")
 
     def get_context_data(self, **kwargs):
         context = super(CandidatureDeleteModal, self).get_context_data(**kwargs)

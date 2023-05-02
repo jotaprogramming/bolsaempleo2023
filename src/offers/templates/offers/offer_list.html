@@ -15,7 +15,7 @@
         type="button"
         class="btn btn-primary btn-center btn-compact"
         name="createButtons"
-        id="{% url 'offer_app:offer_modal_add' %}"
+        id="{% url 'offers_app:offer_modal_add' %}"
       >
         <i class="lni lni-plus"></i>
         <span class="ms-2">Crear</span>
@@ -55,7 +55,7 @@
             </td>
             <td>
               <a
-                href="{% url 'offer_app:offer_detail' row.slug %}"
+                href="{% url 'offers_app:offer_detail' row.slug %}"
                 role="button"
                 class="btn btn-outline-secondary btn-center btn-compact"
               >
@@ -68,7 +68,7 @@
                 type="button"
                 class="btn btn-outline-primary btn-center btn-compact"
                 name="editButtons"
-                id="{% url 'offer_app:offer_edit' row.id %}"
+                id="{% url 'offers_app:offer_edit' row.id %}"
               >
                 <i class="lni lni-pencil"></i>
               </button>
@@ -80,7 +80,7 @@
                 type="button"
                 class="btn btn-outline-danger btn-center btn-compact"
                 name="deleteButtons"
-                id="{% url 'offer_app:offer_delete' row.id %}"
+                id="{% url 'offers_app:offer_delete' row.id %}"
               >
                 <i class="lni lni-trash-can"></i>
               </button>

@@ -58,43 +58,43 @@ class UserGroupForm(forms.ModelForm):
         }
 
 
-class PolicyForm(forms.ModelForm):
-    restriction = forms.ModelMultipleChoiceField(
-        queryset=Restrictions.objects.filter(deleted_at=None),
-        required=True,
-        label=_("Restricción"),
-        widget=forms.SelectMultiple(attrs={"class": "form-select"}),
-    )
+# class PolicyForm(forms.ModelForm):
+#     restriction = forms.ModelMultipleChoiceField(
+#         queryset=Restrictions.objects.filter(deleted_at=None),
+#         required=False,
+#         label=_("Restricción"),
+#         widget=forms.SelectMultiple(attrs={"class": "form-select"}),
+#     )
 
-    app = forms.ModelMultipleChoiceField(
-        queryset=Apps.objects.filter(deleted_at=None),
-        required=True,
-        label=_("Aplicaciones"),
-        widget=forms.SelectMultiple(attrs={"class": "form-select"}),
-    )
+#     app = forms.ModelMultipleChoiceField(
+#         queryset=Apps.objects.filter(deleted_at=None),
+#         required=True,
+#         label=_("Aplicaciones"),
+#         widget=forms.SelectMultiple(attrs={"class": "form-select"}),
+#     )
 
-    def __init__(self, *args, **kwargs):
-        super(UserGroupForm, self).__init__(*args, **kwargs)
-        self.fields["usergroup"].label = "Grupo de usuarios"
-        self.fields["app"].label = "Aplicacion(es)"
-        self.fields["restriction"].label = "Descripción(es)"
+#     def __init__(self, *args, **kwargs):
+#         super(UserGroupForm, self).__init__(*args, **kwargs)
+#         self.fields["usergroup"].label = "Grupo de usuarios"
+#         self.fields["app"].label = "Aplicacion(es)"
+#         self.fields["restriction"].label = "Descripción(es)"
 
-    class Meta:
-        model = UserGroupPolicies
+#     class Meta:
+#         model = UserGroupPolicies
 
-        fields = [
-            "usergroup",
-            "app",
-            "restriction",
-        ]
+#         fields = [
+#             "usergroup",
+#             "app",
+#             "restriction",
+#         ]
 
-        widgets = {
-            "usergroup": forms.Select(
-                attrs={
-                    "class": "form-control",
-                }
-            ),
-        }
+#         widgets = {
+#             "usergroup": forms.Select(
+#                 attrs={
+#                     "class": "form-control",
+#                 }
+#             ),
+#         }
 
 
 class FormDelete(forms.ModelForm):
@@ -238,16 +238,20 @@ class RoleForm(forms.ModelForm):
 class PolicyForm(forms.ModelForm):
     app = forms.ModelMultipleChoiceField(
         queryset=Apps.objects.filter(deleted_at=None),
-        required=False,
+        required=True,
         label=_("Aplicación"),
-        widget=forms.SelectMultiple(attrs={"class": "form-select"}),
+        widget=forms.SelectMultiple(
+            attrs={"class": "form-select", "style": "height: 10rem"}
+        ),
     )
 
     restriction = forms.ModelMultipleChoiceField(
         queryset=Restrictions.objects.filter(deleted_at=None),
-        required=True,
+        required=False,
         label=_("Restricción"),
-        widget=forms.SelectMultiple(attrs={"class": "form-select"}),
+        widget=forms.SelectMultiple(
+            attrs={"class": "form-select", "style": "height: 10rem"}
+        ),
     )
 
     def __init__(self, *args, **kwargs):
@@ -658,15 +662,16 @@ class RegisterCompanyForm(RegisterForm):
         required=True,
         widget=forms.Select(
             attrs={
-                "class": "form-control rounded-end-0",
+                "class": "single-input rounded-end-0",
                 "title": _("Tipo de documento del representante legal"),
                 "style": "width: 40px !important; height: 40px !important; padding: .375rem 7px !important;",
             },
         ),
+        initial=DocumentType.objects.get(acronym__icontains="CC"),
     )
     rep_id = forms.CharField(
         max_length=15,
-        label=_("Número de identificación"),
+        label=_("Documento del Rep. Legal"),
         required=True,
         widget=forms.TextInput(
             attrs={
@@ -693,15 +698,16 @@ class RegisterCompanyForm(RegisterForm):
         required=True,
         widget=forms.Select(
             attrs={
-                "class": "form-control rounded-end-0",
+                "class": "single-input rounded-end-0",
                 "title": _("Tipo de documento del director de recursos humanos"),
                 "style": "width: 40px !important; height: 40px !important; padding: .375rem 7px !important;",
             }
         ),
+        initial=DocumentType.objects.get(acronym__icontains="CC"),
     )
     humres_id = forms.CharField(
         max_length=15,
-        label=_("Número de identificación"),
+        label=_("Documento del Dir. de RRHH"),
         required=True,
         widget=forms.TextInput(
             attrs={
@@ -729,9 +735,10 @@ class RegisterStudentForm(RegisterForm):
         required=True,
         widget=forms.Select(
             attrs={
-                "class": "form-select",
+                "class": "single-input",
             }
         ),
+        initial=DocumentType.objects.get(acronym__icontains="CC"),
     )
     id_number = forms.CharField(
         label=_("Número de identidad"),
@@ -845,7 +852,7 @@ class UserProfileModelForm(forms.ModelForm):
         self.fields["address"].label = "Dirección"
         self.fields["city"].label = "Ciudad"
         self.fields["about_me"].label = "Sobre mí"
-        self.fields["avatar"].required = True
+        self.fields["avatar"].required = False
         self.fields["web"].required = False
         self.fields["document_type"].required = True
         self.fields["id_number"].required = True
@@ -886,7 +893,7 @@ class UserProfileModelForm(forms.ModelForm):
             ),
             "document_type": forms.Select(
                 attrs={
-                    "class": "form-control rounded-end-0",
+                    "class": "single-input rounded-end-0",
                     "title": _("Tipo de documento"),
                     "style": "width: 40px !important; height: 40px !important; padding: .375rem 7px !important;",
                 },

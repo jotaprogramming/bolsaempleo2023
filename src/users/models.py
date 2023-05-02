@@ -330,7 +330,7 @@ class Companies(models.Model):
         blank=True,
     )
     name = models.CharField(_("company name"), max_length=100, null=False)
-    
+
     created_at = models.DateTimeField(_("created at"), auto_now_add=True, null=False)
     updated_at = models.DateTimeField(
         _("updated at"), auto_now_add=False, editable=True, null=True

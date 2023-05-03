@@ -8,33 +8,18 @@
 
 {% block contentfluid %} 
 
-<section class="my-1 position-relative overflow-hidden" style="min-height: calc(100vh - 56px);">
+<section class="layout-section">
   {% include 'partials/_aside.html' %}
-  <div class="p-5" style="margin-left: 300px;">
+  <div class="main-section">
     <div class="container">
       {% include 'partials/_display.html' %}
       <div class="col-12">
         <div class="row mb-3">
-          <form class="col-md-3 form-search" method="GET">
-            {% comment %} <button class="btn btn-outline-primary d-flex justify-content-center align-items-center slider-search" type="button">
-            </button> {% endcomment %}
-            <label for="sliderSearch" class="btn btn-primary d-flex justify-content-center align-items-center slider-search">
-              <i class="lni lni-search-alt"></i>
-            </label>
-            <input type="checkbox" id="sliderSearch" class="d-none">
-            <div class="input-group sliding-input">
-              <input
-                type="search"
-                class="form-control"
-                placeholder="Buscar"
-                aria-label="Search"
-              />
-              <button class="btn btn-outline-primary d-flex justify-content-center align-items-center" type="submit">
-                <i class="lni lni-search-alt"></i>
-              </button>
-            </div>
+          {% comment %} <form class="col-md-3 form-search" method="GET"> {% endcomment %}
+          <form class="col-md-3" method="GET">
+            {% include 'partials/_search_input.html' %}
           </form>
-          <div class="btn-group col-md-1">
+          <div class="btn-group col-md-5">
             <button type="button" class="border-0 bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               Estados
             </button>
@@ -66,13 +51,23 @@
               </li>
             </ul>
           </div>
+          <small class="d-flex gap-3 align-items-center col-md-4">
+            <div class="">
+              <i class="lni lni-thumbs-up text-success"></i> Aceptar candidatura
+            </div>
+            <div class="">
+              <i class="lni lni-briefcase text-success"></i> Contratar
+            </div>
+            <div class="">
+              <i class="lni lni-thumbs-down text-danger"></i> Rechazar
+            </div>
+          </small>
         </div>
         {% for row in object_list %}
         <div class="card mb-3 {% if row.status == '3' %}border-danger{% elif row.status == '4' %}border-warning{% elif row.status == '5' %}border-success{% endif %}">
           <div class="card-body">
-            <div class="d-flex gap-4 justify-content-start align-items-start flex-wrap mb-3">
+            <div class="d-flex gap-4 justify-content-start align-items-start flex-wrap">
               {% include 'partials/_public_profile_picture.html' %}
-              
               <div class="col d-flex flex-column gap-1 justify-content-center align-items-start">
                 <div class="w-100 d-flex justify-content-between">
                   <div>

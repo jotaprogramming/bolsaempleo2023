@@ -47,6 +47,14 @@ input[type="color"]:focus,
     outline: 0 none;
 }
 
+.form-control:focus{
+    color: var(--bs-body-color) !important;
+    background-color: var(--bs-form-control-bg) !important;
+    border-color: var(--shaded-orange) !important;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(253, 129, 13, 0.25) !important;
+}
+
 textarea:-webkit-autofill,
 input[type="text"]:-webkit-autofill,
 input[type="password"]:-webkit-autofill,
@@ -160,4 +168,25 @@ input[type="color"]:-webkit-autofill,
 
 .bg-orange {
     background-color: var(--orange) !important;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    background-color: var(--orange) !important;
+}
+
+.text-orange{
+    color: var(--orange) !important;
+}
+
+.stretched-link-offer{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: var(--bs-card-border-width) solid transparent;
+    border-radius: var(--bs-card-border-radius);
+}
+.stretched-link-offer:hover{
+    border-color: var(--orange) !important;
 }

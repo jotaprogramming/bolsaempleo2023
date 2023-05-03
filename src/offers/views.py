@@ -27,6 +27,7 @@ from django.db.models import (
 )
 from django.utils.translation import gettext as _
 from django.core import signing
+from django.db.models import Q, F, Count, Sum, Case, When, BooleanField, IntegerField
 
 # EXTRA MODULES
 import sweetify
@@ -190,11 +191,21 @@ class OfferDeleteModal(LoginRequiredMixin, generic.UpdateView):
     form_class = FormDelete
     template_name = "Offers/offer_delete_modal.html"
 
+    def get_object(self):
+        pk = get_pk_from_a_slug(self)
+        return self.model.objects.get(pk=pk)
+
     def get_success_url(self):
         success_message(self.request, msg="Oferta eliminada satisfactoriamente")
+        offer = self.get_object()
+        Candidatures.objects.filter(offer=offer, status="1").update(
+            status="2", updated_at=timezone.now()
+        )
         if self.request.user.is_staff:
             return reverse_lazy("offer_app:offer_list")
-        return reverse_lazy("offer_app:mypublications")
+        return reverse_lazy(
+            "offer_app:mypublications", args=[self.request.user.username]
+        )
 
     def get_context_data(self, **kwargs):
         context = super(OfferDeleteModal, self).get_context_data(**kwargs)
@@ -212,6 +223,49 @@ class OfferDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return super().form_valid(form)
 
 
+class OfferFinishModal(LoginRequiredMixin, generic.UpdateView):
+    login_url = "/login"
+    model = Offers
+    form_class = FormDelete
+    template_name = "Offers/offer_finish_modal.html"
+
+    def get_object(self):
+        pk = get_pk_from_a_slug(self)
+        return self.model.objects.get(pk=pk)
+
+    def get_success_url(self):
+        success_message(self.request, msg="Oferta finalizada satisfactoriamente")
+        offer = self.get_object()
+        Candidatures.objects.filter(offer=offer, status="1").update(
+            status="2", updated_at=timezone.now()
+        )
+        # if self.request.user.is_staff:
+        #     return reverse_lazy("offer_app:offer_list")
+        return reverse_lazy(
+            "offer_app:mypublications", args=[self.request.user.username]
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super(OfferFinishModal, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = offer_title
+        context["description_view"] = offer_desc
+        return context
+
+    def form_valid(self, form):
+        p_status = self.request.GET.get("status", False)
+        if not p_status == "true":
+            warning_message(self.request, msg="Esta acción no ha podido completarse")
+            return HttpResponseRedirect(
+                reverse_lazy(
+                    "offer_app:mypublications", args=[self.request.user.username]
+                )
+            )
+        form.instance.status = True
+        form.instance.updated_at = timezone.now()
+        return super().form_valid(form)
+
+
 class BiddingPanel(LoginRequiredMixin, generic.ListView):
     login_url = "/login"
     model = Offers
@@ -221,7 +275,8 @@ class BiddingPanel(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         search = self.request.GET.get("search", "true")
         return self.model.objects.search(text=search, order="-created_at").filter(
-            deleted_at=None
+            deleted_at=None,
+            status=False
         )
 
     def get_context_data(self, **kwargs):
@@ -251,22 +306,66 @@ class PublicationList(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         username = self.kwargs.get("username", "")
+        p_status = self.request.GET.get("status", "")
+        p_search = self.request.GET.get("search", "")
+
         objects = (
             self.model.objects.all()
             .filter(user__username=username)
-            .annotate(candidatures=Count(F("candidature_offer")))
-            .order_by("id")
+            .filter(Q(title__icontains=p_search) | Q(title__icontains=p_search))
+            .annotate(
+                active_candidates=Count(
+                    F("candidature_offer"), filter=~Q(candidature_offer__status=["1", "4"])
+                ),
+                cancelled_candidates=Count(
+                    F("candidature_offer"), filter=~Q(candidature_offer__status=["2"])
+                ),
+                rejected_candidates=Count(
+                    F("candidature_offer"), filter=~Q(candidature_offer__status=["2"])
+                ),
+                accepted_candidates=Count(
+                    F("candidature_offer"), filter=~Q(candidature_offer__status=["4"])
+                ),
+                completed_candidates=Count(
+                    F("candidature_offer"), filter=~Q(candidature_offer__status=["5"])
+                )
+            )
+            .order_by("-deleted_at", "title")
         )
-        pprint(list(objects.values()))
-
-        return objects.exclude(Q(candidatures=0) & ~Q(deleted_at=None))
+        validate = p_status in [item[0] for item in OFFER_STATUS]
+        if p_status and validate:
+            if "!" in p_status:
+                status = p_status.replace("!", "")
+                objects = objects.filter(deleted_at=None)
+                if status == "1":
+                    objects = objects.filter(deleted_at=None).exclude(status=False)
+                elif status == "2":
+                    objects = objects.filter(deleted_at=None).exclude(status=True)
+            else:
+                objects = objects.exclude(deleted_at=None)
+                if p_status == "1":
+                    objects = objects.exclude(deleted_at=None).filter(status=False)
+                elif p_status == "2":
+                    objects = objects.exclude(deleted_at=None).filter(status=True)
+        return objects
 
     def get_context_data(self, **kwargs):
+        p_search = self.request.GET.get("search", "")
+        p_status = self.request.GET.get("status", "")
+
         context = super(PublicationList, self).get_context_data(**kwargs)
         context["app_title"] = app_title
         context["title_view"] = publication_title
         context["description_view"] = publication_desc
         context["in_mypublications"] = True
+        context["search"] = p_search
+        context["pstatus"] = p_status
+        # statuses = POST_STATUS[:1] + POST_STATUS[2:]
+        context["statuses"] = (
+            ("1", "activa"),
+            ("2", "finalizada"),
+            ("3", "eliminada"),
+        )
         return context
 
 
@@ -377,11 +476,16 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         p_status = self.request.GET.get("status", "")
+        p_search = self.request.GET.get("search", "")
         # status_name = get_status_name(p_status)
 
         str_pk = get_pk_from_a_slug(self)
         obj = (
             self.model.objects.filter(offer__id=str_pk)
+            .filter(
+                Q(candidate__first_name__icontains=p_search)
+                | Q(candidate__last_name__icontains=p_search)
+            )
             .exclude(status__in=["2"])
             .order_by("-updated_at")
         )
@@ -397,6 +501,7 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
 
     def get_context_data(self, **kwargs):
         p_status = self.request.GET.get("status", "")
+        p_search = self.request.GET.get("search", "")
         str_pk = get_pk_from_a_slug(self)
         context = super(CandidaturesByOfferList, self).get_context_data(**kwargs)
 
@@ -422,6 +527,7 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
         statuses = POST_STATUS[:1] + POST_STATUS[2:]
         context["statuses"] = statuses
         context["pstatus"] = p_status
+        context["search"] = p_search
 
         # offer_id = objects.first().offer.id
         # context["rejected_candidates"] = (
@@ -440,16 +546,37 @@ class MyCandidacies(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         username = self.kwargs.get("username", "")
-        return self.model.objects.filter(candidate__username=username).order_by(
-            "-status", "created_at", "updated_at"
+        p_status = self.request.GET.get("status", "")
+        p_search = self.request.GET.get("search", "")
+
+        obj = (
+            self.model.objects.filter(candidate__username=username)
+            .filter(
+                Q(offer__title__icontains=p_search)
+                | Q(offer__title__icontains=p_search)
+            )
+            .order_by("-offer__deleted_at", "status")
         )
+        if p_status:
+            if "!" in p_status:
+                status = p_status.replace("!", "")
+                obj = obj.exclude(status=status)
+            else:
+                obj = obj.filter(status=p_status)
+        return obj
 
     def get_context_data(self, **kwargs):
+        p_status = self.request.GET.get("status", "")
+        p_search = self.request.GET.get("search", "")
+
         context = super(MyCandidacies, self).get_context_data(**kwargs)
         context["app_title"] = app_title
         context["title_view"] = candidature_title
         context["description_view"] = candidature_desc
         context["mycandidacies"] = True
+        context["statuses"] = POST_STATUS
+        context["pstatus"] = p_status
+        context["search"] = p_search
         return context
 
 

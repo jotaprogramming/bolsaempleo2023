@@ -133,7 +133,7 @@
 
 .form-search {
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 .sliding-input {

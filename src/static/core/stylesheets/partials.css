@@ -173,6 +173,26 @@
     padding-bottom: .2rem;
 }
 
+.l-aside {
+    width: 300px;
+    min-height: calc(100vh - 56px);
+    height: 100%;
+    z-index: 2;
+    padding: 8rem 2rem 2rem 2rem;
+}
+
+.layout-section {
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+}
+
+.main-section {
+    margin-top: 56px;
+    margin-left: 300px;
+    padding: 3rem;
+}
+
 @media (max-width:475px) {
     .navbar-brand {
         /* background-color: red !important; */

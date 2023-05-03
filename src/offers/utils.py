@@ -10,6 +10,11 @@ POST_STATUS = (
     ("5", "contratado"),
 )
 
+OFFER_STATUS = (
+    ("1", "publicada"),
+    ("2", "finalizada"),
+)
+
 
 def string_to_base64(sample_string):
     sample_string_bytes = sample_string.encode("ascii")

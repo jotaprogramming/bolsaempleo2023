@@ -2,9 +2,9 @@
 
 <div class="modal-dialog modal-dialog-centered">
   <div class="modal-content">
-    <form method="POST" action="{% url 'offer_app:offer_delete' object.slug %}" id="form">
+    <form method="POST" action="{% url 'offer_app:offer_finish' object.slug %}?status=true" id="form">
       <div class="modal-header">
-        <h5 class="modal-title">Eliminar</h5>
+        <h5 class="modal-title">Finalizar</h5>
         <button
           type="button"
           class="btn-close"
@@ -15,7 +15,7 @@
       <div class="modal-body">
         {% csrf_token %}
         <h6>
-          La siguiente oferta se ELIMINARÁ permanentemente:
+          La siguiente oferta se deshabilitará permanentemente:
         </h6>
         <div class="row mb-2 text-secondary">
           <small class="m-0 col-12">
@@ -34,7 +34,7 @@
         <div class="alert alert-warning" role="alert">
           ¿Está seguro que desea continuar?
           <br>
-          Una vez eliminada ya no podrás recuperarla
+          Una vez finalizada ya no podrás habilitarla
         </div>
       </div>
       <div class="modal-footer">

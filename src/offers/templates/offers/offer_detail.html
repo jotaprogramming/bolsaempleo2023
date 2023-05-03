@@ -7,9 +7,9 @@
 {% endblock title %}
 
 {% block contentfluid %}
-<section class="my-1 position-relative overflow-hidden" style="min-height: calc(100vh - 56px);">
+<section class="layout-section">
     {% include 'partials/_aside.html' %}
-    <div class="p-5" style="margin-left: 300px;">
+    <div class="main-section">
         <div class="container">
             <div class="card p-4 rounded-4">
                 <div class="card-body">
@@ -100,7 +100,7 @@
                     <div class="alert alert-danger" role="alert">
                         Oferta no disponible
                     </div>
-                    {% elif not usergroups and not candidature %}
+                    {% elif not usergroups and not candidature and not object.status %}
                         <button
                             type="button"
                             class="btn btn-primary rounded-pill px-4"
@@ -109,6 +109,10 @@
                         >
                             <span class="">Aplicar</span>
                         </button>
+                    {% elif object.status %}
+                        <div class="alert alert-warning" role="alert">
+                            Esta oferta ya finalizó
+                        </div>
                     {% elif candidature %}
                         {% if candidature.status == '1' %}
                         <div class="alert alert-warning" role="alert">
@@ -120,7 +124,7 @@
                         </div>
                         {% elif candidature.status == '3' %}
                         <div class="alert alert-danger" role="alert">
-                            ¡Oh, lo sentimos!
+                            ¡Lo sentimos!
                             <br>
                             Desafortunadamente has sido {{ candidature.get_status_display }} en esta oferta y ya no podrás aplicar de nuevo
                             <br>

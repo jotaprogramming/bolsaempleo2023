@@ -12,7 +12,7 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.template.defaultfilters import slugify
 
-from .utils import string_to_base64, POST_STATUS
+from .utils import string_to_base64, POST_STATUS, OFFER_STATUS
 from .managers import OffersManager
 from config.models import *
 
@@ -54,6 +54,7 @@ class Offers(models.Model):
         blank=False,
         on_delete=models.PROTECT,
     )
+    status = models.BooleanField(_("finish status"), default=False)
     slug = models.SlugField(max_length=255, unique=True)
     title = models.CharField(_("title"), max_length=255, null=False)
     salary = models.DecimalField(

@@ -121,7 +121,7 @@
                         type="button"
                         class="btn btn-outline-danger btn-center"
                         name="deleteButtons"
-                        id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=2&path=mycandidacies"
+                        id="{% url 'offers_app:candidature_save' row.offer.slug row.candidate.username %}?status=2&path=mycandidacies"
                         title="Cancelar postulación"
                         style="height: 42px;"
                       >
@@ -137,7 +137,7 @@
                 <p class="m-0 fw-light">
                   Salario: {{ row.offer.currency }} {{ row.offer.salary|currency_format }} {{ row.offer.payperiod }}
                 </p>
-                <a href="{% url 'offer_app:offer_detail' row.offer.slug %}" class="stretched-link" role="button"></a>
+                <a href="{% url 'offers_app:offer_detail' row.offer.slug %}" class="stretched-link" role="button"></a>
               </div>
             </div>
             {% comment %} <h5 class="card-title">

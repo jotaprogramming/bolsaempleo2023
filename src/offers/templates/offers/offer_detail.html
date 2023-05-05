@@ -20,7 +20,7 @@
                                 <span class="d-flex gap-1 align-items-center">
                                     {{ object.title }}
                                     {% if request.user.is_staff or usergroups and allowed  %} 
-                                    <a href="{% url 'offer_app:offer_edit' object.slug %}" class="btn btn-link btn-sm rounded-circle" role="button">
+                                    <a href="{% url 'offers_app:offer_edit' object.slug %}" class="btn btn-link btn-sm rounded-circle" role="button">
                                         {% include 'partials/icon_element/_pencil_icon.html' %}
                                     </a>
                                     {% endif %}
@@ -88,7 +88,7 @@
                             {% endif %}
                             aplicado a esta oferta
                             <br>
-                            <a href="{% url 'offer_app:candidature_list' object.slug %}" class="link-orange" role="button">
+                            <a href="{% url 'offers_app:candidature_list' object.slug %}" class="link-orange" role="button">
                                 Ver todos los candidatos
                             </a>
                         </p>
@@ -105,7 +105,7 @@
                             type="button"
                             class="btn btn-primary rounded-pill px-4"
                             name="createButtons"
-                            id="{% url 'offer_app:candidature_save' object.slug request.user.username %}?path=mycandidacies&status=1"
+                            id="{% url 'offers_app:candidature_save' object.slug request.user.username %}?path=mycandidacies&status=1"
                         >
                             <span class="">Aplicar</span>
                         </button>
@@ -145,7 +145,7 @@
                         {% endif %}
                         {% if candidature.status == '1' or candidature.status == '4' %}
                         <a 
-                            href="{% url 'offer_app:mycandidacies' request.user.username %}"
+                            href="{% url 'offers_app:mycandidacies' request.user.username %}"
                             class="link-orange"
                         >
                             Ver postulaciones

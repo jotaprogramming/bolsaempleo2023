@@ -1,26 +1,47 @@
 .input-icon {
     position: absolute;
     font-size: 18px;
-    bottom: 0;
-    top: 0;
+    /* bottom: 0; */
+    /* top: 0; */
     display: flex;
     align-items: center;
     justify-content: center;
-    border-right: 1px solid #d7d7d7;
+    border: 1px solid #d7d7d7;
+    border-right: transparent;
+    border-radius: 10px 0 0 10px;
     padding: 0 10px;
+    order: 0;
+    min-width: 40px;
+    /* overflow: hidden; */
+}
+
+.input-icon .single-input {
+    border-radius: 10px 0 0 10px !important;
+    border-right: none !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.input-icon .single-input::-ms-expand {
+    display: none;
 }
 
 .input-placeholder {
     position: absolute;
-    padding-left: 50px;
-    bottom: 0;
-    top: 0;
+    margin-left: 50px;
+    /* bottom: 0; */
+    top: .5rem;
     display: flex;
     align-items: center;
     pointer-events: none;
     color: #6F6F6F;
-    transition: 0.5s;
+    /* background-color: #fff; */
+    transition: 300ms;
     font-size: 16px;
+    max-width: calc(100% - 60px);
+    white-space:nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .set-input {
@@ -34,12 +55,13 @@
 .single-input {
     width: 100%;
     height: 100%;
-    border-radius: 10px;
+    border-radius: 0 10px 10px 0;
     outline: 0 none;
     border: 1px solid #d7d7d7;
     pointer-events: all;
-    transition: 0.5s;
-    padding-left: 50px;
+    transition: 300ms;
+    padding: 0 .5rem;
+    font-size: 1rem;
 }
 
 /* .pdl-0{
@@ -52,11 +74,23 @@
     padding: 0 10px;
     background-color: #fff;
     font-size: 12px;
-    transform: translateX(50px) translateY(-10px);
+    transform: translateX(0) translateY(-1rem);
     letter-spacing: 1px;
     border-left: 1px solid var(--orange);
     border-right: 1px solid var(--orange);
     height: 20px;
+}
+
+.set-input select.single-input {
+    background-color: white;
+}
+
+.set-input select.single-input:invalid {
+    color: transparent;
+}
+
+.set-input select.single-input:focus {
+    color: var(--black);
 }
 
 .set-input .single-input__modify:valid~.input-placeholder,
@@ -65,14 +99,14 @@
     padding: 0 -15px;
     background-color: #fff;
     font-size: 12px;
-    transform: translateX(10px) translateY(-10px);
+    transform: translateX(0px1) translateY(-1rem);
     letter-spacing: 1px;
     border-left: 1px solid var(--orange);
     border-right: 1px solid var(--orange);
     height: 1rem;
 }
 
-
+.single-input:-webkit-autofill,
 .set-input .single-input:valid,
 .set-input .single-input:focus,
 /* .form-control:valid{

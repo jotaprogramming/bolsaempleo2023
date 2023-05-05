@@ -18,7 +18,7 @@
             type="button"
             class="btn btn-primary btn-center"
             name="createButtons"
-            id="{% url 'offer_app:offer_modal_add' %}"
+            id="{% url 'offers_app:offer_modal_add' %}"
           >
             <i class="lni lni-plus"></i>
             <span class="ms-2">Crear</span>
@@ -63,7 +63,7 @@
                 </td>
                 <td>
                   {% comment %} <a
-                    href="{% url 'offer_app:offer_detail' row.slug %}"
+                    href="{% url 'offers_app:offer_detail' row.slug %}"
                     role="button"
                     class="btn btn-outline-secondary btn-center"
                   >
@@ -76,7 +76,7 @@
                     type="button"
                     class="btn btn-outline-primary btn-center btn-compact"
                     name="editButtons"
-                    id="{% url 'offer_app:candidature_edit' row.id %}"
+                    id="{% url 'offers_app:candidature_edit' row.id %}"
                   >
                     <i class="lni lni-pencil"></i>
                   </button>
@@ -88,7 +88,7 @@
                     type="button"
                     class="btn btn-outline-danger btn-center btn-compact"
                     name="deleteButtons"
-                    id="{% url 'offer_app:candidature_delete' row.id %}"
+                    id="{% url 'offers_app:candidature_delete' row.id %}"
                   >
                     <i class="lni lni-trash-can"></i>
                   </button>

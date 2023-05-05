@@ -43,7 +43,7 @@
             <p>{{ object.description }}</p>
             <div class="d-flex justify-content-between align-items-center">
               <p class="m-0">Salario estimado: <strong>{{ object.currency }} {{ object.salary|currency_format }} {{ object.payperiod }}</strong></p>
-              <a href="{% url 'offer_app:offer_detail' object.slug %}" class="btn btn-primary rounded-pill px-4 stretched-link" role="button">
+              <a href="{% url 'offers_app:offer_detail' object.slug %}" class="btn btn-primary rounded-pill px-4 stretched-link" role="button">
                 {% if usergroups or request.user.is_staff %}
                 Visualizar
                 {% else %}

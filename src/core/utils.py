@@ -132,3 +132,38 @@ def set_data_status(data=[], status="204"):
         _type = "success"
         msg = ""
     return {"status": status, "type": _type, "msg": msg, "data": data}
+
+
+def verify_dispatch(urlpatterns):
+    """
+    This function verifies if a given URL pattern in a Django app requires authentication.
+    
+    :param urlpatterns: The `urlpatterns` parameter is expected to be a string representing a URL
+    pattern in the format `app_name:url_name`. For example, `myapp:home` would represent the URL pattern
+    for the `home` view in the `myapp` Django application
+    :return: a boolean value. It returns True if the given urlpatterns contain a URL pattern that has a
+    view function with an inheritance from the Django authentication mixin, and False otherwise.
+    """
+    urlpatterns_split = urlpatterns.split(":")
+    app = urlpatterns_split[0].replace("_app", "")
+    pathname = urlpatterns_split[1]
+    mod_urls_to_import = f"{app}.urls"
+    urls = getattr(importlib.import_module(mod_urls_to_import), "urlpatterns")
+    try:
+        for url in urls:
+            if url.name == pathname:
+                lookup = url.lookup_str
+                lookup_split = lookup.split(".")
+                class_name = lookup_split[-1]
+                mod_views_to_import = f"{app}.views"
+                _class = getattr(
+                    importlib.import_module(mod_views_to_import), class_name
+                )
+                inheritences = _class.__mro__
+                for inheritence in inheritences:
+                    if "django.contrib.auth.mixins" == inheritence.__module__:
+                        return True
+    except:
+        pass
+
+    return False

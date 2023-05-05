@@ -16,7 +16,7 @@
         <a
           type="button"
           class="btn btn-primary btn-center"
-          href="{% url 'offer_app:offer_add' %}"
+          href="{% url 'offers_app:offer_add' %}"
           style="width: fit-content;"
         >
           <i class="lni lni-plus"></i>
@@ -105,7 +105,7 @@
                     <div class="d-flex gap-1">
                       {% if not row.deleted_at and not row.status %}
                       <a
-                        href="{% url 'offer_app:offer_edit' row.slug %}"
+                        href="{% url 'offers_app:offer_edit' row.slug %}"
                         role="button"
                         class="btn btn-outline-secondary btn-center btn-compact"
                         style="z-index: 2;"
@@ -121,7 +121,7 @@
                         class="btn btn-outline-success btn-center btn-compact"
                         style="z-index: 2;"
                         name="deleteButtons"
-                        id="{% url 'offer_app:offer_finish' row.slug %}"
+                        id="{% url 'offers_app:offer_finish' row.slug %}"
                       >
                         <i class="lni lni-checkmark"></i>
                       </button>
@@ -132,7 +132,7 @@
                         class="btn btn-outline-danger btn-center btn-compact"
                         style="z-index: 2;"
                         name="deleteButtons"
-                        id="{% url 'offer_app:offer_delete' row.slug %}"
+                        id="{% url 'offers_app:offer_delete' row.slug %}"
                       >
                         <i class="lni lni-trash-can"></i>
                       </button>
@@ -150,7 +150,7 @@
                     Sin candidatos contratados
                   </p>
                   {% else %}
-                  <a href="{% url 'offer_app:candidature_list' row.slug %}" class="link-orange" role="button" style="z-index: 2;">
+                  <a href="{% url 'offers_app:candidature_list' row.slug %}" class="link-orange" role="button" style="z-index: 2;">
                     {% if row.completed_candidates == 1 %}
                     Un candidato contratado
                     {% else %}
@@ -162,7 +162,7 @@
                   {% if row.cancelled_candidates == 0 %}
                   No aplicaron candidatos
                   {% else %}
-                  <a href="{% url 'offer_app:candidature_list' row.slug %}" class="link-orange" role="button" style="z-index: 2;">
+                  <a href="{% url 'offers_app:candidature_list' row.slug %}" class="link-orange" role="button" style="z-index: 2;">
                     {% if row.cancelled_candidates == 1 %}
                     Se canceló la postulación de un candidato
                     {% else %}
@@ -171,7 +171,7 @@
                   </a>
                   {% endif %}
                 {% else %}
-                <a href="{% url 'offer_app:candidature_list' row.slug %}" class="link-orange" role="button" style="z-index: 2;">
+                <a href="{% url 'offers_app:candidature_list' row.slug %}" class="link-orange" role="button" style="z-index: 2;">
                   {% if row.active_candidates == 0 %}
                   Sin postulaciones
                   {% elif row.active_candidates == 1 %}
@@ -181,7 +181,7 @@
                   {% endif %}
                 </a>
                 {% endif %}
-                <a href="{% url 'offer_app:offer_detail' row.slug %}" class="stretched-link" role="button"></a>
+                <a href="{% url 'offers_app:offer_detail' row.slug %}" class="stretched-link" role="button"></a>
               </div>
             </div>
           </div>

@@ -2,7 +2,7 @@
 
 <div class="modal-dialog modal-dialog-centered">
   <div class="modal-content">
-    <form method="POST" action="{% url 'offer_app:offer_delete' object.id %}" id="form">
+    <form method="POST" action="{% url 'offers_app:offer_delete' object.slug %}" id="form">
       <div class="modal-header">
         <h5 class="modal-title">Eliminar</h5>
         <button
@@ -15,16 +15,14 @@
       <div class="modal-body">
         {% csrf_token %}
         <h6>
-          Se eliminará la siguiente oferta:
+          La siguiente oferta se ELIMINARÁ permanentemente:
         </h6>
         <div class="row mb-2 text-secondary">
           <small class="m-0 col-12">
-            <strong>Título:</strong>
             {{object.title}}
           </small>
           <small class="m-0 col-12">
-            <strong>Creada por</strong>
-            {{object.user.first_name}} el {{object.created_at}}
+            Creada el {{object.created_at}}
           </small>
           {% if object.updated_at %}
           <small class="m-0 col-12">
@@ -35,13 +33,17 @@
         </div>
         <div class="alert alert-warning" role="alert">
           ¿Está seguro que desea continuar?
+          <br>
+          Una vez eliminada ya no podrás recuperarla
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Cancelar
         </button>
-        <button type="submit" class="btn btn-primary">Eliminar</button>
+        <button type="submit" class="btn btn-primary">
+          Continuar
+        </button>
       </div>
     </form>
   </div>

@@ -27,6 +27,7 @@ from django.db.models import (
 )
 from django.utils.translation import gettext as _
 from django.core import signing
+from django.db.models import Q, F, Count, Sum, Case, When, BooleanField, IntegerField
 
 # EXTRA MODULES
 import sweetify
@@ -47,8 +48,12 @@ offer_desc = _("Ofertas")
 offer_create_title = _("Publicar")
 offer_update_title = _("Editar")
 offer_detail_title = _("Detalle")
-candidature_title = _("Postulaciones")
-candidature_desc = _("Postulaciones")
+publication_title = _("Publicaciones")
+publication_desc = _("Listado de mis publicaciones")
+candidature_title = _("Candidaturas")
+candidature_desc = _("Postulaciones a ofertas laborales")
+candidature_offer_title = _("Candidaturas")
+candidature_offer_desc = _("Postulaciones de la oferta")
 
 
 # OFFERS
@@ -130,7 +135,7 @@ class OfferModalCreate(LoginRequiredMixin, generic.CreateView):
 
     def get_success_url(self):
         success_message(self.request)
-        return reverse_lazy("offer_app:offer_list")
+        return reverse_lazy("offers_app:offer_list")
 
     def get_context_data(self, **kwargs):
         context = super(OfferModalCreate, self).get_context_data(**kwargs)
@@ -146,7 +151,7 @@ class OfferModalCreate(LoginRequiredMixin, generic.CreateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return HttpResponseRedirect(reverse_lazy("offer_app:offer_list"))
+        return HttpResponseRedirect(reverse_lazy("offers_app:offer_list"))
 
 
 class OfferEditModal(LoginRequiredMixin, generic.UpdateView):
@@ -157,7 +162,7 @@ class OfferEditModal(LoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         success_message(self.request, msg="Oferta actualizada satisfactoriamente")
-        return reverse_lazy("offer_app:offer_list")
+        return reverse_lazy("offers_app:offer_list")
 
     def get_context_data(self, **kwargs):
         context = super(OfferEditModal, self).get_context_data(**kwargs)
@@ -177,7 +182,7 @@ class OfferEditModal(LoginRequiredMixin, generic.UpdateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return HttpResponseRedirect(reverse_lazy("offer_app:offer_list"))
+        return HttpResponseRedirect(reverse_lazy("offers_app:offer_list"))
 
 
 class OfferDeleteModal(LoginRequiredMixin, generic.UpdateView):
@@ -186,9 +191,21 @@ class OfferDeleteModal(LoginRequiredMixin, generic.UpdateView):
     form_class = FormDelete
     template_name = "Offers/offer_delete_modal.html"
 
+    def get_object(self):
+        pk = get_pk_from_a_slug(self)
+        return self.model.objects.get(pk=pk)
+
     def get_success_url(self):
         success_message(self.request, msg="Oferta eliminada satisfactoriamente")
-        return reverse_lazy("offer_app:offer_list")
+        offer = self.get_object()
+        Candidatures.objects.filter(offer=offer, status="1").update(
+            status="2", updated_at=timezone.now()
+        )
+        if self.request.user.is_staff:
+            return reverse_lazy("offers_app:offer_list")
+        return reverse_lazy(
+            "offers_app:mypublications", args=[self.request.user.username]
+        )
 
     def get_context_data(self, **kwargs):
         context = super(OfferDeleteModal, self).get_context_data(**kwargs)
@@ -198,7 +215,54 @@ class OfferDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
+        # offer = self.get_object()
+        # validate = Candidatures.objects.filter(offer=offer)
+        # if validate:
+        #     warning_message(self.request, msg="No se puede ")
         form.instance.deleted_at = timezone.now()
+        return super().form_valid(form)
+
+
+class OfferFinishModal(LoginRequiredMixin, generic.UpdateView):
+    login_url = "/login"
+    model = Offers
+    form_class = FormDelete
+    template_name = "Offers/offer_finish_modal.html"
+
+    def get_object(self):
+        pk = get_pk_from_a_slug(self)
+        return self.model.objects.get(pk=pk)
+
+    def get_success_url(self):
+        success_message(self.request, msg="Oferta finalizada satisfactoriamente")
+        offer = self.get_object()
+        Candidatures.objects.filter(offer=offer, status="1").update(
+            status="2", updated_at=timezone.now()
+        )
+        # if self.request.user.is_staff:
+        #     return reverse_lazy("offers_app:offer_list")
+        return reverse_lazy(
+            "offers_app:mypublications", args=[self.request.user.username]
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super(OfferFinishModal, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = offer_title
+        context["description_view"] = offer_desc
+        return context
+
+    def form_valid(self, form):
+        p_status = self.request.GET.get("status", False)
+        if not p_status == "true":
+            warning_message(self.request, msg="Esta acción no ha podido completarse")
+            return HttpResponseRedirect(
+                reverse_lazy(
+                    "offers_app:mypublications", args=[self.request.user.username]
+                )
+            )
+        form.instance.status = True
+        form.instance.updated_at = timezone.now()
         return super().form_valid(form)
 
 
@@ -211,7 +275,8 @@ class BiddingPanel(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         search = self.request.GET.get("search", "true")
         return self.model.objects.search(text=search, order="-created_at").filter(
-            deleted_at=None
+            deleted_at=None,
+            status=False
         )
 
     def get_context_data(self, **kwargs):
@@ -226,6 +291,7 @@ class BiddingPanel(LoginRequiredMixin, generic.ListView):
             user=self.request.user, usergroup__code__icontains="COM"
         ).count()
         context["in_offer"] = True
+        context["search_results"] = self.get_queryset()
         return context
 
 
@@ -240,14 +306,71 @@ class PublicationList(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         username = self.kwargs.get("username", "")
-        return self.model.objects.all().filter(user__username=username).order_by("id")
+        p_status = self.request.GET.get("status", "")
+        p_search = self.request.GET.get("search", "")
+
+        objects = (
+            self.model.objects.all()
+            .filter(user__username=username)
+            .filter(Q(title__icontains=p_search) | Q(title__icontains=p_search))
+            .annotate(
+                active_candidates=Count(
+                    F("candidature_offer"), filter=~Q(candidature_offer__status=["1", "4"])
+                ),
+                cancelled_candidates=Count(
+                    F("candidature_offer"), filter=~Q(candidature_offer__status=["2"])
+                ),
+                rejected_candidates=Count(
+                    F("candidature_offer"), filter=~Q(candidature_offer__status=["2"])
+                ),
+                accepted_candidates=Count(
+                    F("candidature_offer"), filter=~Q(candidature_offer__status=["4"])
+                ),
+                completed_candidates=Count(
+                    F("candidature_offer"), filter=~Q(candidature_offer__status=["5"])
+                )
+            )
+            .order_by("-deleted_at", "title")
+        )
+        if p_status:
+            if "!" in p_status:
+                status = p_status.replace("!", "")
+                validate = status in [item[0] for item in OFFER_STATUS]
+                if status == '3' or validate:
+                    if status == "1":
+                        objects = objects.exclude(deleted_at=None).exclude(status=False)
+                    elif status == "2":
+                        objects = objects.filter(deleted_at=None).exclude(status=True)
+                    else:
+                        objects = objects.filter(deleted_at=None)
+            else:
+                validate = p_status in [item[0] for item in OFFER_STATUS]
+                if p_status == '3' or validate:
+                    if p_status == "1":
+                        objects = objects.filter(deleted_at=None).filter(status=False)
+                    elif p_status == "2":
+                        objects = objects.filter(deleted_at=None).filter(status=True)
+                    else:
+                        objects = objects.exclude(deleted_at=None)
+        return objects
 
     def get_context_data(self, **kwargs):
+        p_search = self.request.GET.get("search", "")
+        p_status = self.request.GET.get("status", "")
+
         context = super(PublicationList, self).get_context_data(**kwargs)
         context["app_title"] = app_title
-        context["title_view"] = candidature_title
-        context["description_view"] = candidature_desc
+        context["title_view"] = publication_title
+        context["description_view"] = publication_desc
         context["in_mypublications"] = True
+        context["search"] = p_search
+        context["pstatus"] = p_status
+        # statuses = POST_STATUS[:1] + POST_STATUS[2:]
+        context["statuses"] = (
+            ("1", "activa"),
+            ("2", "finalizada"),
+            ("3", "eliminada"),
+        )
         return context
 
 
@@ -259,7 +382,7 @@ class PublicationCreate(LoginRequiredMixin, generic.CreateView):
 
     def get_success_url(self):
         success_message(self.request)
-        return reverse_lazy("offer_app:bidding_panel")
+        return reverse_lazy("offers_app:bidding_panel")
 
     def get_context_data(self, **kwargs):
         context = super(PublicationCreate, self).get_context_data(**kwargs)
@@ -303,7 +426,7 @@ class PublicationEdit(LoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         success_message(self.request, msg="Oferta actualizada satisfactoriamente")
-        return reverse_lazy("offer_app:offer_detail", args=[self.slug])
+        return reverse_lazy("offers_app:offer_detail", args=[self.slug])
 
     def get_context_data(self, **kwargs):
         self.slug = self.kwargs.get("slug", "")
@@ -328,7 +451,7 @@ class PublicationEdit(LoginRequiredMixin, generic.UpdateView):
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
         return HttpResponseRedirect(
-            reverse_lazy("offer_app:offer_edit", args=[self.slug])
+            reverse_lazy("offers_app:offer_edit", args=[self.slug])
         )
 
 
@@ -357,18 +480,66 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
+        p_status = self.request.GET.get("status", "")
+        p_search = self.request.GET.get("search", "")
+        # status_name = get_status_name(p_status)
+
         str_pk = get_pk_from_a_slug(self)
-        return (
+        obj = (
             self.model.objects.filter(offer__id=str_pk)
-            .exclude(status="2")
-            .order_by("created_at")
+            .filter(
+                Q(candidate__first_name__icontains=p_search)
+                | Q(candidate__last_name__icontains=p_search)
+            )
+            .exclude(status__in=["2"])
+            .order_by("-updated_at")
         )
 
+        if p_status:
+            if "!" in p_status:
+                status = p_status.replace("!", "")
+                obj = obj.exclude(status=status)
+            else:
+                obj = obj.filter(status=p_status)
+
+        return obj
+
     def get_context_data(self, **kwargs):
+        p_status = self.request.GET.get("status", "")
+        p_search = self.request.GET.get("search", "")
+        str_pk = get_pk_from_a_slug(self)
         context = super(CandidaturesByOfferList, self).get_context_data(**kwargs)
+
+        objects = self.get_queryset()
+        count = objects.count()
+
         context["app_title"] = app_title
-        context["title_view"] = candidature_title
-        context["description_view"] = candidature_desc
+        context["title_view"] = (
+            objects.first().offer.title.capitalize()
+            if count
+            else self.model.objects.filter(offer__id=str_pk)
+            .first()
+            .offer.title.capitalize()
+        )
+        if count == 1:
+            desc = "Un candidato ha aplicado a esta oferta"
+        elif count > 0:
+            desc = f"{count} candidatos han aplicado a esta oferta"
+        else:
+            desc = "Sin candidatos"
+        context["description_view"] = desc
+        context["mycandidacies"] = True
+        statuses = POST_STATUS[:1] + POST_STATUS[2:]
+        context["statuses"] = statuses
+        context["pstatus"] = p_status
+        context["search"] = p_search
+
+        # offer_id = objects.first().offer.id
+        # context["rejected_candidates"] = (
+        #     self.model.objects.filter(offer__id=offer_id)
+        #     .filter(status__in=["2", "3"])
+        #     .order_by("updated_at")
+        # )
         return context
 
 
@@ -380,16 +551,37 @@ class MyCandidacies(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         username = self.kwargs.get("username", "")
-        return self.model.objects.filter(candidate__username=username).order_by(
-            "-status", "created_at", "updated_at"
+        p_status = self.request.GET.get("status", "")
+        p_search = self.request.GET.get("search", "")
+
+        obj = (
+            self.model.objects.filter(candidate__username=username)
+            .filter(
+                Q(offer__title__icontains=p_search)
+                | Q(offer__title__icontains=p_search)
+            )
+            .order_by("-offer__deleted_at", "status")
         )
+        if p_status:
+            if "!" in p_status:
+                status = p_status.replace("!", "")
+                obj = obj.exclude(status=status)
+            else:
+                obj = obj.filter(status=p_status)
+        return obj
 
     def get_context_data(self, **kwargs):
+        p_status = self.request.GET.get("status", "")
+        p_search = self.request.GET.get("search", "")
+
         context = super(MyCandidacies, self).get_context_data(**kwargs)
         context["app_title"] = app_title
         context["title_view"] = candidature_title
         context["description_view"] = candidature_desc
         context["mycandidacies"] = True
+        context["statuses"] = POST_STATUS
+        context["pstatus"] = p_status
+        context["search"] = p_search
         return context
 
 
@@ -414,7 +606,7 @@ class CandidatureSave(LoginRequiredMixin, generic.FormView):
                 msg=f"Has {status_name} esta candidatura satisfactoriamente",
             )
             return reverse_lazy(
-                f"offer_app:{p_path}", args=[self.request.user.username]
+                f"offers_app:{p_path}", args=[self.request.user.username]
             )
 
         allowed = self.request.user.is_authenticated
@@ -429,10 +621,10 @@ class CandidatureSave(LoginRequiredMixin, generic.FormView):
                 self.request,
                 msg=f"El candidato ha sido {status_name} satisfactoriamente",
             )
-            return reverse_lazy("offer_app:candidature_list", args=[slug])
+            return reverse_lazy("offers_app:candidature_list", args=[slug])
 
         success_message(self.request, msg="Acción realizada satisfactoriamente")
-        return reverse_lazy("offer_app:offer_detail", args=[slug])
+        return reverse_lazy("offers_app:offer_detail", args=[slug])
 
     def get_context_data(self, **kwargs):
         p_status = self.request.GET.get("status", "")
@@ -450,11 +642,12 @@ class CandidatureSave(LoginRequiredMixin, generic.FormView):
         context["status"] = p_status
         context["path"] = p_path
         context["app_title"] = app_title
-        context["title_view"] = candidature_title
-        context["description_view"] = candidature_desc
+        context["title_view"] = publication_title
+        context["description_view"] = publication_desc
         return context
 
     def form_valid(self, form):
+        slug = self.kwargs.get("slug", "")
         username = self.kwargs.get("username", "")
         p_status = self.request.GET.get("status", "")
 
@@ -473,10 +666,13 @@ class CandidatureSave(LoginRequiredMixin, generic.FormView):
 
         if cantidatures:
             cantidature_cache = cantidatures.filter(deleted_at=None)
-            if cantidature_cache:
-                cantidatures.update(
-                    status=p_status, updated_at=timezone.now(), deleted_at=None
+            if not cantidature_cache:
+                return HttpResponseRedirect(
+                    reverse_lazy("offers_app:offer_detail", args=[slug])
                 )
+            cantidatures.update(
+                status=p_status, updated_at=timezone.now(), deleted_at=None
+            )
         else:
             user = User.objects.get(username=username)
             candidature = Candidatures(offer_id=str_pk, status=p_status, candidate=user)
@@ -493,13 +689,13 @@ class CandidatureEditModal(LoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         success_message(self.request, msg="Postulación actualizada satisfactoriamente")
-        return reverse_lazy("offer_app:candidature_list")
+        return reverse_lazy("offers_app:candidature_list")
 
     def get_context_data(self, **kwargs):
         context = super(CandidatureEditModal, self).get_context_data(**kwargs)
         context["app_title"] = app_title
-        context["title_view"] = candidature_title
-        context["description_view"] = candidature_desc
+        context["title_view"] = publication_title
+        context["description_view"] = publication_desc
         return context
 
     def form_valid(self, form):
@@ -512,7 +708,7 @@ class CandidatureEditModal(LoginRequiredMixin, generic.UpdateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return HttpResponseRedirect(reverse_lazy("offer_app:candidature_list"))
+        return HttpResponseRedirect(reverse_lazy("offers_app:candidature_list"))
 
 
 class CandidatureDeleteModal(LoginRequiredMixin, generic.UpdateView):
@@ -523,13 +719,13 @@ class CandidatureDeleteModal(LoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         success_message(self.request, msg="Postulación eliminada satisfactoriamente")
-        return reverse_lazy("offer_app:candidature_list")
+        return reverse_lazy("offers_app:candidature_list")
 
     def get_context_data(self, **kwargs):
         context = super(CandidatureDeleteModal, self).get_context_data(**kwargs)
         context["app_title"] = app_title
-        context["title_view"] = candidature_title
-        context["description_view"] = candidature_desc
+        context["title_view"] = publication_title
+        context["description_view"] = publication_desc
         return context
 
     def form_valid(self, form):

@@ -64,3 +64,13 @@ class ModalitiesAdmin(admin.ModelAdmin):
 @admin.register(ContractTypes)
 class ContractTypesAdmin(admin.ModelAdmin):
     exclude = []
+
+
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    exclude = []
+
+
+@admin.register(SocialNetwork)
+class SocialNetworkAdmin(admin.ModelAdmin):
+    exclude = []

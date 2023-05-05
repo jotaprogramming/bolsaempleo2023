@@ -14,7 +14,7 @@ from pprint import pprint
 def success_message(request, msg=_("Successfully created"), time=5000):
     """
     It creates a success message with a title, message, icon, timer, and button.
-    
+
     :param request: The request object
     :param msg: The message to be displayed
     """
@@ -36,7 +36,7 @@ def warning_message(request, msg=_("Warning")):
     """
     It's a function that takes a request and a message as parameters and displays a warning message
     using sweetify.
-    
+
     :param request: The request object
     :param msg: The message to be displayed
     """
@@ -57,7 +57,7 @@ def warning_message(request, msg=_("Warning")):
 def error_message(request, msg=_("An unexpected error occurred"), time=5000):
     """
     It takes a request object and a message, and then displays a sweetalert2 popup with the message
-    
+
     :param request: The request object
     :param msg: The message to display
     """
@@ -102,7 +102,7 @@ def get_form_errors(form):
 def normalize_email(email):
     """
     It normalizes the email address.
-    
+
     :param email: The email address to be normalized
     :return: A string
     """
@@ -110,3 +110,60 @@ def normalize_email(email):
     verify_email = forms.EmailField()
     verify_email.clean(_email)
     return _email
+
+
+def get_request_body(request):
+    body_unicode = request.body.decode("utf-8")
+    body_data = json.loads(body_unicode)
+
+    return body_data
+
+
+def set_data_status(data=[], status="204"):
+    _type = "warning"
+    msg = "No se encontraron registros"
+    if int(status) >= 400:
+        _type = "error"
+        msg = _(
+            "Ha ocurrido un error. Por favor inténtelo de nuevo o comuníquese con nuestro equipo de soporte"
+        )
+    elif data:
+        status = "200"
+        _type = "success"
+        msg = ""
+    return {"status": status, "type": _type, "msg": msg, "data": data}
+
+
+def verify_dispatch(urlpatterns):
+    """
+    This function verifies if a given URL pattern in a Django app requires authentication.
+    
+    :param urlpatterns: The `urlpatterns` parameter is expected to be a string representing a URL
+    pattern in the format `app_name:url_name`. For example, `myapp:home` would represent the URL pattern
+    for the `home` view in the `myapp` Django application
+    :return: a boolean value. It returns True if the given urlpatterns contain a URL pattern that has a
+    view function with an inheritance from the Django authentication mixin, and False otherwise.
+    """
+    urlpatterns_split = urlpatterns.split(":")
+    app = urlpatterns_split[0].replace("_app", "")
+    pathname = urlpatterns_split[1]
+    mod_urls_to_import = f"{app}.urls"
+    urls = getattr(importlib.import_module(mod_urls_to_import), "urlpatterns")
+    try:
+        for url in urls:
+            if url.name == pathname:
+                lookup = url.lookup_str
+                lookup_split = lookup.split(".")
+                class_name = lookup_split[-1]
+                mod_views_to_import = f"{app}.views"
+                _class = getattr(
+                    importlib.import_module(mod_views_to_import), class_name
+                )
+                inheritences = _class.__mro__
+                for inheritence in inheritences:
+                    if "django.contrib.auth.mixins" == inheritence.__module__:
+                        return True
+    except:
+        pass
+
+    return False

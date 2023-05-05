@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% load crypto_url %}
+{% load format_numbers %}
 
 {% block title %}
 <title>{{app_title}} | {{title_view}}</title>
@@ -8,65 +9,163 @@
 
 {% block contentfluid %} 
 
-<section class="my-1 position-relative">
+<section class="layout-section">
   {% include 'partials/_aside.html' %}
-  <div class="p-5" style="margin-left: 300px;">
-    <div class="col-12">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Oferta</th>
-            <th>Estado</th>
-            <th>Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for row in object_list %}
-          <tr>
-            <td>
-              
-              <a
-                href="{% url 'offer_app:offer_detail' row.offer.slug %}"
-                role="button"
-                class="link-orange"
-              >
-                {{row.offer.title}}
-              </a>
-            </td>
-            <td>
-              {% if row.deleted_at %} 
-              Eliminado el {{row.deleted_at}}
-              {% elif row.updated_at %} 
-              <strong class="text-orange">{{row.get_status_display}}</strong> el {{row.updated_at}}
-              {% else %}
-              <strong class="text-orange">{{row.get_status_display}}</strong> el {{row.created_at}}
-              {% endif %}
-            </td>
-            <td>
-              <div class="d-flex gap-1" style="min-width: 240px">
-                {% if not row.deleted_at and not row.status == '5' and not row.status == '3' and not row.status == '2' %}
-                <button
-                  type="button"
-                  class="btn btn-outline-danger btn-center btn-slide"
-                  name="deleteButtons"
-                  id="{% url 'offer_app:candidature_save' row.offer.slug row.candidate.username %}?status=2&path=mycandidacies"
-                  title="Cancelar postulación"
-                >
-                  <i class="lni lni-thumbs-down"></i>
-                  <span class="">Cancelar</span>
-                </button>
-                {% endif %}
+  <div class="main-section">
+    <div class="container">
+      {% include 'partials/_display.html' %}
+      <div class="col-12">
+        <div class="row mb-3">
+          {% comment %} <form class="col-md-3 form-search" method="GET"> {% endcomment %}
+          <form class="col-md-3" method="GET">
+            {% include 'partials/_search_input.html' %}
+          </form>
+          <div class="btn-group col-md-7">
+            <button type="button" class="border-0 bg-transparent dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              Estados
+            </button>
+            <ul class="dropdown-menu">
+              {% for status in statuses %}
+              <li>
+                <a class="dropdown-item {% if pstatus == status.0 %}active{% endif %}" href="?status={{status.0}}">
+                  Solo {{ status.1 }}s
+                </a>
+              </li>
+              {% endfor %}
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              {% for status in statuses %}
+              <li>
+                <a class="dropdown-item {% if pstatus == "!"|add:status.0 %}active{% endif %}" href="?status=!{{status.0}}">
+                  Sin {{ status.1 }}s
+                </a>
+              </li>
+              {% endfor %}
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item" href="?status=">
+                  Todo
+                </a>
+              </li>
+            </ul>
+          </div>
+          <small class="d-flex gap-3 align-items-center col-md-2">
+            <div class="">
+              <i class="lni lni-thumbs-down text-danger"></i> Cancelar postulación
+            </div>
+          </small>
+        </div>
+        {% for row in object_list %}
+        <div class="card mb-3 bid-letter position-relative {% if row.status == '3' %}border-danger{% elif row.status == '4' %}border-warning{% elif row.status == '5' %}border-success{% endif %}">
+          <div class="card-body">
+            <div class="d-flex gap-4 justify-content-start align-items-start flex-wrap">
+              <div class="emblem">
+                <div class="icon-alert text-secondary">
+                  {% if row.offer.deleted_at %}
+                  <i class="lni lni-ban"></i>
+                  {% elif row.status == "1" %}
+                  <i class="lni lni-coffee-cup"></i>
+                  {% elif row.status == "2" %}
+                  <i class="lni lni-exit"></i>
+                  {% elif row.status == "3" %}
+                  <i class="lni lni-warning text-danger"></i>
+                  {% elif row.status == "4" %}
+                  <i class="lni lni-checkmark text-warning"></i>
+                  {% elif row.status == "5" %}
+                  <i class="lni lni-briefcase text-success"></i>
+                  {% endif %}
+                </div>
+                <span class="fw-light">
+                  {% if row.status == "2" and row.offer.deleted_at %}
+                  no disponible
+                  {% elif row.status == "2" and row.offer.status %}
+                  oferta finalizada
+                  {% else %}
+                  {{ row.get_status_display }}
+                  {% endif %}
+                </span>
               </div>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+              <div class="col d-flex flex-column gap-1 justify-content-center align-items-start">
+                <div class="w-100 d-flex justify-content-between">
+                  <div>
+                    <h5 class="fw-bold m-0">
+                      {{ row.offer.title }}
+                    </h5>
+                    <p class="text-muted m-0 fw-light fs-6">
+                      Aplicaste el {{ row.created_at }}
+                    </p>
+                  </div>
+                  <div class="d-flex align-items-center gap-1">
+                    {% comment %} <div class="d-flex gap-1" style="min-width: 240px"> {% endcomment %}
+                    {% if not row.deleted_at and not row.status == '1' %}
+                    <small class="text-muted fw-normal me-2">
+                      {% if row.status == '2' %}
+                      {% if row.offer.deleted_at %}
+                      La oferta no se encuentra disponible
+                      {% elif row.offer.status %}
+                      La oferta finalizó y ya no se encuentra disponible
+                      {% else %}
+                      Cancelaste el {{ row.updated_at }}
+                      {% endif %}
+                      {% else %}
+                      Fuiste {{row.get_status_display }} el {{ row.updated_at }}
+                      {% endif %}
+                    </small>
+                    {% endif %}
+                    {% if not row.deleted_at and not row.status == '5' and not row.status == '3' and not row.status == '2' %}
+                    <div class="" style="z-index: 2;">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger btn-center"
+                        name="deleteButtons"
+                        id="{% url 'offers_app:candidature_save' row.offer.slug row.candidate.username %}?status=2&path=mycandidacies"
+                        title="Cancelar postulación"
+                        style="height: 42px;"
+                      >
+                        <i class="lni lni-thumbs-down"></i>
+                      </button>
+                    </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <p class="m-0 fw-light mt-2">
+                  {{ row.offer.description }}
+                </p>
+                <p class="m-0 fw-light">
+                  Salario: {{ row.offer.currency }} {{ row.offer.salary|currency_format }} {{ row.offer.payperiod }}
+                </p>
+                <a href="{% url 'offers_app:offer_detail' row.offer.slug %}" class="stretched-link" role="button"></a>
+              </div>
+            </div>
+            {% comment %} <h5 class="card-title">
+              {% if row.candidate.first_name and row.candidate.last_name %}
+              {{row.candidate.first_name}} {{row.candidate.last_name}}
+              {% else %}
+              {{row.candidate.username}}
+              {% endif %}
+            </h5> {% endcomment %}
+            {% comment %} <p class="card-text">
+              {{ row.candidate.userprofile.about_me }}
+            </p> {% endcomment %}
+          </div>
+        </div>
+        {% empty %}
+        <small class="text-muted">
+          Sin registros
+        </small>
+        {% endfor %}
+      </div>
+      {% if is_paginated %}
+      {% include 'partials/_pagination_sm.html' %}
+      {% endif %}
     </div>
-    {% if is_paginated %}
-    {% include 'partials/_pagination_sm.html' %}
-    {% endif %}
   </div>
 </section>
+{% comment %} <article class="footer position-relative" style="z-index: 2;">
+  {% include 'partials/_footer.html' %}
+</article>  {% endcomment %}
 
 {% endblock contentfluid %}

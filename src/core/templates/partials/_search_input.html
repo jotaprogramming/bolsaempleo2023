@@ -1,24 +1,38 @@
 {% load static %}
 
-<div class="d-flex align-items-center w-100 ps-3">
-    {% comment %} <label class="btn btn-light-orange h-center border-0 h-100" for="search_btn">
-        <img class="w1-h-auto" src="{% static 'core/assets/icon/icon-search-small.svg' %}" alt="icon-search-small" />
-    </label>
-    <input class="d-none" type="checkbox" name="search_btn" id="search_btn"> {% endcomment %}
-    <div class="input-group">
-        <input 
-            class="form-control form-search border-bottom {% if search and search != 'true' %}{% endif %} "
-            type="search"
-            placeholder="{% if search_placeholder %}{{search_placeholder}}{% else %}Buscar{% endif %}"
-            aria-label="Search"
-            name="search"
-            value="{% if search and search != 'true' %}{{ search }}{% endif %}"
-        />
-        <button class="btn btn-light-orange" id="search" type="submit">
-            {% include 'partials/icon_element/_search_icon.html' %}
-        </button>
-    </div>
+<div class="d-flex align-items-center gap-3 w-100 ps-3">
+  <div class="input-group">
     {% comment %}
-    <button class="btn btn-outline-success d-none" type="submit">Search</button>
+    <input
+      class="form-control form-search border-bottom {% if search and search != 'true' %}{% endif %}"
+      type="search"
+      placeholder="{% if search_placeholder %}{{search_placeholder}}{% else %}Buscar{% endif %}"
+      aria-label="Search"
+      name="search"
+      value="{% if search and search != 'true' %}{{ search }}{% endif %}"
+    />
     {% endcomment %}
+    <input
+      list="search_list"
+      id="search"
+      name="search"
+      type="search"
+      aria-label="Search"
+      class="form-control form-search border-bottom {% if search and search != 'true' %}{% endif %}"
+      placeholder="{% if search_placeholder %}{{search_placeholder}}{% else %}Buscar{% endif %}"
+      value="{% if search and search != 'true' %}{{ search }}{% endif %}"
+    />
+    <datalist id="search_list">
+      {% for search_result in search_results %}
+      <option
+        value="{{search_result.title}}"
+      >
+        {% for tag in search_result.get_tags %}#{{tag.name}} {% endfor %}
+      </option>
+      {% endfor %}
+    </datalist>
+    <button class="btn btn-light-orange" id="search" type="submit">
+      {% include 'partials/icon_element/_search_icon.html' %}
+    </button>
+  </div>
 </div>

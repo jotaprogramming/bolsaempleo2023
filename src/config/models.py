@@ -29,9 +29,9 @@ class Districts(models.Model):
         unique=True,
         null=False,
     )
-    zipcode = models.CharField(
-        _("administrative subdivision zip code"), max_length=25, unique=True, null=False
-    )
+    # zipcode = models.CharField(
+    #     _("administrative subdivision zip code"), max_length=25, unique=True, null=False
+    # )
     name = models.CharField(
         _("common name of the administrative subdivision"),
         max_length=150,
@@ -55,9 +55,9 @@ class Districts(models.Model):
 
 
 class Cities(models.Model):
-    zipcode = models.CharField(
-        _("city zip code"), max_length=25, unique=True, null=False
-    )
+    # zipcode = models.CharField(
+    #     _("city zip code"), max_length=25, unique=True, null=False
+    # )
     name = models.CharField(
         _("common name of the city"), max_length=150, unique=False, null=False
     )
@@ -211,3 +211,39 @@ class ContractTypes(models.Model):
     class Meta:
         verbose_name = _("contract type")
         verbose_name_plural = _("contract types")
+
+
+class Contact(models.Model):
+    city = models.ForeignKey(
+        Cities,
+        related_name="city_contact",
+        verbose_name=_("city"),
+        blank=False,
+        on_delete=models.PROTECT,
+    )
+    email = models.EmailField(_("contact e-mail"), max_length=250, blank=False)
+    phone = models.CharField(_("cell phone number"), max_length=25, blank=False)
+    msg_app_number = models.CharField(
+        _("instant messaging application number"), max_length=12, blank=False
+    )
+
+    def __str__(self):
+        return "{}".format(self.city.name)
+
+    class Meta:
+        verbose_name = _("contact")
+        verbose_name_plural = _("contacts")
+
+
+class SocialNetwork(models.Model):
+    name = models.CharField(_("name"), max_length=50, blank=False)
+    url = models.CharField(_("url"), max_length=50, blank=False)
+    icon = models.CharField(_("icon"), max_length=50, blank=False)
+    custom = models.BooleanField(_("custom icon"), default=False)
+
+    def __str__(self):
+        return "{}".format(self.name)
+
+    class Meta:
+        verbose_name = _("social network")
+        verbose_name_plural = _("social networks")

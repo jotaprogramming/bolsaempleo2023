@@ -8,9 +8,9 @@
 {% endblock title %}
 
 {% block contentfluid %}
-<section class="my-1 position-relative">
+<section class="layout-section">
   {% include 'partials/_aside.html' %}
-  <div class="p-5" style="margin-left: 300px">
+  <div class="main-section">
     <div class="card p-3">
       <div class="card-body">
         <form action="" method="POST" id="form">
@@ -123,5 +123,8 @@
     </div>
   </div>
 </section>
+{% comment %} <article class="footer position-relative" style="z-index: 2;">
+  {% include 'partials/_footer.html' %}
+</article>  {% endcomment %}
 
 {% endblock contentfluid %}

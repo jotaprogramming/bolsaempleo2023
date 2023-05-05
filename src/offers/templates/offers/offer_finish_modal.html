@@ -1,0 +1,50 @@
+{% load static %}
+
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <form method="POST" action="{% url 'offers_app:offer_finish' object.slug %}?status=true" id="form">
+      <div class="modal-header">
+        <h5 class="modal-title">Finalizar</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+        <h6>
+          La siguiente oferta se deshabilitará permanentemente:
+        </h6>
+        <div class="row mb-2 text-secondary">
+          <small class="m-0 col-12">
+            {{object.title}}
+          </small>
+          <small class="m-0 col-12">
+            Creada el {{object.created_at}}
+          </small>
+          {% if object.updated_at %}
+          <small class="m-0 col-12">
+            <strong>Y actualizada el </strong>
+            {{object.updated_at}}
+          </small>
+          {% endif %}
+        </div>
+        <div class="alert alert-warning" role="alert">
+          ¿Está seguro que desea continuar?
+          <br>
+          Una vez finalizada ya no podrás habilitarla
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary">
+          Continuar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

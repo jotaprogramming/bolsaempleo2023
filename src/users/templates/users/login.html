@@ -1,4 +1,6 @@
-{% extends 'core/base.html' %} {% load static %} {% block title %}
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}
 <title>{{app_title}} | {{title_view}}</title>
 {% endblock title %}
 
@@ -14,10 +16,15 @@
           <p class="right_content__title m-0 text-uppercase">
             {{description_view}}
           </p>
-          <p class="right_content__subtitle m-0 ">Digite sus Credenciales</p>
+          <p class="right_content__subtitle m-0">Digite sus Credenciales</p>
         </div>
         <div class="rigth_content right_content__body">
-          <p class="m-0 right_content__reminder">Recuerde que puede usar tanto su correo electrónico como su usuario</p>
+          {% comment %}
+          <p class="m-0 right_content__reminder">
+            Si no ha logrado ingresar, comuníquese con nuestro equipo de soporte
+            o intente recuperar la contraseña
+          </p>
+          {% endcomment %}
           <form action="" method="post" id="form">
             {% csrf_token %}
             <div class="set-input">
@@ -30,13 +37,28 @@
               <span class="input-placeholder">Contraseña</span>
               <span class="input-icon"><i class="lni lni-lock"></i></span>
             </div>
-            <a class="text-dark" href="{% url 'users_app:credentials_recover' %}">Recuperar Usuario o Contraseña</a>
-            <button class="normal_btn" type="submit" id="btn_save">{{title_view}}</button>
+            <small class="text-muted mt-2">
+              <a
+                class="text-dark"
+                href="{% url 'users_app:credentials_recover' %}"
+                >Recuperar Usuario o Contraseña</a
+              >
+            </small>
+            <button class="normal_btn" type="submit" id="btn_save">
+              {{title_view}}
+            </button>
           </form>
         </div>
         <div class="rigth_content right_content__footer text-center">
-          <span class="rigth_content__link--footer">Si aun no tiene Usuario y Contraseña <br>registrese
-            <b><a class="text-dark fw-bold" href="{% url 'users_app:register_choices' %}">AQUI</a></b>
+          <span class="rigth_content__link--footer"
+            >Si aún no tiene un usuario y contraseña, <br />regístrese
+            <b
+              ><a
+                class="text-dark fw-bold"
+                href="{% url 'users_app:register_choices' %}"
+                >AQUÍ</a
+              ></b
+            >
           </span>
         </div>
       </div>

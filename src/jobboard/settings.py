@@ -68,6 +68,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    # CUSTOMS
+    'core.middlewares.UserWithoutPermissions',
 ]
 
 ROOT_URLCONF = "jobboard.urls"
@@ -90,7 +92,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "jobboard.wsgi.application"
 
-# DB_OPT = env("DB_OPT")
+DB_OPT = env("DB_OPT")
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -102,12 +104,14 @@ DATABASES = {
     # ImproperlyConfigured exception if not found
     #
     # The db() method is an alias for db_url().
-    "default": env.db("DATABASE_URL"),
+    "default": env.db("POSTGRES_URL" if DB_OPT == "docker" else "DATABASE_URL"),
     "settings": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "settings.sqlite3",
     },
 }
+
+# DATABASE_ROUTERS = ('config.dbrouters.AdjustmentRouter',)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

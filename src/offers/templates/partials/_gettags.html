@@ -1,0 +1,9 @@
+{% if object.get_tags %}
+<span class="d-flex text-black-50 tag-group" style="height: 2rem">
+  {% for tag in object.get_tags|slice:":5" %}
+  <div class="single__tag single__tag--yellow">
+    <p class="tag text-lowercase m-0">{{ tag }}</p>
+  </div>
+  {% endfor %}
+</span>
+{% endif %}

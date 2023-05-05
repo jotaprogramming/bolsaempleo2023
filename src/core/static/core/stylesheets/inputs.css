@@ -1,118 +1,207 @@
-.input-icon{
-    position: absolute;
+.input-icon {
+    /* position: absolute; */
     font-size: 18px;
-    bottom: 0;
-    top: 0;
+    /* bottom: 0; */
+    /* top: 0; */
     display: flex;
     align-items: center;
     justify-content: center;
-    border-right: 1px solid #d7d7d7;
+    border: 1px solid #d7d7d7;
+    border-right: transparent;
+    border-radius: 10px 0 0 10px;
     padding: 0 10px;
+    order: 0;
+    min-width: 40px;
+    /* overflow: hidden; */
 }
-.input-placeholder{
+
+.input-icon .single-input {
+    border-radius: 10px 0 0 10px !important;
+    border-right: none !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.input-icon .single-input::-ms-expand {
+    display: none;
+}
+
+.input-placeholder {
     position: absolute;
-    padding-left: 50px;
-    bottom: 0;
-    top: 0;
+    margin-left: 50px;
+    /* bottom: 0; */
+    top: .5rem;
     display: flex;
     align-items: center;
     pointer-events: none;
     color: #6F6F6F;
-    transition: 0.5s;
+    /* background-color: #fff; */
+    transition: 300ms;
     font-size: 16px;
+    max-width: calc(100% - 60px);
+    white-space:nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
-.set-input{
+
+.set-input {
+    display: flex;
     width: 100%;
     height: 40px;
     position: relative;
     display: flex;
-    border-radius: 10px; 
+    border-radius: 10px;
 }
-.single-input{
+
+.single-input {
+    order: 1;
     width: 100%;
     height: 100%;
-    border-radius: 10px;
+    border-radius: 0 10px 10px 0;
     outline: 0 none;
     border: 1px solid #d7d7d7;
     pointer-events: all;
-    transition: 0.5s;
-    padding-left: 50px;
+    transition: 300ms;
+    padding: 0 .5rem;
+    font-size: 1rem;
 }
-/* .pdl-0{
-    padding-left: 16px;
-} */
-            /* ASSETS TO INPUTS */
-.set-input .single-input:valid ~ .input-placeholder,
-.set-input .single-input:focus ~ .input-placeholder{
+
+.single-input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 50px white inset !important;
+    /* Change the color to your own background color */
+    background-color: white;
+    /* -webkit-text-fill-color: #999; */
+}
+
+.single-input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 50px white inset !important;
+    /* Change the color to your own background color */
+    background-color: white;
+    /* -webkit-text-fill-color: #999; */
+}
+
+.single-input:-webkit-autofill:hover,
+.single-input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0 50px white inset !important;
+    background-color: white;
+    /* -webkit-text-fill-color: #999; */
+}
+
+/* ASSETS TO INPUTS */
+.single-input:-webkit-autofill~.input-placeholder,
+.set-input .single-input:valid~.input-placeholder,
+.set-input .single-input:focus~.input-placeholder {
     color: var(--orange);
     padding: 0 10px;
-    background-color:#fff;
+    background-color: #fff;
     font-size: 12px;
-    transform: translateX(50px) translateY(-10px);
+    transform: translateX(0) translateY(-1rem);
     letter-spacing: 1px;
-    border-left:1px solid var(--orange);
-    border-right:1px solid var(--orange);
+    border-left: 1px solid var(--orange);
+    border-right: 1px solid var(--orange);
     height: 20px;
 }
-.set-input .single-input__modify:valid ~ .input-placeholder,
-.set-input .single-input__modify:focus ~ .input-placeholder{
+
+.set-input select.single-input {
+    background-color: white;
+}
+
+.set-input select.single-input:invalid {
+    color: transparent;
+}
+
+.set-input select.single-input:focus {
+    color: var(--black);
+}
+
+.set-input .single-input__modify:valid~.input-placeholder,
+.set-input .single-input__modify:focus~.input-placeholder {
     color: var(--orange);
     padding: 0 -15px;
-    background-color:#fff;
+    background-color: #fff;
     font-size: 12px;
-    transform: translateX(10px) translateY(-10px);
+    transform: translateX(0px1) translateY(-1rem);
     letter-spacing: 1px;
-    border-left:1px solid var(--orange);
-    border-right:1px solid var(--orange);
+    border-left: 1px solid var(--orange);
+    border-right: 1px solid var(--orange);
     height: 1rem;
 }
 
-
+.single-input:-webkit-autofill,
 .set-input .single-input:valid,
 .set-input .single-input:focus,
-.form-control:valid{
+/* .form-control:valid{
      border: 1px solid var(--orange);
-}
-.set-input .single-input:valid ~ .input-icon,
-.set-input .single-input:focus ~ .input-icon{
+} */
+.set-input .single-input:valid~.input-icon,
+.set-input .single-input:focus~.input-icon {
     color: var(--orange);
     border-right: 1px solid var(--orange);
 }
 
-.input_title__publish{
+.input_title__publish {
     max-width: 500px;
 }
-.input_salary__publish{
+
+.input_salary__publish {
     max-width: 170px;
 }
-.input_cant__publish{
+
+.input_cant__publish {
     max-width: 117px;
 }
-.input_description__publish{
+
+.input_description__publish {
     max-width: 100%;
 }
-.input_search__publish{
+
+.input_search__publish {
     max-width: 300px;
 }
-.input_date__publish{
+
+.input_date__publish {
     max-width: 300px;
 }
-.input_coin__publish{
+
+.input_coin__publish {
     max-width: 117px;
 }
+
 .input_modality__publish,
-.input_place__publish{
+.input_place__publish {
     max-width: 200px;
 }
-.input_typeof__publish{
+
+.input_typeof__publish {
     max-width: 370px;
 }
+
 .set-input__create input,
-.set-input__create span{
+.set-input__create span {
     padding-left: 1rem;
 }
 
-.set-input__create--date span{
+.set-input__create--date span {
     padding-left: 130px;
     color: #c4c0c0;
+}
+
+.form-search {
+    position: relative;
+    overflow-x: hidden;
+}
+
+.sliding-input {
+    transform: translateX(-120%);
+    transition: transform .3s ease-in;
+}
+
+.slider-search{
+    position: absolute;
+    width: 42px;
+    height: 42px;
+}
+
+#sliderSearch:checked~.sliding-input {
+    transform: translateX(0);
 }

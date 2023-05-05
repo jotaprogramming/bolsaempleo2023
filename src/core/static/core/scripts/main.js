@@ -52,13 +52,13 @@ if (goToSimilarOffers) {
     const similarOffers = document.getElementById("similarOffers");
     const childList = similarOffers.childNodes;
     childList.forEach((element) => {
-      if (element.nodeName.toLowerCase() == 'div') {
+      if (element.nodeName.toLowerCase() == "div") {
         element.classList.add("click-effect");
         setTimeout(function () {
           element.classList.remove("click-effect");
         }, 1000);
       }
-    })
+    });
   });
 }
 
@@ -122,4 +122,33 @@ if (slider && sliderSection) {
   setInterval(() => {
     Next();
   }, 4000);
+}
+
+function setPopUpAlert(type = "danger", msg = "Error") {
+  const div = document.createElement("div");
+  const template = `
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			${msg}
+			`;
+  div.classList.add(
+    "alert",
+    `alert-${type}`,
+    "alert-dismissible",
+    "fade",
+    "show"
+  );
+  div.setAttribute("id", "alert");
+  div.setAttribute("role", "alert");
+  div.innerHTML = template;
+  popupAlert.appendChild(div);
+}
+
+function setAlertDelay(idElement = "alert", delay = 1000) {
+  const vAlert = document.getElementById(idElement);
+  if (vAlert) {
+    setTimeout(() => {
+      const alert = bootstrap.Alert.getOrCreateInstance(`#${idElement}`);
+      alert.close();
+    }, delay);
+  }
 }

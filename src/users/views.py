@@ -872,7 +872,7 @@ class UserLogin(UserLoggedMixin, generic.FormView):
 
     def form_valid(self, form):
         username = form.cleaned_data["username"]
-        password = form.cleaned_data["password"]    
+        password = form.cleaned_data["password"]
         user = authenticate(
             username=username,
             password=password,
@@ -1062,9 +1062,7 @@ class UserProfileEdit(LoginRequiredMixin, generic.UpdateView):
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
         return HttpResponseRedirect(
-            reverse_lazy(
-                "users_app:userprofile_edit", args=[slug]
-            )
+            reverse_lazy("users_app:userprofile_edit", args=[slug])
         )
 
 

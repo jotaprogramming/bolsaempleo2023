@@ -18,10 +18,7 @@ def get_url_names():
             urls = getattr(importlib.import_module(mod_to_import), "urlpatterns")
             # urls = importlib.import_module(mod_to_import)
             # pprint(urls)
-            list_of_all_urls.append({
-                "app": app.name,
-                "urls": urls
-            })
+            list_of_all_urls.append({"app": app.name, "urls": urls})
         except ImportError as ex:
             # is an app without urls
             pass

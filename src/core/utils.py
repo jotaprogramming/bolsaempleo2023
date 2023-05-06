@@ -137,7 +137,7 @@ def set_data_status(data=[], status="204"):
 def verify_dispatch(urlpatterns):
     """
     This function verifies if a given URL pattern in a Django app requires authentication.
-    
+
     :param urlpatterns: The `urlpatterns` parameter is expected to be a string representing a URL
     pattern in the format `app_name:url_name`. For example, `myapp:home` would represent the URL pattern
     for the `home` view in the `myapp` Django application

@@ -11,7 +11,7 @@ from unicodedata import normalize
 def format_diacritics(text):
     """
     The function removes diacritics from a given text string in Python.
-    
+
     :param text: a string of text that may contain diacritics (accent marks, etc.)
     :return: The function `format_diacritics` returns a string with diacritics (accent marks) normalized
     to their base characters.

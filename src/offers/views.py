@@ -275,8 +275,7 @@ class BiddingPanel(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         search = self.request.GET.get("search", "true")
         return self.model.objects.search(text=search, order="-created_at").filter(
-            deleted_at=None,
-            status=False
+            deleted_at=None, status=False
         )
 
     def get_context_data(self, **kwargs):
@@ -315,7 +314,8 @@ class PublicationList(LoginRequiredMixin, generic.ListView):
             .filter(Q(title__icontains=p_search) | Q(title__icontains=p_search))
             .annotate(
                 active_candidates=Count(
-                    F("candidature_offer"), filter=~Q(candidature_offer__status=["1", "4"])
+                    F("candidature_offer"),
+                    filter=~Q(candidature_offer__status=["1", "4"]),
                 ),
                 cancelled_candidates=Count(
                     F("candidature_offer"), filter=~Q(candidature_offer__status=["2"])
@@ -328,7 +328,7 @@ class PublicationList(LoginRequiredMixin, generic.ListView):
                 ),
                 completed_candidates=Count(
                     F("candidature_offer"), filter=~Q(candidature_offer__status=["5"])
-                )
+                ),
             )
             .order_by("-deleted_at", "title")
         )
@@ -336,7 +336,7 @@ class PublicationList(LoginRequiredMixin, generic.ListView):
             if "!" in p_status:
                 status = p_status.replace("!", "")
                 validate = status in [item[0] for item in OFFER_STATUS]
-                if status == '3' or validate:
+                if status == "3" or validate:
                     if status == "1":
                         objects = objects.exclude(deleted_at=None).exclude(status=False)
                     elif status == "2":
@@ -345,7 +345,7 @@ class PublicationList(LoginRequiredMixin, generic.ListView):
                         objects = objects.filter(deleted_at=None)
             else:
                 validate = p_status in [item[0] for item in OFFER_STATUS]
-                if p_status == '3' or validate:
+                if p_status == "3" or validate:
                     if p_status == "1":
                         objects = objects.filter(deleted_at=None).filter(status=False)
                     elif p_status == "2":

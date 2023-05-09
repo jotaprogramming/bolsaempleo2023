@@ -274,7 +274,8 @@ class BiddingPanel(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         search = self.request.GET.get("search", "true")
-        return self.model.objects.search(text=search, order="-created_at").filter(
+        order = self.request.GET.get("order", "-created_at")
+        return self.model.objects.search(text=search, order=order).filter(
             deleted_at=None, status=False
         )
 

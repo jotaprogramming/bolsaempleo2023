@@ -11,50 +11,72 @@
   {% include 'partials/_aside.html' %}
   <div class="main-section">
     <div class="container">
-      {% if object_list %}
-        {% for object in object_list %}
-        <div class="card p-4 rounded-4 mb-4 bid-letter position-relative">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-12 d-flex justify-content-between mb-1">
-                <div>
-                  <h4 class="fs-5 fw-bold m-0">{{ object.title }}</h4>
+      <div class="col-12 mb-3">
+        <div class="row mb-3">
+          <form class="col-md-3" method="GET">
+            {% include 'partials/_search_input.html' %}
+          </form>
+          <small class="d-flex gap-3 align-items-center col-md-4">
+            <a class="{% if request.GET.order == 'title' or request.GET.order == '-title' %}link-orange{% else %}link-dark{% endif %}" href="?search={{ request.GET.search }}&order={% if request.GET.order == 'title' %}-{% endif %}title">
+              <i class="lni {% if request.GET.order == '-title' %}lni-sort-amount-dsc{% else %}lni-sort-amount-asc{% endif %}"></i> Título
+            </a>
+            <a class="{% if request.GET.order == 'salary' or request.GET.order == '-salary' %}link-orange{% else %}link-dark{% endif %}" href="?search={{ request.GET.search }}&order={% if request.GET.order == 'salary' %}-{% endif %}salary">
+              <i class="lni {% if request.GET.order == '-salary' %}lni-sort-amount-dsc{% else %}lni-sort-amount-asc{% endif %}"></i> Salario
+              
+            </a>
+          </small>
+        </div>
+        {% if object_list %}
+          {% for object in object_list %}
+          <div class="card p-3 rounded-3 mb-4 bid-letter position-relative">  
+            <div class="card-body">
+              <div class="row">
+                <div class="col-12 d-flex justify-content-between">
+                  <div>
+                    <h4 class="fs-5 fw-bold m-0">{{ object.title }}</h4>
+                  </div>
+                  <div class="d-flex gap-3">
+                    {% include 'partials/_gettags.html' %}
+                  </div>
                 </div>
-                <div class="d-flex gap-3">
-                  {% include 'partials/_gettags.html' %}
+                <div class="col-12 d-flex gap-5 mt-4">
+                  <div class="d-flex gap-1 align-items-center">
+                    {% include 'partials/icon_element/_build_icon.html' %}
+                    <span class="text-muted">{{object.user.userprofile.company_profile.name}}</span>
+                  </div>
+                  <div class="d-flex gap-1 align-items-center">
+                    {% include 'partials/icon_element/_location_icon.html' %}
+                    <span class="text-muted">{{object.city.name}}</span>
+                  </div>
+                  <div class="d-flex gap-1 align-items-center">
+                    {% include 'partials/icon_element/_suitcase_icon.html' %}
+                    <span class="text-muted">{{object.conttype}}</span>
+                  </div>
+                  <div class="d-flex gap-1 align-items-center">
+                    {% include 'partials/icon_element/_time_icon.html' %}
+                    <span class="text-muted">{{object.workday}}</span>
+                  </div>
                 </div>
               </div>
-              <div class="col-12 d-flex gap-3 mb-4">
-                <div class="d-flex gap-1 align-items-center">
-                  {% include 'partials/icon_element/_build_icon.html' %}
-                  <span class="text-muted">{{object.user.userprofile.company_profile.name}}</span>
-                </div>
-                <div class="d-flex gap-1 align-items-center">
-                  {% include 'partials/icon_element/_suitcase_icon.html' %}
-                  <span class="text-muted">{{object.conttype}}</span>
-                </div>
-                <div class="d-flex gap-1 align-items-center">
-                  {% include 'partials/icon_element/_time_icon.html' %}
-                  <span class="text-muted">{{object.workday}}</span>
-                </div>
+              <hr>
+   
+              <p class="text-truncate" style="max-height: 6rem;">{{ object.description }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <p class="m-0">Salario estimado: <strong>{{ object.currency }} {{ object.salary|currency_format }} {{ object.payperiod }}</strong></p>
+                <a href="{% url 'offers_app:offer_detail' object.slug %}" class="stretched-link" role="button">
+                  {% comment %} btn btn-primary rounded-pill px-4  {% endcomment %}
+                  {% comment %} {% if usergroups or request.user.is_staff %}
+                  Visualizar
+                  {% else %}
+                  Aplicar
+                  {% endif %} {% endcomment %}
+                </a>
               </div>
-            </div>
-  
-            <p>{{ object.description }}</p>
-            <div class="d-flex justify-content-between align-items-center">
-              <p class="m-0">Salario estimado: <strong>{{ object.currency }} {{ object.salary|currency_format }} {{ object.payperiod }}</strong></p>
-              <a href="{% url 'offers_app:offer_detail' object.slug %}" class="btn btn-primary rounded-pill px-4 stretched-link" role="button">
-                {% if usergroups or request.user.is_staff %}
-                Visualizar
-                {% else %}
-                Aplicar
-                {% endif %}
-              </a>
             </div>
           </div>
-        </div>
-        {% endfor %}
-      {% else %}
+          {% endfor %}
+        {% else %}
+      </div>
       Sin registros
       {% endif %}
     </div>

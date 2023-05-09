@@ -853,7 +853,7 @@ class UserLogin(UserLoggedMixin, generic.FormView):
         if user.is_staff:
             return reverse_lazy("users_app:user_list")
         else:
-            return reverse_lazy("home_app:home_page")
+            return reverse_lazy("offers_app:bidding_panel")
 
     def get_context_data(self, **kwargs):
         context = super(UserLogin, self).get_context_data(**kwargs)

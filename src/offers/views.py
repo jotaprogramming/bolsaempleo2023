@@ -316,19 +316,19 @@ class PublicationList(LoginRequiredMixin, generic.ListView):
             .annotate(
                 active_candidates=Count(
                     F("candidature_offer"),
-                    filter=~Q(candidature_offer__status=["1", "4"]),
+                    filter=Q(candidature_offer__status__in=["1", "4"]),
                 ),
                 cancelled_candidates=Count(
-                    F("candidature_offer"), filter=~Q(candidature_offer__status=["2"])
+                    F("candidature_offer"), filter=Q(candidature_offer__status__in=["2"])
                 ),
                 rejected_candidates=Count(
-                    F("candidature_offer"), filter=~Q(candidature_offer__status=["2"])
+                    F("candidature_offer"), filter=Q(candidature_offer__status__in=["3"])
                 ),
                 accepted_candidates=Count(
-                    F("candidature_offer"), filter=~Q(candidature_offer__status=["4"])
+                    F("candidature_offer"), filter=Q(candidature_offer__status__in=["4"])
                 ),
                 completed_candidates=Count(
-                    F("candidature_offer"), filter=~Q(candidature_offer__status=["5"])
+                    F("candidature_offer"), filter=Q(candidature_offer__status__in=["5"])
                 ),
             )
             .order_by("-deleted_at", "title")
@@ -381,7 +381,11 @@ class PublicationCreate(LoginRequiredMixin, generic.CreateView):
     form_class = OfferForm
     template_name = "publications/publication_create.html"
 
+    tags = []
+
     def get_success_url(self):
+        self.object.tags.set(self.tags)
+        # self.object.save(update_fields=["tags"])
         success_message(self.request)
         return reverse_lazy("offers_app:bidding_panel")
 
@@ -392,9 +396,22 @@ class PublicationCreate(LoginRequiredMixin, generic.CreateView):
         context["description_view"] = offer_desc
         context["in_mypublications"] = True
         context["in_mypublications_add"] = True
+        context["tag_datalist"] = Tags.objects.all()
         return context
 
     def form_valid(self, form):
+        form_tags = form.cleaned_data["tags"]
+        tag_list = form_tags.split(",")
+
+        # temp_list = []
+        for tag in tag_list:
+            try:
+                objtag = Tags.objects.get(name__icontains=tag)
+                self.tags.append(objtag)
+            except:
+                pass
+
+        # form.cleaned_data["tags"] = temp_list
         form.instance.title = str(form.instance.title).upper()
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -437,6 +454,7 @@ class PublicationEdit(LoginRequiredMixin, generic.UpdateView):
         context["description_view"] = offer_desc
         context["in_mypublications"] = True
         context["in_mypublications_edit"] = True
+        context["tag_datalist"] = Tags.objects.all()
         return context
 
     def form_valid(self, form):
@@ -492,7 +510,7 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
                 Q(candidate__first_name__icontains=p_search)
                 | Q(candidate__last_name__icontains=p_search)
             )
-            .exclude(status__in=["2"])
+            # .exclude(status__in=["2"])
             .order_by("-updated_at")
         )
 
@@ -518,9 +536,7 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
         context["title_view"] = (
             objects.first().offer.title.capitalize()
             if count
-            else self.model.objects.filter(offer__id=str_pk)
-            .first()
-            .offer.title.capitalize()
+            else Offers.objects.filter(id=str_pk).first().title.capitalize()
         )
         if count == 1:
             desc = "Un candidato ha aplicado a esta oferta"
@@ -530,8 +546,7 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
             desc = "Sin candidatos"
         context["description_view"] = desc
         context["mycandidacies"] = True
-        statuses = POST_STATUS[:1] + POST_STATUS[2:]
-        context["statuses"] = statuses
+        context["statuses"] = POST_STATUS
         context["pstatus"] = p_status
         context["search"] = p_search
 

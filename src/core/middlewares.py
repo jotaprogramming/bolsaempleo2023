@@ -25,12 +25,12 @@ class UserWithoutPermissions:
         response = self.get_response(request)
 
         url_resolve = resolve(request.path_info)
-        if url_resolve.url_name:
-            urlpatterns = f"{url_resolve.app_names[0]}:{url_resolve.url_name}"
-            dispatch = verify_dispatch(urlpatterns)
-
-            if dispatch and not request.user.is_staff:
-                try:
+        
+        if not request.user.is_staff and url_resolve.url_name:
+            try:
+                urlpatterns = f"{url_resolve.app_names[0]}:{url_resolve.url_name}"
+                dispatch = verify_dispatch(urlpatterns)
+                if dispatch:
                     rules = request.user.rule_user.all()
                     usergroups = [rule.usergroup for rule in rules]
                     roles = [rule.role for rule in rules]
@@ -46,7 +46,6 @@ class UserWithoutPermissions:
                             # policy_restrictions.append(policy.restriction.all())
                             # policy_apps.append(policy.app.all())
                             result = policy.app.all().filter(name=urlpatterns)
-                            
 
                             # if result.count():
                             #     return response
@@ -56,12 +55,16 @@ class UserWithoutPermissions:
                             #         app.route,
                             #     )
 
+                    username = url_resolve.kwargs["username"]
+                    if result and username and not username == request.user.username:
+                        result = 0
+
                     if not result:
                         return HttpResponseRedirect(
                             reverse_lazy("home_app:home_page")
                         )
 
-                except Exception as ex:
-                    print(f"Error: {ex}")
+            except Exception as ex:
+                print(f"Error: {ex}")
 
         return response

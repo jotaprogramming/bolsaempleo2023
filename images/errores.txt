@@ -1,0 +1,1 @@
+error_middleware: se resolvió con un trycatch que impide ingresar al módulo de Admin en caso de no ser staff

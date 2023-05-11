@@ -86,16 +86,16 @@ class OfferDetail(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(OfferDetail, self).get_context_data(**kwargs)
-        obj = self.get_object()
+        offer = self.get_object()
         offers_cache = (
-            Offers.objects.exclude(id=obj.id)
+            Offers.objects.exclude(id=offer.id)
             .filter(
                 deleted_at=None,
             )
             .order_by("-created_at", "updated_at")
         )
 
-        offers = offers_cache.filter(Q(tags__in=obj.get_tags()))
+        offers = offers_cache.filter(Q(tags__in=offer.get_tags()))
 
         if not offers:
             offers = offers_cache.filter(deleted_at=None)
@@ -105,17 +105,31 @@ class OfferDetail(LoginRequiredMixin, generic.DetailView):
         user = self.request.user
 
         candidatures = Candidatures.objects.filter(
-            offer=obj.id, deleted_at=None
+            offer=offer.id, deleted_at=None
         ).exclude(status="2")
 
-        usergroups = UserRules.objects.filter(
-            user=user, usergroup__code__icontains="COM"
+        allowed_to_apply = UserRules.objects.filter(user=user, usergroup__code="GRA")
+        print("🐍 File: offers/views.py | Line: 112 | get_context_data ~ allowed_to_apply",allowed_to_apply)
+        allowed_to_edit = UserRules.objects.filter(
+            user=user,
+            user__offer_user=offer.id,
+            usergroup__usergroup_policy__app__name="offers_app:offer_edit",
         )
+        allowed_to_candidates = UserRules.objects.filter(
+            Q(
+                user=user,
+                usergroup__code="MOD",
+                usergroup__usergroup_policy__app__name="offers_app:candidature_list",
+            )
+            | Q(user=user, usergroup__code="COM", user__offer_user=offer.id),
+        )
+        # company = UserRules.objects.filter(user__offer_user=self.get_object(), usergroup__code__icontains="COM")
 
         candidature = candidatures.filter(candidate=user)
 
-        context["usergroups"] = usergroups
-        context["allowed"] = self.get_object().user == user
+        context["allowed_to_apply"] = allowed_to_apply
+        context["allowed_to_edit"] = allowed_to_edit
+        context["allowed_to_candidates"] = allowed_to_candidates
         context["similar_offers"] = offers
         context["candidature"] = candidature and candidature.first()
         context["candidatures"] = candidatures
@@ -319,16 +333,20 @@ class PublicationList(LoginRequiredMixin, generic.ListView):
                     filter=Q(candidature_offer__status__in=["1", "4"]),
                 ),
                 cancelled_candidates=Count(
-                    F("candidature_offer"), filter=Q(candidature_offer__status__in=["2"])
+                    F("candidature_offer"),
+                    filter=Q(candidature_offer__status__in=["2"]),
                 ),
                 rejected_candidates=Count(
-                    F("candidature_offer"), filter=Q(candidature_offer__status__in=["3"])
+                    F("candidature_offer"),
+                    filter=Q(candidature_offer__status__in=["3"]),
                 ),
                 accepted_candidates=Count(
-                    F("candidature_offer"), filter=Q(candidature_offer__status__in=["4"])
+                    F("candidature_offer"),
+                    filter=Q(candidature_offer__status__in=["4"]),
                 ),
                 completed_candidates=Count(
-                    F("candidature_offer"), filter=Q(candidature_offer__status__in=["5"])
+                    F("candidature_offer"),
+                    filter=Q(candidature_offer__status__in=["5"]),
                 ),
             )
             .order_by("-deleted_at", "title")
@@ -505,8 +523,7 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
 
         str_pk = get_pk_from_a_slug(self)
         obj = (
-            self.model.objects.filter(offer__id=str_pk)
-            .filter(
+            self.model.objects.filter(offer__id=str_pk).filter(
                 Q(candidate__first_name__icontains=p_search)
                 | Q(candidate__last_name__icontains=p_search)
             )

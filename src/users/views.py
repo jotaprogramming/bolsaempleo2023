@@ -323,7 +323,6 @@ class AppList(LoginRequiredMixin, generic.ListView):
             f_objects = objects.filter(
                 name__exact=url["name"], route__exact=url["route"]
             )
-            pprint(url)
             if not f_objects:
                 name_cache = objects.filter(name__exact=url["name"])
                 if name_cache:
@@ -759,8 +758,8 @@ class UserCreate(LoginRequiredMixin, generic.FormView):
         is_superuser = form.cleaned_data["is_superuser"]
         is_staff = form.cleaned_data["is_staff"]
         is_active = form.cleaned_data["is_active"]
-        usergroup = form.cleaned_data["usergroup"]
-        role = form.cleaned_data["role"]
+        # usergroup = form.cleaned_data["usergroup"]
+        # role = form.cleaned_data["role"]
         user = User.objects.create_user(
             username=username,
             email=email,
@@ -769,7 +768,7 @@ class UserCreate(LoginRequiredMixin, generic.FormView):
             is_staff=is_staff,
             is_active=is_active,
         )
-        UserRules.objects.create(user=user, usergroup=usergroup, role=role)
+        # UserRules.objects.create(user=user, usergroup=usergroup, role=role)
         return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
@@ -850,10 +849,16 @@ class UserLogin(UserLoggedMixin, generic.FormView):
 
     def get_success_url(self):
         user = self.request.user
-        if user.is_staff:
+        comgra = user.rule_user.filter(usergroup__code__in=['COM', 'GRA'])
+        admmod = user.rule_user.filter(usergroup__code__in=['MOD']).filter(role__code__in=["ADM"])
+        memmod = user.rule_user.filter(usergroup__code__in=['MOD']).filter(role__code__in=["MEM"])
+        if user.is_staff or admmod:
             return reverse_lazy("users_app:user_list")
-        else:
+        if comgra:
             return reverse_lazy("offers_app:bidding_panel")
+        if memmod:
+            return reverse_lazy("users_app:user_list")
+        return reverse_lazy("home_app:home_page")
 
     def get_context_data(self, **kwargs):
         context = super(UserLogin, self).get_context_data(**kwargs)
@@ -1180,7 +1185,6 @@ class RegisterStudentView(UserLoggedMixin, generic.FormView):
             cod_name = format_diacritics(cod_name)
             last_id = User.objects.filter(username__icontains=cod_name).order_by("-id")
             user_id = int(last_id[0].id) if last_id.count() > 0 else 0
-            print("🐍 File: users/views.py | Line: 1198 | form_valid ~ user_id", user_id)
             username = f"{cod_name}{user_id + 1}".lower()
 
             usergroup = UserGroups.objects.get(code__icontains="GRA")

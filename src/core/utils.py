@@ -167,3 +167,34 @@ def verify_dispatch(urlpatterns):
         pass
 
     return False
+
+
+def validate_urlpattern(request, urlpatterns):
+    """
+    This function validates a URL pattern based on user rules, user groups, roles, and policies.
+
+    :param request: The request object contains information about the current HTTP request, such as the
+    user making the request, the HTTP method used, and any data submitted in the request
+    :param urlpatterns: The `urlpatterns` parameter is a string representing a URL pattern that needs to
+    be validated
+    :return: the result of filtering policies based on whether the app name contains the provided URL
+    pattern. The result is an integer value, which is not very informative on its own. It seems like the
+    function is intended to check if the user has permission to access a certain URL pattern based on
+    their assigned rules, user groups, roles, and policies. However, without more context on the data
+    models
+    """
+    rules = request.user.rule_user.all()
+    usergroups = [rule.usergroup for rule in rules]
+    roles = [rule.role for rule in rules]
+    policies = [usergroup.usergroup_policy.all() for usergroup in usergroups]
+
+    result = 0
+    permissions = []
+    for qs in policies:
+        for policy in qs:
+            result = policy.app.filter(name__icontains=urlpatterns.strip())
+            # apps = policy.app.all()
+            # for app in apps:
+            #     print(f"{urlpatterns} == {app.name} = {urlpatterns == app.name}")
+
+    return result

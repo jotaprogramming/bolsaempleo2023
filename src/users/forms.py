@@ -15,6 +15,12 @@ from config.models import *
 from users.models import *
 from users.utils import *
 
+doctype_default = None
+try:
+    doctype_default = DocumentType.objects.get(acronym__icontains="CC")
+except:
+    pass
+
 
 class UserGroupForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -667,7 +673,7 @@ class RegisterCompanyForm(RegisterForm):
                 "style": "width: 40px !important; height: 40px !important; padding: .375rem 7px !important;",
             },
         ),
-        initial=DocumentType.objects.get(acronym__icontains="CC"),
+        initial=doctype_default,
     )
     rep_id = forms.CharField(
         max_length=15,
@@ -703,7 +709,7 @@ class RegisterCompanyForm(RegisterForm):
                 "style": "width: 40px !important; height: 40px !important; padding: .375rem 7px !important;",
             }
         ),
-        initial=DocumentType.objects.get(acronym__icontains="CC"),
+        initial=doctype_default,
     )
     humres_id = forms.CharField(
         max_length=15,
@@ -738,7 +744,7 @@ class RegisterStudentForm(RegisterForm):
                 "class": "single-input",
             }
         ),
-        initial=DocumentType.objects.get(acronym__icontains="CC"),
+        initial=doctype_default,
     )
     id_number = forms.CharField(
         label=_("Número de identidad"),

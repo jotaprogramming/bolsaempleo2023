@@ -11,7 +11,7 @@
     <div class="container">
       <div class="row justify-content-start gap-3">
         <h3 class="col-12">Perfil</h3>
-        <div class="row gap-4 {% if object.userprofile.company_profile %}col-md-6{% else %}col-8{% endif %}">
+        <div class="row gap-4 {% if object.userprofile.company_profile or object.userprofile.user_cv %}col-md-6{% else %}col-md-8{% endif %}">
           <div class="card col-12">
             <div class="card-body d-flex flex-row justify-content-between align-items-center flex-wrap gap-3">
               <div class="d-flex gap-4 justify-content-between align-items-center flex-wrap">
@@ -31,12 +31,12 @@
                     Superusuario
                     {% elif object.is_staff %}
                     Staff
-                    {% elif cv %}
-                    {{ cv.specialization }}
+                    {% elif object.userprofile.user_cv.specialization %}
+                    {{ object.userprofile.user_cv.specialization.name }}
                     {% else %}
-                    {% for rule in object.rule_user.all %}
-                    {{ rule.usergroup.group_name }}
-                    {% endfor %}
+                      {% for rule in object.rule_user.all %}
+                      {{ rule.usergroup.group_name }}
+                      {% endfor %}
                     {% endif %}
                     {% comment %} {% for rule in rules %}
                     {{ rule.usergroup.group_name }}
@@ -149,17 +149,15 @@
                   </a>
                 </div>
                 {% endif %}
-                {% if cv %}
-                <hr class="mt-3">
-                {% include 'partials/_cv.html' %}
-                {% endif %}
               </div>
             </div>
           </div>
         </div>
         {% if object.userprofile.company_profile %}
-        {% include 'partials/_company_profile.html' %}
+          {% include 'partials/_company_profile.html' %}
         {% endif %}
+
+        {% include 'partials/_cv_profile.html' %}
       </div>
     </div>
   </div>

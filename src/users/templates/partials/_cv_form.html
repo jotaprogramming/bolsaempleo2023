@@ -1,0 +1,376 @@
+{% load static %}
+<div class="row justify-content-start gap-3">
+  <h3 class="col-12">Hoja de vida</h3>
+  <div class="row gap-4 col-md-6">
+    <div class="card col-12">
+      <div class="card-body">
+        <div class="row">
+          <h5 class="fw-bold m-0 col-12 mb-3">Especialización</h5>
+          <div class="col-md-12 mb-2">
+            <div class="row row-gap-3">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="set-input max-w">
+                    {{ form.specialization }}
+                    <span class="input-placeholder"
+                      >{{ form.specialization.label }}</span
+                    >
+                    <span class="input-icon">
+                      <i class="lni lni-grow"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="set-input max-w">
+                    {{ form.skills }}
+                    <span class="input-placeholder"
+                      >{{ form.skills.label }}</span
+                    >
+                    <span class="input-icon">
+                      <i class="lni lni-thought"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card col-12">
+      <div class="card-body">
+        <div class="row">
+          <h5 class="fw-bold m-0 col-12 mb-3">Estudios</h5>
+          <div class="col-md-12 mb-2">
+            <div class="row row-gap-3 align-items-center">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="set-input max-w">
+                    <select
+                      name="study_level"
+                      class="single-input"
+                      title="Nivel académico"
+                      required=""
+                      id="id_study_level"
+                    >
+                      {% for level in study_level %}
+                      <option value="{{ level.0 }}">{{ level.1 }}</option>
+                      {% endfor %}
+                    </select>
+                    <span class="input-placeholder">Nivel académico</span>
+                    <span class="input-icon">
+                      <i class="lni lni-school-bench-alt"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="set-input max-w">
+                    <input
+                      type="text"
+                      name="academy"
+                      class="single-input"
+                      list="datalist_academy"
+                      minlength="3"
+                      id="id_academy"
+                    />
+                    <span class="input-placeholder"
+                      >Nombre de la institución</span
+                    >
+                    <span class="input-icon">
+                      {% include 'partials/icon_element/_build_icon.html' %}
+                    </span>
+                    <datalist id="datalist_academy">
+                      {% for academy in datalist_academy %}
+                      <option value="{{ academy.another_name }}"></option>
+                      {% endfor %}
+                    </datalist>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="row">
+                  <div class="set-input max-w">
+                    <input
+                      type="date"
+                      name="ac_start_date"
+                      class="single-input"
+                      required=""
+                      id="id_ac_start_date"
+                    />
+                    <span class="input-placeholder">Fecha de inicio</span>
+                    <span class="input-icon">
+                      <i class="lni lni-calendar"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="row">
+                  <div class="set-input max-w">
+                    <input
+                      type="date"
+                      name="ac_end_date"
+                      class="single-input"
+                      id="id_ac_end_date"
+                    />
+                    <span class="input-placeholder">Fecha final</span>
+                    <span class="input-icon">
+                      <i class="lni lni-calendar"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="d-flex gap-1">
+                  <input
+                    type="checkbox"
+                    name="ac_currently"
+                    class="form-check-input"
+                    id="id_ac_currently"
+                  />
+                  Actualmente
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card col-12">
+      <div class="card-body">
+        <div class="row">
+          <h5 class="fw-bold m-0 col-12 mb-3">Idiomas</h5>
+          <div class="col-md-12 mb-2">
+            <div class="row row-gap-3">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="set-input max-w">
+                    <select
+                      name="lan_level"
+                      class="single-input"
+                      title="Nivel académico"
+                      required=""
+                      id="id_lan_level"
+                    >
+                      {% for level in lan_level %}
+                      <option value="{{ level.0 }}">{{ level.1 }}</option>
+                      {% endfor %}
+                    </select>
+                    <span class="input-placeholder">Nivel de dominio</span>
+                    <span class="input-icon">
+                      <i class="lni lni-layers"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="set-input max-w">
+                    <select
+                      name="language"
+                      class="single-input"
+                      title="Idiomas"
+                      required=""
+                      id="id_language"
+                    >
+                      {% for language in languages %}
+                      <option value="{{ language.pk }}">{{ language.name }}</option>
+                      {% endfor %}
+                    </select>
+                    <span class="input-placeholder">Idioma</span>
+                    <span class="input-icon">
+                      <i class="lni lni-bridge"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row gap-4 col-md-6">
+    <div class="card col-12">
+      <div class="card-body">
+        <div class="row">
+          <h5 class="fw-bold m-0 col-12 mb-3">Experiencia laboral</h5>
+          <div class="col-md-12 mb-2">
+            <div class="row row-gap-3 align-items-center">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="set-input max-w">
+                    <input
+                      type="text"
+                      name="company"
+                      class="single-input"
+                      list="datalist_company"
+                      minlength="3"
+                      id="id_company"
+                    />
+                    <span class="input-placeholder">Nombre de la empresa</span>
+                    <span class="input-icon">
+                      {% include 'partials/icon_element/_build_icon.html' %}
+                    </span>
+                    <datalist id="datalist_company">
+                      {% for company in datalist_company %}
+                      <option value="{{ company.name }}"></option>
+                      {% endfor %}
+                    </datalist>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <span class="fw-bold">¿Por cuánto tiempo trabajaste ahí?</span>
+              </div>
+              <div class="col-md-4">
+                <div class="row">
+                  <div class="set-input max-w">
+                    <input
+                      type="date"
+                      name="com_start_date"
+                      class="single-input"
+                      required=""
+                      id="id_com_start_date"
+                    />
+                    <span class="input-placeholder">Fecha de inicio</span>
+                    <span class="input-icon">
+                      <i class="lni lni-calendar"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="row">
+                  <div class="set-input max-w">
+                    <input
+                      type="date"
+                      name="com_end_date"
+                      class="single-input"
+                      id="id_com_end_date"
+                    />
+                    <span class="input-placeholder">Fecha final</span>
+                    <span class="input-icon">
+                      <i class="lni lni-calendar"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="d-flex gap-1">
+                  <input
+                    type="checkbox"
+                    name="com_currently"
+                    class="form-check-input"
+                    id="id_com_currently"
+                  />
+                  Actualmente
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="set-input max-w">
+                    <textarea
+                      name="performances"
+                      cols="40"
+                      rows="10"
+                      class="single-input"
+                      minlength="3"
+                      id="id_performances"
+                    ></textarea>
+                    <span class="input-placeholder"
+                      >¿Cuales fueron tus funciones dentro de la empresa?</span
+                    >
+                    <span class="input-icon">
+                      <i class="lni lni-library"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="col-md-12">
+                    <span class="fw-bold"
+                      >Califica tu estadía en la empresa</span
+                    >
+                    <div class="mt-2">
+                      <input
+                        type="range"
+                        name="rating"
+                        value="0"
+                        class="form-range"
+                        min="0"
+                        max="5"
+                        step="0.5"
+                        id="id_rating"
+                        checked=""
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div
+                      class="d-flex justify-content-between"
+                      style="padding: 0 3.5px"
+                    >
+                      <small>0</small>
+                      <small>1</small>
+                      <small>2</small>
+                      <small>3</small>
+                      <small>4</small>
+                      <small>5</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card col-12">
+      <div class="card-body">
+        <div class="row">
+          <h5 class="fw-bold m-0 col-12"></h5>
+          <div class="col-md-12 mb-2">
+            <div class="row gap-3">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-12">
+                    <span class="fw-bold">{{ form.attached.label }}</span>
+                    <div class="br-or mt-2">
+                      <label class="input-file__icon" for="id_attached">
+                        <i class="lni lni-arrow-up-circle"></i>
+                      </label>
+                      {{ form.attached }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row gap-4 col-md-12">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="">
+            <button
+              class="btn btn-primary float-end px-4 rounded-pill"
+              type="submit"
+              id="btn_save"
+            >
+              Guardar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -19,9 +19,9 @@ STUDY_LEVEL = (
     ("1", "Educación básica - Primaria"),
     ("2", "Educación básica - Secundaria"),
     ("3", "Educación media - Bachillerato"),
-    ("4", "Educación superioa - Carrera técnica"),
-    ("5", "Educación superioa - Carrera tecnológica"),
-    ("6", "Educación superioa - Carrera profesional"),
+    ("4", "Educación superior - Carrera técnica"),
+    ("5", "Educación superior - Carrera tecnológica"),
+    ("6", "Educación superior - Carrera profesional"),
     ("7", "Postgrada - Especialización"),
     ("8", "Postgrada - Maestría"),
     ("9", "Postgrada - Doctorado"),
@@ -372,6 +372,7 @@ class Entities(models.Model):
         related_name="company_entity",
         verbose_name=_("company"),
         blank=True,
+        null=True,
         on_delete=models.PROTECT,
     )
     another_name = models.CharField(_("other name"), max_length=100, null=True)
@@ -403,7 +404,7 @@ class CurriculumVitae(models.Model):
         Specializations,
         related_name="cv_specialization",
         verbose_name=_("specialization"),
-        blank=False,
+        blank=True,
         on_delete=models.PROTECT,
     )
     # job_profile = models.TextField(_("job profile"), null=False)
@@ -425,6 +426,9 @@ class CurriculumVitae(models.Model):
 
     def __str__(self):
         return "{}".format(self.userprofile.user.username)
+
+    def slug(self):
+        return slugify(self.userprofile.user.username)
 
     class Meta:
         verbose_name = _("curriculum vitae")
@@ -449,7 +453,9 @@ class Works(models.Model):
     rating = models.DecimalField(
         _("rating"), max_digits=4, decimal_places=1, blank=True, null=True
     )
-    performances = models.TextField(_("performances"), null=True)
+    performances = models.TextField(
+        _("performances"), null=True
+    )  # functions, positions, duties
 
     def __str__(self):
         return "{}".format(self.company.another_name)
@@ -506,7 +512,7 @@ class PersonalLanguages(models.Model):
     )
 
     def __str__(self):
-        return "{}".format(self.cv.userprofile.charge)
+        return "{}".format(self.cv.userprofile.user.username)
 
     class Meta:
         verbose_name = _("personal language")

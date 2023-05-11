@@ -8,11 +8,15 @@
 
 <section class="layout-section">
   {% include 'partials/_aside.html' %}
-  <div class="row justify-content-start p-5 gap-3" style="width: calc(100% - 300px); margin-left: 300px;">
-    <form method="POST" enctype="multipart/form-data" action="{% url 'users_app:userprofile_edit' username %}" id="form">
-      {% csrf_token %}
-      {% include 'partials/_userprofile_form.html' %}
-    </form>
+  <div class="main-section">
+    <div class="container">
+      <div class="row justify-content-start gap-3">
+        <form method="POST" enctype="multipart/form-data" action="{% url 'users_app:userprofile_edit' username %}" id="form">
+          {% csrf_token %}
+          {% include 'partials/_userprofile_form.html' %}
+        </form>
+      </div>
+    </div>
   </div>
 </section>
 {% comment %} <article class="footer position-relative" style="z-index: 2;">

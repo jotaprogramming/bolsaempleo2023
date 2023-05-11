@@ -144,13 +144,15 @@ input[type="date"]:focus,
 .single-input:-webkit-autofill,
 .set-input .single-input:valid,
 .set-input .single-input:focus,
-/* .form-control:valid{
-     border: 1px solid var(--orange);
-} */
 .set-input .single-input:valid~.input-icon,
 .set-input .single-input:focus~.input-icon {
     color: var(--orange);
     border-right: 1px solid var(--orange);
+}
+
+.set-input .single-input:valid~.input-icon figure,
+.set-input .single-input:focus~.input-icon figure{
+    filter: var(--f-orange);
 }
 
 .input_title__publish {

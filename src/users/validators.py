@@ -4,12 +4,12 @@ from django.core.exceptions import ValidationError
 # `docext` is a list that contains the allowed file extensions for a document. In this case, the
 # allowed extensions are ".png", ".jpeg", ".jpg", and ".pdf". This list is used in the
 # `validate_extension` function to check if a file has an allowed extension.
-docext = [".png", ".jpeg", ".jpg", ".pdf"]
+docext = [".pdf"]
 
 imgext = [".png", ".jpeg", ".jpg", ".gif", ".heic", ".jfif"]
 
 
-def validate_size(file):
+def validate_size(file, limit=2000000):
     """
     This function validates the size of a file and raises an error if it exceeds 2Mb.
 
@@ -21,15 +21,17 @@ def validate_size(file):
     """
     size = file.size
 
-    if size > 2000000:
+    mb = limit / 1000000
+
+    if size > limit:
         raise ValidationError(
-            "El archivo es demasiado pesado. Asegúrese de no subir archivos superiores a 2Mb"
+            f"El archivo es demasiado pesado. Asegúrese de no subir archivos superiores a {mb}Mb"
         )
 
     return file
 
 
-def validate_extension(file, fileext=docext):
+def validate_extension(file, fileext=imgext):
     """
     This function validates if a file has an allowed extension and raises a validation error if not.
 
@@ -58,7 +60,7 @@ def validate_document(value):
     passed through the `validate_size` and `validate_extension` functions.
     """
     value = validate_size(value)
-    value = validate_extension(value)
+    value = validate_extension(value, fileext=docext)
 
     return value
 

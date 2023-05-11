@@ -105,4 +105,16 @@ urlpatterns = [
         UserProfileEdit.as_view(),
         name="userprofile_edit",
     ),
+    # CURRICULUM VITAE
+    # path("curriculum/<slug:slug>", CurriculumVitaeDetail.as_view(), name="userprofile"),
+    path(
+        "curriculum/<slug:slug>/add",
+        CurriculumVitaeCreate.as_view(),
+        name="cv_add",
+    ),
+    # path(
+    #     "profile/<slug:slug>/edit",
+    #     UserProfileEdit.as_view(),
+    #     name="userprofile_edit",
+    # ),
 ]

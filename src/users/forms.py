@@ -15,6 +15,12 @@ from config.models import *
 from users.models import *
 from users.utils import *
 
+doctype_default = None
+try:
+    doctype_default = DocumentType.objects.get(acronym__icontains="CC")
+except:
+    pass
+
 
 class UserGroupForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -667,7 +673,7 @@ class RegisterCompanyForm(RegisterForm):
                 "style": "width: 40px !important; height: 40px !important; padding: .375rem 7px !important;",
             },
         ),
-        initial=DocumentType.objects.get(acronym__icontains="CC"),
+        initial=doctype_default,
     )
     rep_id = forms.CharField(
         max_length=15,
@@ -703,7 +709,7 @@ class RegisterCompanyForm(RegisterForm):
                 "style": "width: 40px !important; height: 40px !important; padding: .375rem 7px !important;",
             }
         ),
-        initial=DocumentType.objects.get(acronym__icontains="CC"),
+        initial=doctype_default,
     )
     humres_id = forms.CharField(
         max_length=15,
@@ -738,7 +744,7 @@ class RegisterStudentForm(RegisterForm):
                 "class": "single-input",
             }
         ),
-        initial=DocumentType.objects.get(acronym__icontains="CC"),
+        initial=doctype_default,
     )
     id_number = forms.CharField(
         label=_("Número de identidad"),
@@ -934,5 +940,120 @@ class UserProfileModelForm(forms.ModelForm):
                     "minlength": "1",
                     "title": _("Sobre mí"),
                 }
+            ),
+        }
+
+
+class WorksForm:
+    # COMPANY 1
+    company1 = forms.CharField(
+        # max_length=10,
+        min_length=3,
+        required=False,
+        label="Nombre de la empresa",
+        widget=forms.NumberInput(
+            attrs={
+                "class": "single-input",
+                "title": _("(0) mala - (10) buena"),
+            },
+        ),
+    )
+    rating1 = forms.DecimalField(
+        max_value=10,
+        min_value=0,
+        max_digits=1,
+        required=False,
+        label="Califica tu estadía en la empresa",
+        widget=forms.NumberInput(
+            attrs={
+                "class": "single-input",
+                "title": _("(0) mala - (10) buena"),
+            },
+        ),
+    )
+    performances1 = forms.CharField(
+        min_length=3,
+        required=False,
+        label="¿Cuales fueron tus funciones dentro de la empresa?",
+        widget=forms.TextInput(
+            attrs={
+                "class": "single-input",
+            },
+        ),
+    )
+    start_date1 = forms.DateField(
+        label="Fecha de inicio",
+        required=True,
+        widget=forms.DateInput(
+            format="%Y-%m-%d", attrs={"class": "single-input", "type": "date"}
+        ),
+    )
+    end_date1 = forms.DateField(
+        label="Fecha final",
+        required=True,
+        widget=forms.DateInput(
+            format="%Y-%m-%d", attrs={"class": "single-input", "type": "date"}
+        ),
+    )
+    currently1 = forms.BooleanField(
+        required=False,
+        label="En actualidad",
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
+        initial=False,
+    )
+
+
+class CurriculumVitaeForm(forms.ModelForm):
+    specialization = forms.ModelChoiceField(
+        queryset=Specializations.objects.exclude(
+            name__icontains="REPRESENTANTE LEGAL"
+        ).exclude(name__icontains="RECURSOS HUMANOS"),
+        label=_("¿En qué te especializas o sobresales?"),
+        required=True,
+        widget=forms.Select(
+            attrs={
+                "class": "single-input",
+                "title": _("Especialización"),
+            },
+        ),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(CurriculumVitaeForm, self).__init__(*args, **kwargs)
+        self.fields["specialization"].label = "¿En qué te especializas o sobresales?"
+        self.fields[
+            "skills"
+        ].label = "Describe tus habilidades y conocimientos dentro de tu especialización o en otras áreas"
+        self.fields["attached"].label = "Adjunta tu hoja de vida (opcional)"
+        self.fields["specialization"].required = True
+        self.fields["skills"].required = True
+        self.fields["attached"].required = False
+
+    class Meta:
+        model = CurriculumVitae
+
+        fields = [
+            "specialization",
+            "skills",
+            "attached",
+        ]
+
+        widgets = {
+            "specialization": forms.Select(
+                attrs={
+                    "class": "single-input",
+                    "title": _("Especialización"),
+                },
+            ),
+            "skills": forms.Textarea(
+                attrs={
+                    "class": "single-input",
+                }
+            ),
+            "attached": forms.FileInput(
+                attrs={
+                    "class": "input-file",
+                    "title": _("Subir pdf con tu hoja de vida"),
+                },
             ),
         }

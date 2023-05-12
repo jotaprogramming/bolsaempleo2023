@@ -70,6 +70,8 @@ account_already = _("si ya dispone de Usuario y Contraseña")
 student_register_desc = _("Registro Estudiantes")
 company_register_desc = _("Registro Empresas")
 recover_title = _("Recuperar Credenciales")
+cv_title = _("Hoja de vida")
+cv_desc = _("Llena tu hoja de vida para que las empresas puedan conocerte")
 
 # Create your views here.
 
@@ -323,7 +325,6 @@ class AppList(LoginRequiredMixin, generic.ListView):
             f_objects = objects.filter(
                 name__exact=url["name"], route__exact=url["route"]
             )
-            pprint(url)
             if not f_objects:
                 name_cache = objects.filter(name__exact=url["name"])
                 if name_cache:
@@ -759,8 +760,8 @@ class UserCreate(LoginRequiredMixin, generic.FormView):
         is_superuser = form.cleaned_data["is_superuser"]
         is_staff = form.cleaned_data["is_staff"]
         is_active = form.cleaned_data["is_active"]
-        usergroup = form.cleaned_data["usergroup"]
-        role = form.cleaned_data["role"]
+        # usergroup = form.cleaned_data["usergroup"]
+        # role = form.cleaned_data["role"]
         user = User.objects.create_user(
             username=username,
             email=email,
@@ -769,7 +770,7 @@ class UserCreate(LoginRequiredMixin, generic.FormView):
             is_staff=is_staff,
             is_active=is_active,
         )
-        UserRules.objects.create(user=user, usergroup=usergroup, role=role)
+        # UserRules.objects.create(user=user, usergroup=usergroup, role=role)
         return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
@@ -850,10 +851,20 @@ class UserLogin(UserLoggedMixin, generic.FormView):
 
     def get_success_url(self):
         user = self.request.user
-        if user.is_staff:
+        comgra = user.rule_user.filter(usergroup__code__in=["COM", "GRA"])
+        admmod = user.rule_user.filter(usergroup__code__in=["MOD"]).filter(
+            role__code__in=["ADM"]
+        )
+        memmod = user.rule_user.filter(usergroup__code__in=["MOD"]).filter(
+            role__code__in=["MEM"]
+        )
+        if user.is_staff or admmod:
             return reverse_lazy("users_app:user_list")
-        else:
-            return reverse_lazy("home_app:home_page")
+        if comgra:
+            return reverse_lazy("offers_app:bidding_panel")
+        if memmod:
+            return reverse_lazy("users_app:user_list")
+        return reverse_lazy("home_app:home_page")
 
     def get_context_data(self, **kwargs):
         context = super(UserLogin, self).get_context_data(**kwargs)
@@ -872,7 +883,7 @@ class UserLogin(UserLoggedMixin, generic.FormView):
 
     def form_valid(self, form):
         username = form.cleaned_data["username"]
-        password = form.cleaned_data["password"]    
+        password = form.cleaned_data["password"]
         user = authenticate(
             username=username,
             password=password,
@@ -885,57 +896,6 @@ class UserLogout(generic.View):
     def get(self, request, *args, **kargs):
         logout(request)
         return HttpResponseRedirect(reverse("users_app:login"))
-
-
-"""
-class RegisterView(UserLoggedMixin, generic.FormView):
-    model = User
-    form_class = RegisterForm
-    template_name = "users/register.html"
-
-    def get_success_url(self):
-        success_message(self.request)
-        return reverse_lazy("users_app:login")
-
-    def get_context_data(self, **kwargs):
-        context = super(RegisterView, self).get_context_data(**kwargs)
-        context["app_title"] = app_title
-        context["title_view"] = register_title
-        context["description_view"] = register_desc
-        context["account_view"] = account_already
-        # context["img_url"] = 'core/assets/img/img.jpg'
-        return context
-
-    def form_valid(self, form):
-        objects = duplicate_users(self, form)
-        if objects > 0:
-            if (
-                self.cleaned_data["username"] == "admin"
-                or self.cleaned_data["username"] == "root"
-            ):
-                msg = _(f"Nombre de usuario no permitido")
-            else:
-                msg = _(f"El nombre de usuario ya existe")
-
-            warning_message(self.request, msg=msg)
-            return HttpResponseRedirect(reverse_lazy("home_app:register"))
-        username = str(form.instance.username).lower()
-        email = form.cleaned_data["email"]
-        password = form.cleaned_data["password"]
-        User.objects.create_user(
-            username=username,
-            email=email,
-            password=password,
-        )
-        return super().form_valid(form)
-
-    def form_invalid(self, form, **kwargs):
-        ctx = self.get_context_data(**kwargs)
-        ctx["form"] = form
-        msg_error = get_form_errors(form)
-        warning_message(self.request, msg=msg_error)
-        return self.render_to_response(ctx)
-"""
 
 
 # USER PROFILE
@@ -969,6 +929,7 @@ class UserProfileDetail(LoginRequiredMixin, generic.TemplateView):
         context["initial"] = username_param[0]
         context["username"] = username_param
         context["profile"] = True
+
         return context
 
 
@@ -1062,13 +1023,8 @@ class UserProfileEdit(LoginRequiredMixin, generic.UpdateView):
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
         return HttpResponseRedirect(
-            reverse_lazy(
-                "users_app:userprofile_edit", args=[slug]
-            )
+            reverse_lazy("users_app:userprofile_edit", args=[slug])
         )
-
-
-# ----------------------------------------------
 
 
 # REGISTER
@@ -1182,7 +1138,6 @@ class RegisterStudentView(UserLoggedMixin, generic.FormView):
             cod_name = format_diacritics(cod_name)
             last_id = User.objects.filter(username__icontains=cod_name).order_by("-id")
             user_id = int(last_id[0].id) if last_id.count() > 0 else 0
-            print("🐍 File: users/views.py | Line: 1198 | form_valid ~ user_id", user_id)
             username = f"{cod_name}{user_id + 1}".lower()
 
             usergroup = UserGroups.objects.get(code__icontains="GRA")
@@ -1363,3 +1318,195 @@ class CredentialsRecoverView(generic.TemplateView):
 
 
 # ----------------------------------------------------
+
+
+# CURRICULUM VITAE
+class CurriculumVitaeCreate(LoginRequiredMixin, generic.CreateView):
+    login_url = "/login"
+    model = CurriculumVitae
+    form_class = CurriculumVitaeForm
+    template_name = "curriculum/cv_create.html"
+
+    def get_success_url(self):
+        slug = self.kwargs.get("slug", "")
+        cv = self.object
+
+        # {
+        #     "csrfmiddlewaretoken": [
+        #         "0zyIXYlatFwFNklyDlPDJGvgPEJ2QslrLNPX8VffYVLkKtVEsSrf8LRxsXi0fzVt"
+        #     ],
+        #     "specialization": ["3"],
+        #     "skills": ["No sé nada"],
+        #     "study_level": ["6"],
+        #     "academy": ["Universidad Enuna"],
+        #     "ac_start_date": ["2023-05-07"],
+        #     "ac_end_date": ["2023-05-09"],
+        #     "ac_currently": ["on"],
+        #     "lan_level": ["5"],
+        #     "language": ["1"],
+        #     "company": ["COLGATESTA SAS"],
+        #     "com_start_date": ["2023-05-01"],
+        #     "com_end_date": ["2023-05-12"],
+        #     "com_currently": ["on"],
+        #     "performances": ["No sé no he ido ;)"],
+        #     "rating": ["2.5"],
+        #     "attached": [""],
+        # }
+
+        # Education
+        study_level_id = self.request.POST.get("study_level", "")
+        academy = self.request.POST.get("academy", "")
+        ac_start_date = self.request.POST.get("ac_start_date", "")
+        ac_end_date = self.request.POST.get("ac_end_date", "")
+        ac_currently = self.request.POST.get("ac_currently", "")
+
+        ac_currently = True if ac_currently == "on" else False
+
+        academic_institution = Entities(
+            another_name=academy,
+            start_date=ac_start_date,
+            end_date=None if ac_currently else ac_end_date,
+            currently=ac_currently,
+        )
+        academic_institution.save()
+
+        education = Education(cv=cv, academy=academic_institution, level=study_level_id)
+        education.save()
+
+        # Languages
+        lan_level = self.request.POST.get("lan_level", "")
+        language_id = self.request.POST.get("language", "")
+
+        perlan = PersonalLanguages(cv=cv, language_id=language_id, level=lan_level)
+        perlan.save()
+
+        # Company
+        com_name = self.request.POST.get("company", "")
+        com_start_date = self.request.POST.get("com_start_date", "")
+        com_end_date = self.request.POST.get("com_end_date", "")
+        com_currently = self.request.POST.get("com_currently", "")
+        rating = self.request.POST.get("rating", "")
+        performances = self.request.POST.get("performances", "")
+
+        com_currently = True if com_currently == "on" else False
+
+        company = None
+        companies = Companies.objects.filter(name__icontains=com_name)
+        if companies:
+            company = companies.first()
+
+        corporate_institution = Entities(
+            company=company,
+            # another_name=com_name,
+            start_date=com_start_date,
+            end_date=None if com_currently else com_end_date,
+            currently=com_currently,
+        )
+        corporate_institution.save()
+
+        works = Works(
+            cv=cv,
+            company=corporate_institution,
+            rating=rating,
+            performances=performances,
+        )
+        works.save()
+
+        success_message(
+            self.request, msg="Tu hoja de vida fue añadida satisfactoriamente"
+        )
+        return reverse_lazy("users_app:userprofile", args=[slug])
+
+    def get_context_data(self, **kwargs):
+        slug = self.kwargs.get("slug", "")
+        context = super(CurriculumVitaeCreate, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = cv_title
+        context["description_view"] = cv_desc
+        context["username"] = slug
+        context["datalist_company"] = Companies.objects.all()
+        context["datalist_academy"] = Entities.objects.exclude(academy__in=[None])
+        context["languages"] = Languages.objects.all()
+        context["study_level"] = STUDY_LEVEL
+        context["lan_level"] = LAN_LEVEL
+        return context
+
+    def form_valid(self, form):
+        slug = self.kwargs.get("slug", "")
+        try:
+            userprofile = UserProfile.objects.get(user__username=slug)
+            form.instance.userprofile = userprofile
+        except Exception as ex:
+            print(f"An exception occurred: {ex}")
+            warning_message(self.request, msg=ex)
+            return reverse_lazy("users_app:userprofile", args=[slug])
+        return super().form_valid(form)
+
+    def form_invalid(self, form, **kwargs):
+        slug = self.kwargs.get("slug", "")
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
+        return reverse_lazy("users_app:userprofile", args=[slug])
+
+
+class CurriculumVitaeEdit(LoginRequiredMixin, generic.UpdateView):
+    login_url = "/login"
+    model = CurriculumVitae
+    form_class = CurriculumVitaeForm
+    template_name = "curriculum/cv_edit.html"
+
+    def get_success_url(self):
+        slug = self.kwargs.get("slug", "")
+        success_message(
+            self.request, msg="Tu hoja de vida se añadida satisfactoriamente"
+        )
+        return reverse_lazy("users_app:userprofile", args=[slug])
+
+    def get_context_data(self, **kwargs):
+        context = super(CurriculumVitaeEdit, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = cv_title
+        context["description_view"] = cv_desc
+        return context
+
+    def form_valid(self, form):
+        form.instance.updated_at = timezone.now()
+        return super().form_valid(form)
+
+    def form_invalid(self, form, **kwargs):
+        slug = self.kwargs.get("slug", "")
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
+        return reverse_lazy("users_app:userprofile", args=[slug])
+
+
+class CurriculumVitaeDeleteModal(LoginRequiredMixin, generic.UpdateView):
+    login_url = "/login"
+    model = CurriculumVitae
+    form_class = FormDelete
+    template_name = "curriculum/cv_delete_modal.html"
+
+    def get_queryset(self):
+        data = CurriculumVitae.objects.order_by()
+        return data
+
+    def get_success_url(self):
+        success_message(self.request, msg="Registro eliminado satisfactoriamente")
+        return reverse_lazy("users_app:cv_list")
+
+    def get_context_data(self, **kwargs):
+        context = super(CurriculumVitaeDeleteModal, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = cv_title
+        context["description_view"] = cv_desc
+        return context
+
+    def form_valid(self, form):
+        form.instance.deleted_at = timezone.now()
+        return super().form_valid(form)

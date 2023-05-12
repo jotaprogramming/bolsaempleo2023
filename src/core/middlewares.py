@@ -7,7 +7,7 @@ from django.contrib.auth.mixins import AccessMixin
 from django.urls import resolve
 
 
-from .utils import verify_dispatch
+from .utils import verify_dispatch, validate_urlpattern
 
 
 class UserLoggedMixin(AccessMixin):
@@ -22,46 +22,47 @@ class UserWithoutPermissions:
         self.get_response = get_response
 
     def __call__(self, request):
+        """
+        This function checks if a user has permission to access a certain URL and redirects them if they
+        don't.
+
+        :param request: The HTTP request object that contains information about the incoming request,
+        such as the URL, headers, and data
+        :return: the response object that is obtained by calling the get_response() method with the
+        request object passed as an argument. If certain conditions are met, the function may also
+        return an HttpResponseRedirect object that redirects the user to the home page.
+        """
         response = self.get_response(request)
 
         url_resolve = resolve(request.path_info)
-        if url_resolve.url_name:
-            urlpatterns = f"{url_resolve.app_names[0]}:{url_resolve.url_name}"
-            dispatch = verify_dispatch(urlpatterns)
 
-            if dispatch and not request.user.is_staff:
-                try:
-                    rules = request.user.rule_user.all()
-                    usergroups = [rule.usergroup for rule in rules]
-                    roles = [rule.role for rule in rules]
-                    policies = [
-                        usergroup.usergroup_policy.all() for usergroup in usergroups
-                    ]
-                    
-                    result = 0
-                    # policy_apps = []
-                    # policy_restrictions = []
-                    for qs in policies:
-                        for policy in qs:
-                            # policy_restrictions.append(policy.restriction.all())
-                            # policy_apps.append(policy.app.all())
-                            result = policy.app.all().filter(name=urlpatterns)
-                            
-
-                            # if result.count():
-                            #     return response
-                            # for app in policy.app.all():
-                            #     print(
-                            #         "🐍 File: core/middlewares.py | Line: 46 | __call__ ~ app",
-                            #         app.route,
-                            #     )
-
-                    if not result:
-                        return HttpResponseRedirect(
-                            reverse_lazy("home_app:home_page")
+        if not request.user.is_staff and url_resolve.url_name:
+            try:
+                urlpatterns = f"{url_resolve.app_names[0]}:{url_resolve.url_name}"
+                dispatch = verify_dispatch(urlpatterns)
+                if dispatch:
+                    result = validate_urlpattern(request, urlpatterns)
+                    username = (
+                        "username" in url_resolve.kwargs
+                        and url_resolve.kwargs["username"]
+                    )
+                    slug = username
+                    if not username:
+                        slug = (
+                            "slug" in url_resolve.kwargs and url_resolve.kwargs["slug"]
                         )
 
-                except Exception as ex:
-                    print(f"Error: {ex}")
+                    if result and username:
+                        if (
+                            not username == request.user.username
+                            and not slug == request.user.username
+                        ):
+                            result = 0
+
+                    if not result:
+                        return HttpResponseRedirect(reverse_lazy("home_app:home_page"))
+
+            except Exception as ex:
+                print(f"Error in UserWithoutPermissions: {ex}")
 
         return response

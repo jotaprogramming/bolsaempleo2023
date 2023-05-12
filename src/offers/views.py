@@ -86,16 +86,16 @@ class OfferDetail(LoginRequiredMixin, generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(OfferDetail, self).get_context_data(**kwargs)
-        obj = self.get_object()
+        offer = self.get_object()
         offers_cache = (
-            Offers.objects.exclude(id=obj.id)
+            Offers.objects.exclude(id=offer.id)
             .filter(
                 deleted_at=None,
             )
             .order_by("-created_at", "updated_at")
         )
 
-        offers = offers_cache.filter(Q(tags__in=obj.get_tags()))
+        offers = offers_cache.filter(Q(tags__in=offer.get_tags()))
 
         if not offers:
             offers = offers_cache.filter(deleted_at=None)
@@ -105,17 +105,31 @@ class OfferDetail(LoginRequiredMixin, generic.DetailView):
         user = self.request.user
 
         candidatures = Candidatures.objects.filter(
-            offer=obj.id, deleted_at=None
+            offer=offer.id, deleted_at=None
         ).exclude(status="2")
 
-        usergroups = UserRules.objects.filter(
-            user=user, usergroup__code__icontains="COM"
+        allowed_to_apply = UserRules.objects.filter(user=user, usergroup__code="GRA")
+        print("🐍 File: offers/views.py | Line: 112 | get_context_data ~ allowed_to_apply",allowed_to_apply)
+        allowed_to_edit = UserRules.objects.filter(
+            user=user,
+            user__offer_user=offer.id,
+            usergroup__usergroup_policy__app__name="offers_app:offer_edit",
         )
+        allowed_to_candidates = UserRules.objects.filter(
+            Q(
+                user=user,
+                usergroup__code="MOD",
+                usergroup__usergroup_policy__app__name="offers_app:candidature_list",
+            )
+            | Q(user=user, usergroup__code="COM", user__offer_user=offer.id),
+        )
+        # company = UserRules.objects.filter(user__offer_user=self.get_object(), usergroup__code__icontains="COM")
 
         candidature = candidatures.filter(candidate=user)
 
-        context["usergroups"] = usergroups
-        context["allowed"] = self.get_object().user == user
+        context["allowed_to_apply"] = allowed_to_apply
+        context["allowed_to_edit"] = allowed_to_edit
+        context["allowed_to_candidates"] = allowed_to_candidates
         context["similar_offers"] = offers
         context["candidature"] = candidature and candidature.first()
         context["candidatures"] = candidatures
@@ -274,9 +288,9 @@ class BiddingPanel(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         search = self.request.GET.get("search", "true")
-        return self.model.objects.search(text=search, order="-created_at").filter(
-            deleted_at=None,
-            status=False
+        order = self.request.GET.get("order", "-created_at")
+        return self.model.objects.search(text=search, order=order).filter(
+            deleted_at=None, status=False
         )
 
     def get_context_data(self, **kwargs):
@@ -315,20 +329,25 @@ class PublicationList(LoginRequiredMixin, generic.ListView):
             .filter(Q(title__icontains=p_search) | Q(title__icontains=p_search))
             .annotate(
                 active_candidates=Count(
-                    F("candidature_offer"), filter=~Q(candidature_offer__status=["1", "4"])
+                    F("candidature_offer"),
+                    filter=Q(candidature_offer__status__in=["1", "4"]),
                 ),
                 cancelled_candidates=Count(
-                    F("candidature_offer"), filter=~Q(candidature_offer__status=["2"])
+                    F("candidature_offer"),
+                    filter=Q(candidature_offer__status__in=["2"]),
                 ),
                 rejected_candidates=Count(
-                    F("candidature_offer"), filter=~Q(candidature_offer__status=["2"])
+                    F("candidature_offer"),
+                    filter=Q(candidature_offer__status__in=["3"]),
                 ),
                 accepted_candidates=Count(
-                    F("candidature_offer"), filter=~Q(candidature_offer__status=["4"])
+                    F("candidature_offer"),
+                    filter=Q(candidature_offer__status__in=["4"]),
                 ),
                 completed_candidates=Count(
-                    F("candidature_offer"), filter=~Q(candidature_offer__status=["5"])
-                )
+                    F("candidature_offer"),
+                    filter=Q(candidature_offer__status__in=["5"]),
+                ),
             )
             .order_by("-deleted_at", "title")
         )
@@ -336,7 +355,7 @@ class PublicationList(LoginRequiredMixin, generic.ListView):
             if "!" in p_status:
                 status = p_status.replace("!", "")
                 validate = status in [item[0] for item in OFFER_STATUS]
-                if status == '3' or validate:
+                if status == "3" or validate:
                     if status == "1":
                         objects = objects.exclude(deleted_at=None).exclude(status=False)
                     elif status == "2":
@@ -345,7 +364,7 @@ class PublicationList(LoginRequiredMixin, generic.ListView):
                         objects = objects.filter(deleted_at=None)
             else:
                 validate = p_status in [item[0] for item in OFFER_STATUS]
-                if p_status == '3' or validate:
+                if p_status == "3" or validate:
                     if p_status == "1":
                         objects = objects.filter(deleted_at=None).filter(status=False)
                     elif p_status == "2":
@@ -380,7 +399,11 @@ class PublicationCreate(LoginRequiredMixin, generic.CreateView):
     form_class = OfferForm
     template_name = "publications/publication_create.html"
 
+    tags = []
+
     def get_success_url(self):
+        self.object.tags.set(self.tags)
+        # self.object.save(update_fields=["tags"])
         success_message(self.request)
         return reverse_lazy("offers_app:bidding_panel")
 
@@ -391,9 +414,22 @@ class PublicationCreate(LoginRequiredMixin, generic.CreateView):
         context["description_view"] = offer_desc
         context["in_mypublications"] = True
         context["in_mypublications_add"] = True
+        context["tag_datalist"] = Tags.objects.all()
         return context
 
     def form_valid(self, form):
+        form_tags = form.cleaned_data["tags"]
+        tag_list = form_tags.split(",")
+
+        # temp_list = []
+        for tag in tag_list:
+            try:
+                objtag = Tags.objects.get(name__icontains=tag)
+                self.tags.append(objtag)
+            except:
+                pass
+
+        # form.cleaned_data["tags"] = temp_list
         form.instance.title = str(form.instance.title).upper()
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -436,6 +472,7 @@ class PublicationEdit(LoginRequiredMixin, generic.UpdateView):
         context["description_view"] = offer_desc
         context["in_mypublications"] = True
         context["in_mypublications_edit"] = True
+        context["tag_datalist"] = Tags.objects.all()
         return context
 
     def form_valid(self, form):
@@ -486,12 +523,11 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
 
         str_pk = get_pk_from_a_slug(self)
         obj = (
-            self.model.objects.filter(offer__id=str_pk)
-            .filter(
+            self.model.objects.filter(offer__id=str_pk).filter(
                 Q(candidate__first_name__icontains=p_search)
                 | Q(candidate__last_name__icontains=p_search)
             )
-            .exclude(status__in=["2"])
+            # .exclude(status__in=["2"])
             .order_by("-updated_at")
         )
 
@@ -517,9 +553,7 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
         context["title_view"] = (
             objects.first().offer.title.capitalize()
             if count
-            else self.model.objects.filter(offer__id=str_pk)
-            .first()
-            .offer.title.capitalize()
+            else Offers.objects.filter(id=str_pk).first().title.capitalize()
         )
         if count == 1:
             desc = "Un candidato ha aplicado a esta oferta"
@@ -529,8 +563,7 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
             desc = "Sin candidatos"
         context["description_view"] = desc
         context["mycandidacies"] = True
-        statuses = POST_STATUS[:1] + POST_STATUS[2:]
-        context["statuses"] = statuses
+        context["statuses"] = POST_STATUS
         context["pstatus"] = p_status
         context["search"] = p_search
 

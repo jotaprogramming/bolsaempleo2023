@@ -26,9 +26,19 @@
     display: none;
 }
 
+select.single-input {
+    padding-top: .5rem;
+}
+
+textarea.single-input {
+    padding-top: .5rem;
+    min-height: 20rem;
+}
+
 .input-placeholder {
     position: absolute;
     margin-left: 50px;
+    margin-right: 2rem;
     /* bottom: 0; */
     top: .5rem;
     display: flex;
@@ -38,8 +48,8 @@
     /* background-color: #fff; */
     transition: 300ms;
     font-size: 16px;
-    max-width: calc(100% - 60px);
-    white-space:nowrap;
+    max-width: calc(100% - 6.5rem);
+    white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
 }
@@ -47,7 +57,8 @@
 .set-input {
     display: flex;
     width: 100%;
-    height: 40px;
+    min-height: 40px;
+    height: fit-content;
     position: relative;
     display: flex;
     border-radius: 10px;
@@ -56,6 +67,7 @@
 .single-input {
     order: 1;
     width: 100%;
+    min-height: 40px;
     height: 100%;
     border-radius: 0 10px 10px 0;
     outline: 0 none;
@@ -106,10 +118,12 @@
     background-color: white;
 }
 
+input[type="date"]:invalid,
 .set-input select.single-input:invalid {
     color: transparent;
 }
 
+input[type="date"]:focus,
 .set-input select.single-input:focus {
     color: var(--black);
 }
@@ -130,13 +144,15 @@
 .single-input:-webkit-autofill,
 .set-input .single-input:valid,
 .set-input .single-input:focus,
-/* .form-control:valid{
-     border: 1px solid var(--orange);
-} */
 .set-input .single-input:valid~.input-icon,
 .set-input .single-input:focus~.input-icon {
     color: var(--orange);
     border-right: 1px solid var(--orange);
+}
+
+.set-input .single-input:valid~.input-icon figure,
+.set-input .single-input:focus~.input-icon figure{
+    filter: var(--f-orange);
 }
 
 .input_title__publish {
@@ -196,7 +212,7 @@
     transition: transform .3s ease-in;
 }
 
-.slider-search{
+.slider-search {
     position: absolute;
     width: 42px;
     height: 42px;

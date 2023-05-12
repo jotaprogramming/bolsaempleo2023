@@ -1,13 +1,12 @@
-{% extends 'core/base.html' %}
-{% load static %}
+{% extends 'core/base.html' %} {% load static %}
 
-{% load format_numbers %} 
-
+{% load format_numbers %}
 {% block title %}
 <title>{{app_title}} | {{title_view}}</title>
 {% endblock title %}
 
 {% block contentfluid %}
+
 <section class="layout-section">
   {% include 'partials/_aside.html' %}
   <div class="main-section">
@@ -25,94 +24,142 @@
             </p>
             {% csrf_token %}
             <div class="set-input col-md-5 mb-3">
+              <span class="input-icon">
+                <i class="lni lni-text-format"></i>
+              </span>
               {{form.title}}
               <span class="input-placeholder">{{form.title.label}}</span>
-              {% comment %}
-              <span class="input-icon"><i class="lni lni-user"></i></span> {% endcomment %}
-            </div>
-            <div class="set-input col-md-3 mb-3">
-              {{form.salary}}
-              <span class="input-placeholder">{{form.salary.label}}</span>
-              {% comment %}
-              <span class="input-icon"><i class="lni lni-user"></i></span> {% endcomment %}
             </div>
             <div class="set-input col-md-2 mb-3">
+              <span class="input-icon">
+                <i class="lni lni-money-location"></i>
+              </span>
               {{form.currency}}
               <span class="input-placeholder">{{form.currency.label}}</span>
-              {% comment %}
-              <span class="input-icon"><i class="lni lni-user"></i></span> {% endcomment %}
+            </div>
+            <div class="set-input col-md-3 mb-3">
+              <span class="input-icon">
+                <i class="lni lni-coin"></i>
+              </span>
+              {{form.salary}}
+              <span class="input-placeholder">{{form.salary.label}}</span>
             </div>
             <div class="set-input col-md-2 mb-3">
+              <span class="input-icon">
+                <i class="lni lni-ticket-alt"></i>
+              </span>
               {{form.payperiod}}
               <span class="input-placeholder">{{form.payperiod.label}}</span>
-              {% comment %}
-              <span class="input-icon"><i class="lni lni-user"></i></span> {% endcomment %}
             </div>
             <div class="set-input col-md-3 mb-3">
+              <span class="input-icon">
+                <i class="lni lni-display"></i>
+              </span>
               {{form.modality}}
               <span class="input-placeholder">{{form.modality.label}}</span>
-              {% comment %}
-              <span class="input-icon"><i class="lni lni-user"></i></span> {% endcomment %}
             </div>
             <div class="set-input col-md-3 mb-3">
+              <span class="input-icon">
+                <i class="lni lni-flag"></i>
+              </span>
               {{form.country}}
               <span class="input-placeholder">{{form.country.label}}</span>
-              {% comment %}
-              <span class="input-icon"><i class="lni lni-user"></i></span> {% endcomment %}
             </div>
             <div class="set-input col-md-3 mb-3">
+              <span class="input-icon">
+                <i class="lni lni-pointer"></i>
+              </span>
               {{form.district}}
               <span class="input-placeholder">{{form.district.label}}</span>
-              {% comment %}
-              <span class="input-icon"><i class="lni lni-user"></i></span> {% endcomment %}
             </div>
             <div class="set-input col-md-3 mb-3">
+              <span class="input-icon">
+                <i class="lni lni-direction"></i>
+              </span>
               {{form.city}}
               <span class="input-placeholder">{{form.city.label}}</span>
-              {% comment %}
-              <span class="input-icon"><i class="lni lni-user"></i></span> {% endcomment %}
             </div>
             <div class="set-input col-md-3 mb-3">
+              <span class="input-icon">
+                <i class="lni lni-calendar"></i>
+              </span>
               {{form.hiring_date}}
               <span class="input-placeholder">{{form.hiring_date.label}}</span>
-              {% comment %}
-              <span class="input-icon"><i class="lni lni-user"></i></span> {% endcomment %}
             </div>
             <div class="set-input col-md-3 mb-3">
+              <span class="input-icon">
+                <i class="lni lni-briefcase-alt"></i>
+              </span>
               {{form.conttype}}
               <span class="input-placeholder">{{form.conttype.label}}</span>
-              {% comment %}
-              <span class="input-icon"><i class="lni lni-user"></i></span> {% endcomment %}
             </div>
             <div class="set-input col-md-3 mb-3">
+              <span class="input-icon">
+                <i class="lni lni-timer"></i>
+              </span>
               {{form.workday}}
               <span class="input-placeholder">{{form.workday.label}}</span>
-              {% comment %}
-              <span class="input-icon"><i class="lni lni-user"></i></span> {% endcomment %}
             </div>
             <div class="set-input col-md-3 mb-3">
+              <span class="input-icon">
+                <i class="lni lni-users"></i>
+              </span>
               {{form.vacancies}}
               <span class="input-placeholder">{{form.vacancies.label}}</span>
-              {% comment %}
-              <span class="input-icon"><i class="lni lni-user"></i></span> {% endcomment %}
             </div>
             <div class="set-input col-12 mb-3">
+              <span class="input-icon">
+                <i class="lni lni-text-format"></i>
+              </span>
               {{form.description}}
               <span class="input-placeholder">{{form.description.label}}</span>
-              {% comment %}
-              <span class="input-icon"><i class="lni lni-user"></i></span> {% endcomment %}
             </div>
-            <div class="set-input col-md-3 mb-3">
+            <div class="set-input col-md-12 mb-3">
+              <span class="input-icon">
+                <i class="lni lni-list"></i>
+              </span>
               {{form.requirements}}
               <span class="input-placeholder">{{form.requirements.label}}</span>
-              {% comment %}
-              <span class="input-icon"><i class="lni lni-user"></i></span> {% endcomment %}
             </div>
-            <div class="set-input col-md-3 mb-3">
-              {{form.tags}}
-              <span class="input-placeholder">{{form.tags.label}}</span>
-              {% comment %}
-              <span class="input-icon"><i class="lni lni-user"></i></span> {% endcomment %}
+            <div class="set-input col-md-6 mb-3">
+              <span class="input-icon">
+                <i class="lni lni-tag"></i>
+              </span>
+              <input
+                type="text"
+                name="searchTag"
+                class="single-input"
+                maxlength="10"
+                id="searchTag"
+                list="tagDatalist"
+              />
+              <datalist id="tagDatalist">
+                {% for tag in tag_datalist %}
+                <option value="{{tag.name}}"></option>
+                {% endfor %}
+              </datalist>
+              <button
+                class="btn btn-primary rounded-circle ms-2 order-2"
+                type="button"
+                placeholder="Etiquetas de búsqueda"
+                id="addTagBtn"
+              >
+                {% include 'partials/icon_element/_search_icon.html' %}
+              </button>
+              <input
+                type="hidden"
+                name="tags"
+                class="single-input order-3"
+                id="id_tags"
+              />
+              <span class="input-placeholder">Etiquetas</span>
+            </div>
+            <div class="col-md-12">
+              <span
+                class="d-flex text-black-50 tag-group"
+                id="tagList"
+              >
+              </span>
             </div>
           </div>
           <button class="normal_btn col-2" type="submit" id="btn_save">
@@ -123,8 +170,9 @@
     </div>
   </div>
 </section>
-{% comment %} <article class="footer position-relative" style="z-index: 2;">
-  {% include 'partials/_footer.html' %}
-</article>  {% endcomment %}
 
 {% endblock contentfluid %}
+
+{% block extrajs %}
+<script src="{% static 'offers/scripts/main.js' %}"></script>
+{% endblock extrajs %}

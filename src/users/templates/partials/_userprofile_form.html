@@ -1,170 +1,172 @@
 {% load static %}
-<div class="row gap-4 col-md-6">
+<div class="row justify-content-start gap-3">
   <h3 class="col-12">Editar perfil</h3>
-  <div class="card col-12">
-    <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
-      <div class="d-flex gap-4 justify-content-between align-items-center flex-wrap">
-        {% include 'partials/_uploadpic.html' %}
-
-        <div class="d-flex flex-column gap-1 justify-content-center align-items-start">
-          <h5 class="fw-bold m-0">
-            {% if object.first_name or object.last_name %}
-            {{ object.first_name }} {{ object.last_name }}
-            {% else %}
-            @{{ username }}
-            {% endif %}
-          </h5>
-          <p class="text-muted m-0 fw-light">
-            {% if object.is_superuser %}
-            Superusuario
-            {% elif object.is_staff %}
-            Staff
-            {% elif cv %}
-            {{ cv.specialization }}
-            {% else %}
-            {% for rule in object.rule_user.all %}
-            {{ rule.usergroup.group_name }}
-            {% endfor %}
-            {% endif %}
-            {% comment %} {% for rule in rules %}
-            {{ rule.usergroup.group_name }}
-            {% endfor %} {% endcomment %}
-          </p>
+  <div class="row gap-4 {% if object.userprofile.company_profile %}col-md-6{% else %}col-8{% endif %}">
+    <div class="card col-12">
+      <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div class="d-flex gap-4 justify-content-between align-items-center flex-wrap">
+          {% include 'partials/_uploadpic.html' %}
+  
+          <div class="d-flex flex-column gap-1 justify-content-center align-items-start">
+            <h5 class="fw-bold m-0">
+              {% if object.first_name or object.last_name %}
+              {{ object.first_name }} {{ object.last_name }}
+              {% else %}
+              @{{ username }}
+              {% endif %}
+            </h5>
+            <p class="text-muted m-0 fw-light">
+              {% if object.is_superuser %}
+              Superusuario
+              {% elif object.is_staff %}
+              Staff
+              {% elif cv %}
+              {{ cv.specialization }}
+              {% else %}
+              {% for rule in object.rule_user.all %}
+              {{ rule.usergroup.group_name }}
+              {% endfor %}
+              {% endif %}
+              {% comment %} {% for rule in rules %}
+              {{ rule.usergroup.group_name }}
+              {% endfor %} {% endcomment %}
+            </p>
+          </div>
         </div>
+        {% if request.user.is_staff or request.user.username == object.username %}
+          <div class="my-2">
+            <a
+              class="btn btn-secondary"
+              href="{% url 'users_app:credentials_recover' %}"
+            >
+              <i class="lni lni-padlock"></i>
+              <span class="">Cambiar contraseña</span>
+            </a>
+          </div>
+        {% endif %}
+        {% comment %} <button class="btn btn-outline-primary" type="button" style="height: fit-content;">Actualizar</button> {% endcomment %}
       </div>
-      {% if request.user.is_staff or request.user.username == object.username %}
-        <div class="my-2">
-          <a
-            class="btn btn-secondary"
-            href="{% url 'users_app:credentials_recover' %}"
-          >
-            <i class="lni lni-padlock"></i>
-            <span class="">Cambiar contraseña</span>
-          </a>
-        </div>
-      {% endif %}
-      {% comment %} <button class="btn btn-outline-primary" type="button" style="height: fit-content;">Actualizar</button> {% endcomment %}
     </div>
-  </div>
-  <div class="card col-12">
-    <div class="card-body">
-      <div class="row">
-        <h5 class="fw-bold m-0 col-12 mb-3">Información del perfil</h5>
-        <div class="col-md-12 mb-2">
-          <div class="row row-gap-3">
-            <div class="col-md-6">
-              <div class="row">
-                <div class="set-input max-w">
-                  {{ form.web }}
-                  <span class="input-placeholder">{{ form.web.label }}</span>
-                  <span class="input-icon">
-                    <i class="lni lni-domain"></i>
-                  </span>
+    <div class="card col-12">
+      <div class="card-body">
+        <div class="row">
+          <h5 class="fw-bold m-0 col-12 mb-3">Información del perfil</h5>
+          <div class="col-md-12 mb-2">
+            <div class="row row-gap-3">
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="set-input max-w">
+                    {{ form.web }}
+                    <span class="input-placeholder">{{ form.web.label }}</span>
+                    <span class="input-icon">
+                      <i class="lni lni-domain"></i>
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="row">
-                <div class="set-input max-w">
-                  {{ form.id_number }}
-                  <span class="input-placeholder">{{ form.id_number.label }}</span>
-                  <span class="input-icon p-0">
-                      {{ form.document_type }}
-                  </span>
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="set-input max-w">
+                    {{ form.id_number }}
+                    <span class="input-placeholder">{{ form.id_number.label }}</span>
+                    <span class="input-icon p-0">
+                        {{ form.document_type }}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="row">
-                <div class="set-input max-w">
-                  {{ form.phone }}
-                  <span class="input-placeholder">{{ form.phone.label }}</span>
-                  <span class="input-icon">
-                      <i class="lni lni-phone"></i>
-                  </span>
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="set-input max-w">
+                    {{ form.phone }}
+                    <span class="input-placeholder">{{ form.phone.label }}</span>
+                    <span class="input-icon">
+                        <i class="lni lni-phone"></i>
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="row">
-                <div class="set-input max-w">
-                  {{ form.email }}
-                  <span class="input-placeholder">{{ form.email.label }}</span>
-                  <span class="input-icon">
-                      <i class="lni lni-envelope"></i>
-                  </span>
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="set-input max-w">
+                    {{ form.email }}
+                    <span class="input-placeholder">{{ form.email.label }}</span>
+                    <span class="input-icon">
+                        <i class="lni lni-envelope"></i>
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="row">
-                <div class="set-input max-w">
-                  {{ form.district }}
-                  <span class="input-placeholder">{{ form.district.label }}</span>
-                  <span class="input-icon">
-                      <i class="lni lni-map"></i>
-                  </span>
-                </div>  
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="row">
-                <div class="set-input max-w">
-                  {{ form.city }}
-                  <span class="input-placeholder">{{ form.city.label }}</span>
-                  <span class="input-icon">
-                      <i class="lni lni-map-marker"></i>
-                  </span>
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="set-input max-w">
+                    {{ form.district }}
+                    <span class="input-placeholder">{{ form.district.label }}</span>
+                    <span class="input-icon">
+                        <i class="lni lni-map"></i>
+                    </span>
+                  </div>  
                 </div>
               </div>
-            </div>
-            <div class="col-md-6">
-              <div class="row">
-                <div class="set-input max-w">
-                  {{ form.address }}
-                  <span class="input-placeholder">{{ form.address.label }}</span>
-                  <span class="input-icon">
-                      <i class="lni lni-home"></i>
-                  </span>
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="set-input max-w">
+                    {{ form.city }}
+                    <span class="input-placeholder">{{ form.city.label }}</span>
+                    <span class="input-icon">
+                        <i class="lni lni-map-marker"></i>
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-12">
-              <div class="row">
-                <div class="col-md-12">
-                  <p class="col-12 fw-bold mb-1">
-                    Sobre mí
-                  </p>
-                  <p class="col-12 m-0">
-                    {{ form.about_me }}
-                  </p>  
-                </div>
-                <div class="col-md-12">
-                  <p class="col-12 fw-bold mb-1">
-                    Hoja de Vida
-                  </p>
-                  <p class="col-12 m-0">
-                    <div class="br-or" >
-                      <label class="input-file__icon" for="input-file"><i class="lni lni-arrow-up-circle"></i></label>
-                      <input class="input-file" type="file" name="input-file" id="input-file">
-                    </div>
-                  </p>  
+              <div class="col-md-6">
+                <div class="row">
+                  <div class="set-input max-w">
+                    {{ form.address }}
+                    <span class="input-placeholder">{{ form.address.label }}</span>
+                    <span class="input-icon">
+                        <i class="lni lni-home"></i>
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-md-12">
-              <div class="row">
-                <div class="">
-                  <button class="btn btn-primary my-3 float-end px-4 rounded-pill" type="submit" id="btn_save">Guardar</button>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-12">
+                    <p class="col-12 fw-bold mb-1">
+                      Sobre mí
+                    </p>
+                    <p class="col-12 m-0">
+                      {{ form.about_me }}
+                    </p>  
+                  </div>
+                  <div class="col-md-12">
+                    <p class="col-12 fw-bold mb-1">
+                      Hoja de Vida
+                    </p>
+                    <p class="col-12 m-0">
+                      <div class="br-or" >
+                        <label class="input-file__icon" for="input-file"><i class="lni lni-arrow-up-circle"></i></label>
+                        <input class="input-file" type="file" name="input-file" id="input-file">
+                      </div>
+                    </p>  
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="">
+                    <button class="btn btn-primary my-3 float-end px-4 rounded-pill" type="submit" id="btn_save">Guardar</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+          {% if cv %}
+          <hr class="mt-3">
+          {% include 'partials/_cv.html' %}
+          {% endif %}
         </div>
-        {% if cv %}
-        <hr class="mt-3">
-        {% include 'partials/_cv.html' %}
-        {% endif %}
       </div>
     </div>
   </div>

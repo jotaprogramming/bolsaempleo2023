@@ -88,7 +88,7 @@
                   {% endif %}
                 </span>
               </div>
-              <div class="col d-flex flex-column gap-1 justify-content-center align-items-start">
+              <div class="col-10 d-flex flex-column gap-1 justify-content-center align-items-start">
                 <div class="w-100 d-flex justify-content-between">
                   <div>
                     <h5 class="fw-bold m-0">
@@ -131,9 +131,11 @@
                     {% endif %}
                   </div>
                 </div>
-                <p class="m-0 fw-light mt-2">
-                  {{ row.offer.description }}
-                </p>
+                <div class="m-0 fw-light mt-2 col-12">
+                  <div class="col-12 text-truncate">
+                    {{ row.offer.description }}
+                  </div>
+                </div>
                 <p class="m-0 fw-light">
                   Salario: {{ row.offer.currency }} {{ row.offer.salary|currency_format }} {{ row.offer.payperiod }}
                 </p>

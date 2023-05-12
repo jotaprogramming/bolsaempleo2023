@@ -69,7 +69,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # CUSTOMS
-    'core.middlewares.UserWithoutPermissions',
+    "core.middlewares.UserWithoutPermissions",
 ]
 
 ROOT_URLCONF = "jobboard.urls"

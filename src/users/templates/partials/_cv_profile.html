@@ -1,0 +1,151 @@
+{% load tz %}
+
+<div class="row gap-4 {% if object.userprofile.user_cv %}col-md-6{% else %}col-md-4{% endif %}">
+  <div class="card col-12">
+    <div class="card-body">
+      <div class="row row-gap-2">
+        {% if object.userprofile.user_cv %}
+          <h5 class="fw-bold m-0 col-12 mb-3">Hoja de vida</h5>
+          <div class="col-md-12 mb-2">
+            <div class="row">
+              <p class="col-12 fw-semibold fst-italic mb-1">Especialización</p>
+              <p class="col-12 m-0">
+                {% if object.userprofile.user_cv.specialization.name %}
+                {{ object.userprofile.user_cv.specialization.name }}
+                {% else %}
+                ------
+                {% endif %}
+              </p>
+            </div>
+          </div>
+          <div class="col-md-12 mb-2">
+            <div class="row">
+              <p class="col-12 fw-semibold fst-italic mb-1">
+                Conocimientos y/o Habilidades
+              </p>
+              <p class="col-12 m-0">
+                {% if object.userprofile.user_cv.skills %}
+                {{ object.userprofile.user_cv.skills }}
+                {% else %} ------ {% endif %}
+              </p>
+            </div>
+          </div>
+          <div class="col-md-12 mb-2">
+            <div class="row">
+              <p class="col-12 fw-semibold fst-italic mb-1">Experiencia laboral</p>
+              {% for works in object.userprofile.user_cv.cv_works.all %}
+              <p class="col-12 m-0">
+                <strong>Empresa: </strong>
+                {% if works.company.company %}
+                {{ works.company.company.name }}
+                {% else %}
+                {{ works.company.another_name }}
+                {% endif %}
+                <br />
+                <strong>Fecha: </strong>
+                Desde {{ works.company.start_date }},
+                hasta
+                {% if works.company.currently %}
+                la actualidad
+                {% else %}
+                {{ works.company.end_date }}
+                {% endif %}
+                <br />
+                <strong>Funciones: </strong>
+                {{ works.performances }}
+                <br />
+                <strong>Calificación: </strong>
+                {{ works.rating }}
+                <br />
+              </p>
+              {% empty %} 
+              <p class="col-12 m-0">------</p>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="col-md-12 mb-2">
+            <div class="row">
+              <p class="col-12 fw-semibold fst-italic mb-1">Estudios</p>
+              {% for education in object.userprofile.user_cv.cv_education.all %}
+              <p class="col-12 m-0">
+                <strong>Institución: </strong>
+                {{ education.academy.another_name }}
+                <br />
+                <strong>Nivel alcanzado: </strong>
+                {{ education.get_level_display }}
+                <br />
+                <strong>Fecha: </strong>
+                Desde {{ education.academy.start_date }},
+                hasta
+                {% if education.academy.currently %}
+                la actualidad
+                {% else %}
+                {{ education.academy.end_date }}
+                {% endif %}
+                <br />
+              </p>
+              {% empty %} 
+              <p class="col-12 m-0">------</p>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="col-md-12 mb-2">
+            <div class="row">
+              <p class="col-12 fw-semibold fst-italic mb-1">Idiomas</p>
+              {% for perlan in object.userprofile.user_cv.cv_languages.all %}
+              <p class="col-12 m-0">
+                <strong>Idioma: </strong>
+                {{ perlan.language.name }}
+                <br />
+                <strong>Nivel: </strong>
+                {{ perlan.get_level_display }}
+                <br />
+              </p>
+              {% empty %} 
+              <p class="col-12 m-0">------</p>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="col-md-12 mb-2">
+            <div class="row">
+              <p class="col-12 fw-semibold fst-italic mb-1">
+                Hoja de vida adjunta
+              </p>
+              <p class="col-12 m-0">
+                {% if object.userprofile.user_cv.attached %}
+                {{ object.userprofile.user_cv.attached }}
+                {% else %} ------ {% endif%}
+              </p>
+            </div>
+          </div>
+        {% else %}
+          <h5 class="card-title">¿No tienes aún una hoja de vida?</h5>
+          <div class="card-text mb-2">
+            ¡Añade una rapidamente!
+            <br>
+            Las empresas la utilizan para conocerte y medir tus capacidades con respecto al cargo que estás aspirando.
+          </div>
+          <div class="col-md-12">
+            <div class="d-flex justify-content-evenly align-items-center">
+              <a
+                class="btn btn-primary"
+                href="{% url 'users_app:cv_add' username %}"
+              >
+                <i class="lni lni-padlock"></i>
+                <span class="">Créala ahora</span>
+              </a>
+              o
+              <a
+                class="btn btn-secondary"
+                href="{% url 'users_app:cv_add' username %}"
+              >
+                <i class="lni lni-padlock"></i>
+                <span class="">Adjunta una</span>
+              </a>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

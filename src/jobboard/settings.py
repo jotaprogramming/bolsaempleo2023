@@ -105,10 +105,10 @@ DATABASES = {
     #
     # The db() method is an alias for db_url().
     "default": env.db("POSTGRES_URL" if DB_OPT == "docker" else "DATABASE_URL"),
-    "settings": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "settings.sqlite3",
-    },
+    # "settings": {
+    #     "ENGINE": "django.db.backends.sqlite3",
+    #     "NAME": BASE_DIR / "settings.sqlite3",
+    # },
 }
 
 # DATABASE_ROUTERS = ('config.dbrouters.AdjustmentRouter',)

@@ -7,4 +7,4 @@ python manage.py collectstatic --noinput
 python manage.py makemigrations 
 python manage.py migrate
 
-gunicorn jobboard.wsgi:application --bind 0.0.0.0:80
+# gunicorn jobboard.wsgi:application --bind 0.0.0.0:80

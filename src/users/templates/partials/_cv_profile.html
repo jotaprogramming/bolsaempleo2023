@@ -111,11 +111,25 @@
               <p class="col-12 fw-semibold fst-italic mb-1">
                 Hoja de vida adjunta
               </p>
-              <p class="col-12 m-0">
+              <div class="col-12 m-0">
                 {% if object.userprofile.user_cv.attached %}
-                {{ object.userprofile.user_cv.attached }}
-                {% else %} ------ {% endif%}
-              </p>
+                <div class="pdf-thumbnail" style="width: fit-content;">
+                  <div id="pdfThumbnail">
+                    <div class="spinner-border" style="width: 2rem; height: 2rem;" role="status">
+                      <span class="visually-hidden">Cargando hoja de vida...</span>
+                    </div>
+                    <span>Cargando hoja de vida...</span>
+                  </div>
+                  <div class="pdf-thumbnail-hover-hidden" id="pdfUpBtn" url="{{object.userprofile.user_cv.attached.url}}">
+                    <span>
+                      <i class="bi bi-eye"></i>
+                    </span>
+                  </div>
+                </div>
+                {% else %}
+                ------
+                {% endif%}
+              </div>
             </div>
           </div>
         {% else %}

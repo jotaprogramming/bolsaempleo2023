@@ -929,6 +929,7 @@ class UserProfileDetail(LoginRequiredMixin, generic.TemplateView):
         context["initial"] = username_param[0]
         context["username"] = username_param
         context["profile"] = True
+        context["company"] = User.objects.filter(username=username_param, rule_user__usergroup__code="COM").count()
 
         return context
 

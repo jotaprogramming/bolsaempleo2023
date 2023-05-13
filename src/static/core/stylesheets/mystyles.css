@@ -18,9 +18,8 @@
 .fat img{
     z-index: 1;
 }
-.bi{
+/* .bi{
     position: absolute;
-    /* background-color: #F4893C; */
     z-index: 999;
     top: 0;
     bottom: 0;
@@ -30,7 +29,7 @@
     width: 100%;
     height: auto;
     gap: 1rem;
-}
+} */
 .carousel-caption{
     padding: 0 !important;
     background-color: yellow;

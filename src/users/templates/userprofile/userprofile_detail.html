@@ -156,8 +156,9 @@
         {% if object.userprofile.company_profile %}
           {% include 'partials/_company_profile.html' %}
         {% endif %}
-
+        {% if not company %}
         {% include 'partials/_cv_profile.html' %}
+        {% endif %}
       </div>
     </div>
   </div>

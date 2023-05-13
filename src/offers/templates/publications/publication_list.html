@@ -144,9 +144,9 @@
                     </div>
                   </div>
                 </div>
-                <p class="m-0 fw-light mt-2 w-100 text-truncate" style="max-heigth: 5rem;">
-                  {{ row.description }}
-                </p>
+                <div class="w-100 overflow-hidden" style="max-height: 6rem;">
+                  {{ row.description|linebreaks }}
+                </div>
                 {% if row.status %}
                   {% if row.completed_candidates == 0 %}
                   <p class="m-0 fw-light">

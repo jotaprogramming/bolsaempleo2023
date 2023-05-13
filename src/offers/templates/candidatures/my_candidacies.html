@@ -132,8 +132,8 @@
                   </div>
                 </div>
                 <div class="m-0 fw-light mt-2 col-12">
-                  <div class="col-12 text-truncate">
-                    {{ row.offer.description }}
+                  <div class="w-100 overflow-hidden" style="max-height: 6rem;">
+                    {{ row.offer.description|linebreaks }}
                   </div>
                 </div>
                 <p class="m-0 fw-light">

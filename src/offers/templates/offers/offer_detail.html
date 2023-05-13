@@ -68,7 +68,7 @@
                         </div>
                     </div>
                     <h6 class="mt-4 fw-bold">Descripción</h6>
-                    <p>{{ object.description }}</p>
+                    <div>{{ object.description|linebreaks }}</div>
                     <h6 class="mt-4 fw-bold">Requisitos</h6>
                     {% if object.get_requirements %}
                         {% for requirement in object.get_requirements %}

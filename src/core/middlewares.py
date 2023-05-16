@@ -2,7 +2,7 @@ import importlib
 from pprint import pprint
 
 from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
+from django.urls import resolve, reverse_lazy
 from django.contrib.auth.mixins import AccessMixin
 from django.urls import resolve
 
@@ -39,29 +39,9 @@ class UserWithoutPermissions:
         if not request.user.is_staff and url_resolve.url_name:
             try:
                 urlpatterns = f"{url_resolve.app_names[0]}:{url_resolve.url_name}"
-                dispatch = verify_dispatch(urlpatterns)
-                if dispatch:
-                    result = validate_urlpattern(request, urlpatterns)
-                    username = (
-                        "username" in url_resolve.kwargs
-                        and url_resolve.kwargs["username"]
-                    )
-                    slug = username
-                    if not username:
-                        slug = (
-                            "slug" in url_resolve.kwargs and url_resolve.kwargs["slug"]
-                        )
-
-                    if result and username:
-                        if (
-                            not username == request.user.username
-                            and not slug == request.user.username
-                        ):
-                            result = 0
-
-                    if not result:
+                if verify_dispatch(urlpatterns):
+                    if not validate_urlpattern(request, urlpatterns):
                         return HttpResponseRedirect(reverse_lazy("home_app:home_page"))
-
             except Exception as ex:
                 print(f"Error in UserWithoutPermissions: {ex}")
 

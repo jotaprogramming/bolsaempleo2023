@@ -144,27 +144,17 @@ def verify_dispatch(urlpatterns):
     :return: a boolean value. It returns True if the given urlpatterns contain a URL pattern that has a
     view function with an inheritance from the Django authentication mixin, and False otherwise.
     """
-    urlpatterns_split = urlpatterns.split(":")
-    app = urlpatterns_split[0].replace("_app", "")
-    pathname = urlpatterns_split[1]
-    mod_urls_to_import = f"{app}.urls"
-    urls = getattr(importlib.import_module(mod_urls_to_import), "urlpatterns")
-    try:
-        for url in urls:
-            if url.name == pathname:
-                lookup = url.lookup_str
-                lookup_split = lookup.split(".")
-                class_name = lookup_split[-1]
-                mod_views_to_import = f"{app}.views"
-                _class = getattr(
-                    importlib.import_module(mod_views_to_import), class_name
-                )
-                inheritences = _class.__mro__
-                for inheritence in inheritences:
-                    if "django.contrib.auth.mixins" == inheritence.__module__:
-                        return True
-    except:
-        pass
+    app_name, url_name = urlpatterns.split(":")
+    app_module = importlib.import_module(app_name.replace("_app", ""))
+    urls = getattr(app_module, "urlpatterns", [])
+
+    for url in urls:
+        if url.name == url_name:
+            view_func = url.callback.view_class
+            inheritances = view_func.mro()
+            for inheritance in inheritances:
+                if inheritance.__module__ == "django.contrib.auth.mixins":
+                    return True
 
     return False
 
@@ -177,24 +167,14 @@ def validate_urlpattern(request, urlpatterns):
     user making the request, the HTTP method used, and any data submitted in the request
     :param urlpatterns: The `urlpatterns` parameter is a string representing a URL pattern that needs to
     be validated
-    :return: the result of filtering policies based on whether the app name contains the provided URL
-    pattern. The result is an integer value, which is not very informative on its own. It seems like the
-    function is intended to check if the user has permission to access a certain URL pattern based on
-    their assigned rules, user groups, roles, and policies. However, without more context on the data
-    models
+    :return: True if the user has permission to access the provided URL pattern, False otherwise.
     """
-    rules = request.user.rule_user.all()
-    usergroups = [rule.usergroup for rule in rules]
-    roles = [rule.role for rule in rules]
-    policies = [usergroup.usergroup_policy.all() for usergroup in usergroups]
 
-    result = 0
-    permissions = []
-    for qs in policies:
-        for policy in qs:
-            result = policy.app.filter(name__icontains=urlpatterns.strip())
-            # apps = policy.app.all()
-            # for app in apps:
-            #     print(f"{urlpatterns} == {app.name} = {urlpatterns == app.name}")
+    rules = request.user.rule_user.select_related("usergroup__usergroup_policy__app")
+    for rule in rules:
+        if rule.usergroup.usergroup_policy.filter(
+            app__name__icontains=urlpatterns.strip()
+        ).exists():
+            return True
 
-    return result
+    return False

@@ -407,6 +407,7 @@ class CurriculumVitae(models.Model):
         related_name="cv_specialization",
         verbose_name=_("specialization"),
         blank=True,
+        null=True,
         on_delete=models.PROTECT,
     )
     # job_profile = models.TextField(_("job profile"), null=False)

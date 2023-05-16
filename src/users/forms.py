@@ -944,65 +944,6 @@ class UserProfileModelForm(forms.ModelForm):
         }
 
 
-class WorksForm:
-    # COMPANY 1
-    company1 = forms.CharField(
-        # max_length=10,
-        min_length=3,
-        required=False,
-        label="Nombre de la empresa",
-        widget=forms.NumberInput(
-            attrs={
-                "class": "single-input",
-                "title": _("(0) mala - (10) buena"),
-            },
-        ),
-    )
-    rating1 = forms.DecimalField(
-        max_value=10,
-        min_value=0,
-        max_digits=1,
-        required=False,
-        label="Califica tu estadía en la empresa",
-        widget=forms.NumberInput(
-            attrs={
-                "class": "single-input",
-                "title": _("(0) mala - (10) buena"),
-            },
-        ),
-    )
-    performances1 = forms.CharField(
-        min_length=3,
-        required=False,
-        label="¿Cuales fueron tus funciones dentro de la empresa?",
-        widget=forms.TextInput(
-            attrs={
-                "class": "single-input",
-            },
-        ),
-    )
-    start_date1 = forms.DateField(
-        label="Fecha de inicio",
-        required=True,
-        widget=forms.DateInput(
-            format="%Y-%m-%d", attrs={"class": "single-input", "type": "date"}
-        ),
-    )
-    end_date1 = forms.DateField(
-        label="Fecha final",
-        required=True,
-        widget=forms.DateInput(
-            format="%Y-%m-%d", attrs={"class": "single-input", "type": "date"}
-        ),
-    )
-    currently1 = forms.BooleanField(
-        required=False,
-        label="En actualidad",
-        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
-        initial=False,
-    )
-
-
 class CurriculumVitaeForm(forms.ModelForm):
     specialization = forms.ModelChoiceField(
         queryset=Specializations.objects.exclude(
@@ -1050,6 +991,29 @@ class CurriculumVitaeForm(forms.ModelForm):
                     "class": "single-input",
                 }
             ),
+            "attached": forms.FileInput(
+                attrs={
+                    "class": "input-file",
+                    "title": _("Subir pdf con tu hoja de vida"),
+                },
+            ),
+        }
+
+class CurriculumVitaeAttachForm(forms.ModelForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(CurriculumVitaeAttachForm, self).__init__(*args, **kwargs)
+        self.fields["attached"].label = "Adjunta tu hoja de vida"
+        self.fields["attached"].required = True
+
+    class Meta:
+        model = CurriculumVitae
+
+        fields = [
+            "attached",
+        ]
+
+        widgets = {
             "attached": forms.FileInput(
                 attrs={
                     "class": "input-file",

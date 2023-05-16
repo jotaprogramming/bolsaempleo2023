@@ -122,4 +122,9 @@ urlpatterns = [
         CurriculumVitaeDeleteAttached.as_view(),
         name="cv_delete_attached",
     ),
+    path(
+        "curriculum/<slug:slug>/attach",
+        CurriculumVitaeAttach.as_view(),
+        name="cv_attach",
+    ),
 ]

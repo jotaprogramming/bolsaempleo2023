@@ -1611,3 +1611,46 @@ class CurriculumVitaeDeleteAttached(LoginRequiredMixin, generic.UpdateView):
     def form_valid(self, form):
         # form.instance.deleted_at = timezone.now()
         return super().form_valid(form)
+
+class CurriculumVitaeAttach(LoginRequiredMixin, generic.CreateView):
+    login_url = "/login"
+    model = CurriculumVitae
+    form_class = CurriculumVitaeAttachForm
+    template_name = "curriculum/cv_attach.html"
+
+    def get_success_url(self):
+        slug = self.kwargs.get("slug", "")
+
+        success_message(
+            self.request, msg="Tu hoja de vida fue subida satisfactoriamente"
+        )
+        return reverse_lazy("users_app:userprofile", args=[slug])
+
+    def get_context_data(self, **kwargs):
+        slug = self.kwargs.get("slug", "")
+        context = super(CurriculumVitaeAttach, self).get_context_data(**kwargs)
+        context["app_title"] = app_title
+        context["title_view"] = cv_title
+        context["description_view"] = cv_desc
+        context["username"] = slug
+        return context
+
+    def form_valid(self, form):
+        slug = self.kwargs.get("slug", "")
+        try:
+            userprofile = UserProfile.objects.get(user__username=slug)
+            form.instance.userprofile = userprofile
+        except Exception as ex:
+            print(f"An exception occurred: {ex}")
+            warning_message(self.request, msg=ex)
+            return reverse_lazy("users_app:userprofile", args=[slug])
+        return super().form_valid(form)
+
+    def form_invalid(self, form, **kwargs):
+        slug = self.kwargs.get("slug", "")
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
+        return HttpResponseRedirect(reverse_lazy("users_app:userprofile", args=[slug]))

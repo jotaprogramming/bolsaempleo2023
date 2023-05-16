@@ -112,9 +112,14 @@ urlpatterns = [
         CurriculumVitaeCreate.as_view(),
         name="cv_add",
     ),
-    # path(
-    #     "profile/<slug:slug>/edit",
-    #     UserProfileEdit.as_view(),
-    #     name="userprofile_edit",
-    # ),
+    path(
+        "curriculum/<slug:slug>/edit",
+        CurriculumVitaeEdit.as_view(),
+        name="cv_edit",
+    ),
+    path(
+        "curriculum/<slug:slug>/delete/attached",
+        CurriculumVitaeDeleteAttached.as_view(),
+        name="cv_delete_attached",
+    ),
 ]

@@ -385,6 +385,8 @@ class Entities(models.Model):
     currently = models.BooleanField(default=False)
 
     def __str__(self):
+        if self.company:
+            return "{}".format(self.company)
         return "{}".format(self.another_name)
 
     class Meta:
@@ -458,7 +460,7 @@ class Works(models.Model):
     )  # functions, positions, duties
 
     def __str__(self):
-        return "{}".format(self.company.another_name)
+        return "{}".format(self.company)
 
     class Meta:
         verbose_name = _("work")

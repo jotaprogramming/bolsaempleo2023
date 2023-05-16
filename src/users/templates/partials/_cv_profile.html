@@ -5,7 +5,12 @@
     <div class="card-body">
       <div class="row row-gap-2">
         {% if object.userprofile.user_cv %}
-          <h5 class="fw-bold m-0 col-12 mb-3">Hoja de vida</h5>
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold m-0 mb-3">Hoja de vida</h5>
+            <a role="button" class="btn btn-primary" href="{% url 'users_app:cv_edit' username %}">
+              Editar
+            </a>
+          </div>
           <div class="col-md-12 mb-2">
             <div class="row">
               <p class="col-12 fw-semibold fst-italic mb-1">Especialización</p>
@@ -113,18 +118,28 @@
               </p>
               <div class="col-12 m-0">
                 {% if object.userprofile.user_cv.attached %}
-                <div class="pdf-thumbnail" style="width: fit-content;">
-                  <div id="pdfThumbnail">
-                    <div class="spinner-border" style="width: 2rem; height: 2rem;" role="status">
-                      <span class="visually-hidden">Cargando hoja de vida...</span>
+                <div class="d-flex gap-1">
+                  <div class="pdf-thumbnail" style="width: fit-content;">
+                    <div id="pdfThumbnail">
+                      <div class="spinner-border" style="width: 2rem; height: 2rem;" role="status">
+                        <span class="visually-hidden">Cargando hoja de vida...</span>
+                      </div>
+                      <span>Cargando hoja de vida...</span>
                     </div>
-                    <span>Cargando hoja de vida...</span>
+                    <div class="pdf-thumbnail-hover-hidden" id="pdfUpBtn" url="{{object.userprofile.user_cv.attached.url}}">
+                      <span>
+                        <i class="bi bi-eye"></i>
+                      </span>
+                    </div>
                   </div>
-                  <div class="pdf-thumbnail-hover-hidden" id="pdfUpBtn" url="{{object.userprofile.user_cv.attached.url}}">
-                    <span>
-                      <i class="bi bi-eye"></i>
-                    </span>
-                  </div>
+                  <button 
+                    class="btn btn-sm m-0 p-1 d-flex justify-content-center align-items-center"
+                    name="deleteButtons"
+                    id="{% url 'users_app:cv_delete_attached' username %}"
+                    style="height: fit-content; width: fit-content; font-size: 14px"
+                  >
+                    <i class="lni lni-close"></i>
+                  </button>
                 </div>
                 {% else %}
                 ------

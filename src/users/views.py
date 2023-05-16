@@ -929,7 +929,9 @@ class UserProfileDetail(LoginRequiredMixin, generic.TemplateView):
         context["initial"] = username_param[0]
         context["username"] = username_param
         context["profile"] = True
-        context["company"] = User.objects.filter(username=username_param, rule_user__usergroup__code="COM").count()
+        context["company"] = User.objects.filter(
+            username=username_param, rule_user__usergroup__code="COM"
+        ).count()
 
         return context
 
@@ -1332,28 +1334,6 @@ class CurriculumVitaeCreate(LoginRequiredMixin, generic.CreateView):
         slug = self.kwargs.get("slug", "")
         cv = self.object
 
-        # {
-        #     "csrfmiddlewaretoken": [
-        #         "0zyIXYlatFwFNklyDlPDJGvgPEJ2QslrLNPX8VffYVLkKtVEsSrf8LRxsXi0fzVt"
-        #     ],
-        #     "specialization": ["3"],
-        #     "skills": ["No sé nada"],
-        #     "study_level": ["6"],
-        #     "academy": ["Universidad Enuna"],
-        #     "ac_start_date": ["2023-05-07"],
-        #     "ac_end_date": ["2023-05-09"],
-        #     "ac_currently": ["on"],
-        #     "lan_level": ["5"],
-        #     "language": ["1"],
-        #     "company": ["COLGATESTA SAS"],
-        #     "com_start_date": ["2023-05-01"],
-        #     "com_end_date": ["2023-05-12"],
-        #     "com_currently": ["on"],
-        #     "performances": ["No sé no he ido ;)"],
-        #     "rating": ["2.5"],
-        #     "attached": [""],
-        # }
-
         # Education
         study_level_id = self.request.POST.get("study_level", "")
         academy = self.request.POST.get("academy", "")
@@ -1398,7 +1378,7 @@ class CurriculumVitaeCreate(LoginRequiredMixin, generic.CreateView):
 
         corporate_institution = Entities(
             company=company,
-            # another_name=com_name,
+            another_name=None if company else com_name,
             start_date=com_start_date,
             end_date=None if com_currently else com_end_date,
             currently=com_currently,
@@ -1459,18 +1439,127 @@ class CurriculumVitaeEdit(LoginRequiredMixin, generic.UpdateView):
     form_class = CurriculumVitaeForm
     template_name = "curriculum/cv_edit.html"
 
+    def get_object(self, queryset=None):
+        slug = self.kwargs.get("slug", "")
+        obj = self.model.objects.get(userprofile__user__username=slug)
+        return obj
+
     def get_success_url(self):
         slug = self.kwargs.get("slug", "")
+        cv = self.object
+
+        # Company
+        com_name = self.request.POST.get("company", "")
+        com_start_date = self.request.POST.get("com_start_date", "")
+        com_end_date = self.request.POST.get("com_end_date", "")
+        com_currently = self.request.POST.get("com_currently", "")
+        rating = self.request.POST.get("rating", "")
+        performances = self.request.POST.get("performances", "")
+
+        com_currently = True if com_currently == "on" else False
+
+        performances = performances.replace("  ", " ")
+
+        company = None
+        companies = Companies.objects.filter(name__icontains=com_name)
+        if companies:
+            company = companies.first()
+
+        works = Works.objects.filter(cv=cv)
+        work = works.first()
+        corporate_institution = Entities.objects.get(pk=work.company.pk)
+        corporate_institution.company = company
+        corporate_institution.another_name = None if company else com_name
+        corporate_institution.start_date = com_start_date
+        corporate_institution.end_date = None if com_currently else com_end_date
+        corporate_institution.currently = com_currently
+        corporate_institution.save(
+            update_fields=[
+                "company",
+                "another_name",
+                "start_date",
+                "end_date",
+                "currently",
+            ]
+        )
+
+        work.company = corporate_institution
+        work.rating = rating
+        work.performances = performances
+        work.save(update_fields=["company", "rating", "performances"])
+
+        # Education
+        study_level_id = self.request.POST.get("study_level", "")
+        academy = self.request.POST.get("academy", "")
+        ac_start_date = self.request.POST.get("ac_start_date", "")
+        ac_end_date = self.request.POST.get("ac_end_date", "")
+        ac_currently = self.request.POST.get("ac_currently", "")
+
+        ac_currently = True if ac_currently == "on" else False
+
+        # academic_institution = Entities(
+        #     another_name=academy,
+        #     start_date=ac_start_date,
+        #     end_date=None if ac_currently else ac_end_date,
+        #     currently=ac_currently,
+        # )
+        # academic_institution.save()
+
+        educations = Education.objects.filter(cv=cv)
+        education = educations.first()
+        academic_institution = Entities.objects.get(pk=education.academy.pk)
+        academic_institution.another_name = academy
+        academic_institution.start_date = ac_start_date
+        academic_institution.end_date = None if ac_currently else ac_end_date
+        academic_institution.currently = ac_currently
+        academic_institution.save(
+            update_fields=[
+                "another_name",
+                "start_date",
+                "end_date",
+                "currently",
+            ]
+        )
+        education.academy = academic_institution
+        education.level = study_level_id
+        education.save(
+            update_fields=[
+                "academy",
+                "level",
+            ]
+        )
+
+        # # Languages
+        lan_level = self.request.POST.get("lan_level", "")
+        language_id = self.request.POST.get("language", "")
+
+        perlan = PersonalLanguages.objects.filter(cv=cv).first()
+        perlan.language_id = language_id
+        perlan.level = lan_level
+        perlan.save(
+            update_fields=[
+                "language_id",
+                "level",
+            ]
+        )
+
         success_message(
-            self.request, msg="Tu hoja de vida se añadida satisfactoriamente"
+            self.request, msg="Tu hoja de vida fue actualizada satisfactoriamente"
         )
         return reverse_lazy("users_app:userprofile", args=[slug])
 
     def get_context_data(self, **kwargs):
+        slug = self.kwargs.get("slug", "")
         context = super(CurriculumVitaeEdit, self).get_context_data(**kwargs)
         context["app_title"] = app_title
         context["title_view"] = cv_title
         context["description_view"] = cv_desc
+        context["username"] = slug
+        context["datalist_company"] = Companies.objects.all()
+        context["datalist_academy"] = Entities.objects.exclude(academy__in=[None])
+        context["languages"] = Languages.objects.all()
+        context["study_level"] = STUDY_LEVEL
+        context["lan_level"] = LAN_LEVEL
         return context
 
     def form_valid(self, form):
@@ -1484,30 +1573,41 @@ class CurriculumVitaeEdit(LoginRequiredMixin, generic.UpdateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return reverse_lazy("users_app:userprofile", args=[slug])
+        return HttpResponseRedirect(reverse_lazy("users_app:userprofile", args=[slug]))
 
 
-class CurriculumVitaeDeleteModal(LoginRequiredMixin, generic.UpdateView):
+class CurriculumVitaeDeleteAttached(LoginRequiredMixin, generic.UpdateView):
     login_url = "/login"
     model = CurriculumVitae
     form_class = FormDelete
-    template_name = "curriculum/cv_delete_modal.html"
+    template_name = "curriculum/cv_delete_attached.html"
 
-    def get_queryset(self):
-        data = CurriculumVitae.objects.order_by()
-        return data
+    def get_object(self, queryset=None):
+        slug = self.kwargs.get("slug", "")
+        obj = self.model.objects.get(userprofile__user__username=slug)
+        return obj
 
     def get_success_url(self):
-        success_message(self.request, msg="Registro eliminado satisfactoriamente")
-        return reverse_lazy("users_app:cv_list")
+        slug = self.kwargs.get("slug", "")
+        attached = self.object.attached
+        if attached:
+            attached.delete()
+
+        success_message(
+            self.request, msg="Hoja de vida adjunta eliminada satisfactoriamente"
+        )
+        return reverse_lazy("users_app:userprofile", args=[slug])
 
     def get_context_data(self, **kwargs):
-        context = super(CurriculumVitaeDeleteModal, self).get_context_data(**kwargs)
+        slug = self.kwargs.get("slug", "")
+        context = super(CurriculumVitaeDeleteAttached, self).get_context_data(**kwargs)
         context["app_title"] = app_title
         context["title_view"] = cv_title
         context["description_view"] = cv_desc
+        context["username"] = slug
+
         return context
 
     def form_valid(self, form):
-        form.instance.deleted_at = timezone.now()
+        # form.instance.deleted_at = timezone.now()
         return super().form_valid(form)

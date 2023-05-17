@@ -7,9 +7,11 @@
         {% if object.userprofile.user_cv %}
           <div class="d-flex justify-content-between align-items-center">
             <h5 class="fw-bold m-0 mb-3">Hoja de vida</h5>
+            {% if request.user.is_staff or request.user.username == object.username %}
             <a role="button" class="btn btn-primary" href="{% url 'users_app:cv_edit' username %}">
               Editar
             </a>
+            {% endif %}
           </div>
           {% if object.userprofile.user_cv.specialization.name %}
           <div class="col-md-12 mb-2">

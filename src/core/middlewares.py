@@ -42,25 +42,37 @@ class UserWithoutPermissions:
                 dispatch = verify_dispatch(urlpatterns)
                 if dispatch:
                     result = validate_urlpattern(request, urlpatterns)
-                    username = (
-                        "username" in url_resolve.kwargs
-                        and url_resolve.kwargs["username"]
-                    )
-                    slug = username
-                    if not username:
-                        slug = (
-                            "slug" in url_resolve.kwargs and url_resolve.kwargs["slug"]
+
+                    candidature_save = None
+
+                    if result:
+                        candidature_save = result.filter(
+                            name="offers_app:candidature_save"
                         )
 
-                    if result and username:
-                        if (
-                            not username == request.user.username
-                            and not slug == request.user.username
-                        ):
-                            result = 0
+                    if not candidature_save:
+                        username = (
+                            "username" in url_resolve.kwargs
+                            and url_resolve.kwargs["username"]
+                        )
+                        slug = username
+                        if not username:
+                            slug = (
+                                "slug" in url_resolve.kwargs
+                                and url_resolve.kwargs["slug"]
+                            )
 
-                    if not result:
-                        return HttpResponseRedirect(reverse_lazy("home_app:home_page"))
+                        if result and username:
+                            if (
+                                not username == request.user.username
+                                and not slug == request.user.username
+                            ):
+                                result = 0
+
+                        if not result:
+                            return HttpResponseRedirect(
+                                reverse_lazy("home_app:home_page")
+                            )
 
             except Exception as ex:
                 print(f"Error in UserWithoutPermissions: {ex}")

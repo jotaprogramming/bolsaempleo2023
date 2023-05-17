@@ -163,8 +163,8 @@ def verify_dispatch(urlpatterns):
                 for inheritence in inheritences:
                     if "django.contrib.auth.mixins" == inheritence.__module__:
                         return True
-    except:
-        pass
+    except Exception as ex:
+        print(f"Error in verify_dispatch: {ex}")
 
     return False
 

@@ -3,6 +3,7 @@ from datetime import datetime
 import json
 
 # DJANGO MODULES
+from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
@@ -28,18 +29,33 @@ from django.db.models import (
 from django.utils.translation import gettext as _
 from django.core import signing
 from django.db.models import Q, F, Count, Sum, Case, When, BooleanField, IntegerField
+from django.utils import timezone
 
 # EXTRA MODULES
 import sweetify
+from notifications.signals import notify
+from notifications.models import Notification
 
 # PROJECT MODULES
-from offers.forms import *
-from offers.models import *
-from core.utils import *
-from users.models import *
+from offers.forms import (
+    OfferAdminForm,
+    OfferForm,
+    CandidatureSaveForm,
+    CandidatureUpdateForm,
+)
+from offers.models import Tags, Offers, Candidatures
+from offers.utils import (
+    get_pk_from_a_slug,
+    send_new_offer_notification,
+    get_status_name,
+    send_notification_of_candidacy_status,
+    OFFER_STATUS,
+    POST_STATUS,
+)
+from core.utils import success_message, warning_message, get_form_errors
+from users.models import UserRules
 from users.forms import FormDelete
 from jobboard.utils import *
-
 
 # GLOBAL VARIABLES
 app_title = _("Ofertas")
@@ -106,10 +122,9 @@ class OfferDetail(LoginRequiredMixin, generic.DetailView):
 
         candidatures = Candidatures.objects.filter(
             offer=offer.id, deleted_at=None
-        ).exclude(status="2")
+        )
 
         allowed_to_apply = UserRules.objects.filter(user=user, usergroup__code="GRA")
-        print("🐍 File: offers/views.py | Line: 112 | get_context_data ~ allowed_to_apply",allowed_to_apply)
         allowed_to_edit = UserRules.objects.filter(
             user=user,
             user__offer_user=offer.id,
@@ -403,7 +418,8 @@ class PublicationCreate(LoginRequiredMixin, generic.CreateView):
 
     def get_success_url(self):
         self.object.tags.set(self.tags)
-        # self.object.save(update_fields=["tags"])
+
+        send_new_offer_notification(self)
         success_message(self.request)
         return reverse_lazy("offers_app:bidding_panel")
 
@@ -421,7 +437,7 @@ class PublicationCreate(LoginRequiredMixin, generic.CreateView):
         form_tags = form.cleaned_data["tags"]
         tag_list = form_tags.split(",")
 
-        # temp_list = []
+        self.tags = []
         for tag in tag_list:
             try:
                 objtag = Tags.objects.get(name__icontains=tag)
@@ -632,6 +648,7 @@ class CandidatureSave(LoginRequiredMixin, generic.FormView):
         username = self.kwargs.get("username", "")
 
         status_name = get_status_name(p_status)
+        send_notification_of_candidacy_status(self)
 
         if p_path:
             success_message(

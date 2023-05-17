@@ -106,7 +106,6 @@ urlpatterns = [
         name="userprofile_edit",
     ),
     # CURRICULUM VITAE
-    # path("curriculum/<slug:slug>", CurriculumVitaeDetail.as_view(), name="userprofile"),
     path(
         "curriculum/<slug:slug>/add",
         CurriculumVitaeCreate.as_view(),
@@ -127,4 +126,6 @@ urlpatterns = [
         CurriculumVitaeAttach.as_view(),
         name="cv_attach",
     ),
+    # NOTIFICATIONS
+    path("<str:username>/notifications", NotificationList.as_view(), name="notifications"),
 ]

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     # MODULES
     "sweetify",
     "coverage",
+    'notifications',
     # APPs
     "core",
     "home",

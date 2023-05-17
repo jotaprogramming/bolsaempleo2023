@@ -29,6 +29,7 @@ from django.utils.translation import gettext as _
 
 # EXTRA MODULES
 import sweetify
+from notifications.models import Notification
 
 # PROJECT MODULES
 from users.forms import *
@@ -1654,3 +1655,22 @@ class CurriculumVitaeAttach(LoginRequiredMixin, generic.CreateView):
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
         return HttpResponseRedirect(reverse_lazy("users_app:userprofile", args=[slug]))
+
+# NOTIFICATIONS
+class NotificationList(LoginRequiredMixin, generic.ListView):
+    login_url = "/login"
+    model = Notification
+    template_name = "notifications/notification_list.html"
+    paginate_by = 10
+
+    def get_queryset(self):
+        username = self.kwargs.get("username", "")
+        return self.model.objects.filter(recipient__username=username).order_by("-timestamp")
+
+    def get_context_data(self, **kwargs):
+        username = self.kwargs.get("username", "")
+        context = super(NotificationList, self).get_context_data(**kwargs)
+        context["app_title"] = "Panel de notificaciones"
+        context["title_view"] = username
+        context["notifications"] = True
+        return context

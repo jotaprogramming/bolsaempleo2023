@@ -1,0 +1,25 @@
+{% load static %} {% load format_numbers %}
+
+<div class="card bid-letter position-relative">
+  <div class="card-body m-0">
+    <h6 class="">{{ row.target.offer.title }}</h6>
+    <div class="card-text">
+      <div class="col-12 mb-2">
+        <div class="text-truncate">{{ row.target.offer.description }}</div>
+      </div>
+      <div class="col-12 d-flex gap-2">
+        {% include 'partials/icon_element/_dolar_icon.html' %}
+        <span class="text-black">
+          {{ row.target.offer.currency }}
+          {{ row.target.offer.salary|currency_format }}
+          {{ row.target.offer.payperiod }}
+        </span>
+      </div>
+      <a
+        href="{% url 'offers_app:offer_detail' row.target.offer.slug %}"
+        class="stretched-link"
+        role="button"
+      ></a>
+    </div>
+  </div>
+</div>

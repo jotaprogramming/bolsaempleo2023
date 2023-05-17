@@ -33,18 +33,6 @@
             </p>
           </div>
         </div>
-        {% if request.user.is_staff or request.user.username == object.username %}
-          <div class="my-2">
-            <a
-              class="btn btn-secondary"
-              href="{% url 'users_app:credentials_recover' %}"
-            >
-              <i class="lni lni-padlock"></i>
-              <span class="">Cambiar contraseña</span>
-            </a>
-          </div>
-        {% endif %}
-        {% comment %} <button class="btn btn-outline-primary" type="button" style="height: fit-content;">Actualizar</button> {% endcomment %}
       </div>
     </div>
     <div class="card col-12">
@@ -138,17 +126,6 @@
                     </p>
                     <p class="col-12 m-0">
                       {{ form.about_me }}
-                    </p>  
-                  </div>
-                  <div class="col-md-12">
-                    <p class="col-12 fw-bold mb-1">
-                      Hoja de Vida
-                    </p>
-                    <p class="col-12 m-0">
-                      <div class="br-or" >
-                        <label class="input-file__icon" for="input-file"><i class="lni lni-arrow-up-circle"></i></label>
-                        <input class="input-file" type="file" name="input-file" id="input-file">
-                      </div>
                     </p>  
                   </div>
                 </div>

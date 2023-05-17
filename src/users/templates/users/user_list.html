@@ -1,8 +1,6 @@
 {% extends 'core/base.html' %} {% load static %} {% block title %}
 <title>{{app_title}} | {{title_view}}</title>
-{% endblock title %}
-
-{% block contentfluid %}    
+{% endblock title %} {% block contentfluid %}
 <section class="layout-section">
   {% include 'partials/_aside.html' %}
   <div class="main-section">
@@ -21,93 +19,82 @@
           </button>
         </div>
         <div class="col-12">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th>Usuario</th>
-                  <th>Correo electrónico</th>
-                  <th>Rango</th>
-                  <th>Fecha de Ingreso</th>
-                  <th>Activo</th>
-                  <th>Última sesión</th>
-                  <th>Perfil</th>
-                  <th>Editar</th>
-                  <th>Eliminar</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for row in object_list %}
-                <tr>
-                  <td scope="row">{{row.id}}</td>
-                  <td>{{row.username}}</td>
-                  <td>{{row.email}}</td>
-                  <td>
-                    {% if row.is_superuser %}
-                    Superusuario
-                    {% elif row.is_staff %}
-                    Administrativo
-                    {% else %}
-                    Regular
-                    {% endif %}
-                  </td>
-                  <td>{{row.date_joined}}</td>
-                  <td>
-                    {% if row.is_active %}
-                    Sí
-                    {% else %}
-                    No
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if row.last_login %}
-                    {{row.last_login}}
-                    {% else %}
-                    Aún no ha iniciado sesión
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if row.userprofile %}
-                    <a
-                      href="{% url 'users_app:userprofile' row.username %}"
-                      class="btn btn-outline-secondary btn-center btn-compact"
-                      >
-                      <i class="lni lni-user"></i>
-                    </a>
-                    {% endif %}
-                  </td>
-                  <td>
-                    <!-- data-bs-toggle="modal"
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th>Usuario</th>
+                <th>Correo electrónico</th>
+                <th>Rango</th>
+                <th>Fecha de Ingreso</th>
+                <th>Activo</th>
+                <th>Última sesión</th>
+                <th>Perfil</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in object_list %}
+              <tr>
+                <td scope="row">{{row.id}}</td>
+                <td>{{row.username}}</td>
+                <td>{{row.email}}</td>
+                <td>
+                  {% if row.is_superuser %} Superusuario {% elif row.is_staff %}
+                  Administrativo {% else %} Regular {% endif %}
+                </td>
+                <td>{{row.date_joined}}</td>
+                <td>{% if row.is_active %} Sí {% else %} No {% endif %}</td>
+                <td>
+                  {% if row.last_login %} {{row.last_login}} {% else %} Aún no
+                  ha iniciado sesión {% endif %}
+                </td>
+                <td>
+                  {% if row.userprofile %}
+                  <a
+                    href="{% url 'users_app:userprofile' row.username %}"
+                    class="btn btn-outline-secondary btn-center btn-compact"
+                  >
+                    <i class="lni lni-user"></i>
+                  </a>
+                  {% endif %}
+                </td>
+                <td>
+                  <!-- data-bs-toggle="modal"
                                     data-bs-target="#userGroupModal" -->
-                    {% if not row.deleted_at %}
-                    <button
-                      type="button"
-                      class="btn btn-outline-primary btn-center btn-compact"
-                      name="editButtons"
-                      id="{% url 'users_app:user_edit' row.id %}"
-                    >
-                        <i class="lni lni-pencil"></i>
-                    </button>
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if not row.deleted_at %}
-                    <button
-                      type="button"
-                      class="btn btn-outline-danger btn-center btn-compact"
-                      name="deleteButtons"
-                      id="{% url 'users_app:user_delete' row.id %}"
-                    >
-                      <i class="lni lni-trash-can"></i>
-                    </button>
-                    {% endif %}
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
+                  {% if not row.deleted_at %}
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary btn-center btn-compact"
+                    name="editButtons"
+                    id="{% url 'users_app:user_edit' row.id %}"
+                  >
+                    <i class="lni lni-pencil"></i>
+                  </button>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if not row.deleted_at %}
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger btn-center btn-compact"
+                    name="deleteButtons"
+                    id="{% url 'users_app:user_delete' row.id %}"
+                  >
+                    <i class="lni lni-trash-can"></i>
+                  </button>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
       </div>
+      {% if is_paginated %}
+      {% include 'partials/_pagination_sm.html' %}
+      {% endif %}
     </div>
   </div>
 </section>

@@ -297,7 +297,7 @@ class Personnel(models.Model):
         on_delete=models.PROTECT,
     )
     id_number = models.CharField(_("identification number"), max_length=25, null=False)
-    fullname = models.CharField(_("fullname"), max_length=100, unique=True, null=False)
+    fullname = models.CharField(_("fullname"), max_length=100, unique=False, null=False)
     # position = models.CharField(
     #     _("position or specialization of the individual"), max_length=100, blank=False
     # )

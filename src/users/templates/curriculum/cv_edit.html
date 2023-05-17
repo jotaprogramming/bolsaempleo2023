@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %} {% load static %} 
+
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+{% block contentfluid %}
+
+<section class="layout-section">
+  {% include 'partials/_aside.html' %}
+  <div class="main-section">
+    <div class="container">
+      <div class="row justify-content-start gap-3">
+        <form method="POST" enctype="multipart/form-data" action="{% url 'users_app:cv_edit' username %}" id="form">
+          {% csrf_token %}
+          {% include 'partials/_cv_edit_form.html' %}
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% comment %} <article class="footer position-relative" style="z-index: 2;">
+  {% include 'partials/_footer.html' %}
+</article>  {% endcomment %}
+
+{% endblock contentfluid %}

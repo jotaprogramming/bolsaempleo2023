@@ -1,0 +1,69 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+{% block contentfluid %}
+<section class="layout-section">
+  {% include 'partials/_aside.html' %}
+  <div class="main-section">
+    <div class="container">
+      <div class="row justify-content-start gap-3">
+        <h3 class="col-12">{{ app_title }}</h3>
+        <div class="row gap-4 col-12">
+          {% for row in object_list %}
+          <div class="card mb-3">
+            <div class="card-body">
+              <div class="d-flex gap-4 justify-content-start align-items-start flex-wrap">
+                <div class="col-12 d-flex flex-column gap-1 justify-content-center align-items-start">
+                  <div class="w-100 d-flex justify-content-between">
+                    <div>
+                      <h5 class="fw-bold m-0">
+                        {% if row.verb == 'oferta' %}
+                        Nueva {{ row.verb }} publicada
+                        {% elif row.verb == 'aplicado' %}
+                        Nuevo candidato
+                        {% elif row.verb == 'cancelado' %}
+                        Un candidato ha {{ row.verb }}
+                        {% else %}
+                        Fuiste {{ row.verb }} en una oferta
+                        {% endif %}
+                      </h5>
+                    </div>
+                    <div class="text-muted m-0 fw-light fs-6">
+                      {{ row.timestamp }}
+                    </div>
+                  </div>
+                  <div class="m-0 fw-light mt-2 col-12">
+                    <div class="w-100">
+                      {{ row.description|linebreaks }}
+                    </div>
+                    {% if row.target.title %}
+                    {% include 'partials/_offer_notification.html' %}
+                    {% endif %}
+                    {% if row.target.offer.title %}
+                    {% include 'partials/_candidature_notification.html' %}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <span class="text-muted">
+            No tienes notificaciones
+          </span>
+          {% endfor %}
+        </div>
+      </div>
+      {% if is_paginated %}
+      {% include 'partials/_pagination_lg.html' %}
+      {% endif %}
+    </div>
+  </div>
+
+</section>
+
+{% endblock contentfluid %}

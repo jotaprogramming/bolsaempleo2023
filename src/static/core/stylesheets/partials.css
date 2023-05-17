@@ -96,13 +96,13 @@
     background-color: #943FC8;
 }
 
-.single__tag--remove{
+.single__tag--remove {
     cursor: pointer;
     position: relative;
     transition: all .15s ease-in .1s;
 }
 
-.single__tag--remove:hover .tag{
+.single__tag--remove:hover .tag {
     color: transparent;
 }
 
@@ -217,7 +217,7 @@
     padding: 3rem;
 }
 
-.emblem{
+.emblem {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -227,7 +227,7 @@
     height: 100px;
 }
 
-.icon-alert{
+.icon-alert {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -235,8 +235,57 @@
     height: 3rem;
 }
 
-.icon-alert i{
+.icon-alert i {
     font-size: 3rem;
+}
+
+.pdf-page,
+.pdf-thumbnail-page {
+    display: none;
+}
+
+.pdf-pagination {
+    margin-top: 20px;
+}
+
+.pdf-pagination button {
+    margin: 0 5px;
+}
+
+.pdf-thumbnail,
+.pdf-thumbnail-hover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pdf-thumbnail {
+    position: relative;
+    gap: 1rem;
+    padding: 0;
+    overflow: hidden;
+    border-radius: .5rem;
+}
+
+.pdf-thumbnail-hover{
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 0;
+    width: 100%;
+    overflow: hidden;
+    transition: all 300ms ease;
+}
+
+.pdf-thumbnail:hover .pdf-thumbnail-hover {
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    color: var(--white);
+}
+
+.pdf-thumbnail-hover-hidden {
+    display: none;
 }
 
 @media (max-width:475px) {

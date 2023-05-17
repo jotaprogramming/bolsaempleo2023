@@ -25,11 +25,13 @@ def get_url_names():
     for row in list_of_all_urls:
         for url in row["urls"]:
             app = row["app"]
-            list_of_url_names.append(
-                {
-                    "name": f"{app}_app:{url.name}",
-                    "route": url.pattern._route,
-                }
-            )
+            if hasattr(url.pattern, "_route"):
+                print("🐍 File: jobboard/utils.py | Line: 28 | get_url_names ~ app", app)
+                list_of_url_names.append(
+                    {
+                        "name": f"{app}_app:{url.name}",
+                        "route": url.pattern._route,
+                    }
+                )
 
     return list_of_url_names

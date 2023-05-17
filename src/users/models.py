@@ -385,6 +385,8 @@ class Entities(models.Model):
     currently = models.BooleanField(default=False)
 
     def __str__(self):
+        if self.company:
+            return "{}".format(self.company)
         return "{}".format(self.another_name)
 
     class Meta:
@@ -405,6 +407,7 @@ class CurriculumVitae(models.Model):
         related_name="cv_specialization",
         verbose_name=_("specialization"),
         blank=True,
+        null=True,
         on_delete=models.PROTECT,
     )
     # job_profile = models.TextField(_("job profile"), null=False)
@@ -458,7 +461,7 @@ class Works(models.Model):
     )  # functions, positions, duties
 
     def __str__(self):
-        return "{}".format(self.company.another_name)
+        return "{}".format(self.company)
 
     class Meta:
         verbose_name = _("work")

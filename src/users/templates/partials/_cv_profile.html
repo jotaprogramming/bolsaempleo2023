@@ -5,31 +5,35 @@
     <div class="card-body">
       <div class="row row-gap-2">
         {% if object.userprofile.user_cv %}
-          <h5 class="fw-bold m-0 col-12 mb-3">Hoja de vida</h5>
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold m-0 mb-3">Hoja de vida</h5>
+            <a role="button" class="btn btn-primary" href="{% url 'users_app:cv_edit' username %}">
+              Editar
+            </a>
+          </div>
+          {% if object.userprofile.user_cv.specialization.name %}
           <div class="col-md-12 mb-2">
             <div class="row">
               <p class="col-12 fw-semibold fst-italic mb-1">Especialización</p>
               <p class="col-12 m-0">
-                {% if object.userprofile.user_cv.specialization.name %}
                 {{ object.userprofile.user_cv.specialization.name }}
-                {% else %}
-                ------
-                {% endif %}
               </p>
             </div>
           </div>
+          {% endif %}
+          {% if object.userprofile.user_cv.skills %}
           <div class="col-md-12 mb-2">
             <div class="row">
               <p class="col-12 fw-semibold fst-italic mb-1">
                 Conocimientos y/o Habilidades
               </p>
               <p class="col-12 m-0">
-                {% if object.userprofile.user_cv.skills %}
                 {{ object.userprofile.user_cv.skills }}
-                {% else %} ------ {% endif %}
               </p>
             </div>
           </div>
+          {% endif %}
+          {% if object.userprofile.user_cv.cv_works.all %}
           <div class="col-md-12 mb-2">
             <div class="row">
               <p class="col-12 fw-semibold fst-italic mb-1">Experiencia laboral</p>
@@ -63,6 +67,8 @@
               {% endfor %}
             </div>
           </div>
+          {% endif %}
+          {% if object.userprofile.user_cv.cv_education.all %}
           <div class="col-md-12 mb-2">
             <div class="row">
               <p class="col-12 fw-semibold fst-italic mb-1">Estudios</p>
@@ -89,6 +95,8 @@
               {% endfor %}
             </div>
           </div>
+          {% endif %}
+          {% if object.userprofile.user_cv.cv_languages.all %}
           <div class="col-md-12 mb-2">
             <div class="row">
               <p class="col-12 fw-semibold fst-italic mb-1">Idiomas</p>
@@ -106,16 +114,41 @@
               {% endfor %}
             </div>
           </div>
+          {% endif %}
           <div class="col-md-12 mb-2">
             <div class="row">
               <p class="col-12 fw-semibold fst-italic mb-1">
                 Hoja de vida adjunta
               </p>
-              <p class="col-12 m-0">
+              <div class="col-12 m-0">
                 {% if object.userprofile.user_cv.attached %}
-                {{ object.userprofile.user_cv.attached }}
-                {% else %} ------ {% endif%}
-              </p>
+                <div class="d-flex gap-1">
+                  <div class="pdf-thumbnail" style="width: fit-content;">
+                    <div id="pdfThumbnail">
+                      <div class="spinner-border" style="width: 2rem; height: 2rem;" role="status">
+                        <span class="visually-hidden">Cargando hoja de vida...</span>
+                      </div>
+                      <span>Cargando hoja de vida...</span>
+                    </div>
+                    <div class="pdf-thumbnail-hover-hidden" id="pdfUpBtn" url="{{object.userprofile.user_cv.attached.url}}">
+                      <span>
+                        <i class="bi bi-eye"></i>
+                      </span>
+                    </div>
+                  </div>
+                  <button 
+                    class="btn btn-sm m-0 p-1 d-flex justify-content-center align-items-center"
+                    name="deleteButtons"
+                    id="{% url 'users_app:cv_delete_attached' username %}"
+                    style="height: fit-content; width: fit-content; font-size: 14px"
+                  >
+                    <i class="lni lni-close"></i>
+                  </button>
+                </div>
+                {% else %}
+                ------
+                {% endif%}
+              </div>
             </div>
           </div>
         {% else %}
@@ -123,7 +156,7 @@
           <div class="card-text mb-2">
             ¡Añade una rapidamente!
             <br>
-            Las empresas la utilizan para conocerte y medir tus capacidades con respecto al cargo que estás aspirando.
+            Las empresas la utilizan para conocerte y medir tus capacidades con respecto al cargo al que estás aplicando.
           </div>
           <div class="col-md-12">
             <div class="d-flex justify-content-evenly align-items-center">
@@ -132,16 +165,24 @@
                 href="{% url 'users_app:cv_add' username %}"
               >
                 <i class="lni lni-padlock"></i>
-                <span class="">Créala ahora</span>
+                <span class="">Crea la tuya</span>
               </a>
               o
-              <a
+              {% comment %} <a
                 class="btn btn-secondary"
                 href="{% url 'users_app:cv_add' username %}"
               >
                 <i class="lni lni-padlock"></i>
                 <span class="">Adjunta una</span>
-              </a>
+              </a> {% endcomment %}
+              <button 
+                class="btn btn-secondary"
+                name="editButtons"
+                id="{% url 'users_app:cv_attach' username %}"
+              >
+                <i class="lni lni-padlock"></i>
+                <span class="">Adjunta una</span>
+              </button>
             </div>
           </div>
         {% endif %}

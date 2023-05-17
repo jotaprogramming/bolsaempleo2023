@@ -106,15 +106,26 @@ urlpatterns = [
         name="userprofile_edit",
     ),
     # CURRICULUM VITAE
-    # path("curriculum/<slug:slug>", CurriculumVitaeDetail.as_view(), name="userprofile"),
     path(
         "curriculum/<slug:slug>/add",
         CurriculumVitaeCreate.as_view(),
         name="cv_add",
     ),
-    # path(
-    #     "profile/<slug:slug>/edit",
-    #     UserProfileEdit.as_view(),
-    #     name="userprofile_edit",
-    # ),
+    path(
+        "curriculum/<slug:slug>/edit",
+        CurriculumVitaeEdit.as_view(),
+        name="cv_edit",
+    ),
+    path(
+        "curriculum/<slug:slug>/delete/attached",
+        CurriculumVitaeDeleteAttached.as_view(),
+        name="cv_delete_attached",
+    ),
+    path(
+        "curriculum/<slug:slug>/attach",
+        CurriculumVitaeAttach.as_view(),
+        name="cv_attach",
+    ),
+    # NOTIFICATIONS
+    path("<str:username>/notifications", NotificationList.as_view(), name="notifications"),
 ]

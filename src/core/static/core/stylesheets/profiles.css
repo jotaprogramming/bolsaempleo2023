@@ -501,7 +501,7 @@
     width: 300px;
     height: 40px;
     position: relative;
-    display: flex;
+    /* display: flex; */
     align-items: center;
     border-radius: 10px;
 }
@@ -516,6 +516,7 @@
     border-top-left-radius:0;
     border-bottom-left-radius:0;
     cursor: pointer;
+    height: 2.8rem;
 }
 ::-webkit-file-upload-button{
    display: none    ;
@@ -534,4 +535,5 @@
     border-top-left-radius:inherit;
     border-bottom-left-radius:inherit;
     cursor: pointer;
+    height: 2.8rem;
 }

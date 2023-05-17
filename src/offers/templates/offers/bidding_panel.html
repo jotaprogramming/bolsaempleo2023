@@ -69,7 +69,9 @@
               </div>
               <hr>
    
-              <p class="text-truncate" style="max-height: 6rem;">{{ object.description }}</p>
+              <div class="w-100 overflow-hidden" style="max-height: 6rem;">
+                {{ object.description|linebreaks }}
+              </div>
               <div class="d-flex justify-content-between align-items-center">
                 <p class="m-0">Salario estimado: <strong>{{ object.currency }} {{ object.salary|currency_format }} {{ object.payperiod }}</strong></p>
                 <a href="{% url 'offers_app:offer_detail' object.slug %}" class="stretched-link" role="button">

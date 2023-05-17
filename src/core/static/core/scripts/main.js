@@ -5,14 +5,7 @@ const uploadPic = document.getElementById("uploadPic");
 const previewPic = document.getElementById("previewPic");
 const goToSimilarOffers = document.getElementById("goToSimilarOffers");
 
-/**
- * The function opens a modal window by fetching HTML content from a URL and displaying it using
- * Bootstrap.
- * @param url - The URL of the HTML file that will be loaded into the modal.
- */
-async function open_modal(url) {
-  const resp = await fetch(url);
-  const html = await resp.text();
+async function openModal(html) {
   const defatultModal = document.getElementById("defaultModal");
 
   defatultModal.innerHTML = html;
@@ -23,15 +16,17 @@ async function open_modal(url) {
   modalObject.show();
 }
 
-/**
- * This function adds a click event listener to an element and opens a modal with a URL based on the
- * element's ID attribute.
- * @param element - The HTML element that the function is being called on.
- */
+async function getHTML(url) {
+  const resp = await fetch(url);
+  const html = await resp.text();
+  return html;
+}
+
 function elementOpenModal(element) {
-  element.addEventListener("click", () => {
+  element.addEventListener("click", async () => {
     const URL = element.getAttribute("id");
-    open_modal(URL);
+    const HTML = await getHTML(URL);
+    await openModal(HTML);
   });
 }
 

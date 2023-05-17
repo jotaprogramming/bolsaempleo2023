@@ -1,0 +1,41 @@
+{% load static %}
+
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <form
+      method="POST"
+      action="{% url 'users_app:cv_attach' username %}"
+      enctype="multipart/form-data"
+      id="form"
+    >
+      <div class="modal-header">
+        <h5 class="modal-title">{{ form.attached.label }}</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col-md-12">
+            <div class="br-or mt-2">
+              <label class="input-file__icon" for="id_attached">
+                <i class="lni lni-arrow-up-circle"></i>
+              </label>
+              {{ form.attached }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>

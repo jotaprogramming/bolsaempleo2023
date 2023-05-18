@@ -143,7 +143,6 @@ class OfferForm(forms.ModelForm):
 
     district = forms.ModelChoiceField(
         queryset=Districts.objects.all(),
-        # queryset=Districts.objects.filter(country__iso="COL"),
         required=True,
         label="Departamento *",
         widget=forms.Select(attrs={"class": "single-input"}),
@@ -151,7 +150,6 @@ class OfferForm(forms.ModelForm):
 
     city = forms.ModelChoiceField(
         queryset=Cities.objects.all(),
-        # queryset=Cities.objects.filter(district__iso="SAN"),
         required=True,
         label="Ciudad *",
         widget=forms.Select(attrs={"class": "single-input"}),
@@ -165,7 +163,6 @@ class OfferForm(forms.ModelForm):
     )
 
     tags = forms.CharField(
-        # max_length=10,
         min_length=3,
         required=False,
         label="Etiquetas de búsqueda",
@@ -208,7 +205,6 @@ class OfferForm(forms.ModelForm):
             "payperiod",
             "description",
             "requirements",
-            # "tags",
         ]
 
         widgets = {

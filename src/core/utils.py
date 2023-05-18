@@ -114,6 +114,14 @@ def normalize_email(email):
 
 
 def get_request_body(request):
+    """
+    This function decodes and loads the JSON data from a request body in UTF-8 format.
+    
+    :param request: The request object is an instance of the HttpRequest class in Django. It represents
+    an HTTP request that has been sent to the server and contains information about the request, such as
+    the HTTP method, headers, and body
+    :return: the parsed JSON data from the request body of the HTTP request.
+    """
     body_unicode = request.body.decode("utf-8")
     body_data = json.loads(body_unicode)
 
@@ -121,6 +129,16 @@ def get_request_body(request):
 
 
 def set_data_status(data=[], status="204"):
+    """
+    This function sets the status, type, and message of a data object based on the HTTP status code and
+    whether or not the data object is empty.
+    
+    :param data: A list of data that is being checked for status
+    :param status: The HTTP status code to be returned in the response, defaults to 204 (optional)
+    :return: A dictionary with keys "status", "type", "msg", and "data". The values for "status",
+    "type", and "msg" depend on the input parameter "status" and whether or not the input parameter
+    "data" is empty. The value for "data" is the input parameter "data".
+    """
     _type = "warning"
     msg = "No se encontraron registros"
     if int(status) >= 400:
@@ -171,19 +189,22 @@ def verify_dispatch(urlpatterns):
 
 
 def validate_permissions(request, urlpatterns):
-    # print("🐍 File: core/utils.py | Line: 174 | undefined ~ urlpatterns", urlpatterns)
+    """
+    The function validates user permissions based on the requested URL pattern and returns False if any
+    restrictions are found, otherwise it returns the filtered user group.
+    
+    :param request: The request object contains information about the current HTTP request, such as the
+    user making the request and the URL being accessed
+    :param urlpatterns: The `urlpatterns` parameter is a string that represents the name of the URL
+    pattern being accessed by the user. It is used to filter the user's permissions based on the app and
+    the specific action being performed (e.g. add, list, edit, delete, finish)
+    :return: If there are any restrictions on the user's permissions for the specified urlpatterns, the
+    function returns False. Otherwise, it returns the queryset of the user's permissions for the
+    specified urlpatterns.
+    """
     app = request.user.rule_user.filter(
         usergroup__usergroup_policy__app__name=urlpatterns
     )
-    # print("----------------app----------------")
-    # pprint(
-    #     list(
-    #         app.values(
-    #             "usergroup__usergroup_policy__app__name",
-    #             "usergroup__usergroup_policy__app__app_policies__restriction__code",
-    #         )
-    #     )
-    # )
 
     restrictions = app.filter(
         Q(
@@ -223,15 +244,6 @@ def validate_permissions(request, urlpatterns):
         )
     )
     if restrictions:
-        # print("----------------restrictions----------------")
-        # pprint(
-        #     list(
-        #         restrictions.values(
-        #             "usergroup__usergroup_policy__app__name",
-        #             "usergroup__usergroup_policy__app__app_policies__restriction__code",
-        #         )
-        #     )
-        # )
         return False
 
     return app

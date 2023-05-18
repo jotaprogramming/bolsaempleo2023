@@ -371,11 +371,6 @@ class AppEditModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        # count_name, count_route = duplicate_apps(self, form)
-        # if count_name > 0 or count_route > 0:
-        #     warning_message(self.request, msg="El registro ya existe")
-        #     return HttpResponseRedirect(reverse_lazy("users_app:app_list"))
-
         form.instance.updated_at = timezone.now()
         return super().form_valid(form)
 
@@ -637,10 +632,6 @@ class UserRulesCreate(LoginRequiredMixin, generic.CreateView):
         return context
 
     def form_valid(self, form):
-        # objects = duplicate_rules(self, form)
-        # if objects > 0:
-        #     duplicate_message(self.request)
-        #     return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
         return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
@@ -670,10 +661,6 @@ class UserRulesEditModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        # objects = duplicate_rules(self, form)
-        # if objects > 0:
-        #     duplicate_message(self.request)
-        #     return HttpResponseRedirect(reverse_lazy("users_app:rule_list"))
         form.instance.updated_at = timezone.now()
         return super().form_valid(form)
 
@@ -749,20 +736,12 @@ class UserCreate(LoginRequiredMixin, generic.FormView):
         return context
 
     def form_valid(self, form):
-        # objects = duplicate_users(self, form)
-        # if objects > 0:
-        #     warning_message(
-        #         self.request, msg="El nombre de usuario ingresado ya está en uso"
-        #     )
-        #     return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
         username = str(form.instance.username).lower()
         email = form.cleaned_data["email"]
         password = form.cleaned_data["password"]
         is_superuser = form.cleaned_data["is_superuser"]
         is_staff = form.cleaned_data["is_staff"]
         is_active = form.cleaned_data["is_active"]
-        # usergroup = form.cleaned_data["usergroup"]
-        # role = form.cleaned_data["role"]
         user = User.objects.create_user(
             username=username,
             email=email,
@@ -771,7 +750,6 @@ class UserCreate(LoginRequiredMixin, generic.FormView):
             is_staff=is_staff,
             is_active=is_active,
         )
-        # UserRules.objects.create(user=user, usergroup=usergroup, role=role)
         return super().form_valid(form)
 
     def form_invalid(self, form, **kwargs):
@@ -801,12 +779,6 @@ class UserEditModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        # objects = duplicate_users(self, form)
-        # if objects > 0:
-        #     warning_message(
-        #         self.request, msg="El nombre de usuario ingresado ya está en uso"
-        #     )
-        #     return HttpResponseRedirect(reverse_lazy("users_app:user_list"))
         form.instance.username = str(form.instance.username).lower()
         return super().form_valid(form)
 
@@ -902,7 +874,6 @@ class UserLogout(generic.View):
 # USER PROFILE
 class UserProfileDetail(LoginRequiredMixin, generic.TemplateView):
     login_url = "/login"
-    # model = UserProfile
     template_name = "userprofile/userprofile_detail.html"
 
     def get_context_data(self, **kwargs):
@@ -910,7 +881,6 @@ class UserProfileDetail(LoginRequiredMixin, generic.TemplateView):
         username_param = self.kwargs.get("slug", "")
 
         try:
-            # userprofile = UserProfile.objects.filter(user__username=username_param)
             obj = User.objects.get(username=username_param)
             context["object"] = obj
 
@@ -918,9 +888,6 @@ class UserProfileDetail(LoginRequiredMixin, generic.TemplateView):
             if not userprofile:
                 UserProfile.objects.create(user=obj)
             context["userprofile"] = userprofile
-
-            # rules = UserRules.objects.filter(user__username=username_param)
-            # context["rules"] = rules
         except Exception as ex:
             print("Error in <<get_context_data ~ UserProfileDetail>>: ", ex)
             pass
@@ -1014,9 +981,6 @@ class UserProfileEdit(LoginRequiredMixin, generic.UpdateView):
 
     def form_valid(self, form):
         slug = self.kwargs.get("slug", "")
-        # fullname = form.cleaned_data["avatar"]
-        # fullname = form.cleaned_data["fullname"]
-        # user.update(first_name=fullname)
         form.instance.updated_at = now()
         form.instance.email = normalize_email(form.instance.email)
         return super().form_valid(form)
@@ -1035,7 +999,6 @@ class UserProfileEdit(LoginRequiredMixin, generic.UpdateView):
 
 # REGISTER
 class PreRegisterView(UserLoggedMixin, generic.TemplateView):
-    # selection_url = "/register_choices"
     template_name = "users/selection_register.html"
 
     def get_context_data(self, **kwargs):
@@ -1074,18 +1037,6 @@ class RegisterView(UserLoggedMixin, generic.FormView):
         return context
 
     def form_valid(self, form):
-        # objects = duplicate_users(self, form)
-        # if objects > 0:
-        #     if (
-        #         self.cleaned_data["username"] == "admin"
-        #         or self.cleaned_data["username"] == "root"
-        #     ):
-        #         msg = _(f"Nombre de usuario no permitido")
-        #     else:
-        #         msg = _(f"El nombre de usuario ya existe")
-
-        #     warning_message(self.request, msg=msg)
-        #     return HttpResponseRedirect(reverse_lazy("home_app:register"))
         username = str(form.instance.username).lower()
         email = form.cleaned_data["email"]
         password = form.cleaned_data["password"]
@@ -1175,7 +1126,6 @@ class RegisterStudentView(UserLoggedMixin, generic.FormView):
             return super().form_valid(form)
         except Exception as exception:
             message = "¡Oh no! Algo ocurrió. Por favor comuníquese con soporte para encontrar una solución"
-            # message = getattr(exception, "message", str(exception))
             print(f"Error when registering the student: {exception}")
             error_message(self.request, msg=message)
             return HttpResponseRedirect(reverse_lazy("users_app:register_student"))
@@ -1296,7 +1246,6 @@ class RegisterCompanyView(UserLoggedMixin, generic.FormView):
             company.personnel.set([rep, humres])
         except Exception as exception:
             message = "¡Oh no! Algo ocurrió. Por favor comuníquese con soporte para encontrar una solución"
-            # message = getattr(exception, "message", str(exception))
             print(f"Error when registering the company: {exception}")
             error_message(self.request, msg=message)
             return HttpResponseRedirect(reverse_lazy("users_app:register_company"))
@@ -1305,7 +1254,6 @@ class RegisterCompanyView(UserLoggedMixin, generic.FormView):
 
 
 class CredentialsRecoverView(generic.TemplateView):
-    # credentials_recover_url = "/credentials_recover"
     template_name = "users/credentials_recover.html"
 
     def get_context_data(self, **kwargs):
@@ -1500,14 +1448,6 @@ class CurriculumVitaeEdit(LoginRequiredMixin, generic.UpdateView):
 
         ac_currently = True if ac_currently == "on" else False
 
-        # academic_institution = Entities(
-        #     another_name=academy,
-        #     start_date=ac_start_date,
-        #     end_date=None if ac_currently else ac_end_date,
-        #     currently=ac_currently,
-        # )
-        # academic_institution.save()
-
         educations = Education.objects.filter(cv=cv)
         education = educations.first()
         academic_institution = Entities.objects.get(pk=education.academy.pk)
@@ -1532,7 +1472,7 @@ class CurriculumVitaeEdit(LoginRequiredMixin, generic.UpdateView):
             ]
         )
 
-        # # Languages
+        # Languages
         lan_level = self.request.POST.get("lan_level", "")
         language_id = self.request.POST.get("language", "")
 
@@ -1612,8 +1552,8 @@ class CurriculumVitaeDeleteAttached(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        # form.instance.deleted_at = timezone.now()
         return super().form_valid(form)
+
 
 class CurriculumVitaeAttach(LoginRequiredMixin, generic.CreateView):
     login_url = "/login"
@@ -1658,6 +1598,7 @@ class CurriculumVitaeAttach(LoginRequiredMixin, generic.CreateView):
         warning_message(self.request, msg=msg_error)
         return HttpResponseRedirect(reverse_lazy("users_app:userprofile", args=[slug]))
 
+
 # NOTIFICATIONS
 class NotificationList(LoginRequiredMixin, generic.ListView):
     login_url = "/login"
@@ -1667,7 +1608,9 @@ class NotificationList(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         username = self.kwargs.get("username", "")
-        return self.model.objects.filter(recipient__username=username).order_by("-timestamp")
+        return self.model.objects.filter(recipient__username=username).order_by(
+            "-timestamp"
+        )
 
     def get_context_data(self, **kwargs):
         username = self.kwargs.get("username", "")

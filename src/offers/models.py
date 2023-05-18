@@ -1,6 +1,5 @@
 from django.db import models
 
-# from .managers import *
 from config.models import Countries, Currencies, Cities, DocumentType
 
 from django.utils.translation import gettext_lazy as _
@@ -134,7 +133,6 @@ class Offers(models.Model):
         return "{}".format(self.title)
 
     def slug(self):
-        # _b = string_to_base64(str(self.pk))
         _b = self.pk
         _field = f"{self.title} {_b}"
         return slugify(_field)
@@ -160,13 +158,6 @@ class Candidatures(models.Model):
         blank=False,
         on_delete=models.PROTECT,
     )
-    # status = models.ForeignKey(
-    #     POST_STATUS,
-    #     related_name="candidature_status",
-    #     verbose_name=_("status"),
-    #     blank=False,
-    #     on_delete=models.PROTECT,
-    # )
     status = models.CharField(
         _("candidature status"), max_length=2, null=False, choices=POST_STATUS
     )

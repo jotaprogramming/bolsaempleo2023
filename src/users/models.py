@@ -97,7 +97,6 @@ class UserGroups(models.Model):
     class Meta:
         verbose_name = _("user group")
         verbose_name_plural = _("user groups")
-        # abstract = True
 
 
 class UserGroupPolicies(models.Model):
@@ -211,7 +210,6 @@ class UserProfile(models.Model):
         upload_to="profile/",
         blank=True,
         null=True,
-        # validators=[validate_image],
     )
     user = models.OneToOneField(
         User,
@@ -221,7 +219,6 @@ class UserProfile(models.Model):
         on_delete=models.PROTECT,
     )
     web = models.TextField(_("web or social network"), null=True)
-    # slug = models.SlugField(max_length=120, unique=True)
     document_type = models.ForeignKey(
         DocumentType,
         related_name="userprofile_document_type",
@@ -261,8 +258,6 @@ class UserProfile(models.Model):
         super(UserProfile, self).save(*args, **kwargs)
         if self.avatar:
             image = Image.open(self.avatar.path)
-            # image.save(self.avatar.path, quality=20, optimize=True)
-            # image = Image.open(self.post_image.path)
             maxsize = 500
             dim = image.width if image.width < image.height else image.height
             if dim > maxsize:
@@ -272,7 +267,6 @@ class UserProfile(models.Model):
                 output_size = (re_width, re_height)
                 image.thumbnail(output_size)
 
-            # image.save(self.avatar.path)
             image.save(self.avatar.path, quality=20, optimize=True)
             return image
 
@@ -282,13 +276,6 @@ class UserProfile(models.Model):
 
 
 class Personnel(models.Model):
-    # picture = models.FileField(
-    #     verbose_name=_("picture"),
-    #     upload_to="pictures/",
-    #     blank=True,
-    #     null=True,
-    #     validators=[validate_image],
-    # )
     document_type = models.ForeignKey(
         DocumentType,
         related_name="personnel_document_type",
@@ -298,9 +285,6 @@ class Personnel(models.Model):
     )
     id_number = models.CharField(_("identification number"), max_length=25, null=False)
     fullname = models.CharField(_("fullname"), max_length=100, unique=False, null=False)
-    # position = models.CharField(
-    #     _("position or specialization of the individual"), max_length=100, blank=False
-    # )
     specialization = models.ForeignKey(
         Specializations,
         related_name="specializations",
@@ -308,16 +292,6 @@ class Personnel(models.Model):
         blank=False,
         on_delete=models.PROTECT,
     )
-    # phone = models.CharField(_("cell phone number"), max_length=25, blank=False)
-    # email = models.EmailField(_("contact e-mail address"), max_length=250, blank=False)
-    # address = models.CharField(_("residence address"), max_length=250, blank=True)
-    # city = models.ForeignKey(
-    #     Cities,
-    #     related_name="personnel_city",
-    #     verbose_name=_("city"),
-    #     blank=False,
-    #     on_delete=models.PROTECT,
-    # )
     created_at = models.DateTimeField(_("created at"), auto_now_add=True, null=False)
     updated_at = models.DateTimeField(
         _("updated at"), auto_now_add=False, editable=True, null=True
@@ -410,7 +384,6 @@ class CurriculumVitae(models.Model):
         null=True,
         on_delete=models.PROTECT,
     )
-    # job_profile = models.TextField(_("job profile"), null=False)
     skills = models.TextField(_("skills"), null=True)
     attached = models.FileField(
         verbose_name=_("attached"),

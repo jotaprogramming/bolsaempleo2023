@@ -5,8 +5,6 @@ from pprint import pprint
 from notifications.signals import notify
 from django.contrib.auth.models import User
 
-# from offers.models import Candidatures
-
 POST_STATUS = (
     ("1", "aplicado"),
     ("2", "cancelado"),
@@ -46,7 +44,6 @@ def get_pk_from_a_slug(self):
     slug = self.kwargs.get("slug", "")
     slug_split = slug.split("-")
     split_pk = slug_split[-1]
-    # str_pk = base64_to_string(f"{split_pk}")
     return split_pk
 
 
@@ -75,7 +72,9 @@ def send_new_offer_notification(self):
 
 
 def get_message_to_state(status, candidature, company, candidate):
-    candidate_name = candidate.first_name if candidate.first_name else candidate.username
+    candidate_name = (
+        candidate.first_name if candidate.first_name else candidate.username
+    )
     status_name = get_status_name(status)
     if status == "1":
         return {

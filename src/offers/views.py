@@ -136,7 +136,6 @@ class OfferDetail(LoginRequiredMixin, generic.DetailView):
             )
             | Q(user=user, usergroup__code="COM", user__offer_user=offer.id),
         )
-        # company = UserRules.objects.filter(user__offer_user=self.get_object(), usergroup__code__icontains="COM")
 
         candidature = candidatures.filter(candidate=user)
 
@@ -242,10 +241,6 @@ class OfferDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        # offer = self.get_object()
-        # validate = Candidatures.objects.filter(offer=offer)
-        # if validate:
-        #     warning_message(self.request, msg="No se puede ")
         form.instance.deleted_at = timezone.now()
         return super().form_valid(form)
 
@@ -266,8 +261,6 @@ class OfferFinishModal(LoginRequiredMixin, generic.UpdateView):
         Candidatures.objects.filter(offer=offer, status="1").update(
             status="2", updated_at=timezone.now()
         )
-        # if self.request.user.is_staff:
-        #     return reverse_lazy("offers_app:offer_list")
         return reverse_lazy(
             "offers_app:mypublications", args=[self.request.user.username]
         )
@@ -457,7 +450,6 @@ class PublicationCreate(LoginRequiredMixin, generic.CreateView):
             except:
                 pass
 
-        # form.cleaned_data["tags"] = temp_list
         form.instance.title = str(form.instance.title).upper()
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -483,7 +475,6 @@ class PublicationEdit(LoginRequiredMixin, generic.UpdateView):
         self.slug = self.kwargs.get("slug", "")
         slug_split = self.slug.split("-")
         split_pk = slug_split[-1]
-        # str_pk = base64_to_string(f"{split_pk}")
         str_pk = split_pk
 
         return self.model.objects.get(pk=str_pk)
@@ -547,7 +538,6 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         p_status = self.request.GET.get("status", "")
         p_search = self.request.GET.get("search", "")
-        # status_name = get_status_name(p_status)
 
         str_pk = get_pk_from_a_slug(self)
         obj = (
@@ -555,7 +545,6 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
                 Q(candidate__first_name__icontains=p_search)
                 | Q(candidate__last_name__icontains=p_search)
             )
-            # .exclude(status__in=["2"])
             .order_by("-updated_at")
         )
 
@@ -718,17 +707,9 @@ class CandidatureStatusEdit(LoginRequiredMixin, generic.FormView):
         p_status = self.request.GET.get("status", "")
 
         str_pk = get_pk_from_a_slug(self)
-        # user = self.request.user
         cantidatures = Candidatures.objects.filter(
             candidate__username=username, offer_id=str_pk
         )
-
-        # if p_status:
-        #     status_name = p_status
-        # else:
-        #     status_name = "postulado"
-
-        # status = POST_STATUS.objects.get(name=status_name)
 
         if cantidatures:
             cantidature_cache = cantidatures.filter(deleted_at=None)

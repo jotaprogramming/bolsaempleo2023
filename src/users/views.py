@@ -864,7 +864,7 @@ class UserLogin(UserLoggedMixin, generic.FormView):
         if comgra:
             return reverse_lazy("offers_app:bidding_panel")
         if memmod:
-            return reverse_lazy("users_app:user_list")
+            return reverse_lazy("reports_app:reports_home")
         return reverse_lazy("home_app:home_page")
 
     def get_context_data(self, **kwargs):

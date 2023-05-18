@@ -64,45 +64,6 @@ class UserGroupForm(forms.ModelForm):
         }
 
 
-# class PolicyForm(forms.ModelForm):
-#     restriction = forms.ModelMultipleChoiceField(
-#         queryset=Restrictions.objects.filter(deleted_at=None),
-#         required=False,
-#         label=_("Restricción"),
-#         widget=forms.SelectMultiple(attrs={"class": "form-select"}),
-#     )
-
-#     app = forms.ModelMultipleChoiceField(
-#         queryset=Apps.objects.filter(deleted_at=None),
-#         required=True,
-#         label=_("Aplicaciones"),
-#         widget=forms.SelectMultiple(attrs={"class": "form-select"}),
-#     )
-
-#     def __init__(self, *args, **kwargs):
-#         super(UserGroupForm, self).__init__(*args, **kwargs)
-#         self.fields["usergroup"].label = "Grupo de usuarios"
-#         self.fields["app"].label = "Aplicacion(es)"
-#         self.fields["restriction"].label = "Descripción(es)"
-
-#     class Meta:
-#         model = UserGroupPolicies
-
-#         fields = [
-#             "usergroup",
-#             "app",
-#             "restriction",
-#         ]
-
-#         widgets = {
-#             "usergroup": forms.Select(
-#                 attrs={
-#                     "class": "form-control",
-#                 }
-#             ),
-#         }
-
-
 class FormDelete(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(FormDelete, self).__init__(*args, **kwargs)
@@ -304,19 +265,6 @@ class UserRuleForm(forms.ModelForm):
 
 
 class UserForm(forms.ModelForm):
-    # usergroup = forms.ModelChoiceField(
-    #     queryset=UserGroups.objects.all(),
-    #     label=_("Grupo"),
-    #     required=True,
-    #     widget=forms.Select(attrs={"class": "form-select"}),
-    # )
-    # role = forms.ModelChoiceField(
-    #     queryset=Roles.objects.all(),
-    #     label=_("Rol"),
-    #     required=True,
-    #     widget=forms.Select(attrs={"class": "form-select"}),
-    # )
-
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
         self.fields["username"].label = "Usuario"
@@ -350,7 +298,6 @@ class UserForm(forms.ModelForm):
             ),
             "email": forms.EmailInput(
                 attrs={
-                    # "placeholder": "Correo electrónico",
                     "class": "form-control",
                 }
             ),
@@ -471,7 +418,6 @@ class LoginForm(AuthenticationForm):
         widget=forms.PasswordInput(
             attrs={
                 "class": "single-input",
-                # "placeholder": _("Password")
             }
         ),
     )
@@ -483,7 +429,6 @@ class RegisterForm(forms.ModelForm):
         required=True,
         widget=forms.PasswordInput(
             attrs={
-                # "placeholder": "Repita la contraseña",
                 "class": "single-input",
                 "minlength": "8",
                 "title": _("Repite la contraseña"),
@@ -533,7 +478,6 @@ class RegisterForm(forms.ModelForm):
             ),
             "username": forms.TextInput(
                 attrs={
-                    # "placeholder": "Nombre de usuario",
                     "class": "single-input",
                     "minlength": "3",
                     "maxlength": "150",
@@ -542,7 +486,6 @@ class RegisterForm(forms.ModelForm):
             ),
             "password": forms.PasswordInput(
                 attrs={
-                    # "placeholder": "Contraseña",
                     "class": "single-input",
                     "minlength": "8",
                     "title": _("Contraseña"),
@@ -550,25 +493,12 @@ class RegisterForm(forms.ModelForm):
             ),
             "email": forms.EmailInput(
                 attrs={
-                    # "placeholder": "Correo electrónico",
                     "class": "single-input",
                     "minlength": "3",
                     "title": _("Correo electrónico de registro"),
                 },
             ),
         }
-
-    # def clean_username_not_allowed(self):
-    #     user_cache = User.objects.filter(username=self.cleaned_data["username"]).count()
-
-    #     if user_cache > 0:
-    #         if (
-    #             self.cleaned_data["username"] == "admin"
-    #             or self.cleaned_data["username"] == "root"
-    #         ):
-    #             self.add_error("username", _(f"Nombre de usuario no permitido"))
-    #         else:
-    #             self.add_error("username", _(f"El nombre de usuario ya existe"))
 
     def clean_repeat_pass(self):
         if self.cleaned_data["password"] != self.cleaned_data["repeat_pass"]:
@@ -725,16 +655,6 @@ class RegisterCompanyForm(RegisterForm):
 
 
 class RegisterStudentForm(RegisterForm):
-    # avatar = forms.FileField(
-    #     label=_("Foto de perfil"),
-    #     allow_empty_file=False,
-    #     required=False,
-    #     widget=forms.FileInput(
-    #         attrs={
-    #             "class": "form-control",
-    #         }
-    #     ),
-    # )
     document_type = forms.ModelChoiceField(
         queryset=DocumentType.objects.all(),
         label=_("Tipo de documento"),

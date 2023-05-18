@@ -103,31 +103,33 @@
                     {% if not row.deleted_at and not row.status == '1' %}
                     <small class="text-muted fw-normal me-2">
                       {% if row.status == '2' %}
-                      {% if row.offer.deleted_at %}
-                      La oferta no se encuentra disponible
-                      {% elif row.offer.status %}
-                      La oferta finalizó y ya no se encuentra disponible
+                        {% if row.offer.deleted_at %}
+                          La oferta no se encuentra disponible
+                        {% elif row.offer.status %}
+                          La oferta finalizó y ya no se encuentra disponible
+                        {% else %}
+                          Cancelaste el {{ row.updated_at }}
+                        {% endif %}
                       {% else %}
-                      Cancelaste el {{ row.updated_at }}
-                      {% endif %}
-                      {% else %}
-                      Fuiste {{row.get_status_display }} el {{ row.updated_at }}
+                        Fuiste {{row.get_status_display }} el {{ row.updated_at }}
                       {% endif %}
                     </small>
                     {% endif %}
                     {% if not row.deleted_at and not row.status == '5' and not row.status == '3' and not row.status == '2' %}
-                    <div class="" style="z-index: 2;">
-                      <button
-                        type="button"
-                        class="btn btn-outline-danger btn-center"
-                        name="deleteButtons"
-                        id="{% url 'offers_app:candidature_save' row.offer.slug row.candidate.username %}?status=2&path=mycandidacies"
-                        title="Cancelar postulación"
-                        style="height: 42px;"
-                      >
-                        <i class="lni lni-thumbs-down"></i>
-                      </button>
-                    </div>
+                      {% if request.user.is_staff or allowed_to_candidature_status_edit %}
+                        <div class="" style="z-index: 2;">
+                          <button
+                            type="button"
+                            class="btn btn-outline-danger btn-center"
+                            name="deleteButtons"
+                            id="{% url 'offers_app:candidature_status_edit' row.offer.slug row.candidate.username %}?status=2&path=mycandidacies"
+                            title="Cancelar postulación"
+                            style="height: 42px;"
+                          >
+                            <i class="lni lni-thumbs-down"></i>
+                          </button>
+                        </div>
+                      {% endif %}
                     {% endif %}
                   </div>
                 </div>

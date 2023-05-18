@@ -40,7 +40,7 @@ from notifications.models import Notification
 from offers.forms import (
     OfferAdminForm,
     OfferForm,
-    CandidatureSaveForm,
+    CandidatureStatusEditForm,
     CandidatureUpdateForm,
 )
 from offers.models import Tags, Offers, Candidatures
@@ -53,7 +53,7 @@ from offers.utils import (
     POST_STATUS,
 )
 from core.utils import success_message, warning_message, get_form_errors
-from users.models import UserRules
+from users.models import UserRules, UserGroupPolicies
 from users.forms import FormDelete
 from jobboard.utils import *
 
@@ -120,9 +120,7 @@ class OfferDetail(LoginRequiredMixin, generic.DetailView):
 
         user = self.request.user
 
-        candidatures = Candidatures.objects.filter(
-            offer=offer.id, deleted_at=None
-        )
+        candidatures = Candidatures.objects.filter(offer=offer.id, deleted_at=None)
 
         allowed_to_apply = UserRules.objects.filter(user=user, usergroup__code="GRA")
         allowed_to_edit = UserRules.objects.filter(
@@ -138,7 +136,6 @@ class OfferDetail(LoginRequiredMixin, generic.DetailView):
             )
             | Q(user=user, usergroup__code="COM", user__offer_user=offer.id),
         )
-        # company = UserRules.objects.filter(user__offer_user=self.get_object(), usergroup__code__icontains="COM")
 
         candidature = candidatures.filter(candidate=user)
 
@@ -244,10 +241,6 @@ class OfferDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        # offer = self.get_object()
-        # validate = Candidatures.objects.filter(offer=offer)
-        # if validate:
-        #     warning_message(self.request, msg="No se puede ")
         form.instance.deleted_at = timezone.now()
         return super().form_valid(form)
 
@@ -268,8 +261,6 @@ class OfferFinishModal(LoginRequiredMixin, generic.UpdateView):
         Candidatures.objects.filter(offer=offer, status="1").update(
             status="2", updated_at=timezone.now()
         )
-        # if self.request.user.is_staff:
-        #     return reverse_lazy("offers_app:offer_list")
         return reverse_lazy(
             "offers_app:mypublications", args=[self.request.user.username]
         )
@@ -399,12 +390,26 @@ class PublicationList(LoginRequiredMixin, generic.ListView):
         context["in_mypublications"] = True
         context["search"] = p_search
         context["pstatus"] = p_status
-        # statuses = POST_STATUS[:1] + POST_STATUS[2:]
         context["statuses"] = (
             ("1", "activa"),
             ("2", "finalizada"),
             ("3", "eliminada"),
         )
+        user_rules = UserRules.objects.filter(user=self.request.user)
+
+        context["allowed_to_offer_add"] = user_rules.filter(
+            usergroup__usergroup_policy__app__name__in=["offers_app:offer_add"],
+        ).exclude(usergroup__usergroup_policy__restriction__code__in=["CR"])
+        context["allowed_to_offer_finish"] = user_rules.filter(
+            usergroup__usergroup_policy__app__name__in=["offers_app:offer_finish"],
+        ).exclude(usergroup__usergroup_policy__restriction__code__in=["UP"])
+        context["allowed_to_offer_edit"] = user_rules.filter(
+            usergroup__usergroup_policy__app__name__in=["offers_app:offer_edit"],
+        ).exclude(usergroup__usergroup_policy__restriction__code__in=["UP"])
+        context["allowed_to_offer_delete"] = user_rules.filter(
+            usergroup__usergroup_policy__app__name__in=["offers_app:offer_delete"],
+        ).exclude(usergroup__usergroup_policy__restriction__code__in=["DL"])
+
         return context
 
 
@@ -445,7 +450,6 @@ class PublicationCreate(LoginRequiredMixin, generic.CreateView):
             except:
                 pass
 
-        # form.cleaned_data["tags"] = temp_list
         form.instance.title = str(form.instance.title).upper()
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -471,7 +475,6 @@ class PublicationEdit(LoginRequiredMixin, generic.UpdateView):
         self.slug = self.kwargs.get("slug", "")
         slug_split = self.slug.split("-")
         split_pk = slug_split[-1]
-        # str_pk = base64_to_string(f"{split_pk}")
         str_pk = split_pk
 
         return self.model.objects.get(pk=str_pk)
@@ -535,7 +538,6 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
     def get_queryset(self):
         p_status = self.request.GET.get("status", "")
         p_search = self.request.GET.get("search", "")
-        # status_name = get_status_name(p_status)
 
         str_pk = get_pk_from_a_slug(self)
         obj = (
@@ -543,7 +545,6 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
                 Q(candidate__first_name__icontains=p_search)
                 | Q(candidate__last_name__icontains=p_search)
             )
-            # .exclude(status__in=["2"])
             .order_by("-updated_at")
         )
 
@@ -582,13 +583,12 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
         context["statuses"] = POST_STATUS
         context["pstatus"] = p_status
         context["search"] = p_search
-
-        # offer_id = objects.first().offer.id
-        # context["rejected_candidates"] = (
-        #     self.model.objects.filter(offer__id=offer_id)
-        #     .filter(status__in=["2", "3"])
-        #     .order_by("updated_at")
-        # )
+        context["allowed_to_candidature_status_edit"] = UserRules.objects.filter(
+            user=self.request.user,
+            usergroup__usergroup_policy__app__name__in=[
+                "offers_app:candidature_status_edit"
+            ],
+        ).exclude(usergroup__usergroup_policy__restriction__code__in=["UP"])
         return context
 
 
@@ -631,14 +631,19 @@ class MyCandidacies(LoginRequiredMixin, generic.ListView):
         context["statuses"] = POST_STATUS
         context["pstatus"] = p_status
         context["search"] = p_search
+
+        user_rules = UserRules.objects.filter(user=self.request.user)
+        context["allowed_to_candidature_status_edit"] = user_rules.filter(
+            usergroup__usergroup_policy__app__name__in=["offers_app:candidature_status_edit"],
+        ).exclude(usergroup__usergroup_policy__restriction__code__in=["UP"])
         return context
 
 
-class CandidatureSave(LoginRequiredMixin, generic.FormView):
+class CandidatureStatusEdit(LoginRequiredMixin, generic.FormView):
     login_url = "/login"
     model = Candidatures
-    form_class = CandidatureSaveForm
-    template_name = "candidatures/candidature_save.html"
+    form_class = CandidatureStatusEditForm
+    template_name = "candidatures/candidature_status_edit.html"
     paginate_by = 10
 
     def get_success_url(self):
@@ -682,7 +687,7 @@ class CandidatureSave(LoginRequiredMixin, generic.FormView):
         username = self.kwargs.get("username", "")
         slug = self.kwargs.get("slug", "")
 
-        context = super(CandidatureSave, self).get_context_data(**kwargs)
+        context = super(CandidatureStatusEdit, self).get_context_data(**kwargs)
 
         str_pk = get_pk_from_a_slug(self)
 
@@ -702,17 +707,9 @@ class CandidatureSave(LoginRequiredMixin, generic.FormView):
         p_status = self.request.GET.get("status", "")
 
         str_pk = get_pk_from_a_slug(self)
-        # user = self.request.user
         cantidatures = Candidatures.objects.filter(
             candidate__username=username, offer_id=str_pk
         )
-
-        # if p_status:
-        #     status_name = p_status
-        # else:
-        #     status_name = "postulado"
-
-        # status = POST_STATUS.objects.get(name=status_name)
 
         if cantidatures:
             cantidature_cache = cantidatures.filter(deleted_at=None)

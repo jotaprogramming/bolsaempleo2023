@@ -153,10 +153,10 @@
             </div>
           </div>
         </div>
-        {% if object.userprofile.company_profile %}
+        {% if request.user.is_staff or company %}
           {% include 'partials/_company_profile.html' %}
         {% endif %}
-        {% if not company %}
+        {% if request.user.is_staff or graduate %}
         {% include 'partials/_cv_profile.html' %}
         {% endif %}
       </div>

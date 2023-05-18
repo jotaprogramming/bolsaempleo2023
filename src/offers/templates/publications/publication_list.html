@@ -13,6 +13,7 @@
     <div class="container">
       {% include 'partials/_display.html' %}
       <div class="col-12 mb-3">
+        {% if request.user.is_staff or allowed_to_offer_add %}
         <a
           type="button"
           class="btn btn-primary btn-center"
@@ -22,6 +23,7 @@
           <i class="lni lni-plus"></i>
           <span class="ms-2">Publicar</span>
         </a>
+        {% endif %}
       </div>
       <div class="col-12 mb-3">
         <div class="row mb-3">
@@ -62,15 +64,21 @@
             </ul>
           </div>
           <small class="d-flex gap-3 align-items-center col-md-4">
+            {% if request.user.is_staff or allowed_to_offer_edit %}
             <div class="">
               <i class="lni lni-pencil text-secondary"></i> Editar publicación
             </div>
+            {% endif %}
+            {% if request.user.is_staff or allowed_to_offer_finish %}
             <div class="">
               <i class="lni lni-checkmark text-success"></i> Finalizar oferta
             </div>
+            {% endif %}
+            {% if request.user.is_staff or allowed_to_offer_delete %}
             <div class="">
               <i class="lni lni-trash-can text-danger"></i> Eliminar oferta
             </div>
+            {% endif %}
           </small>
         </div>
         {% for row in object_list %}
@@ -104,19 +112,21 @@
                     {% endif %}
                     <div class="d-flex gap-1">
                       {% if not row.deleted_at and not row.status %}
+                      {% if request.user.is_staff or allowed_to_offer_edit %}
                       <a
                         href="{% url 'offers_app:offer_edit' row.slug %}"
                         role="button"
                         class="btn btn-outline-secondary btn-center btn-compact"
                         title="Editar"
                         style="z-index: 2;"
-                      >
+                        >
                         <i class="lni lni-pencil"></i>
                       </a>
                       {% endif %}
+                      {% endif %}
                       {% if not row.deleted_at %}
-                        {% if row.candidature_offer.all %}
-                          {% if not row.status %}
+                        {% if row.candidature_offer.all and not row.status %}
+                          {% if request.user.is_staff or allowed_to_offer_finish %}
                           <button
                             type="button"
                             class="btn btn-outline-success btn-center btn-compact"
@@ -128,17 +138,17 @@
                             <i class="lni lni-checkmark"></i>
                           </button>
                           {% endif %}
-                        {% else %}
-                        <button
-                          type="button"
-                          class="btn btn-outline-danger btn-center btn-compact"
-                          style="z-index: 2;"
-                          name="deleteButtons"
-                          title="Eliminar"
-                          id="{% url 'offers_app:offer_delete' row.slug %}"
-                        >
-                          <i class="lni lni-trash-can"></i>
-                        </button>
+                        {% elif request.user.is_staff or allowed_to_offer_delete %}
+                          <button
+                            type="button"
+                            class="btn btn-outline-danger btn-center btn-compact"
+                            style="z-index: 2;"
+                            name="deleteButtons"
+                            title="Eliminar"
+                            id="{% url 'offers_app:offer_delete' row.slug %}"
+                          >
+                            <i class="lni lni-trash-can"></i>
+                          </button>
                         {% endif %}
                       {% endif %}
                     </div>

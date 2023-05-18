@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %}
+
+{% block contentfluid %}
+<section class="layout-section">
+  {% include 'partials/_aside.html' %}
+  <div class="main-section">
+    <div class="container">
+      {% include 'partials/_display.html' %}
+      <div class="row gy-3 mt-3">
+        <div class="col-12">
+          <div class="d-flex gap-2">
+            <div class="card bid-letter position-relative" style="max-width: 25rem;">
+              <div class="card-body">
+                <div class="card-head">
+                  <span class="c-head-icon">
+                    <i class="lni lni-users"></i>
+                  </span>
+                  <div class="head-title">Reporte de usuarios</div>
+                </div>
+                <p>Revisa los registros de los usuarios "empresa" o "egresado"</p>
+              </div>
+              <a class="stretched-link" href="{% url 'reports_app:user_report' %}"></a>
+            </div>
+
+            <div class="card bid-letter position-relative" style="max-width: 25rem;">
+              <div class="card-body">
+                <div class="card-head">
+                  <span class="c-head-icon">
+                    <i class="lni lni-offer"></i>
+                  </span>
+                  <div class="head-title">Reporte de ofertas</div>
+                </div>
+                <p>Revisa las ofertas que han sido publicadas</p>
+              </div>
+              <a class="stretched-link" href="{% url 'reports_app:offer_report' %}"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% if is_paginated %}
+      {% include 'partials/_pagination_sm.html' %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% endblock contentfluid %}

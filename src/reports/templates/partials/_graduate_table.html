@@ -1,0 +1,48 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Postulaciones</th>
+      <th>Fecha de Ingreso</th>
+      <th>Activo</th>
+      <th>Última sesión</th>
+      <th>Perfil</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in object_list %}
+    <tr>
+      <td>
+        {{ row.first_name }} {{ row.last_name }}
+      </td>
+      <td>
+        <a class="link-orange" href="{% url 'offers_app:mycandidacies' row.username %}">
+          {% if row.candidate.count == 0 %}
+          Sin postulaciones
+          {% elif row.candidate.count == 1 %}
+          Una postulación
+          {% else %}
+          {{row.candidate.count}} postulaciones
+          {% endif %}
+        </a>
+      </td>
+      <td>{{row.date_joined}}</td>
+      <td>{% if row.is_active %} Sí {% else %} No {% endif %}</td>
+      <td>
+        {% if row.last_login %} {{row.last_login}} {% else %} Aún no ha iniciado
+        sesión {% endif %}
+      </td>
+      <td>
+        {% if row.userprofile %}
+        <a
+          href="{% url 'users_app:userprofile' row.username %}"
+          class="btn btn-outline-secondary btn-center btn-compact"
+        >
+          <i class="lni lni-user"></i>
+        </a>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>

@@ -1,6 +1,7 @@
 # DJANGO MODULES
 from django import forms
 from django.utils.translation import gettext as _
+from django.db.models import Q
 
 # PYTHON MODULES
 import importlib
@@ -113,6 +114,14 @@ def normalize_email(email):
 
 
 def get_request_body(request):
+    """
+    This function decodes and loads the JSON data from a request body in UTF-8 format.
+    
+    :param request: The request object is an instance of the HttpRequest class in Django. It represents
+    an HTTP request that has been sent to the server and contains information about the request, such as
+    the HTTP method, headers, and body
+    :return: the parsed JSON data from the request body of the HTTP request.
+    """
     body_unicode = request.body.decode("utf-8")
     body_data = json.loads(body_unicode)
 
@@ -120,6 +129,16 @@ def get_request_body(request):
 
 
 def set_data_status(data=[], status="204"):
+    """
+    This function sets the status, type, and message of a data object based on the HTTP status code and
+    whether or not the data object is empty.
+    
+    :param data: A list of data that is being checked for status
+    :param status: The HTTP status code to be returned in the response, defaults to 204 (optional)
+    :return: A dictionary with keys "status", "type", "msg", and "data". The values for "status",
+    "type", and "msg" depend on the input parameter "status" and whether or not the input parameter
+    "data" is empty. The value for "data" is the input parameter "data".
+    """
     _type = "warning"
     msg = "No se encontraron registros"
     if int(status) >= 400:
@@ -169,32 +188,62 @@ def verify_dispatch(urlpatterns):
     return False
 
 
-def validate_urlpattern(request, urlpatterns):
+def validate_permissions(request, urlpatterns):
     """
-    This function validates a URL pattern based on user rules, user groups, roles, and policies.
-
+    The function validates user permissions based on the requested URL pattern and returns False if any
+    restrictions are found, otherwise it returns the filtered user group.
+    
     :param request: The request object contains information about the current HTTP request, such as the
-    user making the request, the HTTP method used, and any data submitted in the request
-    :param urlpatterns: The `urlpatterns` parameter is a string representing a URL pattern that needs to
-    be validated
-    :return: the result of filtering policies based on whether the app name contains the provided URL
-    pattern. The result is an integer value, which is not very informative on its own. It seems like the
-    function is intended to check if the user has permission to access a certain URL pattern based on
-    their assigned rules, user groups, roles, and policies. However, without more context on the data
-    models
+    user making the request and the URL being accessed
+    :param urlpatterns: The `urlpatterns` parameter is a string that represents the name of the URL
+    pattern being accessed by the user. It is used to filter the user's permissions based on the app and
+    the specific action being performed (e.g. add, list, edit, delete, finish)
+    :return: If there are any restrictions on the user's permissions for the specified urlpatterns, the
+    function returns False. Otherwise, it returns the queryset of the user's permissions for the
+    specified urlpatterns.
     """
-    rules = request.user.rule_user.all()
-    usergroups = [rule.usergroup for rule in rules]
-    roles = [rule.role for rule in rules]
-    policies = [usergroup.usergroup_policy.all() for usergroup in usergroups]
+    app = request.user.rule_user.filter(
+        usergroup__usergroup_policy__app__name=urlpatterns
+    )
 
-    result = 0
-    permissions = []
-    for qs in policies:
-        for policy in qs:
-            result = policy.app.filter(name__icontains=urlpatterns.strip())
-            # apps = policy.app.all()
-            # for app in apps:
-            #     print(f"{urlpatterns} == {app.name} = {urlpatterns == app.name}")
+    restrictions = app.filter(
+        Q(
+            usergroup__usergroup_policy__app__name=urlpatterns,
+            usergroup__usergroup_policy__app__name__icontains="add",
+            usergroup__usergroup_policy__app__app_policies__restriction__code__in=[
+                "CR"
+            ],
+        )
+        | Q(
+            usergroup__usergroup_policy__app__name=urlpatterns,
+            usergroup__usergroup_policy__app__name__icontains="list",
+            usergroup__usergroup_policy__app__app_policies__restriction__code__in=[
+                "RD"
+            ],
+        )
+        | Q(
+            usergroup__usergroup_policy__app__name=urlpatterns,
+            usergroup__usergroup_policy__app__name__icontains="edit",
+            usergroup__usergroup_policy__app__app_policies__restriction__code__in=[
+                "UP"
+            ],
+        )
+        | Q(
+            usergroup__usergroup_policy__app__name=urlpatterns,
+            usergroup__usergroup_policy__app__name__icontains="delete",
+            usergroup__usergroup_policy__app__app_policies__restriction__code__in=[
+                "DL"
+            ],
+        )
+        | Q(
+            usergroup__usergroup_policy__app__name=urlpatterns,
+            usergroup__usergroup_policy__app__name__icontains="finish",
+            usergroup__usergroup_policy__app__app_policies__restriction__code__in=[
+                "FN"
+            ],
+        )
+    )
+    if restrictions:
+        return False
 
-    return result
+    return app

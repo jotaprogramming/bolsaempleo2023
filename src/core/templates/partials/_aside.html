@@ -63,6 +63,13 @@
             >
               Mis postulaciones
             </a>
+          {% elif rule.usergroup.code == 'MOD' %}
+            <a 
+              href="{% url 'reports_app:reports_home' %}"
+              class="list-group-item list-group-item-action border-0 {% if reports %}active{% endif %}"
+            >
+              Reportes
+            </a>
           {% endif %}
         {% empty %}
           {% if request.user.is_staff %}
@@ -77,6 +84,12 @@
               class="list-group-item list-group-item-action border-0 {% if mycandidacies %}active{% endif %}"
             >
               Candidaturas
+            </a>
+            <a 
+              href="{% url 'reports_app:reports_home' %}"
+              class="list-group-item list-group-item-action border-0 {% if reports %}active{% endif %}"
+            >
+              Reportes
             </a>
           {% endif %}
         {% endfor %}

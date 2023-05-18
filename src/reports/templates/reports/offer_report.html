@@ -1,0 +1,135 @@
+{% extends 'core/base.html' %}{% load static %} {% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %} {% block contentfluid %}
+<section class="layout-section">
+  {% include 'partials/_aside.html' %}
+  <div class="main-section">
+    <div class="container">
+      {% include 'partials/_display.html' %}
+      <div class="row gy-3 mt-3">
+        
+        <div class="col-12">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>
+                  {% if '-' in request.GET.order %}
+                  <a class="text-decoration-none text-black" href="?tag={{request.GET.tag}}&order=title">
+                    Ofertas
+                  </a>
+                  {% else %}
+                  <a class="text-decoration-none text-black" href="?tag={{request.GET.tag}}&order=-title">
+                    Ofertas
+                  </a>
+                  {% endif %}
+                </th>
+                <th>
+                  <div class="d-flex align-items-center gap-1">
+                    {% if '-' in request.GET.order %}
+                    <a class="text-decoration-none text-black" href="?tag={{request.GET.tag}}&order=ctags">
+                      Etiquetas
+                    </a>
+                    {% else %}
+                    <a class="text-decoration-none text-black" href="?tag={{request.GET.tag}}&order=-ctags">
+                      Etiquetas
+                    </a>
+                    {% endif %}
+                    {% if request.GET.tag %}
+                    <a href="?tag=" class="btn btn-outline-danger btn-sm border-0">
+                      <span class="d-flex justify-content-center align-items-center">
+                        <i class="lni lni-trash-can"></i>
+                      </span>
+                    </a>
+                    {% endif %}
+                  </div>
+                </th>
+                <th>
+                  {% if '-' in request.GET.order %}
+                  <a class="text-decoration-none text-black" href="?tag={{request.GET.tag}}&order=count">
+                    N° candidatos
+                  </a>
+                  {% else %}
+                  <a class="text-decoration-none text-black" href="?tag={{request.GET.tag}}&order=-count">
+                    N° candidatos
+                  </a>
+                  {% endif %}
+                </th>
+                <th>
+                  {% if '-' in request.GET.order %}
+                  <a class="text-decoration-none text-black" href="?tag={{request.GET.tag}}&order=created_at">
+                    Fecha
+                  </a>
+                  {% else %}
+                  <a class="text-decoration-none text-black" href="?tag={{request.GET.tag}}&order=-created_at">
+                    Fecha
+                  </a>
+                  {% endif %}
+                </th>
+                <th>
+                  {% if '-' in request.GET.order %}
+                  <a class="text-decoration-none text-black" href="?tag={{request.GET.tag}}&order=status">
+                    Estado
+                  </a>
+                  {% else %}
+                  <a class="text-decoration-none text-black" href="?tag={{request.GET.tag}}&order=-status">
+                    Estado
+                  </a>
+                  {% endif %}
+                </th>
+                <th>
+                  Detalle
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in object_list %}
+              <tr>
+                <td>{{ row.title }}</td>
+                <td>
+                  {% with row as object %}
+                  {% if object.tags.count %}
+                  {% include 'partials/_gettags.html' %}
+                  {% else %}
+                  Sin etiquetas
+                  {% endif %}
+                  {% endwith %}
+                </td>
+                <td>
+                  <a href="{% url 'offers_app:candidature_list' row.slug %}" class="link-orange" role="button">
+                    {% if row.candidature_offer.count == 0 %}
+                    Sin candidatos
+                    {% elif row.candidature_offer.count == 1 %}
+                    Un candidato
+                    {% else %}
+                    {{ row.candidature_offer.count }} candidatos
+                    {% endif %}
+                  </a>
+                </td>
+                <td>{{ row.created_at }}</td>
+                <td>
+                  {% if row.status %}
+                  Finalizada
+                  {% else %}
+                  Activa
+                  {% endif %}
+                </td>
+                <td>
+                  <a
+                    href="{% url 'offers_app:offer_detail' row.slug %}"
+                    class="btn btn-outline-secondary btn-center btn-compact"
+                  >
+                    <i class="lni lni-eye"></i>
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {% if is_paginated %} {% include 'partials/_pagination_sm.html' %} {% endif %}
+    </div>
+  </div>
+</section>
+
+{% endblock contentfluid %}

@@ -90,38 +90,40 @@
                       {{row.get_status_display }} el {{ row.updated_at }}
                     </small>
                     {% endif %}
-                    {% if allowed_to_candidature_status_edit and not row.deleted_at and not row.status == '5' and not row.status == '3' and not row.status == '2' %}
-                      {% if row.status == '4' %}
-                      <button
-                        type="button"
-                        class="btn btn-outline-success btn-center"
-                        name="editButtons"
-                        id="{% url 'offers_app:candidature_status_edit' row.offer.slug row.candidate.username %}?status=5"
-                        title="Contratar"
-                      >
-                        <i class="lni lni-briefcase"></i>
-                      </button>
-                      {% else %}
-                      <button
-                        type="button"
-                        class="btn btn-outline-success btn-center"
-                        name="editButtons"
-                        id="{% url 'offers_app:candidature_status_edit' row.offer.slug row.candidate.username %}?status=4"
-                        title="Aceptar"
-                      >
-                        <i class="lni lni-thumbs-up"></i>
-                      </button>
-                      {% endif %}
-                      {% if row.status != '3' %}
-                      <button
-                        type="button"
-                        class="btn btn-outline-danger btn-center"
-                        name="deleteButtons"
-                        id="{% url 'offers_app:candidature_status_edit' row.offer.slug row.candidate.username %}?status=3"
-                        title="Rechazar"
-                      >
-                        <i class="lni lni-thumbs-down"></i>
-                      </button>
+                    {% if not row.deleted_at and not row.status == '5' and not row.status == '3' and not row.status == '2' %}
+                      {% if request.user.is_staff or allowed_to_candidature_status_edit%}
+                        {% if row.status == '4' %}
+                          <button
+                            type="button"
+                            class="btn btn-outline-success btn-center"
+                            name="editButtons"
+                            id="{% url 'offers_app:candidature_status_edit' row.offer.slug row.candidate.username %}?status=5"
+                            title="Contratar"
+                          >
+                            <i class="lni lni-briefcase"></i>
+                          </button>
+                        {% else %}
+                          <button
+                            type="button"
+                            class="btn btn-outline-success btn-center"
+                            name="editButtons"
+                            id="{% url 'offers_app:candidature_status_edit' row.offer.slug row.candidate.username %}?status=4"
+                            title="Aceptar"
+                          >
+                            <i class="lni lni-thumbs-up"></i>
+                          </button>
+                        {% endif %}
+                        {% if row.status != '3' %}
+                          <button
+                            type="button"
+                            class="btn btn-outline-danger btn-center"
+                            name="deleteButtons"
+                            id="{% url 'offers_app:candidature_status_edit' row.offer.slug row.candidate.username %}?status=3"
+                            title="Rechazar"
+                          >
+                            <i class="lni lni-thumbs-down"></i>
+                          </button>
+                        {% endif %}
                       {% endif %}
                     {% endif %}
                   </div>

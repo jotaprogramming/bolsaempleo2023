@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %} {% load static %} {% block title %}
+<title>{{app_title}} | {{title_view}}</title>
+{% endblock title %} {% block contentfluid %}
+<section class="layout-section">
+  {% include 'partials/_aside.html' %}
+  <div class="main-section">
+    <div class="container">
+      {% include 'partials/_display.html' %}
+      <div class="row gy-3 mt-3">
+        <div class="col-12">
+          {% if request.GET.usergroup == 'GRA' %}
+          {% include 'partials/_graduate_table.html' %}
+          {% elif request.GET.usergroup == 'COM' %}
+          {% include 'partials/_company_table.html' %}
+          {% else %}
+          <div class="d-flex gap-2">
+            <div class="card bid-letter position-relative">
+              <div class="card-body">
+                <div class="card-head">
+                  <span class="c-head-icon"
+                    ><i class="lni lni-apartment"></i
+                  ></span>
+                  <div class="head-title">Empresas</div>
+                </div>
+                <p>Revisa los registros de las empresas</p>
+              </div>
+              <a class="stretched-link" href="{% url 'reports_app:user_report' %}?usergroup=COM"></a>
+            </div>
+            <div class="card bid-letter position-relative">
+              <div class="card-body">
+                <div class="card-head">
+                  <span class="c-head-icon"
+                    ><i class="lni lni-graduation"></i
+                  ></span>
+                  <div class="head-title">Egresados</div>
+                </div>
+                <p>Revisa los registros de los egresados</p>
+              </div>
+              <a class="stretched-link" href="{% url 'reports_app:user_report' %}?usergroup=GRA"></a>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      {% if is_paginated %}
+      {% include 'partials/_pagination_sm.html' %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% endblock contentfluid %}

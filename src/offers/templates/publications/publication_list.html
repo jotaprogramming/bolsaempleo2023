@@ -64,15 +64,21 @@
             </ul>
           </div>
           <small class="d-flex gap-3 align-items-center col-md-4">
+            {% if request.user.is_staff or allowed_to_offer_edit %}
             <div class="">
               <i class="lni lni-pencil text-secondary"></i> Editar publicación
             </div>
+            {% endif %}
+            {% if request.user.is_staff or allowed_to_offer_finish %}
             <div class="">
               <i class="lni lni-checkmark text-success"></i> Finalizar oferta
             </div>
+            {% endif %}
+            {% if request.user.is_staff or allowed_to_offer_delete %}
             <div class="">
               <i class="lni lni-trash-can text-danger"></i> Eliminar oferta
             </div>
+            {% endif %}
           </small>
         </div>
         {% for row in object_list %}

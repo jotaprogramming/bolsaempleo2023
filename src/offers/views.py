@@ -40,7 +40,7 @@ from notifications.models import Notification
 from offers.forms import (
     OfferAdminForm,
     OfferForm,
-    CandidatureSaveForm,
+    CandidatureStatusEditForm,
     CandidatureUpdateForm,
 )
 from offers.models import Tags, Offers, Candidatures
@@ -53,7 +53,7 @@ from offers.utils import (
     POST_STATUS,
 )
 from core.utils import success_message, warning_message, get_form_errors
-from users.models import UserRules
+from users.models import UserRules, UserGroupPolicies
 from users.forms import FormDelete
 from jobboard.utils import *
 
@@ -120,9 +120,7 @@ class OfferDetail(LoginRequiredMixin, generic.DetailView):
 
         user = self.request.user
 
-        candidatures = Candidatures.objects.filter(
-            offer=offer.id, deleted_at=None
-        )
+        candidatures = Candidatures.objects.filter(offer=offer.id, deleted_at=None)
 
         allowed_to_apply = UserRules.objects.filter(user=user, usergroup__code="GRA")
         allowed_to_edit = UserRules.objects.filter(
@@ -399,12 +397,26 @@ class PublicationList(LoginRequiredMixin, generic.ListView):
         context["in_mypublications"] = True
         context["search"] = p_search
         context["pstatus"] = p_status
-        # statuses = POST_STATUS[:1] + POST_STATUS[2:]
         context["statuses"] = (
             ("1", "activa"),
             ("2", "finalizada"),
             ("3", "eliminada"),
         )
+        user_rules = UserRules.objects.filter(user=self.request.user)
+
+        context["allowed_to_offer_add"] = user_rules.filter(
+            usergroup__usergroup_policy__app__name__in=["offers_app:offer_add"],
+        ).exclude(usergroup__usergroup_policy__restriction__code__in=["CR"])
+        context["allowed_to_offer_finish"] = user_rules.filter(
+            usergroup__usergroup_policy__app__name__in=["offers_app:offer_finish"],
+        ).exclude(usergroup__usergroup_policy__restriction__code__in=["UP"])
+        context["allowed_to_offer_edit"] = user_rules.filter(
+            usergroup__usergroup_policy__app__name__in=["offers_app:offer_edit"],
+        ).exclude(usergroup__usergroup_policy__restriction__code__in=["UP"])
+        context["allowed_to_offer_delete"] = user_rules.filter(
+            usergroup__usergroup_policy__app__name__in=["offers_app:offer_delete"],
+        ).exclude(usergroup__usergroup_policy__restriction__code__in=["DL"])
+
         return context
 
 
@@ -582,13 +594,12 @@ class CandidaturesByOfferList(LoginRequiredMixin, generic.ListView):
         context["statuses"] = POST_STATUS
         context["pstatus"] = p_status
         context["search"] = p_search
-
-        # offer_id = objects.first().offer.id
-        # context["rejected_candidates"] = (
-        #     self.model.objects.filter(offer__id=offer_id)
-        #     .filter(status__in=["2", "3"])
-        #     .order_by("updated_at")
-        # )
+        context["allowed_to_candidature_status_edit"] = UserRules.objects.filter(
+            user=self.request.user,
+            usergroup__usergroup_policy__app__name__in=[
+                "offers_app:candidature_status_edit"
+            ],
+        ).exclude(usergroup__usergroup_policy__restriction__code__in=["UP"])
         return context
 
 
@@ -631,14 +642,19 @@ class MyCandidacies(LoginRequiredMixin, generic.ListView):
         context["statuses"] = POST_STATUS
         context["pstatus"] = p_status
         context["search"] = p_search
+
+        user_rules = UserRules.objects.filter(user=self.request.user)
+        context["allowed_to_candidature_status_edit"] = user_rules.filter(
+            usergroup__usergroup_policy__app__name__in=["offers_app:candidature_status_edit"],
+        ).exclude(usergroup__usergroup_policy__restriction__code__in=["UP"])
         return context
 
 
-class CandidatureSave(LoginRequiredMixin, generic.FormView):
+class CandidatureStatusEdit(LoginRequiredMixin, generic.FormView):
     login_url = "/login"
     model = Candidatures
-    form_class = CandidatureSaveForm
-    template_name = "candidatures/candidature_save.html"
+    form_class = CandidatureStatusEditForm
+    template_name = "candidatures/candidature_status_edit.html"
     paginate_by = 10
 
     def get_success_url(self):
@@ -682,7 +698,7 @@ class CandidatureSave(LoginRequiredMixin, generic.FormView):
         username = self.kwargs.get("username", "")
         slug = self.kwargs.get("slug", "")
 
-        context = super(CandidatureSave, self).get_context_data(**kwargs)
+        context = super(CandidatureStatusEdit, self).get_context_data(**kwargs)
 
         str_pk = get_pk_from_a_slug(self)
 

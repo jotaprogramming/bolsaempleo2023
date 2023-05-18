@@ -1,6 +1,7 @@
 # DJANGO MODULES
 from django import forms
 from django.utils.translation import gettext as _
+from django.db.models import Q
 
 # PYTHON MODULES
 import importlib
@@ -169,32 +170,68 @@ def verify_dispatch(urlpatterns):
     return False
 
 
-def validate_urlpattern(request, urlpatterns):
-    """
-    This function validates a URL pattern based on user rules, user groups, roles, and policies.
+def validate_permissions(request, urlpatterns):
+    # print("🐍 File: core/utils.py | Line: 174 | undefined ~ urlpatterns", urlpatterns)
+    app = request.user.rule_user.filter(
+        usergroup__usergroup_policy__app__name=urlpatterns
+    )
+    # print("----------------app----------------")
+    # pprint(
+    #     list(
+    #         app.values(
+    #             "usergroup__usergroup_policy__app__name",
+    #             "usergroup__usergroup_policy__app__app_policies__restriction__code",
+    #         )
+    #     )
+    # )
 
-    :param request: The request object contains information about the current HTTP request, such as the
-    user making the request, the HTTP method used, and any data submitted in the request
-    :param urlpatterns: The `urlpatterns` parameter is a string representing a URL pattern that needs to
-    be validated
-    :return: the result of filtering policies based on whether the app name contains the provided URL
-    pattern. The result is an integer value, which is not very informative on its own. It seems like the
-    function is intended to check if the user has permission to access a certain URL pattern based on
-    their assigned rules, user groups, roles, and policies. However, without more context on the data
-    models
-    """
-    rules = request.user.rule_user.all()
-    usergroups = [rule.usergroup for rule in rules]
-    roles = [rule.role for rule in rules]
-    policies = [usergroup.usergroup_policy.all() for usergroup in usergroups]
+    restrictions = app.filter(
+        Q(
+            usergroup__usergroup_policy__app__name=urlpatterns,
+            usergroup__usergroup_policy__app__name__icontains="add",
+            usergroup__usergroup_policy__app__app_policies__restriction__code__in=[
+                "CR"
+            ],
+        )
+        | Q(
+            usergroup__usergroup_policy__app__name=urlpatterns,
+            usergroup__usergroup_policy__app__name__icontains="list",
+            usergroup__usergroup_policy__app__app_policies__restriction__code__in=[
+                "RD"
+            ],
+        )
+        | Q(
+            usergroup__usergroup_policy__app__name=urlpatterns,
+            usergroup__usergroup_policy__app__name__icontains="edit",
+            usergroup__usergroup_policy__app__app_policies__restriction__code__in=[
+                "UP"
+            ],
+        )
+        | Q(
+            usergroup__usergroup_policy__app__name=urlpatterns,
+            usergroup__usergroup_policy__app__name__icontains="delete",
+            usergroup__usergroup_policy__app__app_policies__restriction__code__in=[
+                "DL"
+            ],
+        )
+        | Q(
+            usergroup__usergroup_policy__app__name=urlpatterns,
+            usergroup__usergroup_policy__app__name__icontains="finish",
+            usergroup__usergroup_policy__app__app_policies__restriction__code__in=[
+                "FN"
+            ],
+        )
+    )
+    if restrictions:
+        # print("----------------restrictions----------------")
+        # pprint(
+        #     list(
+        #         restrictions.values(
+        #             "usergroup__usergroup_policy__app__name",
+        #             "usergroup__usergroup_policy__app__app_policies__restriction__code",
+        #         )
+        #     )
+        # )
+        return False
 
-    result = 0
-    permissions = []
-    for qs in policies:
-        for policy in qs:
-            result = policy.app.filter(name__icontains=urlpatterns.strip())
-            # apps = policy.app.all()
-            # for app in apps:
-            #     print(f"{urlpatterns} == {app.name} = {urlpatterns == app.name}")
-
-    return result
+    return app

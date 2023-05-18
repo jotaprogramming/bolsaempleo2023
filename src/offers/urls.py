@@ -35,8 +35,8 @@ urlpatterns = [
     ),
     path(
         "<str:slug>/candidatures/save/<str:username>",
-        CandidatureSave.as_view(),
-        name="candidature_save",
+        CandidatureStatusEdit.as_view(),
+        name="candidature_status_edit",
     ),
     path(
         "candidatures/modal/edit/<int:pk>",

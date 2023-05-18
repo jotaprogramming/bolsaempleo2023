@@ -273,9 +273,9 @@ class OfferForm(forms.ModelForm):
         }
 
 
-class CandidatureSaveForm(forms.ModelForm):
+class CandidatureStatusEditForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        super(CandidatureSaveForm, self).__init__(*args, **kwargs)
+        super(CandidatureStatusEditForm, self).__init__(*args, **kwargs)
         self.fields["status"].label = "Estado"
         self.fields["status"].required = False
 

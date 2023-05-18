@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "users",
     "config",
     "offers",
+    "reports",
 ]
 
 MIDDLEWARE = [

@@ -41,9 +41,13 @@
                 <td>{{row.role_name}}</td>
                 <td>{{row.description}}</td>
                 <td>
-                  {% if row.deleted_at %} Eliminado el {{row.deleted_at}} {% elif
-                  row.updated_at %} Actualizado el {{row.updated_at}} {% else %}
-                  Creado el {{row.created_at}} {% endif %}
+                  {% if row.deleted_at %}
+                  Eliminado el {{row.deleted_at}}
+                  {% elif row.updated_at %}
+                  Actualizado el {{row.updated_at}}
+                  {% else %}
+                  Creado el {{row.created_at}}
+                  {% endif %}
                 </td>
                 <td>
                   {% if not row.deleted_at %}

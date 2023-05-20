@@ -52,7 +52,7 @@ from users.views import (
     PreRegisterView,
     RegisterStudentView,
     RegisterCompanyView,
-    CredentialsRecoverView,
+    CredentialsRecover,
 )
 from users.urls import urlpatterns as url_users
 from config.models import Cities, Countries, Districts, Cities, DocumentType
@@ -1005,8 +1005,8 @@ class RegisterCompanyViewTest(TestCase):
 
 class CredentialsRecoverViewTest(TestCase):
     fixtures = ["users_fixtures.json"]
-    path = reverse("users_app:credentials_recover")
-    objview = CredentialsRecoverView()
+    path = reverse("users_app:retrieve_credentials")
+    objview = CredentialsRecover()
 
     @classmethod
     def setUpTestData(cls):
@@ -1018,6 +1018,6 @@ class CredentialsRecoverViewTest(TestCase):
 
     def test_get_context_data(self):
         kwargs = {}
-        response = CredentialsRecoverView.as_view()(self.view.request, **kwargs)
+        response = CredentialsRecover.as_view()(self.view.request, **kwargs)
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.context_data)

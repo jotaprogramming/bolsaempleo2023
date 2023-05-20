@@ -37,13 +37,13 @@
               <span class="input-placeholder">Contraseña</span>
               <span class="input-icon"><i class="lni lni-lock"></i></span>
             </div>
-            <small class="text-muted mt-2">
+            {% comment %} <small class="text-muted mt-2">
               <a
                 class="text-dark"
-                href="{% url 'users_app:credentials_recover' %}"
-                >Recuperar Usuario o Contraseña</a
+                href="{% url 'users_app:retrieve_credentials' %}"
+                >Recuperar usuario o contraseña</a
               >
-            </small>
+            </small> {% endcomment %}
             <button class="normal_btn" type="submit" id="btn_save">
               {{title_view}}
             </button>

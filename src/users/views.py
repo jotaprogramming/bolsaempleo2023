@@ -813,7 +813,7 @@ class UserDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return context
 
     def form_valid(self, form):
-        form.instance.is_active = False
+        form.instance.is_active = not form.instance.is_active
         return super().form_valid(form)
 
 
@@ -1253,11 +1253,11 @@ class RegisterCompanyView(UserLoggedMixin, generic.FormView):
         return super().form_valid(form)
 
 
-class CredentialsRecoverView(generic.TemplateView):
-    template_name = "users/credentials_recover.html"
+class RetrieveCredentials(generic.TemplateView):
+    template_name = "users/retrieve_credentials.html"
 
     def get_context_data(self, **kwargs):
-        context = super(CredentialsRecoverView, self).get_context_data(**kwargs)
+        context = super(RetrieveCredentials, self).get_context_data(**kwargs)
         context["app_title"] = app_title
         context["title_view"] = recover_title
         context[
@@ -1269,6 +1269,54 @@ class CredentialsRecoverView(generic.TemplateView):
         ] = "Para estudiantes y egresados de Ingenieria de Sistemas"
         context["company_text"] = "Para empresas en busca de grandes Talentos"
         return context
+
+
+class PasswordRecovery(LoginRequiredMixin, generic.FormView):
+    login_url = "/login"
+    model = User
+    form_class = PasswordRecoveryForm
+    template_name = "users/password_recovery.html"
+
+    def get_success_url(self):
+        slug = self.kwargs.get("slug", "")
+
+        success_message(self.request, msg="Se ha cambiado la contraseña satisfactoriamente")
+        return reverse_lazy("users_app:userprofile", args=[slug])
+
+    def get_context_data(self, **kwargs):
+        slug = self.kwargs.get("slug", "")
+        context = super(PasswordRecovery, self).get_context_data(**kwargs)
+        context["username"] = slug
+        return context
+
+    def form_valid(self, form):
+        try:
+            slug = self.kwargs.get("slug", "")
+            user = User.objects.get(username=slug)
+            password = form.cleaned_data["password"]
+            if not self.request.user.is_staff:
+                old_pass = form.cleaned_data["old_pass"]
+                if not user.check_password(old_pass):
+                    warning_message(self.request, msg="Contraseña incorrecta")
+                    return HttpResponseRedirect(reverse_lazy("users_app:userprofile", args=[slug]))
+                if old_pass == password:
+                    warning_message(self.request, msg="La nueva contraseña debe ser diferente a la que ya tienes")
+                    return HttpResponseRedirect(reverse_lazy("users_app:userprofile", args=[slug]))
+            user.set_password(password)
+            user.save()
+        except:
+            warning_message(self.request, msg="Ocurrió un error inesperado. Por favor, inténtelo de nuevo")
+            return HttpResponseRedirect(reverse_lazy("users_app:userprofile", args=[slug]))
+        return super().form_valid(form)
+
+    def form_invalid(self, form, **kwargs):
+        slug = self.kwargs.get("slug", "")
+        ctx = self.get_context_data(**kwargs)
+        ctx["form"] = form
+
+        msg_error = get_form_errors(form)
+        warning_message(self.request, msg=msg_error)
+        return HttpResponseRedirect(reverse_lazy("users_app:userprofile", args=[slug]))
 
 
 # ----------------------------------------------------
@@ -1381,7 +1429,7 @@ class CurriculumVitaeCreate(LoginRequiredMixin, generic.CreateView):
 
         msg_error = get_form_errors(form)
         warning_message(self.request, msg=msg_error)
-        return reverse_lazy("users_app:userprofile", args=[slug])
+        return HttpResponseRedirect(reverse_lazy("users_app:userprofile", args=[slug]))
 
 
 class CurriculumVitaeEdit(LoginRequiredMixin, generic.UpdateView):

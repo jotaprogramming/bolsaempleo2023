@@ -1,4 +1,4 @@
-{% extends 'core/base.html' %} {% load static %} {% block title %}
+  {% extends 'core/base.html' %} {% load static %} {% block title %}
 <title>{{app_title}} | {{title_view}}</title>
 {% endblock title %} {% block contentfluid %}
 <section class="layout-section">
@@ -31,7 +31,7 @@
                 <th>Última sesión</th>
                 <th>Perfil</th>
                 <th>Editar</th>
-                <th>Eliminar</th>
+                <th>Habilitar</th>
               </tr>
             </thead>
             <tbody>
@@ -77,12 +77,16 @@
                 <td>
                   {% if not row.deleted_at %}
                   <button
-                    type="button"
-                    class="btn btn-outline-danger btn-center btn-compact"
-                    name="deleteButtons"
-                    id="{% url 'users_app:user_delete' row.id %}"
+                  type="button"
+                  class="btn {% if row.is_active %}btn-danger{% else %}btn-success{% endif %} btn-center btn-compact"
+                  name="deleteButtons"
+                  id="{% url 'users_app:user_delete' row.id %}"
                   >
-                    <i class="lni lni-trash-can"></i>
+                    {% if row.is_active %}
+                    <i class="lni lni-ban"></i>
+                    {% else %}
+                    <i class="lni lni-checkmark"></i>
+                    {% endif %}
                   </button>
                   {% endif %}
                 </td>

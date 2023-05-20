@@ -4,7 +4,7 @@
   <div class="modal-content">
     <form method="POST" action="{% url 'users_app:user_delete' object.id %}" id="form">
       <div class="modal-header">
-        <h5 class="modal-title">Eliminar</h5>
+        <h5 class="modal-title">Activar o desactivar usuario</h5>
         <button
           type="button"
           class="btn-close"
@@ -14,15 +14,6 @@
       </div>
       <div class="modal-body">
         {% csrf_token %}
-        <h6>
-          Se eliminará el siguiente registro:
-        </h6>
-        <div class="row mb-2 text-secondary">
-          <small class="m-0 col-12">
-            <strong>Usuario:</strong>
-            {{object.username}}
-          </small>
-        </div>
         <div class="alert alert-warning" role="alert">
           ¿Estás seguro que deseas continuar?
         </div>
@@ -31,7 +22,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Cancelar
         </button>
-        <button type="submit" class="btn btn-primary">Eliminar</button>
+        <button type="submit" class="btn btn-primary">Continuar</button>
       </div>
     </form>
   </div>

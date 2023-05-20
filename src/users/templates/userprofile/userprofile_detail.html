@@ -140,13 +140,15 @@
                 </div>
                 {% if request.user.is_staff or request.user.username == object.username %}
                 <div class="col-md-12 my-2">
-                  <a
-                    class="btn btn-outline-primary"
-                    href="{% url 'users_app:credentials_recover' %}"
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary btn-center btn-compact"
+                    name="editButtons"
+                    id="{% url 'users_app:password_recovery' username %}"
                   >
                     <i class="lni lni-padlock"></i>
                     <span class="">Cambiar contraseña</span>
-                  </a>
+                  </button>
                 </div>
                 {% endif %}
               </div>

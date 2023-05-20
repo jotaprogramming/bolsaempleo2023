@@ -88,10 +88,15 @@ urlpatterns = [
     path("register/choices", PreRegisterView.as_view(), name="register_choices"),
     path("register/student", RegisterStudentView.as_view(), name="register_student"),
     path("register/company", RegisterCompanyView.as_view(), name="register_company"),
+    # path(
+    #     "user/retrieve/credentials",
+    #     RetrieveCredentials.as_view(),
+    #     name="retrieve_credentials",
+    # ),
     path(
-        "credentials/recover",
-        CredentialsRecoverView.as_view(),
-        name="credentials_recover",
+        "user/<slug:slug>/password/recovery",
+        PasswordRecovery.as_view(),
+        name="password_recovery",
     ),
     # USER PROFILE
     path("profile/<slug:slug>", UserProfileDetail.as_view(), name="userprofile"),
@@ -127,5 +132,7 @@ urlpatterns = [
         name="cv_attach",
     ),
     # NOTIFICATIONS
-    path("<str:username>/notifications", NotificationList.as_view(), name="notifications"),
+    path(
+        "<str:username>/notifications", NotificationList.as_view(), name="notifications"
+    ),
 ]

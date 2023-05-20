@@ -802,7 +802,7 @@ class UserDeleteModal(LoginRequiredMixin, generic.UpdateView):
         return data
 
     def get_success_url(self):
-        success_message(self.request, msg="Registro eliminado satisfactoriamente")
+        success_message(self.request, msg="Acción realizada con éxito")
         return reverse_lazy("users_app:user_list")
 
     def get_context_data(self, **kwargs):

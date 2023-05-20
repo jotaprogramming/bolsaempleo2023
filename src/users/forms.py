@@ -919,8 +919,59 @@ class CurriculumVitaeForm(forms.ModelForm):
             ),
         }
 
+
+class PasswordRecoveryForm(forms.ModelForm):
+    repeat_pass = forms.CharField(
+        label=_("Repite la nueva contraseña"),
+        required=True,
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "single-input",
+                "minlength": "8",
+                "title": _("Repite la nueva contraseña"),
+            }
+        ),
+    )
+    old_pass = forms.CharField(
+        label=_("Antigua contraseña"),
+        required=False,
+        widget=forms.PasswordInput(
+            attrs={
+                "class": "single-input",
+                "minlength": "8",
+                "title": _("Antigua contraseña"),
+            }
+        ),
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(PasswordRecoveryForm, self).__init__(*args, **kwargs)
+        self.fields["password"].label = "Nueva contraseña"
+
+    class Meta:
+        model = User
+
+        fields = [
+            "password",
+            "repeat_pass",
+        ]
+
+        widgets = {
+            "password": forms.PasswordInput(
+                attrs={
+                    "class": "single-input",
+                    "minlength": "8",
+                    "title": _("Contraseña"),
+                },
+            ),
+        }
+
+    def clean_repeat_pass(self):
+        if self.cleaned_data["password"] != self.cleaned_data["repeat_pass"]:
+            self.add_error("repeat_pass", _(f"La nueva contraseña no coincide"))
+
+
 class CurriculumVitaeAttachForm(forms.ModelForm):
-    
     def __init__(self, *args, **kwargs):
         super(CurriculumVitaeAttachForm, self).__init__(*args, **kwargs)
         self.fields["attached"].label = "Adjunta tu hoja de vida"

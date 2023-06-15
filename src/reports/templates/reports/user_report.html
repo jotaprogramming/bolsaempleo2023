@@ -42,8 +42,10 @@
           {% endif %}
         </div>
       </div>
-      {% if is_paginated %}
-      {% include 'partials/_pagination_sm.html' %}
+      {% if request.GET.usergroup == 'GRA' or request.GET.usergroup == 'COM'%}
+        {% if is_paginated %}
+        {% include 'partials/_pagination_sm.html' %}
+        {% endif %}
       {% endif %}
     </div>
   </div>

@@ -116,7 +116,7 @@ def normalize_email(email):
 def get_request_body(request):
     """
     This function decodes and loads the JSON data from a request body in UTF-8 format.
-    
+
     :param request: The request object is an instance of the HttpRequest class in Django. It represents
     an HTTP request that has been sent to the server and contains information about the request, such as
     the HTTP method, headers, and body
@@ -132,7 +132,7 @@ def set_data_status(data=[], status="204"):
     """
     This function sets the status, type, and message of a data object based on the HTTP status code and
     whether or not the data object is empty.
-    
+
     :param data: A list of data that is being checked for status
     :param status: The HTTP status code to be returned in the response, defaults to 204 (optional)
     :return: A dictionary with keys "status", "type", "msg", and "data". The values for "status",
@@ -192,7 +192,7 @@ def validate_permissions(request, urlpatterns):
     """
     The function validates user permissions based on the requested URL pattern and returns False if any
     restrictions are found, otherwise it returns the filtered user group.
-    
+
     :param request: The request object contains information about the current HTTP request, such as the
     user making the request and the URL being accessed
     :param urlpatterns: The `urlpatterns` parameter is a string that represents the name of the URL
@@ -210,40 +210,30 @@ def validate_permissions(request, urlpatterns):
         Q(
             usergroup__usergroup_policy__app__name=urlpatterns,
             usergroup__usergroup_policy__app__name__icontains="add",
-            usergroup__usergroup_policy__app__app_policies__restriction__code__in=[
-                "CR"
-            ],
+            usergroup__usergroup_policy__restriction__code__in=["CR"],
         )
         | Q(
             usergroup__usergroup_policy__app__name=urlpatterns,
             usergroup__usergroup_policy__app__name__icontains="list",
-            usergroup__usergroup_policy__app__app_policies__restriction__code__in=[
-                "RD"
-            ],
+            usergroup__usergroup_policy__restriction__code__in=["RD"],
         )
         | Q(
             usergroup__usergroup_policy__app__name=urlpatterns,
             usergroup__usergroup_policy__app__name__icontains="edit",
-            usergroup__usergroup_policy__app__app_policies__restriction__code__in=[
-                "UP"
-            ],
+            usergroup__usergroup_policy__restriction__code__in=["UP"],
         )
         | Q(
             usergroup__usergroup_policy__app__name=urlpatterns,
             usergroup__usergroup_policy__app__name__icontains="delete",
-            usergroup__usergroup_policy__app__app_policies__restriction__code__in=[
-                "DL"
-            ],
+            usergroup__usergroup_policy__restriction__code__in=["DL"],
         )
         | Q(
             usergroup__usergroup_policy__app__name=urlpatterns,
             usergroup__usergroup_policy__app__name__icontains="finish",
-            usergroup__usergroup_policy__app__app_policies__restriction__code__in=[
-                "FN"
-            ],
+            usergroup__usergroup_policy__restriction__code__in=["FN"],
         )
     )
-    if restrictions:
+    if restrictions.count():
         return False
 
     return app

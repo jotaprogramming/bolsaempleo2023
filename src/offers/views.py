@@ -215,7 +215,7 @@ class OfferDeleteModal(LoginRequiredMixin, generic.UpdateView):
     login_url = "/login"
     model = Offers
     form_class = FormDelete
-    template_name = "Offers/offer_delete_modal.html"
+    template_name = "offers/offer_delete_modal.html"
 
     def get_object(self):
         pk = get_pk_from_a_slug(self)
@@ -249,7 +249,7 @@ class OfferFinishModal(LoginRequiredMixin, generic.UpdateView):
     login_url = "/login"
     model = Offers
     form_class = FormDelete
-    template_name = "Offers/offer_finish_modal.html"
+    template_name = "offers/offer_finish_modal.html"
 
     def get_object(self):
         pk = get_pk_from_a_slug(self)

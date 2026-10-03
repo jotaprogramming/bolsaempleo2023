@@ -1,5 +1,15 @@
 # Proyecto de grado
 
+## Contexto y evolución del proyecto
+
+Este repositorio contiene la versión final de mi proyecto de grado de Ingeniería de Sistemas: una bolsa de empleo para una institución de educación superior.
+
+El proyecto comenzó en una primera iteración construida con TypeScript, Node.js, Express, EJS y Prisma. Elegí deliberadamente tecnologías que no dominaba todavía para explorar otra forma de estructurar la aplicación y aprender durante el desarrollo. Esa primera versión puede consultarse en [bolsaempleo](https://github.com/jotaprogramming/bolsaempleo).
+
+Yo estaba a cargo del desarrollo del software. A medida que se acercó la fecha de entrega, el proyecto también exigía una carga considerable de documentación académica. Mantener simultáneamente la curva de aprendizaje del stack inicial, terminar el producto y completar esa documentación aumentaba el riesgo de no entregar a tiempo. Por ello decidí reconstruir la versión final con Django, que resolvía de forma integrada varios problemas que todavía tenía abiertos y me permitía concentrarme en completar el alcance del proyecto.
+
+El cambio de stack fue, por tanto, una decisión de alcance y entrega bajo restricciones reales de tiempo, no un intento de presentar ambas implementaciones como proyectos independientes.
+
 ## Dependencias
 
 - Python 3.11.1
